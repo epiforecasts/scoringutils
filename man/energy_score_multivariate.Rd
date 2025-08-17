@@ -4,7 +4,7 @@
 \alias{energy_score_multivariate}
 \title{Energy score for multivariate forecasts}
 \usage{
-energy_score_multivariate(observed, predicted, grouping_id, w = NULL)
+energy_score_multivariate(observed, predicted, mv_group_id, w = NULL)
 }
 \arguments{
 \item{observed}{A vector with observed values of size n}
@@ -14,7 +14,7 @@ the number of data points and N (number of columns) the number of Monte
 Carlo samples. Alternatively, if n = 1, \code{predicted} can just be a vector
 of size n.}
 
-\item{grouping_id}{Numeric vector of length n with ids indicating the
+\item{mv_group_id}{Numeric vector of length n with ids indicating the
 grouping of predicted values. Conceptually, each row of the \code{predicted}
 matrix \emph{could} be seen as a separate (univariate) forecast.
 The grouping id then groups several of those forecasts together, treating
@@ -25,6 +25,6 @@ them as a single multivariate forecast.}
 \description{
 Compute the multivariate energy score
 (see \link[scoringRules:es_sample]{scoringRules::es_sample})
-for each group defined by \code{grouping_id}.
+for each group defined by \code{mv_group_id}.
 }
 \keyword{internal_input_check}

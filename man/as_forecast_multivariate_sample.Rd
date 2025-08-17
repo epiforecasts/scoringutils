@@ -74,7 +74,7 @@ with the following columns:
 values represent random samples from the predictive distribution.
 \item \code{sample_id}: Column of any type with unique identifiers
 (unique within a single forecast) for each sample.
-\item \code{grouping_id}: Column of any type with unique identifiers
+\item \code{mv_group_id}: Column of any type with unique identifiers
 (unique within a single forecast) for each group.
 }
 
@@ -113,7 +113,7 @@ or "observed" are retained.
 }
 
 \seealso{
-Other functions to create forecast objects: 
+Other functions to create forecast objects:
 \code{\link{as_forecast_binary}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_ordinal}()},

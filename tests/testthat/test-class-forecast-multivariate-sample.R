@@ -54,7 +54,7 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
       cat("Number of rows:", nrow(result), "\n")
       cat("Number of columns:", ncol(result), "\n")
       cat("Column names:", paste(names(result), collapse = ", "), "\n")
-      cat("Number of unique groups:", length(unique(result$.group_id)), "\n")
+      cat("Number of unique groups:", length(unique(result$.mv_group_id)), "\n")
   })
 })
 
@@ -89,11 +89,11 @@ grouping <- c("model", "target_type", "target_end_date", "horizon")
 
 # Test basic functionality
 result <- set_grouping(data, grouping)
-expect_true(".group_id" %in% names(result))
-expect_true(is.numeric(result$.group_id))
+expect_true(".mv_group_id" %in% names(result))
+expect_true(is.numeric(result$.mv_group_id))
 
 # Test that groups are consistent
-group_counts <- as.data.table(result)[, .N, by = .group_id]
+group_counts <- as.data.table(result)[, .N, by = .mv_group_id]
 expect_true(all(group_counts$N > 0))
 })
 
@@ -108,16 +108,16 @@ expect_type(result, "character")
 expect_true(all(grouping %in% result))
 })
 
-test_that("get_grouping() falls back to forecast_unit when group_id is missing", {
+test_that("get_grouping() falls back to forecast_unit when mv_group_id is missing", {
 data <- example_multivariate_sample
 
-# Remove the group_id column
+# Remove the mv_group_id column
 data_bad <- as.data.table(data)
-data_bad[, .group_id := NULL]
+data_bad[, .mv_group_id := NULL]
 
 expect_error(
   get_grouping(data_bad),
-  "No column `.group_id` found in the forecast object."
+  "No column `.mv_group_id` found in the forecast object."
 )
 })
 
@@ -145,11 +145,11 @@ result_with_keys <- scoringutils:::set_grouping(data_with_keys, grouping)
 expect_equal(key(result_with_keys), original_keys)  # Should preserve original keys
 
 # Test case 3: Verify functionality still works with keys preserved
-expect_true(".group_id" %in% names(result_with_keys))
-expect_true(is.numeric(result_with_keys$.group_id))
+expect_true(".mv_group_id" %in% names(result_with_keys))
+expect_true(is.numeric(result_with_keys$.mv_group_id))
 
 # Test that groups are consistent
-group_counts <- as.data.table(result_with_keys)[, .N, by = .group_id]
+group_counts <- as.data.table(result_with_keys)[, .N, by = .mv_group_id]
 expect_true(all(group_counts$N > 0))
 })
 

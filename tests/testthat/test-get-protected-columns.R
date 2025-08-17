@@ -5,7 +5,7 @@ test_that("get_protected_columns() works as expected", {
   expect_equal(
     get_protected_columns(),
     c(
-      ".group_id",
+      ".mv_group_id",
       "predicted", "observed", "sample_id",
       "quantile_level", "upper", "lower", "pit_value",
       "interval_range", "boundary", "predicted_label", "interval_coverage",
@@ -18,7 +18,7 @@ test_that("get_protected_columns() works as expected", {
 test_that("get_protected_columns() returns the correct result", {
   data <- example_quantile
   manual <- protected_columns <- c(
-    ".group_id",
+    ".mv_group_id",
     "predicted", "observed", "sample_id", "quantile_level", "upper", "lower",
     "pit_value",
     "range", "boundary",

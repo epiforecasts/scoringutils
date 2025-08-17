@@ -22,7 +22,7 @@ the same group, you could do something like
 \code{by = setdiff(get_forecast_unit(data, "location"))}.}
 }
 \value{
-A data.table with an additional column \code{.group_id} that
+A data.table with an additional column \code{.mv_group_id} that
 contains the group id for each row.
 }
 \description{

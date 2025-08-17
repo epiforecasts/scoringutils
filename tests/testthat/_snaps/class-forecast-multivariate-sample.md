@@ -21,7 +21,7 @@
       35478:    190.52560        38       78       IT  epiforecasts-EpiNow2
       35479:    141.06659        39       78       IT  epiforecasts-EpiNow2
       35480:     24.43419        40       78       IT  epiforecasts-EpiNow2
-             target_type target_end_date horizon .group_id
+             target_type target_end_date horizon .mv_group_id
                   <char>          <Date>   <num>                  <int>
           1:       Cases      2021-05-08       1                      1
           2:       Cases      2021-05-08       1                      1
@@ -60,9 +60,9 @@
     Code
       cat("Column names:", paste(names(result), collapse = ", "), "\n")
     Output
-      Column names: predicted, sample_id, observed, location, model, target_type, target_end_date, horizon, .group_id
+      Column names: predicted, sample_id, observed, location, model, target_type, target_end_date, horizon, .mv_group_id
     Code
-      cat("Number of unique groups:", length(unique(result$.group_id)),
+      cat("Number of unique groups:", length(unique(result$.mv_group_id)),
       "\n")
     Output
       Number of unique groups: 224
@@ -85,7 +85,7 @@
       222:      2021-07-24      Deaths    2021-07-12       UMass-MechBayes       2
       223:      2021-07-24      Deaths    2021-07-05  epiforecasts-EpiNow2       3
       224:      2021-07-24      Deaths    2021-07-12  epiforecasts-EpiNow2       2
-           energy_score .group_id
+           energy_score .mv_group_id
                   <num>                  <int>
         1:   23454.2838                     37
         2:   34263.4665                     38
@@ -116,7 +116,7 @@
     Code
       cat("Column names:", paste(names(scores), collapse = ", "), "\n")
     Output
-      Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, .group_id
+      Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, .mv_group_id
     Code
       cat("Energy score range:", paste(range(scores$energy_score, na.rm = TRUE),
       collapse = " to "), "\n")
@@ -153,7 +153,7 @@
     Code
       cat("Column names:", paste(names(scores_specific), collapse = ", "), "\n")
     Output
-      Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, .group_id
+      Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, .mv_group_id
     Code
       cat("Energy score range:", paste(range(scores_specific$energy_score, na.rm = TRUE),
       collapse = " to "), "\n")

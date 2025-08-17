@@ -4,7 +4,7 @@
 \alias{assert_input_multivariate_sample}
 \title{Assert that inputs are correct for sample-based forecast}
 \usage{
-assert_input_multivariate_sample(observed, predicted, grouping_id)
+assert_input_multivariate_sample(observed, predicted, mv_group_id)
 }
 \arguments{
 \item{observed}{Input to be checked. Should be a numeric vector with the
@@ -16,7 +16,7 @@ N (number of columns) the number of samples per forecast.
 If \code{observed} is just a single number, then predicted values can just be a
 vector of size N.}
 
-\item{grouping_id}{Numeric vector of length n with ids indicating the
+\item{mv_group_id}{Numeric vector of length n with ids indicating the
 grouping of predicted values. Conceptually, each row of the \code{predicted}
 matrix \emph{could} be seen as a separate (univariate) forecast.
 The grouping id then groups several of those forecasts together, treating

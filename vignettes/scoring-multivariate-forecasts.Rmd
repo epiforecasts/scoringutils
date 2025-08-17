@@ -88,7 +88,7 @@ The grouping id is 1 everywhere, because we only have a single multivariate fore
 
 When scoring this forecast using `score()`, we will still get 4 rows, though. This is because `score()` handles univariate and multivariate scoring at the same time. All scoring functions that can handle multivariate forecasts will treat the forecast as a single forecast. Those scoring functions that only handle univariate forecasts will continue to treat the forecast as 4 separate univariate forecasts.
 
-You can notice, that the name of the energy score has changed to `energy_score_multiv` and there is an additional column `.group_id` in the output.
+You can notice, that the name of the energy score has changed to `energy_score_multiv` and there is an additional column `.mv_group_id` in the output.
 
 ```{r}
 score(example_multiv)
@@ -100,7 +100,7 @@ If, at any point, you want to score the same forecast using different groupings,
 
 <!-- ## Details on the grouping - WIP
 
-As mentioned above, you can set the grouping with the `set_grouping` function. This will return the original data with an additional column `.group_id` that indicates the group each observation belongs to.
+As mentioned above, you can set the grouping with the `set_grouping` function. This will return the original data with an additional column `.mv_group_id` that indicates the group each observation belongs to.
 
 Alternatively, you can set the grouping right when creating the forecast.
 
@@ -154,7 +154,7 @@ es_sr <- c(es_sr1, es_sr2)
 es_su <- energy_score_multivariate(
   observed = c(obs, obs2),
   predicted = rbind(fc_sample, fc_sample2),
-  grouping_id = c(rep(1, d), rep(2, d))
+  mv_group_id = c(rep(1, d), rep(2, d))
 )
 all.equal(es_sr, es_su, tolerance = 1e-6, check.attributes = FALSE)
 ```
@@ -173,7 +173,7 @@ es_sr <- c(es_sr1, es_sr2)
 es_su <- energy_score_multivariate(
   observed = c(obs, obs2),
   predicted = rbind(fc_sample, fc_sample2),
-  grouping_id = c(rep(1, d), rep(2, d)),
+  mv_group_id = c(rep(1, d), rep(2, d)),
   w = w
 )
 

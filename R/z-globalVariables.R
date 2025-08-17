@@ -12,7 +12,7 @@ globalVariables(c(
   ".GRP",
   ".SD",
   ".scoringutils_count",
-  ".group_id",
+  ".mv_group_id",
   "adj_pval",
   "ae_point",
   "ae_median",
