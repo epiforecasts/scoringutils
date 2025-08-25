@@ -11,7 +11,7 @@ See the examples for how to plot the result of this function."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@ See the examples for how to plot the result of this function."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Probability integral transformation histogram</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/v2.1.1/R/class-forecast-quantile.R" class="external-link"><code>R/class-forecast-quantile.R</code></a>, <a href="https://github.com/epiforecasts/scoringutils/blob/v2.1.1/R/class-forecast-sample.R" class="external-link"><code>R/class-forecast-sample.R</code></a>, <a href="https://github.com/epiforecasts/scoringutils/blob/v2.1.1/R/get-pit-histogram.R" class="external-link"><code>R/get-pit-histogram.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-quantile.R" class="external-link"><code>R/class-forecast-quantile.R</code></a>, <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-sample.R" class="external-link"><code>R/class-forecast-sample.R</code></a>, <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/get-pit-histogram.R" class="external-link"><code>R/get-pit-histogram.R</code></a></small>
       <div class="d-none name"><code>get_pit_histogram.Rd</code></div>
     </div>
 
@@ -150,7 +150,7 @@ region of Sierra Leone, 2014-15, <a href="https://doi.org/10.1371/journal.pcbi.1
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">result</span>,  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mid</span>, y <span class="op">=</span> <span class="va">density</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span> <span class="op">+</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Quantile"</span>, <span class="st">"Density"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Quantile"</span>, y <span class="op">=</span> <span class="st">"Density"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="get_pit_histogram-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example with quantile data</span></span></span>
@@ -158,7 +158,7 @@ region of Sierra Leone, 2014-15, <a href="https://doi.org/10.1371/journal.pcbi.1
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">result</span>,  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mid</span>, y <span class="op">=</span> <span class="va">density</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span> <span class="op">+</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Quantile"</span>, <span class="st">"Density"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Quantile"</span>, y <span class="op">=</span> <span class="st">"Density"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="get_pit_histogram-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

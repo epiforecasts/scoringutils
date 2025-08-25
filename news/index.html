@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,9 +35,14 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/v2.1.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.2" id="scoringutils-212">scoringutils 2.1.2<a class="anchor" aria-label="anchor" href="#scoringutils-212"></a></h2>
+<ul><li>fixed an issue that could arise with small rounding errors in quantile-based forecasts. This happened when there were quantile_levels like 0.5, and 0.5 + 1e-16 present at the same time. <code>scoringutils</code> now warns the user of the issue and automatically rounds all quantile levels to 10 digits.</li>
+<li>updated a few example plots to comply with an updated ggplot2 requirement to name labels in <code><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs()</a></code> explicitly.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.1" id="scoringutils-211">scoringutils 2.1.1<a class="anchor" aria-label="anchor" href="#scoringutils-211"></a></h2><p class="text-muted">CRAN release: 2025-06-25</p>
 <ul><li>The package now depends on R version at least 4.1.0 as a result of downstream dependencies.</li>
