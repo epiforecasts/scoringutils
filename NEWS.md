@@ -1,4 +1,4 @@
-# scoringutils (development version)
+# scoringutils 2.1.2
 
 - fixed an issue that could arise with small rounding errors in quantile-based forecasts. This happened when there were quantile_levels like 0.5, and 0.5 + 1e-16 present at the same time. `scoringutils` now warns the user of the issue and automatically rounds all quantile levels to 10 digits. 
 - updated a few example plots to comply with an updated ggplot2 requirement to name labels in `labs()` explicitly.
