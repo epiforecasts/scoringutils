@@ -258,9 +258,7 @@ Health.
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-
 <!-- prettier-ignore-start -->
-
 <!-- markdownlint-disable -->
 
 All contributions to this project are gratefully acknowledged using the
@@ -304,7 +302,5 @@ any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3ATimTaylor">TimTaylor</a>
 
 <!-- markdownlint-enable -->
-
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
