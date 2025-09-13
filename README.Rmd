@@ -4,7 +4,7 @@ output:
     toc: false
 ---
 
-# scoringutils <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="150" alt="epiforecasts.io website" /></a>
+# scoringutils <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="200" alt="epiforecasts.io website" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
