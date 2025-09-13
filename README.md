@@ -11,11 +11,11 @@ version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 [![metacrandownloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
-**Note**: [This
-documentation](https://epiforecasts.io/scoringutils/dev/) refers to the
-development version of `scoringutils`. You can also view the
-[documentation of the stable
-version](https://epiforecasts.io/scoringutils/).
+***Note***: [*This
+documentation*](https://epiforecasts.io/scoringutils/dev/) *refers to
+the development version of `scoringutils`.* *You can also view the*
+[*documentation of the stable
+version*](https://epiforecasts.io/scoringutils/).
 
 ## Utilities for Scoring and Assessing Predictions
 

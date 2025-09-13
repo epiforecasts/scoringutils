@@ -35,9 +35,9 @@ devel <- length(unclass(package_version(version))[[1]]) > 3
 ```{r note_dev, results = 'asis', echo = FALSE}
 if (devel) {
   cat(
-    "**Note**: ",
-    "[This documentation](https://epiforecasts.io/scoringutils/dev/) refers to the development version of `scoringutils`. ",
-    "You can also view the [documentation of the stable version]",
+    "***Note***: ",
+    "[*This documentation*](https://epiforecasts.io/scoringutils/dev/) *refers to the development version of `scoringutils`.* ",
+    "*You can also view the* [*documentation of the stable version*]",
     "(https://epiforecasts.io/scoringutils/).",
     sep = ""
   )
