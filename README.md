@@ -1,5 +1,5 @@
 
-# scoringutils: Utilities for Scoring and Assessing Predictions <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="138" alt="epiforecasts.io website" /></a>
+# scoringutils: <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="138" alt="epiforecasts.io website" /></a>
 
 <!-- badges: start -->
 
@@ -16,6 +16,8 @@ documentation](https://epiforecasts.io/scoringutils/dev/) refers to the
 development version of `scoringutils`. You can also view the
 [documentation of the stable
 version](https://epiforecasts.io/scoringutils/).
+
+## Utilities for Scoring and Assessing Predictions
 
 The `scoringutils` package facilitates the process of evaluating
 forecasts in R, using a convenient and flexible `data.table`-based

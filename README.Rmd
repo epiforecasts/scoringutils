@@ -4,7 +4,7 @@ output:
     toc: false
 ---
 
-# scoringutils: Utilities for Scoring and Assessing Predictions <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="138" alt="epiforecasts.io website" /></a>
+# scoringutils: <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="138" alt="epiforecasts.io website" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
@@ -52,6 +52,8 @@ if (devel) {
 }
 cat("\n\n")
 ```
+
+## Utilities for Scoring and Assessing Predictions
 
 The `scoringutils` package facilitates the process of evaluating forecasts in R, using a convenient and flexible `data.table`-based framework. It provides broad functionality to check the input data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package is easily extendable, meaning that users can supply their own scoring rules or extend existing classes to handle new types of forecasts. 
 
