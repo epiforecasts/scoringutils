@@ -1,5 +1,5 @@
 
-# scoringutils <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="200" alt="epiforecasts.io website" /></a>
+# scoringutils <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="160" alt="epiforecasts.io website" /></a>
 
 <!-- badges: start -->
 
