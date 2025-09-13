@@ -1,9 +1,10 @@
 ---
-title: 'scoringutils: Utilities for Scoring and Assessing Predictions'
 output:
   github_document:
     toc: false
 ---
+
+# scoringutils: Utilities for Scoring and Assessing Predictions <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="138" alt="epiforecasts.io website" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
