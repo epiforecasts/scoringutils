@@ -1,5 +1,5 @@
-scoringutils: Utilities for Scoring and Assessing Predictions
-================
+
+# scoringutils: Utilities for Scoring and Assessing Predictions <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="138" alt="epiforecasts.io website" /></a>
 
 <!-- badges: start -->
 
