@@ -54,9 +54,9 @@ forecast object. Using the argument \code{forecast_unit}, you can specify
 the columns that uniquely identify a single forecast (and thereby removing
 other, unneeded columns. See section "Forecast Unit" below for details).
 }
-\section{Required input}{
-The input needs to be a data.frame or similar for the default method
-with the following columns:
+\section{Target format}{
+The input for all further scoring needs to be a data.frame or similar with
+the following columns:
 \itemize{
 \item \code{observed}: Column of type \code{numeric} with observed values.
 \item \code{predicted}: Column of type \code{numeric} with predicted values. Predicted
@@ -102,6 +102,7 @@ or "observed" are retained.
 \seealso{
 Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_multivariate_sample}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_ordinal}()},
 \code{\link{as_forecast_point}()},

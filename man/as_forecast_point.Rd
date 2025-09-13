@@ -46,9 +46,9 @@ A \code{forecast} object of class \code{forecast_point}
 When converting a \code{forecast_quantile} object into a \code{forecast_point} object,
 the 0.5 quantile is extracted and returned as the point forecast.
 }
-\section{Required input}{
-The input needs to be a data.frame or similar for the default method
-with the following columns:
+\section{Target format}{
+The input for all further scoring needs to be a data.frame or similar with
+the following columns:
 \itemize{
 \item \code{observed}: Column of type \code{numeric} with observed values.
 \item \code{predicted}: Column of type \code{numeric} with predicted values.
@@ -64,6 +64,7 @@ See the \link{example_point} data set for an example.
 \seealso{
 Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_multivariate_sample}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_ordinal}()},
 \code{\link{as_forecast_quantile}()},

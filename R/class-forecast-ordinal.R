@@ -5,10 +5,10 @@
 #' generalisation of binary forecasts to multiple outcomes. The possible
 #' outcomes that the observed values can assume are ordered.
 #'
-#' # Required input
+#' # Target format
 #'
-#' The input needs to be a data.frame or similar for the default method
-#' with the following columns:
+#' The input for all further scoring needs to be a data.frame or similar with
+#' the following columns:
 #' - `observed`: Column with observed values of type `factor` with N ordered
 #'   levels, where N is the number of possible outcomes.
 #'   The levels of the factor represent the possible outcomes that
@@ -75,7 +75,6 @@ as_forecast_ordinal.default <- function(data,
 assert_forecast.forecast_ordinal <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  forecast <- assert_forecast_generic(forecast, verbose)
   assert(check_columns_present(forecast, "predicted_label"))
   assert_names(
     colnames(forecast),
@@ -85,6 +84,8 @@ assert_forecast.forecast_ordinal <- function(
 
   assert_factor(forecast$observed, ordered = TRUE)
   assert_factor(forecast$predicted_label, ordered = TRUE)
+
+  forecast <- assert_forecast_generic(forecast, verbose)
 
   observed_levels <- levels(forecast$observed)
   predicted_label_levels <- levels(forecast$predicted_label)
