@@ -1,10 +1,10 @@
 #' @title Create a `forecast` object for sample-based forecasts
 #' @inherit as_forecast_doc_template params description
 #' @details
-#' # Required input
+#' # Target format
 #'
-#' The input needs to be a data.frame or similar for the default method
-#' with the following columns:
+#' The input for all further scoring needs to be a data.frame or similar with
+#' the following columns:
 #' - `observed`: Column of type `numeric` with observed values.
 #' - `predicted`: Column of type `numeric` with predicted values. Predicted
 #'    values represent random samples from the predictive distribution.
@@ -59,6 +59,7 @@ assert_forecast.forecast_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   forecast <- assert_forecast_generic(forecast, verbose)
+  assert(check_columns_present(forecast, "sample_id"))
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
   return(invisible(NULL))
 }
@@ -93,8 +94,7 @@ as_forecast_quantile.forecast_sample <- function(
   type = 7,
   ...
 ) {
-  forecast <- copy(data)
-  assert_forecast(forecast, verbose = FALSE)
+  forecast <- as.data.table(data)
   assert_numeric(probs, min.len = 1)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(forecast), reserved_columns)
@@ -129,18 +129,18 @@ score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...
   # transpose the forecasts that belong to the same forecast unit
   f_transposed <- forecast[, .(predicted = list(predicted),
                                observed = unique(observed),
-                               scoringutils_N = length(list(sample_id))),
+                               .scoringutils_N = length(sample_id)),
                            by = forecast_unit]
 
   # split according to number of samples and do calculations for different
   # sample lengths separately
-  f_split <- split(f_transposed, f_transposed$scoringutils_N)
+  f_split <- split(f_transposed, f_transposed$.scoringutils_N)
 
   split_result <- lapply(f_split, function(forecast) {
     # create a matrix
     observed <- forecast$observed
     predicted <- do.call(rbind, forecast$predicted)
-    forecast[, c("observed", "predicted", "scoringutils_N") := NULL]
+    forecast[, c("observed", "predicted", ".scoringutils_N") := NULL]
 
     forecast <- apply_metrics(
       forecast, metrics,

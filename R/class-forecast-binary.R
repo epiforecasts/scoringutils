@@ -1,9 +1,10 @@
 #' @title Create a `forecast` object for binary forecasts
 #' @inherit as_forecast_doc_template params description
 #' @details
-#' # Required input
+#' # Target format
 #'
-#' The input needs to be a data.frame or similar with the following columns:
+#' The input for all further scoring needs to be a data.frame or similar with
+#' the following columns:
 #' - `observed`: `factor` with exactly two levels representing the observed
 #'   values. The highest factor level is assumed to be the reference level.
 #'   This means that corresponding value in `predicted` represent the
