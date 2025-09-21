@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- Added support for scoring multivariate forecasts (#288, big thank you to Sam Abbott and Sebastian Funk). You can find detailed information in the Vignette "Scoring multivariate forecasts". There is no a new forecast type, `forecast_multivariate_sample()` and a corresponding `as_forecast_multivariate_sample()` function. To score a multivariate forecast, users are expected to provide a `joint_across` argument which specifies the variables which are forecast jointly. 
+
 # scoringutils 2.1.2
 
 - fixed an issue that could arise with small rounding errors in quantile-based forecasts. This happened when there were quantile_levels like 0.5, and 0.5 + 1e-16 present at the same time. `scoringutils` now warns the user of the issue and automatically rounds all quantile levels to 10 digits. 
