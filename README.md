@@ -1,5 +1,5 @@
-scoringutils: Utilities for Scoring and Assessing Predictions
-================
+
+# scoringutils <a href="https://epiforecasts.io/"><img src="man/figures/logo.png" align="right" height="175" alt="epiforecasts.io website" /></a>
 
 <!-- badges: start -->
 
@@ -11,11 +11,13 @@ version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)
 [![metacrandownloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
 <!-- badges: end -->
 
-**Note**: [This
-documentation](https://epiforecasts.io/scoringutils/dev/) refers to the
-development version of `scoringutils`. You can also view the
-[documentation of the stable
-version](https://epiforecasts.io/scoringutils/).
+***Note***: [*This
+documentation*](https://epiforecasts.io/scoringutils/dev/) *refers to
+the development version of `scoringutils`.* *You can also view the*
+[*documentation of the stable
+version*](https://epiforecasts.io/scoringutils/).
+
+## Utilities for Scoring and Assessing Predictions
 
 The `scoringutils` package facilitates the process of evaluating
 forecasts in R, using a convenient and flexible `data.table`-based
@@ -258,9 +260,7 @@ Health.
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-
 <!-- prettier-ignore-start -->
-
 <!-- markdownlint-disable -->
 
 All contributions to this project are gratefully acknowledged using the
@@ -304,7 +304,5 @@ any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+commenter%3ATimTaylor">TimTaylor</a>
 
 <!-- markdownlint-enable -->
-
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
