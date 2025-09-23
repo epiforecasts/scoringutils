@@ -54,9 +54,9 @@ forecast object. Using the argument \code{forecast_unit}, you can specify
 the columns that uniquely identify a single forecast (and thereby removing
 other, unneeded columns. See section "Forecast Unit" below for details).
 }
-\section{Required input}{
-The input needs to be a data.frame or similar for the default method
-with the following columns:
+\section{Target format}{
+The input for all further scoring needs to be a data.frame or similar with
+the following columns:
 \itemize{
 \item \code{observed}: Column of type \code{numeric} with observed values.
 \item \code{predicted}: Column of type \code{numeric} with predicted values. Predicted
@@ -75,10 +75,13 @@ for an example
 
 \section{Forecast unit}{
 In order to score forecasts, \code{scoringutils} needs to know which of the rows
-of the data belong together and jointly form a single forecasts. This is
+of the data belong together and jointly form a single forecast. This is
 easy e.g. for point forecast, where there is one row per forecast. For
 quantile or sample-based forecasts, however, there are multiple rows that
-belong to a single forecast.
+belong to a single forecast. (For a multivariate forecast, several univariate
+forecasts are pooled together to form a joint forecast. In the multivariate
+case, "forecast unit" still refers to the forecast unit of the univariate
+forecasts that are pooled together to form the multivariate forecast.)
 
 The \emph{forecast unit} or \emph{unit of a single forecast} is then described by the
 combination of columns that uniquely identify a single forecast.
@@ -102,6 +105,7 @@ or "observed" are retained.
 \seealso{
 Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_multivariate_sample}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_ordinal}()},
 \code{\link{as_forecast_point}()},

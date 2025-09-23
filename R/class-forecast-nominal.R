@@ -5,10 +5,10 @@
 #' generalisation of binary forecasts to multiple outcomes. The possible
 #' outcomes that the observed values can assume are not ordered.
 #'
-#' # Required input
+#' # Target format
 #'
-#' The input needs to be a data.frame or similar for the default method
-#' with the following columns:
+#' The input for all further scoring needs to be a data.frame or similar with
+#' the following columns:
 #' - `observed`: Column with observed values of type `factor` with N levels,
 #'    where N is the number of possible outcomes.
 #'    The levels of the factor represent the possible outcomes that
@@ -75,7 +75,6 @@ as_forecast_nominal.default <- function(data,
 assert_forecast.forecast_nominal <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  forecast <- assert_forecast_generic(forecast, verbose)
   assert(check_columns_present(forecast, "predicted_label"))
   assert_names(
     colnames(forecast),
@@ -89,6 +88,8 @@ assert_forecast.forecast_nominal <- function(
   # levels need to be the same
   outcomes <- levels(forecast$observed)
   assert_set_equal(levels(forecast$predicted_label), outcomes)
+
+  forecast <- assert_forecast_generic(forecast, verbose)
 
   # forecasts need to be complete
   forecast_unit <- get_forecast_unit(forecast)

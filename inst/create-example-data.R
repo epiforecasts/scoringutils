@@ -197,6 +197,18 @@ example_sample_discrete <- as_forecast_sample(example_sample_discrete)
 usethis::use_data(example_sample_discrete, overwrite = TRUE)
 
 
+# get multivariate sample data -------------------------------------------------
+example_multivariate_sample <- data.table::copy(example_sample_continuous)
+
+example_multivariate_sample <- as_forecast_multivariate_sample(
+  data = example_multivariate_sample,
+  joint_across = c("location", "location_name")
+)
+
+usethis::use_data(example_multivariate_sample, overwrite = TRUE)
+
+
+
 # get binary example data ------------------------------------------------------
 # construct a binary prediction by looking at the number of samples below the
 # mean prediction. Construct the outcome as whether or not the actually

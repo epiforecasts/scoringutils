@@ -1,0 +1,168 @@
+---
+title: "Scoring multivariate forecasts"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Scoring multivariate forecasts}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+This Vignette provides an overview about how to score multivariate forecasts.
+
+
+## Univariate forecasts
+
+Let's start with a simple univariate forecast: The number of cases of COVID-19 in Germany on 2021-05-15, forecasted by the EuroCOVIDhub-ensemble model on 2021-05-03. In our example, this forecast is represented by a set of 40 samples from the predictive distribution.
+
+```{r}
+library(scoringutils)
+
+example_univ_single <- example_sample_continuous[
+  target_type == "Cases" &
+    location == "DE" &
+    forecast_date == "2021-05-03" &
+    target_end_date == "2021-05-15" &
+    horizon == 2 &
+    model == "EuroCOVIDhub-ensemble"
+]
+example_univ_single
+```
+
+We can score this forecast and will receive a single score.
+```{r}
+score(example_univ_single)
+```
+
+Now, of course, we can also score multiple similar forecasts at the same time. Let's say we're not only interested in Germany, but other countries as well.
+
+```{r}
+example_univ_multi <- example_sample_continuous[
+  target_type == "Cases" &
+    forecast_date == "2021-05-03" &
+    target_end_date == "2021-05-15" &
+    horizon == 2 &
+    model == "EuroCOVIDhub-ensemble"
+]
+example_univ_multi
+```
+
+Now, we have a set of 4 forecasts for 4 different countries, each of them represented by a set of 40 samples from the predictive distribution.
+
+When we score these forecasts, we will get 4 scores, one for each forecast and observed value.
+```{r}
+score(example_univ_multi)
+```
+
+## Multivariate forecasts
+
+Now, instead of treating the four observations as independent, we could also think of them as a single realisation of a draw from the multivariate distribution of COVID-19 cases across several countries.
+
+The corresponding multivariate forecast would similarly specify a predictive distribution for the number of cases across all 4 countries. The samples are then not draws from four independent distributions, but instead samples from a joint multivariate predictive distribution.
+
+In the following, let's assume that our samples were draws from a multivariate distribution all along (we just treated them as independent for the univariate case).
+
+To tell `scoringutils` that we want to treat these as a multivariate forecast, we need to specify the columns that are pooled together to form a single multivariate forecast. We do this via the `joint_across` argument. For example, if we want to pool forecasts across locations and treat them as a single multivariate forecast, we could set `joint_across = c("location", "location_name")` (in our example, the two columns contain essentially the same information - we therefore have to include both in `joint_across` (or could alternatively delete one of them)).
+
+```{r}
+example_multiv <- as_forecast_multivariate_sample(
+  data = example_univ_multi,
+  c("location", "location_name")
+)
+example_multiv
+```
+
+The column `.mv_group_id` is created automatically and represents an identifier for each multivariate forecast. `.mv_group_id` is 1 everywhere, because we only have a single multivariate forecast. When scoring this forecast using an appropriate multivariate scoring function, we will get a single score, even though we have 4 observations, one for each country. (Note that for the purposes of scoring, it doesn't matter that sample ids are still 1-40, repeated 4 times, instead of 1-160. `scoringutils` handles this appropriately.)
+
+```{r}
+score(example_multiv)
+```
+
+If, at any point, you want to score the same forecast using different groupings, you'd have create a new separate forecast object with a different grouping and score that new forecast object.
+
+<!-- ## Details on the grouping - WIP
+
+As mentioned above, you can set the grouping with the `set_grouping` function. This will return the original data with an additional column `.mv_group_id` that indicates the group each observation belongs to.
+
+Alternatively, you can set the grouping right when creating the forecast.
+
+
+forecast <- as_forecast_sample(
+  example_sample_continuous,
+  grouping = c("target_end_date", "target_type", "forecast_date", "model", "horizon")
+)
+
+forecast -->
+
+
+
+## Univariate and multivariate scoring for matrices
+
+Note: this section may only be relevant to you if you're planning to score forecasts in matrix format.
+
+Let's construct a simple multivariate forecast:
+
+```{r}
+# parameters for multivariate normal example
+set.seed(123)
+d <- 10  # number of dimensions
+m <- 50  # number of samples from multivariate forecast distribution
+
+mu0 <- rep(0, d)
+mu <- rep(1, d)
+
+S0 <- S <- diag(d)
+S0[S0 == 0] <- 0.2
+S[S == 0] <- 0.1
+
+# generate samples from multivariate normal distributions
+obs <- drop(mu0 + rnorm(d) %*% chol(S0))
+fc_sample <- replicate(m, drop(mu + rnorm(d) %*% chol(S)))
+
+obs2 <- drop(mu0 + rnorm(d) %*% chol(S0))
+fc_sample2 <- replicate(m, drop(mu + rnorm(d) %*% chol(S)))
+```
+
+Now, we can compute the Energy Score. Let's compare the `scoringutils` implementation with that of the `scoringRules` package, on which the `scoringutils` implementation is based. The only difference is that `scoringRules` always expects a single multivariate `forecast`, while the `scoringutils` implementation can handle multiple multivariate forecasts together, identified via a grouping vector (assuming they all have the same dimension).
+
+```{r}
+scoringRules::es_sample(y = obs, dat = fc_sample)
+# in the univariate case, Energy Score and CRPS are the same
+# illustration: Evaluate forecast sample for the first variable
+es_sr1 <- scoringRules::es_sample(y = obs, dat = fc_sample)
+es_sr2 <- scoringRules::es_sample(y = obs2, dat = fc_sample2)
+es_sr <- c(es_sr1, es_sr2)
+
+es_su <- energy_score_multivariate(
+  observed = c(obs, obs2),
+  predicted = rbind(fc_sample, fc_sample2),
+  mv_group_id = c(rep(1, d), rep(2, d))
+)
+all.equal(es_sr, es_su, tolerance = 1e-6, check.attributes = FALSE)
+```
+
+You can provide observation weights when computing the Energy Score.
+
+```{r}
+# illustration of observation weights for Energy Score
+# example: equal weights for first half of draws; zero weights for other draws
+w <- rep(c(1, 0), each = 0.5 * m) / (0.5 * m)
+
+es_sr1 <- scoringRules::es_sample(y = obs, dat = fc_sample, w = w)
+es_sr2 <- scoringRules::es_sample(y = obs2, dat = fc_sample2, w = w)
+es_sr <- c(es_sr1, es_sr2)
+
+es_su <- energy_score_multivariate(
+  observed = c(obs, obs2),
+  predicted = rbind(fc_sample, fc_sample2),
+  mv_group_id = c(rep(1, d), rep(2, d)),
+  w = w
+)
+
+all.equal(es_sr, es_su, tolerance = 1e-6, check.attributes = FALSE)
+```

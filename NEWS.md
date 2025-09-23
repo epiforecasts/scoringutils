@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- Added support for scoring multivariate forecasts (#288, big thank you to Sam Abbott and Sebastian Funk). You can find detailed information in the Vignette "Scoring multivariate forecasts". There is a new forecast type, `forecast_multivariate_sample()` and a corresponding `as_forecast_multivariate_sample()` function. To score a multivariate forecast, users are expected to provide a `joint_across` argument which specifies the variables which are forecast jointly. 
+
 # scoringutils 2.1.2
 
 - fixed an issue that could arise with small rounding errors in quantile-based forecasts. This happened when there were quantile_levels like 0.5, and 0.5 + 1e-16 present at the same time. `scoringutils` now warns the user of the issue and automatically rounds all quantile levels to 10 digits. 
@@ -156,7 +158,7 @@ This major release contains a range of new features and bug fixes that have been
 
 - Documentation updated to reflect changes since version 1.1.0, including new transform and workflow functions.
 - New `set_forecast_unit()` function allows manual setting of forecast unit.
-- `summarise_scores()` gains new `across` argument for summarizing across variables.
+- `summarise_scores()` gains new `across` argument for summarizing across variables. EDIT: This has since been removed again in [PR #831](https://github.com/epiforecasts/scoringutils/pull/831).
 - New `transform_forecasts()` and `log_shift()` functions allow forecast transformations. See the documentation for `transform_forecasts()` for more details and an example use case.
 - Input checks and test coverage improved for bias functions.
 - Bug fix in `get_prediction_type()` for integer matrix input.
