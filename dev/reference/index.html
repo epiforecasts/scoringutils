@@ -21,6 +21,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
     <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+    <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -70,6 +71,12 @@
 
         </dt>
         <dd>Binary forecast example data</dd>
+      </dl><dl><dt>
+
+          <code><a href="example_multivariate_sample.html">example_multivariate_sample</a></code>
+
+        </dt>
+        <dd>Multivariate forecast example data</dd>
       </dl><dl><dt>
 
           <code><a href="example_nominal.html">example_nominal</a></code>
@@ -137,6 +144,12 @@
         <dd>Common functionality for <code>as_forecast_&lt;type&gt;</code> functions</dd>
       </dl><dl><dt>
 
+          <code><a href="as_forecast_multivariate_sample.html">as_forecast_multivariate_sample()</a></code>
+
+        </dt>
+        <dd>Create a <code>forecast</code> object for sample-based multivariate forecasts</dd>
+      </dl><dl><dt>
+
           <code><a href="as_forecast_nominal.html">as_forecast_nominal()</a></code>
 
         </dt>
@@ -190,7 +203,7 @@
         <dd>Assert that input is a forecast object and passes validations</dd>
       </dl><dl><dt>
 
-          <code><a href="is_forecast.html">is_forecast_binary()</a></code> <code><a href="is_forecast.html">is_forecast_nominal()</a></code> <code><a href="is_forecast.html">is_forecast_ordinal()</a></code> <code><a href="is_forecast.html">is_forecast_point()</a></code> <code><a href="is_forecast.html">is_forecast_quantile()</a></code> <code><a href="is_forecast.html">is_forecast_sample()</a></code> <code><a href="is_forecast.html">is_forecast()</a></code>
+          <code><a href="is_forecast.html">is_forecast_binary()</a></code> <code><a href="is_forecast.html">is_forecast_sample_multivariate()</a></code> <code><a href="is_forecast.html">is_forecast_nominal()</a></code> <code><a href="is_forecast.html">is_forecast_ordinal()</a></code> <code><a href="is_forecast.html">is_forecast_point()</a></code> <code><a href="is_forecast.html">is_forecast_quantile()</a></code> <code><a href="is_forecast.html">is_forecast_sample()</a></code> <code><a href="is_forecast.html">is_forecast()</a></code>
 
         </dt>
         <dd>Test whether an object is a forecast object</dd>
@@ -229,6 +242,12 @@
 
         </dt>
         <dd>Get unit of a single forecast</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_grouping.html">get_grouping()</a></code>
+
+        </dt>
+        <dd>Get grouping for a multivariate forecast</dd>
       </dl></div><div class="section level2">
       <h2 id="transform-data">Transform data<a class="anchor" aria-label="anchor" href="#transform-data"></a></h2>
 
@@ -246,6 +265,12 @@
 
         </dt>
         <dd>Create a <code>forecast</code> object for binary forecasts</dd>
+      </dl><dl><dt>
+
+          <code><a href="as_forecast_multivariate_sample.html">as_forecast_multivariate_sample()</a></code>
+
+        </dt>
+        <dd>Create a <code>forecast</code> object for sample-based multivariate forecasts</dd>
       </dl><dl><dt>
 
           <code><a href="as_forecast_nominal.html">as_forecast_nominal()</a></code>
@@ -338,6 +363,12 @@
       </dl><dl><dt>
 
           <code><a href="get_metrics.forecast_sample.html">get_metrics(<i>&lt;forecast_sample&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Get default metrics for sample-based forecasts</dd>
+      </dl><dl><dt>
+
+          <code><a href="get_metrics.forecast_sample_multivariate.html">get_metrics(<i>&lt;forecast_sample_multivariate&gt;</i>)</a></code>
 
         </dt>
         <dd>Get default metrics for sample-based forecasts</dd>
@@ -633,6 +664,12 @@
         <dd>Assert that inputs are correct for interval-based forecast</dd>
       </dl><dl><dt>
 
+          <code><a href="assert_input_multivariate_sample.html">assert_input_multivariate_sample()</a></code>
+
+        </dt>
+        <dd>Assert that inputs are correct for sample-based forecast</dd>
+      </dl><dl><dt>
+
           <code><a href="assert_input_nominal.html">assert_input_nominal()</a></code>
 
         </dt>
@@ -727,6 +764,12 @@
 
         </dt>
         <dd>Helper function to convert assert statements into checks</dd>
+      </dl><dl><dt>
+
+          <code><a href="energy_score_multivariate.html">energy_score_multivariate()</a></code>
+
+        </dt>
+        <dd>Energy score for multivariate forecasts</dd>
       </dl><dl><dt>
 
           <code><a href="get_forecast_type.html">get_forecast_type()</a></code>
@@ -936,6 +979,12 @@
 
         </dt>
         <dd>scoringutils: Utilities for Scoring and Assessing Predictions</dd>
+      </dl><dl><dt>
+
+          <code><a href="set_grouping.html">set_grouping()</a></code>
+
+        </dt>
+        <dd>Set grouping</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

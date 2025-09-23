@@ -29,6 +29,7 @@ the required input formats."><meta property="og:image" content="https://epiforec
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
     <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+    <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -42,7 +43,7 @@ the required input formats."><meta property="og:image" content="https://epiforec
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Assert that input is a forecast object and passes validations</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-binary.R" class="external-link"><code>R/class-forecast-binary.R</code></a>, <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-point.R" class="external-link"><code>R/class-forecast-point.R</code></a>, <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-quantile.R" class="external-link"><code>R/class-forecast-quantile.R</code></a>, and 2 more</small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-binary.R" class="external-link"><code>R/class-forecast-binary.R</code></a>, <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-multivariate-sample.R" class="external-link"><code>R/class-forecast-multivariate-sample.R</code></a>, <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-point.R" class="external-link"><code>R/class-forecast-point.R</code></a>, and 3 more</small>
       <div class="d-none name"><code>assert_forecast.Rd</code></div>
     </div>
 
@@ -57,6 +58,9 @@ the required input formats.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'forecast_binary'</span></span>
+<span><span class="fu">assert_forecast</span><span class="op">(</span><span class="va">forecast</span>, forecast_type <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'forecast_sample_multivariate'</span></span>
 <span><span class="fu">assert_forecast</span><span class="op">(</span><span class="va">forecast</span>, forecast_type <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'forecast_point'</span></span>

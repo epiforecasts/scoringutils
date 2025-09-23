@@ -21,6 +21,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
     <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+    <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -39,7 +40,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="scoringutils-development-version">scoringutils (development version)<a class="anchor" aria-label="anchor" href="#scoringutils-development-version"></a></h2>
-</div>
+<ul><li>Added support for scoring multivariate forecasts (<a href="https://github.com/epiforecasts/scoringutils/issues/288" class="external-link">#288</a>, big thank you to Sam Abbott and Sebastian Funk). You can find detailed information in the Vignette “Scoring multivariate forecasts”. There is a new forecast type, <code>forecast_multivariate_sample()</code> and a corresponding <code><a href="../reference/as_forecast_multivariate_sample.html">as_forecast_multivariate_sample()</a></code> function. To score a multivariate forecast, users are expected to provide a <code>joint_across</code> argument which specifies the variables which are forecast jointly.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.2" id="scoringutils-212">scoringutils 2.1.2<a class="anchor" aria-label="anchor" href="#scoringutils-212"></a></h2><p class="text-muted">CRAN release: 2025-08-25</p>
 <ul><li>fixed an issue that could arise with small rounding errors in quantile-based forecasts. This happened when there were quantile_levels like 0.5, and 0.5 + 1e-16 present at the same time. <code>scoringutils</code> now warns the user of the issue and automatically rounds all quantile levels to 10 digits.</li>
@@ -227,7 +229,7 @@
 <ul><li>Documentation updated to reflect changes since version 1.1.0, including new transform and workflow functions.</li>
 <li>New <code><a href="../reference/set_forecast_unit.html">set_forecast_unit()</a></code> function allows manual setting of forecast unit.</li>
 <li>
-<code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> gains new <code>across</code> argument for summarizing across variables.</li>
+<code><a href="../reference/summarise_scores.html">summarise_scores()</a></code> gains new <code>across</code> argument for summarizing across variables. EDIT: This has since been removed again in <a href="https://github.com/epiforecasts/scoringutils/pull/831" class="external-link">PR </a><a href="https://github.com/epiforecasts/scoringutils/issues/831" class="external-link">#831</a>.</li>
 <li>New <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> and <code><a href="../reference/log_shift.html">log_shift()</a></code> functions allow forecast transformations. See the documentation for <code><a href="../reference/transform_forecasts.html">transform_forecasts()</a></code> for more details and an example use case.</li>
 <li>Input checks and test coverage improved for bias functions.</li>
 <li>Bug fix in <code>get_prediction_type()</code> for integer matrix input.</li>

@@ -29,6 +29,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
     <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+    <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -99,6 +100,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <code><a href="get_metrics.forecast_point.html">get_metrics.forecast_point</a>()</code>,
 <code><a href="get_metrics.forecast_quantile.html">get_metrics.forecast_quantile</a>()</code>,
 <code><a href="get_metrics.forecast_sample.html">get_metrics.forecast_sample</a>()</code>,
+<code><a href="get_metrics.forecast_sample_multivariate.html">get_metrics.forecast_sample_multivariate</a>()</code>,
 <code><a href="get_metrics.scores.html">get_metrics.scores</a>()</code></p></div>
     </div>
 
@@ -113,7 +115,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     brierscore &lt;- (observed - predicted)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(brierscore)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c4227f5a20&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c18b8346a8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
@@ -124,7 +126,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     logs &lt;- -log(1 - abs(observed - predicted))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(logs)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c418aca3b0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c18b833870&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">example_binary</span>, select <span class="op">=</span> <span class="st">"brier_score"</span><span class="op">)</span></span></span>
@@ -136,7 +138,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     brierscore &lt;- (observed - predicted)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(brierscore)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c4227f5a20&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c18b8346a8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">example_binary</span>, exclude <span class="op">=</span> <span class="st">"log_score"</span><span class="op">)</span></span></span>
@@ -148,7 +150,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     brierscore &lt;- (observed - predicted)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(brierscore)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c4227f5a20&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c18b8346a8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
