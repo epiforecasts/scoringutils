@@ -94,14 +94,14 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other get_metrics functions:
-<code><a href="get_metrics.html">get_metrics</a>()</code>,
-<code><a href="get_metrics.forecast_nominal.html">get_metrics.forecast_nominal</a>()</code>,
-<code><a href="get_metrics.forecast_ordinal.html">get_metrics.forecast_ordinal</a>()</code>,
-<code><a href="get_metrics.forecast_point.html">get_metrics.forecast_point</a>()</code>,
-<code><a href="get_metrics.forecast_quantile.html">get_metrics.forecast_quantile</a>()</code>,
-<code><a href="get_metrics.forecast_sample.html">get_metrics.forecast_sample</a>()</code>,
-<code><a href="get_metrics.forecast_sample_multivariate.html">get_metrics.forecast_sample_multivariate</a>()</code>,
-<code><a href="get_metrics.scores.html">get_metrics.scores</a>()</code></p></div>
+<code><a href="get_metrics.html">get_metrics()</a></code>,
+<code><a href="get_metrics.forecast_nominal.html">get_metrics.forecast_nominal()</a></code>,
+<code><a href="get_metrics.forecast_ordinal.html">get_metrics.forecast_ordinal()</a></code>,
+<code><a href="get_metrics.forecast_point.html">get_metrics.forecast_point()</a></code>,
+<code><a href="get_metrics.forecast_quantile.html">get_metrics.forecast_quantile()</a></code>,
+<code><a href="get_metrics.forecast_sample.html">get_metrics.forecast_sample()</a></code>,
+<code><a href="get_metrics.forecast_sample_multivariate.html">get_metrics.forecast_sample_multivariate()</a></code>,
+<code><a href="get_metrics.scores.html">get_metrics.scores()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -115,7 +115,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     brierscore &lt;- (observed - predicted)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(brierscore)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c18b8346a8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55ae44350670&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
@@ -126,7 +126,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     logs &lt;- -log(1 - abs(observed - predicted))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(logs)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c18b833870&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55ae4434f838&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">example_binary</span>, select <span class="op">=</span> <span class="st">"brier_score"</span><span class="op">)</span></span></span>
@@ -138,7 +138,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     brierscore &lt;- (observed - predicted)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(brierscore)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c18b8346a8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55ae44350670&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">example_binary</span>, exclude <span class="op">=</span> <span class="st">"log_score"</span><span class="op">)</span></span></span>
@@ -150,7 +150,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     brierscore &lt;- (observed - predicted)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(brierscore)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c18b8346a8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55ae44350670&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

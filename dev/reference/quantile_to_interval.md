@@ -1,0 +1,97 @@
+# Transform from a quantile format to an interval format
+
+Internal helper function to transform from a quantile format to an
+interval format (which is no longer a supported forecast format, but
+still used internally. The function mimics an S3 generic, but is not
+actually an S3 generic, as we want the functions to be internal and not
+exported.)
+
+**Quantile format** In a quantile format, a prediction is characterised
+by one or multiple predicted values and the corresponding quantile
+levels. For example, a prediction in a quantile format could be
+represented by the 0.05, 0.25, 0.5, 0.75 and 0.95 quantiles of the
+predictive distribution.
+
+**Interval format** In the interval format, two quantiles are assumed to
+form a prediction interval. Prediction intervals need to be symmetric
+around the median and are characterised by a lower and an upper bound.
+The lower bound is defined by the lower quantile and the upper bound is
+defined by the upper quantile. A 90% prediction interval, for example,
+covers 90% of the probability mass and is defined by the 5% and 95%
+quantiles. A forecast could therefore be characterised by one or
+multiple prediction intervals, e.g. the lower and upper bounds of the
+50% and 90% prediction intervals (corresponding to the 0.25 and 0.75 as
+well as the 0.05 and 0.095 quantiles).
+
+## Usage
+
+``` r
+quantile_to_interval(...)
+
+quantile_to_interval_dataframe(
+  forecast,
+  format = "long",
+  keep_quantile_col = FALSE,
+  ...
+)
+
+quantile_to_interval_numeric(observed, predicted, quantile_level, ...)
+```
+
+## Arguments
+
+- ...:
+
+  Arguments
+
+- forecast:
+
+  A data.table with forecasts in a quantile-based format (see
+  [`as_forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_quantile.md)).
+
+- format:
+
+  The format of the output. Either "long" or "wide". If "long" (the
+  default), there will be a column `boundary` (with values either
+  "upper" or "lower" and a column `interval_range` that contains the
+  range of the interval. If "wide", there will be a column
+  `interval_range` and two columns `lower` and `upper` that contain the
+  lower and upper bounds of the prediction interval, respectively.
+
+- keep_quantile_col:
+
+  keep the `quantile_level` column in the final output after
+  transformation (default is FALSE). This only works if
+  `format = "long"`. If `format = "wide"`, the `quantile_level` column
+  will always be dropped.
+
+- observed:
+
+  Numeric vector of size n with the observed values.
+
+- predicted:
+
+  Numeric nxN matrix of predictive quantiles, n (number of rows) being
+  the number of forecasts (corresponding to the number of observed
+  values) and N (number of columns) the number of quantiles per
+  forecast. If `observed` is just a single number, then predicted can
+  just be a vector of size N.
+
+- quantile_level:
+
+  Vector of of size N with the quantile levels for which predictions
+  were made.
+
+## Value
+
+A data.table with forecasts in an interval format.
+
+*quantile_to_interval_dataframe*: a data.table in an interval format
+(either "long" or "wide"), with or without a `quantile_level` column.
+Rows will not be reordered.
+
+*quantile_to_interval.numeric*: a data.table in a wide interval format
+with columns `forecast_id`, `observed`, `lower`, `upper`, and
+`interval_range`. The `forecast_id` column is a unique identifier for
+each forecast. Rows will be reordered according to `forecast_id` and
+`interval_range`.

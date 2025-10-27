@@ -1,0 +1,138 @@
+# Probability integral transformation for counts
+
+Uses a Probability integral transformation (PIT) (or a randomised PIT
+for integer forecasts) to assess the calibration of predictive Monte
+Carlo samples.
+
+## Usage
+
+``` r
+pit_histogram_sample(
+  observed,
+  predicted,
+  quantiles,
+  integers = c("nonrandom", "random", "ignore"),
+  n_replicates = NULL
+)
+```
+
+## Arguments
+
+- observed:
+
+  A vector with observed values of size n
+
+- predicted:
+
+  nxN matrix of predictive samples, n (number of rows) being the number
+  of data points and N (number of columns) the number of Monte Carlo
+  samples. Alternatively, if n = 1, `predicted` can just be a vector of
+  size n.
+
+- quantiles:
+
+  A vector of quantiles between which to calculate the PIT.
+
+- integers:
+
+  How to handle integer forecasts (count data). This is based on methods
+  described Czado et al. (2007). If "nonrandom" (default) the function
+  will use the non-randomised PIT method. If "random", will use the
+  randomised PIT method. If "ignore", will treat integer forecasts as if
+  they were continuous.
+
+- n_replicates:
+
+  The number of draws for the randomised PIT for discrete predictions.
+  Will be ignored if forecasts are continuous or `integers` is not set
+  to `random`.
+
+## Value
+
+A vector with PIT histogram densities for the bins corresponding to the
+given quantiles.
+
+## Details
+
+Calibration or reliability of forecasts is the ability of a model to
+correctly identify its own uncertainty in making predictions. In a model
+with perfect calibration, the observed data at each time point look as
+if they came from the predictive probability distribution at that time.
+
+Equivalently, one can inspect the probability integral transform of the
+predictive distribution at time t,
+
+\$\$ u_t = F_t (x_t) \$\$
+
+where \\x_t\\ is the observed data point at time \\t \textrm{ in } t_1,
+…, t_n\\, n being the number of forecasts, and \\F_t\\ is the
+(continuous) predictive cumulative probability distribution at time t.
+If the true probability distribution of outcomes at time t is \\G_t\\
+then the forecasts \\F_t\\ are said to be ideal if \\F_t = G_t\\ at all
+times t. In that case, the probabilities \\u_t\\ are distributed
+uniformly.
+
+In the case of discrete nonnegative outcomes such as incidence counts,
+the PIT is no longer uniform even when forecasts are ideal. In that case
+two methods are available ase described by Czado et al. (2007).
+
+By default, a nonrandomised PIT is calculated using the conditional
+cumulative distribution function \$\$ F(u) = \begin{cases} 0 & \text{if
+} v \< P_t(k_t - 1) \\ (v - P_t(k_t - 1)) / (P_t(k_t) - P_t(k_t - 1)) &
+\text{if } P_t(k_t - 1) \leq v \< P_t(k_t) \\ 1 & \text{if } v \geq
+P_t(k_t) \end{cases} \$\$
+
+where \\k_t\\ is the observed count, \\P_t(x)\\ is the predictive
+cumulative probability of observing incidence \\k\\ at time \\t\\ and
+\\P_t (-1) = 0\\ by definition. Values of the PIT histogram are then
+created by averaging over the \\n\\ predictions,
+
+\$\$ \bar{F}(u) = \frac{i = 1}{n} \sum\_{i=1}^{n} F^{(i)}(u) \$\$
+
+And calculating the value at each bin between quantile \\q_i\\ and
+quantile \\q\_{i + 1}\\ as
+
+\$\$ \bar{F}(q_i) - \bar{F}(q\_{i + 1}) \$\$
+
+Alternatively, a randomised PIT can be used instead. In this case, the
+PIT is \$\$ u_t = P_t(k_t) + v \* (P_t(k_t) - P_t(k_t - 1)) \$\$
+
+where \\v\\ is standard uniform and independent of \\k\\. The values of
+the PIT histogram are then calculated by binning the \\u_t\\ values as
+above.
+
+## References
+
+Claudia Czado, Tilmann Gneiting Leonhard Held (2009) Predictive model
+assessment for count data. Biometrika, 96(4), 633-648. Sebastian Funk,
+Anton Camacho, Adam J. Kucharski, Rachel Lowe, Rosalind M. Eggo, W. John
+Edmunds (2019) Assessing the performance of real-time epidemic
+forecasts: A case study of Ebola in the Western Area region of Sierra
+Leone, 2014-15,
+[doi:10.1371/journal.pcbi.1006785](https://doi.org/10.1371/journal.pcbi.1006785)
+
+## See also
+
+[`get_pit_histogram()`](https://epiforecasts.io/scoringutils/dev/reference/get_pit_histogram.md)
+
+## Examples
+
+``` r
+## continuous predictions
+observed <- rnorm(20, mean = 1:20)
+predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
+pit <- pit_histogram_sample(observed, predicted, quantiles = seq(0, 1, 0.1))
+
+## integer predictions
+observed <- rpois(20, lambda = 1:20)
+predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
+pit <- pit_histogram_sample(observed, predicted, quantiles = seq(0, 1, 0.1))
+
+## integer predictions, randomised PIT
+observed <- rpois(20, lambda = 1:20)
+predicted <- replicate(100, rpois(n = 20, lambda = 1:20))
+pit <- pit_histogram_sample(
+  observed, predicted, quantiles = seq(0, 1, 0.1),
+  integers = "random", n_replicates = 30
+)
+```
