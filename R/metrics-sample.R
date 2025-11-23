@@ -100,13 +100,20 @@ bias_sample <- function(observed, predicted) {
 
   # empirical cdf
   n_pred <- ncol(predicted)
-  p_x <- rowSums(predicted <= observed) / n_pred
 
   if (prediction_type == "continuous") {
+    # For continuous predictions, approximate P_t(x_t) using mid-ranks:
+    # proportion strictly less than x_t plus half the proportion equal to x_t.
+    # Use a small tolerance to handle floating point equality.
+    tol <- sqrt(.Machine$double.eps) * pmax(1, abs(observed))
+    p_lt <- rowSums(predicted < observed) / n_pred
+    p_eq <- rowSums(abs(predicted - observed) <= tol) / n_pred
+    p_x <- p_lt + 0.5 * p_eq
     res <- 1 - 2 * p_x
     return(res)
   } else {
     # for integer case also calculate empirical cdf for (y-1)
+    p_x <- rowSums(predicted <= observed) / n_pred
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
 
     res <- 1 - (p_x + p_xm1)
