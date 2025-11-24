@@ -384,7 +384,12 @@ equal the standard deviation of $F$.For more details, see
 Bias is a measure of the tendency of a forecaster to over- or
 underpredict. For *continuous* forecasts, the `scoringutils`
 implementation calculates bias as $$B(F,y) = 1 - 2 \cdot F(y),$$ where
-$F(y)$ is the cumulative distribution function of the forecast.
+$F(y)$ is the empirical cumulative distribution function of the forecast
+evaluated at the observed value $y$. To handle ties appropriately (which
+can occur when predictions equal observations for example due to
+rounding), the implementation uses mid-ranks: $F(y)$ is computed as the
+proportion of predictions strictly less than $y$ plus half the
+proportion of predictions equal to $y$.
 
 For *discrete* forecasts, we calculate bias as
 $$B(P,y) = 1 - \left( P(y) + P(y + 1) \right).$$ where $P(y)$ is the

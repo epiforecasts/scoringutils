@@ -268,7 +268,7 @@ a probability that the observed outcome will be 1.</p>
 the mean squared error between the probabilistic prediction and the
 observed outcome.</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">BS</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo>−</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><msup><mi>p</mi><mn>2</mn></msup><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>=</mo><mn>1</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>=</mo><mn>0</mn></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\begin{equation}
-    \text{BS}(p, y) = (p - y)^2 = 
+    \text{BS}(p, y) = (p - y)^2 =
     \begin{cases}
         p^2,       &amp; \text{if } y = 1\\
         (1 - p)^2,   &amp; \text{if } y = 0
@@ -305,7 +305,7 @@ a probability that the observed outcome will be 1.</p>
 rule. It is computed as the negative logarithm of the probability
 assigned to the observed outcome.</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Log score</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>−</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mrow><mo stretchy="true" form="prefix">|</mo><mi>y</mi><mo>−</mo><mi>p</mi><mo stretchy="true" form="postfix">|</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mo>−</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>=</mo><mn>1</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mo>−</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>=</mo><mn>0</mn></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\begin{equation}
-    \text{Log score}(p, y) = - \log(1 - |y - p|) = 
+    \text{Log score}(p, y) = - \log(1 - |y - p|) =
     \begin{cases}
         -\log (p),       &amp; \text{if } y = 1\\
         -\log (1 - p),   &amp; \text{if } y = 0
@@ -516,7 +516,17 @@ underpredict. For <em>continuous</em> forecasts, the
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>F</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><mn>2</mn><mo>⋅</mo><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">B(F, y) = 1 - 2 \cdot F (y), </annotation></semantics></math>
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">F(y)</annotation></semantics></math>
-is the cumulative distribution function of the forecast.</p>
+is the empirical cumulative distribution function of the forecast
+evaluated at the observed value
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>.
+To handle ties appropriately (which can occur when predictions equal
+observations for example due to rounding), the implementation uses
+mid-ranks:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">F(y)</annotation></semantics></math>
+is computed as the proportion of predictions strictly less than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+plus half the proportion of predictions equal to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>.</p>
 <p>For <em>discrete</em> forecasts, we calculate bias as
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>P</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">B(P, y) = 1 - (P(y) + P(y + 1)). </annotation></semantics></math>
 where
@@ -647,7 +657,7 @@ quantiles,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>.</p>
 <p>Bias can be measured as</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">B</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mi>F</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mo>⋅</mo><mo>max</mo><mo stretchy="false" form="prefix">{</mo><mi>α</mi><mo stretchy="false" form="prefix">|</mo><msub><mi>q</mi><mi>α</mi></msub><mo>∈</mo><mi>Q</mi><mo>∧</mo><msub><mi>q</mi><mi>α</mi></msub><mo>≤</mo><mi>y</mi><mo stretchy="false" form="postfix">}</mo><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>&lt;</mo><msub><mi>q</mi><mn>0.5</mn></msub><mspace width="1.0em"></mspace><mtext mathvariant="normal">(overprediction)</mtext></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mo>⋅</mo><mo>min</mo><mo stretchy="false" form="prefix">{</mo><mi>α</mi><mo stretchy="false" form="prefix">|</mo><msub><mi>q</mi><mi>α</mi></msub><mo>∈</mo><msub><mi>Q</mi><mi>t</mi></msub><mo>∧</mo><msub><mi>q</mi><mi>α</mi></msub><mo>≥</mo><mi>y</mi><mo stretchy="false" form="postfix">}</mo><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>&gt;</mo><msub><mi>q</mi><mn>0.5</mn></msub><mspace width="1.0em"></mspace><mtext mathvariant="normal">(underprediction)</mtext></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>=</mo><msub><mi>q</mi><mn>0.5</mn></msub><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\begin{equation}
-    \text{B}(F, y) = 
+    \text{B}(F, y) =
     \begin{cases}
         (1 - 2 \cdot \max \{\alpha | q_\alpha \in Q \land q_\alpha \leq y\}),       &amp; \text{if } y &lt; q_{0.5} \quad \text{(overprediction)}\\
         (1 - 2 \cdot \min \{\alpha | q_\alpha \in Q_t \land q_\alpha \geq y\},   &amp; \text{if } y &gt; q_{0.5} \quad \text{(underprediction)}\\
@@ -748,10 +758,10 @@ level
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
 is defined as</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">QS</mtext><mi>τ</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>F</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>2</mn><mo>⋅</mo><mo stretchy="false" form="prefix">{</mo><mn>𝟏</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>y</mi><mo>≤</mo><msub><mi>q</mi><mi>τ</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>τ</mi><mo stretchy="false" form="postfix">}</mo><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>q</mi><mi>τ</mi></msub><mo>−</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>2</mn><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>τ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>*</mo><msub><mi>q</mi><mi>τ</mi></msub><mo>−</mo><mi>y</mi><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>≤</mo><msub><mi>q</mi><mi>τ</mi></msub></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>2</mn><mo>⋅</mo><mi>τ</mi><mo>*</mo><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>q</mi><mi>τ</mi></msub><mo>−</mo><mi>y</mi><mo stretchy="true" form="postfix">|</mo></mrow><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">if </mtext><mspace width="0.333em"></mspace></mrow><mi>y</mi><mo>&gt;</mo><msub><mi>q</mi><mi>τ</mi></msub><mo>,</mo></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\begin{equation}
-    \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau - y) = 
+    \text{QS}_\tau(F, y) = 2 \cdot \{ \mathbf{1}(y \leq q_\tau) - \tau\} \cdot (q_\tau - y) =
     \begin{cases}
         2 \cdot (1 - \tau) * q_\tau - y,       &amp; \text{if } y \leq q_\tau\\
-        2 \cdot \tau * |q_\tau - y|,           &amp; \text{if } y &gt; q_\tau, 
+        2 \cdot \tau * |q_\tau - y|,           &amp; \text{if } y &gt; q_\tau,
     \end{cases}
 \end{equation}</annotation></semantics></math></p>
 <p>with

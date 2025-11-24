@@ -41,6 +41,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="scoringutils-development-version">scoringutils (development version)<a class="anchor" aria-label="anchor" href="#scoringutils-development-version"></a></h2>
 <ul><li>Added support for scoring multivariate forecasts (<a href="https://github.com/epiforecasts/scoringutils/issues/288" class="external-link">#288</a>, big thank you to Sam Abbott and Sebastian Funk). You can find detailed information in the Vignette “Scoring multivariate forecasts”. There is a new forecast type, <code>forecast_multivariate_sample()</code> and a corresponding <code><a href="../reference/as_forecast_multivariate_sample.html">as_forecast_multivariate_sample()</a></code> function. To score a multivariate forecast, users are expected to provide a <code>joint_across</code> argument which specifies the variables which are forecast jointly.</li>
+<li>Fixed a small bug with <code><a href="../reference/bias_sample.html">bias_sample()</a></code> when continuous predictions were equal to observations. These ties could lead to incorrect bias scores. New calculations now use mid-ranks to deal with ties.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.2" id="scoringutils-212">scoringutils 2.1.2<a class="anchor" aria-label="anchor" href="#scoringutils-212"></a></h2><p class="text-muted">CRAN release: 2025-08-25</p>

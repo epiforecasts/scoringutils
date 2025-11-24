@@ -90,18 +90,21 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     assert_input_sample(observed, predicted)
 #>     prediction_type <- get_type(predicted)
 #>     n_pred <- ncol(predicted)
-#>     p_x <- rowSums(predicted <= observed)/n_pred
 #>     if (prediction_type == "continuous") {
+#>         p_lt <- rowSums(predicted < observed)/n_pred
+#>         p_eq <- rowSums(predicted == observed)/n_pred
+#>         p_x <- p_lt + 0.5 * p_eq
 #>         res <- 1 - 2 * p_x
 #>         return(res)
 #>     }
 #>     else {
+#>         p_x <- rowSums(predicted <= observed)/n_pred
 #>         p_xm1 <- rowSums(predicted <= (observed - 1))/n_pred
 #>         res <- 1 - (p_x + p_xm1)
 #>         return(res)
 #>     }
 #> }
-#> <bytecode: 0x5599314f2870>
+#> <bytecode: 0x55c61dd2fe28>
 #> <environment: namespace:scoringutils>
 #> 
 #> $dss
@@ -110,7 +113,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     assert_input_sample(observed, predicted)
 #>     scoringRules::dss_sample(y = observed, dat = predicted, ...)
 #> }
-#> <bytecode: 0x5599302dafb8>
+#> <bytecode: 0x55c61beaa260>
 #> <environment: namespace:scoringutils>
 #> 
 #> $crps
@@ -138,7 +141,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         return(crps)
 #>     }
 #> }
-#> <bytecode: 0x55992b0defe0>
+#> <bytecode: 0x55c61711a640>
 #> <environment: namespace:scoringutils>
 #> 
 #> $overprediction
@@ -148,7 +151,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$overprediction)
 #> }
-#> <bytecode: 0x55992f33c5f0>
+#> <bytecode: 0x55c61b93cd58>
 #> <environment: namespace:scoringutils>
 #> 
 #> $underprediction
@@ -158,7 +161,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$underprediction)
 #> }
-#> <bytecode: 0x55992f3392e8>
+#> <bytecode: 0x55c61b935220>
 #> <environment: namespace:scoringutils>
 #> 
 #> $dispersion
@@ -168,7 +171,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$dispersion)
 #> }
-#> <bytecode: 0x55992f339e10>
+#> <bytecode: 0x55c61b936020>
 #> <environment: namespace:scoringutils>
 #> 
 #> $log_score
@@ -178,7 +181,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     scoringRules::logs_sample(y = observed, dat = predicted, 
 #>         ...)
 #> }
-#> <bytecode: 0x55992f33a970>
+#> <bytecode: 0x55c61b936b80>
 #> <environment: namespace:scoringutils>
 #> 
 #> $ae_median
@@ -190,7 +193,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     ae_median <- abs(observed - median_predictions)
 #>     return(ae_median)
 #> }
-#> <bytecode: 0x55992e4fa1e8>
+#> <bytecode: 0x55c61abce3f8>
 #> <environment: namespace:scoringutils>
 #> 
 #> $se_mean
@@ -201,7 +204,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     se_mean <- (observed - mean_predictions)^2
 #>     return(se_mean)
 #> }
-#> <bytecode: 0x55992f3386d0>
+#> <bytecode: 0x55c61b928100>
 #> <environment: namespace:scoringutils>
 #> 
 ```

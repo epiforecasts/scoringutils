@@ -12,6 +12,11 @@
   function. To score a multivariate forecast, users are expected to
   provide a `joint_across` argument which specifies the variables which
   are forecast jointly.
+- Fixed a small bug with
+  [`bias_sample()`](https://epiforecasts.io/scoringutils/dev/reference/bias_sample.md)
+  when continuous predictions were equal to observations. These ties
+  could lead to incorrect bias scores. New calculations now use
+  mid-ranks to deal with ties.
 
 ## scoringutils 2.1.2
 
