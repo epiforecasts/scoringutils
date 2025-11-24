@@ -31,9 +31,11 @@ B_t (P_t, x_t) = 1 - 2 * (P_t (x_t))
 }
 
 where \eqn{P_t} is the empirical cumulative distribution function of the
-prediction for the observed value \eqn{x_t}. Computationally, \eqn{P_t (x_t)} is
-just calculated as the fraction of predictive samples for \eqn{x_t}
-that are smaller than \eqn{x_t}.
+prediction for the observed value \eqn{x_t}. To handle ties appropriately
+(which can occur when predictions equal observations for exampele
+due to rounding), \eqn{P_t(x_t)} is computed using mid-ranks: the
+fraction of predictive samples strictly smaller than \eqn{x_t} plus half
+the fraction equal to \eqn{x_t}.
 
 For integer valued forecasts, Bias is measured as
 

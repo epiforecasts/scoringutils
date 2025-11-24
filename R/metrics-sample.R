@@ -51,9 +51,11 @@ check_input_sample <- function(observed, predicted) {
 #' }
 #'
 #' where \eqn{P_t} is the empirical cumulative distribution function of the
-#' prediction for the observed value \eqn{x_t}. Computationally, \eqn{P_t (x_t)} is
-#' just calculated as the fraction of predictive samples for \eqn{x_t}
-#' that are smaller than \eqn{x_t}.
+#' prediction for the observed value \eqn{x_t}. To handle ties appropriately
+#' (which can occur when predictions equal observations for exampele
+#' due to rounding), \eqn{P_t(x_t)} is computed using mid-ranks: the
+#' fraction of predictive samples strictly smaller than \eqn{x_t} plus half
+#' the fraction equal to \eqn{x_t}.
 #'
 #' For integer valued forecasts, Bias is measured as
 #'
@@ -100,13 +102,19 @@ bias_sample <- function(observed, predicted) {
 
   # empirical cdf
   n_pred <- ncol(predicted)
-  p_x <- rowSums(predicted <= observed) / n_pred
 
   if (prediction_type == "continuous") {
+    # Ties can occur due to floating-point representation or when predictions
+    # genuinely equal observations. In that case, use mid-ranks
+    # to ensure bias = 0 when predictions match observations.
+    p_lt <- rowSums(predicted < observed) / n_pred
+    p_eq <- rowSums(predicted == observed) / n_pred
+    p_x <- p_lt + 0.5 * p_eq
     res <- 1 - 2 * p_x
     return(res)
   } else {
     # for integer case also calculate empirical cdf for (y-1)
+    p_x <- rowSums(predicted <= observed) / n_pred
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
 
     res <- 1 - (p_x + p_xm1)

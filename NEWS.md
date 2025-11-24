@@ -1,10 +1,11 @@
 # scoringutils (development version)
 
-- Added support for scoring multivariate forecasts (#288, big thank you to Sam Abbott and Sebastian Funk). You can find detailed information in the Vignette "Scoring multivariate forecasts". There is a new forecast type, `forecast_multivariate_sample()` and a corresponding `as_forecast_multivariate_sample()` function. To score a multivariate forecast, users are expected to provide a `joint_across` argument which specifies the variables which are forecast jointly. 
+- Added support for scoring multivariate forecasts (#288, big thank you to Sam Abbott and Sebastian Funk). You can find detailed information in the Vignette "Scoring multivariate forecasts". There is a new forecast type, `forecast_multivariate_sample()` and a corresponding `as_forecast_multivariate_sample()` function. To score a multivariate forecast, users are expected to provide a `joint_across` argument which specifies the variables which are forecast jointly.
+- Fixed a small bug with `bias_sample()` when continuous predictions were equal to observations. These ties could lead to incorrect bias scores. New calculations now use mid-ranks to deal with ties.
 
 # scoringutils 2.1.2
 
-- fixed an issue that could arise with small rounding errors in quantile-based forecasts. This happened when there were quantile_levels like 0.5, and 0.5 + 1e-16 present at the same time. `scoringutils` now warns the user of the issue and automatically rounds all quantile levels to 10 digits. 
+- fixed an issue that could arise with small rounding errors in quantile-based forecasts. This happened when there were quantile_levels like 0.5, and 0.5 + 1e-16 present at the same time. `scoringutils` now warns the user of the issue and automatically rounds all quantile levels to 10 digits.
 - updated a few example plots to comply with an updated ggplot2 requirement to name labels in `labs()` explicitly.
 
 # scoringutils 2.1.1
