@@ -84,7 +84,7 @@ get_metrics(example_point, select = "ape")
 #> {
 #>     return(ae(actual, predicted)/abs(actual))
 #> }
-#> <bytecode: 0x55c61a7ed310>
+#> <bytecode: 0x564946269dc0>
 #> <environment: namespace:Metrics>
 #> 
 

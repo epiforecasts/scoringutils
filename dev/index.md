@@ -253,9 +253,9 @@ Health.
 ## Contributors
 
 All contributions to this project are gratefully acknowledged using the
-[`allcontributors`
-package](https://github.com/ropensci/allcontributors). Contributions of
-any kind are welcome!
+[`allcontributors` package](https://github.com/ropensci/allcontributors)
+following the [all-contributors](https://allcontributors.org)
+specification. Contributions of any kind are welcome!
 
 ### Code
 
@@ -268,14 +268,15 @@ any kind are welcome!
 [toshiakiasakura](https://github.com/epiforecasts/scoringutils/commits?author=toshiakiasakura),
 [MichaelChirico](https://github.com/epiforecasts/scoringutils/commits?author=MichaelChirico),
 [jcken95](https://github.com/epiforecasts/scoringutils/commits?author=jcken95),
+[athowes](https://github.com/epiforecasts/scoringutils/commits?author=athowes),
 [nickreich](https://github.com/epiforecasts/scoringutils/commits?author=nickreich),
-[jhellewell14](https://github.com/epiforecasts/scoringutils/commits?author=jhellewell14),
 [damonbayer](https://github.com/epiforecasts/scoringutils/commits?author=damonbayer)
 
 ### Issue Authors
 
 [DavideMagno](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ADavideMagno),
 [mbojan](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ambojan),
+[jhellewell14](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajhellewell14),
 [dshemetov](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adshemetov),
 [elray1](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aelray1),
 [jonathonmellor](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajonathonmellor),
@@ -283,8 +284,8 @@ any kind are welcome!
 [annakrystalli](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aannakrystalli),
 [robchallen](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen),
 [teunbrand](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand),
-[athowes](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aathowes),
-[RokGrah](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah)
+[RokGrah](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah),
+[zsusswein](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Azsusswein)
 
 ### Issue Contributors
 
