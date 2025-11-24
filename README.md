@@ -264,9 +264,9 @@ Health.
 <!-- markdownlint-disable -->
 
 All contributions to this project are gratefully acknowledged using the
-[`allcontributors`
-package](https://github.com/ropensci/allcontributors). Contributions of
-any kind are welcome!
+[`allcontributors` package](https://github.com/ropensci/allcontributors)
+following the [all-contributors](https://allcontributors.org)
+specification. Contributions of any kind are welcome!
 
 ### Code
 
@@ -279,14 +279,15 @@ any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=toshiakiasakura">toshiakiasakura</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=MichaelChirico">MichaelChirico</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=jcken95">jcken95</a>,
+<a href="https://github.com/epiforecasts/scoringutils/commits?author=athowes">athowes</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=nickreich">nickreich</a>,
-<a href="https://github.com/epiforecasts/scoringutils/commits?author=jhellewell14">jhellewell14</a>,
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=damonbayer">damonbayer</a>
 
 ### Issue Authors
 
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ADavideMagno">DavideMagno</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ambojan">mbojan</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajhellewell14">jhellewell14</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adshemetov">dshemetov</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aelray1">elray1</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajonathonmellor">jonathonmellor</a>,
@@ -294,8 +295,8 @@ any kind are welcome!
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aannakrystalli">annakrystalli</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen">robchallen</a>,
 <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand">teunbrand</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aathowes">athowes</a>,
-<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah">RokGrah</a>
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah">RokGrah</a>,
+<a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Azsusswein">zsusswein</a>
 
 ### Issue Contributors
 
