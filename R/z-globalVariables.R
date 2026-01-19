@@ -86,5 +86,9 @@ globalVariables(c(
   "wis",
   "wis_component_name",
   "x",
-  "y"
+  "y",
+  "in_mcs",
+  "pval_vs_best",
+  "adj_pval_vs_best",
+  "relative_skill"
 ))
