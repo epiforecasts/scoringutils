@@ -83,8 +83,10 @@
 #' unadjusted (`pval`) and adjusted (`adj_pval`) p-values, and relative skill
 #' values of each model (`..._relative_skill`). If a baseline model is given
 #' then the scaled relative skill is reported as well
-#' (`..._scaled_relative_skill`).
-#' @importFrom data.table as.data.table data.table setnames copy
+#' (`..._scaled_relative_skill`). The output has attributes `compare`, `metric`,
+#' and `by` storing the function arguments for use by downstream functions
+#' like [get_model_confidence_set()].
+#' @importFrom data.table as.data.table data.table setnames setattr copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
 #' @importFrom checkmate assert_subset assert_character assert_disjunct
@@ -251,6 +253,11 @@ get_pairwise_comparisons <- function(
   )
 
   out <- data.table::rbindlist(results)
+
+  # Store metadata as attributes for downstream functions
+  data.table::setattr(out, "compare", compare)
+  data.table::setattr(out, "metric", metric)
+  data.table::setattr(out, "by", by)
 
   return(out[])
 }

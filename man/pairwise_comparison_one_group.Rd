@@ -46,7 +46,9 @@ containing the mean score ratios (\code{mean_scores_ratio}),
 unadjusted (\code{pval}) and adjusted (\code{adj_pval}) p-values, and relative skill
 values of each model (\code{..._relative_skill}). If a baseline model is given
 then the scaled relative skill is reported as well
-(\code{..._scaled_relative_skill}).
+(\code{..._scaled_relative_skill}). The output has attributes \code{compare}, \code{metric},
+and \code{by} storing the function arguments for use by downstream functions
+like \code{\link[=get_model_confidence_set]{get_model_confidence_set()}}.
 }
 \description{
 This function does the pairwise comparison for one set of forecasts, but
