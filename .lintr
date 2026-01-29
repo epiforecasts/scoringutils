@@ -7,12 +7,26 @@ linters: linters_with_tags(
     line_length_linter(120),
     cyclocomp_linter(20L),
     return_linter = NULL,
-    object_overwrite_linter = NULL
-  )
-exclusions: c(
-    list.files("tests", recursive = TRUE, full.names = TRUE),
-    list.files("inst", recursive = TRUE, full.names = TRUE),
-    list.files("vignettes", pattern = ".R$", full.names = TRUE),
-    "vignettes/Deprecated-visualisations.Rmd"
+    object_overwrite_linter = NULL,
+    # Disabled: ::: is needed for testing internal functions
+    undesirable_operator_linter = NULL,
+    # Disabled: project uses expect_equal() by default for flexibility
+    expect_identical_linter = NULL,
+    # Disabled: comments in tests often serve as documentation
+    commented_code_linter = NULL,
+    # Disabled: false positives with data.table := and expect_* blocks
+    implicit_assignment_linter = NULL,
+    # Disabled: stringsAsFactors = FALSE is default in R 4.0+
+    strings_as_factors_linter = NULL,
+    # Disabled: single-call pipes are acceptable
+    one_call_pipe_linter = NULL,
+    # Disabled: quoted keywords are acceptable in data.table/dplyr
+    keyword_quote_linter = NULL,
+    # Disabled: c() with single element is often intentional for consistency
+    unnecessary_concatenation_linter = NULL,
+    # Disabled: vignette library() patterns are acceptable
+    library_call_linter = NULL,
+    # Disabled: package uses both pipe styles in different contexts
+    pipe_consistency_linter = NULL
   )
 exclude: "# nolint"

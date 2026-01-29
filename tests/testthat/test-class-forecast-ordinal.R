@@ -72,6 +72,7 @@ test_that("Printing works as expected", {
         capture.output(print(example_ordinal)),
         "Forecast type: ordinal"
       ),
-      "Forecast unit:")
+      "Forecast unit:"
+    )
   )
 })

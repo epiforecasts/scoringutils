@@ -27,7 +27,6 @@ test_that("summarise_scores() works as expected with by = forecast unit", {
 })
 
 test_that("summarise_scores() handles wrong by argument well", {
-
   expect_error(
     summarise_scores(scores_quantile, by = "not_present"),
     "Assertion on 'by' failed: Must be a subset of",
@@ -72,5 +71,3 @@ test_that("summarise_scores() errors if `by = NULL", {
     "Assertion on 'by' failed: Must be a subset of"
   )
 })
-
-

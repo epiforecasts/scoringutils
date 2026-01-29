@@ -73,7 +73,6 @@ test_that("Manipulating scores objects with .[ works as expected", {
 
 # test integer and continuous case ---------------------------------------------
 test_that("function produces output for a continuous format case", {
-
   eval <- scores_sample_continuous
 
   # [.forecast()` will warn even before score()
@@ -103,7 +102,6 @@ test_that("function throws an error if data is missing", {
 })
 
 test_that("score() works with only one sample", {
-
   # with only one sample, dss returns NaN and log_score fails
   onesample <- na.omit(example_sample_continuous)[sample_id == 20]
   expect_warning(
@@ -128,7 +126,6 @@ test_that("function produces output for a nominal format case", {
 # =============================================================================
 
 test_that("apply_metrics() works", {
-
   dt <- data.table::data.table(x = 1:10)
   scoringutils:::apply_metrics(
     forecast = dt, metrics = list("test" = function(x) x + 1),
@@ -140,14 +137,16 @@ test_that("apply_metrics() works", {
   expect_no_condition(
     scoringutils:::apply_metrics(
       forecast = dt, metrics = list("test" = function(x) x + 1),
-      dt$x, y = dt$test)
+      dt$x, y = dt$test
+    )
   )
 
   # additional unnamed argument does not work
   expect_warning(
     scoringutils:::apply_metrics(
       forecast = dt, metrics = list("test" = function(x) x + 1),
-      dt$x, dt$test)
+      dt$x, dt$test
+    )
   )
 })
 
@@ -166,7 +165,7 @@ test_that("`[` preserves attributes", {
 test_that("assert_scores() works", {
   expect_no_condition(assert_scores(scores_binary))
   expect_null(
-    assert_scores(scores_binary),
+    assert_scores(scores_binary)
   )
 })
 

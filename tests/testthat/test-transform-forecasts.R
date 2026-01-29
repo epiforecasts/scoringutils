@@ -5,9 +5,9 @@ test_that("function transform_forecasts works", {
   predictions_original <- example_quantile$predicted
   predictions <- example_quantile %>%
     transform_forecasts(
-    fun = function(x) pmax(0, x),
-    append = FALSE
-  )
+      fun = function(x) pmax(0, x),
+      append = FALSE
+    )
 
   expect_equal(predictions$predicted, pmax(0, predictions_original))
 

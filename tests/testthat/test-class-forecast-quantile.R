@@ -213,7 +213,7 @@ test_that("is_forecast_quantile() works as expected", {
 # ==============================================================================
 test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
-                           target_type == "Cases" & location == "DE"]
+    target_type == "Cases" & location == "DE"]
   metrics <- get_metrics(example_quantile)
   metrics$wis <- purrr::partial(wis, separate_results = FALSE)
   eval <- score(df[!is.na(predicted)], metrics = metrics)
@@ -237,7 +237,7 @@ test_that("score() quantile produces desired metrics", {
     quantile_level = rep(c(0.1, 0.5, 0.9), times = 10)
   )
 
-  data <-suppressWarnings(suppressMessages(as_forecast_quantile(data)))
+  data <- suppressWarnings(suppressMessages(as_forecast_quantile(data)))
 
   out <- score(forecast = data, metrics = metrics_no_cov)
   metrics <- c(
@@ -250,11 +250,11 @@ test_that("score() quantile produces desired metrics", {
 
 
 test_that("calculation of ae_median is correct for a quantile format case", {
-  eval <- summarise_scores(scores_quantile,by = "model")
+  eval <- summarise_scores(scores_quantile, by = "model")
 
   example <- as.data.table(example_quantile)
   ae <- example[quantile_level == 0.5, ae := abs(observed - predicted)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
-                                                                        by = "model"
+    by = "model"
   ]$mean
 
   expect_equal(sort(eval$ae_median), sort(ae))
@@ -267,17 +267,18 @@ test_that("all quantile and range formats yield the same result", {
   df <- as.data.table(example_quantile)
 
   ae <- df[
-    quantile_level == 0.5, ae := abs(observed - predicted)][
-      !is.na(model), .(mean = mean(ae, na.rm = TRUE)),
-      by = "model"
-    ]$mean
+    quantile_level == 0.5, ae := abs(observed - predicted)
+  ][
+    !is.na(model), .(mean = mean(ae, na.rm = TRUE)),
+    by = "model"
+  ]$mean
 
   expect_equal(sort(eval1$ae_median), sort(ae))
 })
 
 test_that("WIS is the same with other metrics omitted or included", {
   eval <- score(example_quantile,
-                metrics = list("wis" = wis)
+    metrics = list("wis" = wis)
   )
 
   eval2 <- scores_quantile
@@ -314,7 +315,7 @@ test_that("score.forecast_quantile() works as expected in edge cases", {
   )
 
   # only one symmetric interval is present
-  oneinterval <- example_quantile[quantile_level %in% c(0.25,0.75)] %>%
+  oneinterval <- example_quantile[quantile_level %in% c(0.25, 0.75)] %>%
     as_forecast_quantile()
   expect_message(
     s <- score(
@@ -329,7 +330,6 @@ test_that("score.forecast_quantile() works as expected in edge cases", {
 })
 
 test_that("score() works even if only some quantiles are missing", {
-
   # only the median is there
   onlymedian <- example_quantile[quantile_level == 0.5]
   expect_no_condition(

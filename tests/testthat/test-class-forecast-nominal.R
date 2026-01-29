@@ -65,6 +65,7 @@ test_that("Printing works as expected", {
         capture.output(print(example_nominal)),
         "Forecast type: nominal"
       ),
-      "Forecast unit:")
+      "Forecast unit:"
+    )
   )
 })

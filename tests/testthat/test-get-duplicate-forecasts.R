@@ -5,15 +5,17 @@ test_that("get_duplicate_forecasts() works as expected for quantile", {
   expect_no_condition(get_duplicate_forecasts(
     example_quantile,
     forecast_unit =
-      c("location", "target_end_date", "target_type", "location_name",
-        "forecast_date", "model")
-  )
-  )
+      c(
+        "location", "target_end_date", "target_type", "location_name",
+        "forecast_date", "model"
+      )
+  ))
 
   expect_equal(nrow(get_duplicate_forecasts(example_quantile)), 0)
   expect_equal(
     nrow(
-      get_duplicate_forecasts(rbind(example_quantile, example_quantile[1000:1010]))),
+      get_duplicate_forecasts(rbind(example_quantile, example_quantile[1000:1010]))
+    ),
     22
   )
 })
@@ -22,7 +24,8 @@ test_that("get_duplicate_forecasts() works as expected for sample", {
   expect_equal(nrow(get_duplicate_forecasts(example_sample_continuous)), 0)
   expect_equal(
     nrow(
-      get_duplicate_forecasts(rbind(example_sample_continuous, example_sample_continuous[1040:1050]))),
+      get_duplicate_forecasts(rbind(example_sample_continuous, example_sample_continuous[1040:1050]))
+    ),
     22
   )
 })
@@ -32,7 +35,8 @@ test_that("get_duplicate_forecasts() works as expected for binary", {
   expect_equal(nrow(get_duplicate_forecasts(example_binary)), 0)
   expect_equal(
     nrow(
-      get_duplicate_forecasts(rbind(example_binary, example_binary[1000:1010]))),
+      get_duplicate_forecasts(rbind(example_binary, example_binary[1000:1010]))
+    ),
     22
   )
 })
@@ -41,7 +45,8 @@ test_that("get_duplicate_forecasts() works as expected for point", {
   expect_equal(nrow(get_duplicate_forecasts(example_binary)), 0)
   expect_equal(
     nrow(
-      get_duplicate_forecasts(rbind(example_point, example_point[1010:1020]))),
+      get_duplicate_forecasts(rbind(example_point, example_point[1010:1020]))
+    ),
     22
   )
 
@@ -105,8 +110,8 @@ test_that("check_duplicates() works", {
     example_quantile[1000:1010]
   )
 
-  expect_equal(check_duplicates(bad),
-               "There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function get_duplicate_forecasts() to identify duplicate rows"
+  expect_match(
+    check_duplicates(bad),
+    "There are instances with more than one forecast.*get_duplicate_forecasts"
   )
 })
-

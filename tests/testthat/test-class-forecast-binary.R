@@ -50,7 +50,6 @@ test_that("assert_forecast.forecast_binary works as expected", {
 # score.forecast_binary()
 # ==============================================================================
 test_that("function produces output for a binary case", {
-
   expect_equal(
     names(scores_binary),
     c(get_forecast_unit(example_binary), names(get_metrics(example_binary)))
@@ -96,7 +95,8 @@ test_that("score() gives same result for binary as regular function", {
 })
 
 test_that(
-  "passing additional functions to score binary works handles them", {
+  "passing additional functions to score binary works handles them",
+  {
     test_fun <- function(x, y, ...) {
       if (hasArg("test")) {
         message("test argument found")
@@ -105,13 +105,16 @@ test_that(
     }
 
     df <- example_binary[model == "EuroCOVIDhub-ensemble" &
-                           target_type == "Cases" & location == "DE"] %>%
+      target_type == "Cases" & location == "DE"] %>%
       as_forecast_binary()
 
     # passing a simple function works
     expect_equal(
       score(df,
-            metrics = list("identity" = function(x, y) {return(y)}))$identity,
+        metrics = list("identity" = function(x, y) {
+          return(y)
+        })
+      )$identity,
       df$predicted
     )
   }

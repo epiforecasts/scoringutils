@@ -73,9 +73,10 @@ test_that("function produces output for a point case", {
 
 test_that("Changing metrics names works", {
   metrics_test <- get_metrics(example_point)
-  names(metrics_test)[1] = "just_testing"
+  names(metrics_test)[1] <- "just_testing"
   eval <- suppressMessages(score(as_forecast_point(example_point),
-                                 metrics = metrics_test))
+    metrics = metrics_test
+  ))
   eval_summarised <- summarise_scores(eval, by = "model")
   expect_equal(
     colnames(eval_summarised),

@@ -82,8 +82,9 @@ test_that("sample_to_range_long works", {
   )
 
   long2 <- scoringutils:::sample_to_interval_long(as_forecast_sample(samples),
-                                                  interval_range = 50,
-                                                  keep_quantile_col = FALSE)
+    interval_range = 50,
+    keep_quantile_col = FALSE
+  )
   long2 <- long2[order(model, boundary, date)]
   data.table::setcolorder(long2, names(long))
 
@@ -110,8 +111,10 @@ test_that("quantile_to_range works - scalar and vector case", {
   expect_equal(out1, out2)
 
   # check error if observed is a vector and predicted is a vector as well
-  expect_error(quantile_to_interval(
-    observed = c(1, 2), predicted = c(1, 2), quantile_level = c(0.1, 0.9)),
+  expect_error(
+    quantile_to_interval(
+      observed = c(1, 2), predicted = c(1, 2), quantile_level = c(0.1, 0.9)
+    ),
     "Assertion on 'predicted' failed: Must be of type 'matrix', not 'double'."
   )
 
@@ -212,7 +215,3 @@ test_that("quantile_to_interval works - data.frame case", {
     "Input must be either a data.frame or a numeric vector."
   )
 })
-
-
-
-

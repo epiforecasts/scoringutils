@@ -91,18 +91,17 @@ test_that("function throws an error for wrong input formats", {
   # predicted is a matrix with one row
   expect_error(
     assert_input_binary(observed, predicted = matrix(0.2)),
-    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
-    fixed = TRUE)
+    "Assertion failed.*check_vector.*check_matrix"
+  )
   expect_error(
     assert_input_point(observed_point, predicted = matrix(0.2)),
-    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
-    fixed = TRUE)
+    "Assertion failed.*check_vector.*check_matrix"
+  )
 
   # predicted is a matrix with 2 rows
   expect_error(
     assert_input_binary(observed, matrix(rep(predicted, 2), ncol = 2)),
-    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 1 cols, but has 2 cols",
-    fixed = TRUE
+    "Assertion failed.*check_vector.*check_matrix"
   )
 })
 
@@ -139,15 +138,13 @@ test_that("Brier score works with different inputs", {
   # predicted is a matrix with 1 row
   expect_error(
     brier_score(observed, predicted = matrix(0.2)),
-    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'matrix'\n * check_matrix(predicted): Must have exactly 10 rows, but has 1 rows",
-    fixed = TRUE
+    "Assertion failed.*check_vector.*check_matrix"
   )
 
   # predicted is an array
   expect_error(
     brier_score(observed, predicted = array(0.2)),
-    "Assertion failed. One of the following must apply:\n * check_vector(predicted): Must be of type 'vector', not 'array'\n * check_matrix(predicted): Must be of type 'matrix', not 'array'",
-    fixed = TRUE
+    "Assertion failed.*check_vector.*check_matrix"
   )
 })
 

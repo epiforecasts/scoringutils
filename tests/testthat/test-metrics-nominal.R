@@ -1,10 +1,14 @@
 factor_levels <- c("one", "two", "three")
 predicted_label <- factor(c("one", "two", "three"), levels = factor_levels)
 observed <- factor(c("one", "two", "two"), levels = factor_levels)
-predicted <- matrix(c(0.8, 0.1, 0.4,
-                      0.1, 0.2, 0.4,
-                      0.1, 0.7, 0.2),
-                    nrow = 3)
+predicted <- matrix(
+  c(
+    0.8, 0.1, 0.4,
+    0.1, 0.2, 0.4,
+    0.1, 0.7, 0.2
+  ),
+  nrow = 3
+)
 
 # ============================================================================ #
 # Input handling ===============================================================
@@ -59,10 +63,10 @@ test_that("Input checking for nominal forecasts works", {
 
   # a single observation
   expect_no_condition(
-    assert_input_nominal(observed[1], predicted[1, ], predicted_label),
+    assert_input_nominal(observed[1], predicted[1, ], predicted_label)
   )
   expect_no_condition(
-    assert_input_nominal(observed[1], as.numeric(predicted[1, ]), predicted_label),
+    assert_input_nominal(observed[1], as.numeric(predicted[1, ]), predicted_label)
   )
 
   # wrong dimensions

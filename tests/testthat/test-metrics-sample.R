@@ -6,8 +6,8 @@ test_that("Input handling", {
   # should error when wrong prediction type is given
   predicted2 <- rpois(30, lambda = 1)
   expect_error(crps_sample(observed, predicted2),
-               "Assertion on 'predicted' failed: Must be of type 'matrix', not 'integer'",
-               fixed = TRUE
+    "Assertion on 'predicted' failed: Must be of type 'matrix', not 'integer'",
+    fixed = TRUE
   )
 
   # predictions have wrong number of rows
@@ -21,8 +21,8 @@ test_that("Input handling", {
 
   # error with missing argument
   expect_error(crps_sample(predicted = predicted),
-               'argument "observed" is missing, with no default',
-               fixed = TRUE
+    'argument "observed" is missing, with no default',
+    fixed = TRUE
   )
 })
 
@@ -195,7 +195,7 @@ test_that("bias_sample() approx equals bias_quantile() for many samples", {
   quantile_preds <- quantile(predicted, probs = quantiles)
 
   # Get quantile based bias
-  bias_quantile_result <-   suppressMessages(
+  bias_quantile_result <- suppressMessages(
     bias_quantile(observed, quantile_preds, quantiles)
   )
 
@@ -328,7 +328,8 @@ test_that("pit_histogram_sample() throws an error if inputs are wrong", {
 
   expect_warning(
     pit_histogram_sample(
-      observed, predicted, quantiles = seq(0, 1, by = 0.1), n_replicates = 10
+      observed, predicted,
+      quantiles = seq(0, 1, by = 0.1), n_replicates = 10
     ),
     "`n_replicates` is ignored when `integers` is not `random`"
   )

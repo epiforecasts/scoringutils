@@ -219,4 +219,3 @@ test_that("removing NA rows from data works as expected", {
     attributes
   )
 })
-

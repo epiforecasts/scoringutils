@@ -1,5 +1,4 @@
 test_that("get_correlations() works as expected", {
-
   # expect all to go well in the usual case
   expect_no_condition(
     correlations <- scores_quantile %>%

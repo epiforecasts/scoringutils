@@ -19,7 +19,7 @@ test_that("get_forecast_type() works as expected", {
   class(test) <- c("forecast", "data.table", "data.frame")
   expect_error(
     get_forecast_type(test),
-    "Input is not a valid forecast object",
+    "Input is not a valid forecast object"
   )
 
   # get_forecast_type() should still work even if a new class is added
@@ -71,7 +71,7 @@ test_that("new `get_type()` is equal to old `prediction_type()", {
     }
     if (
       isTRUE(all.equal(as.vector(data), as.integer(data))) &&
-      !all(is.na(as.integer(data)))
+        !all(is.na(as.integer(data)))
     ) {
       return("integer")
     } else if (suppressWarnings(!all(is.na(as.numeric(data))))) {
