@@ -15,10 +15,13 @@
 #' R](https://arxiv.org/abs/2205.07090).
 #' @param forecast A forecast object (a validated data.table with predicted and
 #'   observed values).
-#' @param metrics A named list of scoring functions. Names will be used as
-#'   column names in the output. See [get_metrics()] for more information on the
-#'   default metrics used. See the *Customising metrics* section below for
-#'   information on how to pass custom arguments to scoring functions.
+#' @param metrics A named list of scoring functions. Each element should be a
+#'   function reference, not a function call. For example, use
+#'   `list("crps" = crps_sample)` rather than `list("crps" = crps_sample())`.
+#'   Names will be used as column names in the output. See [get_metrics()] for
+#'   more information on the default metrics used. See the *Customising metrics*
+#'   section below for information on how to pass custom arguments to scoring
+#'   functions.
 #' @param ... Currently unused. You *cannot* pass additional arguments to scoring
 #'   functions via `...`. See the *Customising metrics* section below for
 #'   details on how to use [purrr::partial()] to pass arguments to individual
@@ -84,6 +87,22 @@
 #' score(as_forecast_sample(example_sample_discrete))
 #' score(as_forecast_sample(example_sample_continuous))
 #' }
+#'
+#' # passing a subset of metrics using select_metrics()
+#' # (the preferred approach for selecting from default metrics)
+#' example_sample_continuous %>%
+#'   as_forecast_sample() %>%
+#'   score(metrics = select_metrics(
+#'     get_metrics(as_forecast_sample(example_sample_continuous)),
+#'     select = c("crps", "mad")
+#'   ))
+#'
+#' # passing a custom list of metrics manually
+#' # make sure to pass the function itself, not the result of calling it,
+#' # i.e. use `crps_sample` (correct) instead of `crps_sample()` (incorrect)
+#' example_sample_continuous %>%
+#'   as_forecast_sample() %>%
+#'   score(metrics = list("crps" = crps_sample, "mad" = mad_sample))
 #'
 #' # multivariate forecasts
 #' \dontrun{
