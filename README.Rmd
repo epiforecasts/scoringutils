@@ -28,14 +28,6 @@ library(ggplot2)
 library(knitr)
 ```
 
-::: {.pkgdown-devel}
-***Note***: [*This documentation*](https://epiforecasts.io/scoringutils/dev/) *refers to the development version of `scoringutils`.* *You can also view the* [*documentation of the stable version*](https://epiforecasts.io/scoringutils/).
-:::
-
-::: {.pkgdown-release}
-***Note***: [*This documentation*](https://epiforecasts.io/scoringutils/) *refers to the stable version of `scoringutils`.* *You can also view the* [*documentation of the development version*](https://epiforecasts.io/scoringutils/dev/).
-:::
-
 ## Utilities for Scoring and Assessing Predictions
 
 The `scoringutils` package facilitates the process of evaluating forecasts in R, using a convenient and flexible `data.table`-based framework. It provides broad functionality to check the input data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package is easily extendable, meaning that users can supply their own scoring rules or extend existing classes to handle new types of forecasts. 
