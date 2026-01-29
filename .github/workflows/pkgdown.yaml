@@ -34,7 +34,9 @@ jobs:
           needs: website
 
       - name: Generate pkgdown index with version note
-        run: cat pkgdown/_index_header.md README.md > pkgdown/index.md
+        run: |
+          # Insert version note after the badges section (after "<!-- badges: end -->")
+          sed '/<!-- badges: end -->/r pkgdown/_index_header.md' README.md > pkgdown/index.md
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
