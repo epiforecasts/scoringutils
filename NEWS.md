@@ -2,6 +2,7 @@
 
 - Added support for scoring multivariate forecasts (#288, big thank you to Sam Abbott and Sebastian Funk). You can find detailed information in the Vignette "Scoring multivariate forecasts". There is a new forecast type, `forecast_multivariate_sample()` and a corresponding `as_forecast_multivariate_sample()` function. To score a multivariate forecast, users are expected to provide a `joint_across` argument which specifies the variables which are forecast jointly.
 - Fixed a small bug with `bias_sample()` when continuous predictions were equal to observations. These ties could lead to incorrect bias scores. New calculations now use mid-ranks to deal with ties.
+- Removed workaround for `{distributional}` native pipe issue which has now been fixed upstream (#947).
 
 # scoringutils 2.1.2
 
