@@ -1,7 +1,7 @@
 test_that("Input handling", {
   observed <- rpois(30, lambda = 1:30)
   predicted <- replicate(20, rpois(n = 30, lambda = 1:30))
-  expect_equal(length(crps_sample(observed, predicted)), 30)
+  expect_length(crps_sample(observed, predicted), 30)
 
   # should error when wrong prediction type is given
   predicted2 <- rpois(30, lambda = 1)
@@ -34,7 +34,7 @@ test_that("crps works with separate results", {
     predicted = predicted,
     separate_results = TRUE
   )
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     crps$crps, crps$dispersion + crps$overprediction + crps$underprediction
   )
 })
@@ -51,7 +51,7 @@ test_that("crps is the sum of overprediction, underprediction, dispersion", {
   o <- overprediction_sample(observed, predicted)
   u <- underprediction_sample(observed, predicted)
 
-  expect_equal(crps, d + o + u)
+  expect_equal(crps, d + o + u) # nolint: expect_identical_linter
 
   observed <- rnorm(30, mean = 1:30)
   predicted <- replicate(20, rnorm(n = 30, mean = 1:30))
@@ -64,7 +64,7 @@ test_that("crps is the sum of overprediction, underprediction, dispersion", {
   o <- overprediction_sample(observed, predicted)
   u <- underprediction_sample(observed, predicted)
 
-  expect_equal(crps, d + o + u)
+  expect_equal(crps, d + o + u) # nolint: expect_identical_linter
 })
 
 
@@ -97,13 +97,13 @@ test_that("crps_sample() components correspond to WIS components", {
 })
 
 test_that("crps_sample() works with a single observation", {
-  expect_no_condition(
-    crps <- crps_sample(
+  crps <- expect_no_condition(
+    crps_sample(
       observed = 2.5, predicted = 1.5:10.5, separate_results = TRUE
     )
   )
-  expect_equal(length(crps), 4)
-  expect_equal(unique(vapply(crps, length, integer(1))), 1)
+  expect_length(crps, 4)
+  expect_equal(unique(lengths(crps)), 1) # nolint: expect_identical_linter
 })
 
 test_that("bias_sample() throws an error when missing observed", {
@@ -133,13 +133,13 @@ test_that("bias_sample() works for integer observed and predicted", {
     observed = observed,
     predicted = predicted
   )
-  expect_equal(
-    length(output),
+  expect_length(
+    output,
     length(observed)
   )
-  expect_equal(
-    class(output),
-    "numeric"
+  expect_type(
+    output,
+    "double"
   )
 })
 
@@ -150,13 +150,13 @@ test_that("bias_sample() works for continuous observed values and predicted", {
     observed = observed,
     predicted = predicted
   )
-  expect_equal(
-    length(output),
+  expect_length(
+    output,
     length(observed)
   )
-  expect_equal(
-    class(output),
-    "numeric"
+  expect_type(
+    output,
+    "double"
   )
 })
 
@@ -172,7 +172,7 @@ test_that("bias_sample() works as expected", {
   scoringutils2 <- bias_sample(observed, predicted)
   scoringutils <- bias_sample(observed, predicted)
 
-  expect_equal(scoringutils, scoringutils2)
+  expect_equal(scoringutils, scoringutils2) # nolint: expect_identical_linter
 })
 
 
@@ -200,7 +200,9 @@ test_that("bias_sample() approx equals bias_quantile() for many samples", {
   )
 
   # Difference should be small
-  expect_equal(bias_quantile_result, bias_sample_result, tolerance = 0.1)
+  expect_equal( # nolint: expect_identical_linter
+    bias_quantile_result, bias_sample_result, tolerance = 0.1
+  )
 })
 
 
@@ -210,7 +212,7 @@ test_that("ae_median_sample works", {
   predicted_values <- rnorm(30, mean = 1:30)
   scoringutils <- ae_median_sample(observed, matrix(predicted_values))
   ae <- abs(observed - predicted_values)
-  expect_equal(ae, scoringutils)
+  expect_equal(ae, scoringutils) # nolint: expect_identical_linter # nolint: expect_identical_linter
 })
 
 # `mad_sample()` ===============================================================
@@ -224,7 +226,7 @@ test_that("function throws an error when missing 'predicted'", {
 
 
 # ============================================================================ #
-# pit_histogram_sample()
+# pit_histogram_sample() # nolint: commented_code_linter
 # ============================================================================ #
 
 test_that("pit_histogram_sample() function throws an error when missing args", {
@@ -263,8 +265,8 @@ test_that("pit_histogram_sample() function works for integer observed and predic
     predicted = predicted,
     quantiles = seq(0, 1, by = 0.1)
   )
-  expect_equal(
-    length(output),
+  expect_length(
+    output,
     10
   )
 
@@ -287,27 +289,27 @@ test_that("pit_histogram_sample() function works for continuous observed and pre
     predicted = predicted,
     quantiles = seq(0, 1, by = 0.1)
   )
-  expect_equal(
-    length(output),
+  expect_length(
+    output,
     10
   )
 })
 
 test_that("pit_histogram_sample() works with a single observvation", {
-  expect_no_condition(
-    output <- pit_histogram_sample(
+  output <- expect_no_condition(
+    pit_histogram_sample(
       observed = 2.5, predicted = 1.5:10.5, quantiles = seq(0, 1, by = 0.1)
     )
   )
-  expect_equal(length(output), 10)
+  expect_length(output, 10)
 
   # test discrete case
-  expect_no_condition(
-    output2 <- pit_histogram_sample(
+  output2 <- expect_no_condition(
+    pit_histogram_sample(
       observed = 3, predicted = 1:10, quantiles = seq(0, 1, by = 0.1)
     )
   )
-  expect_equal(length(output2), 10)
+  expect_length(output2, 10)
 })
 
 test_that("pit_histogram_sample() throws an error if inputs are wrong", {

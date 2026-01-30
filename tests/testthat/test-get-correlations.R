@@ -1,20 +1,18 @@
 test_that("get_correlations() works as expected", {
   # expect all to go well in the usual case
-  expect_no_condition(
-    correlations <- scores_quantile %>%
-      get_correlations()
+  correlations <- expect_no_condition(
+    get_correlations(scores_quantile)
   )
-  expect_equal(
+  expect_identical(
     colnames(correlations), c(get_metrics.scores(scores_quantile), "metric")
   )
 
   # expect no error if scores are unsummarised
   # (meaning that coverage will be a logical vector instead of a numeric)
-  expect_no_condition(
-    correlations2 <- scores_quantile %>%
-      get_correlations()
+  correlations2 <- expect_no_condition(
+    get_correlations(scores_quantile)
   )
-  expect_equal(correlations, correlations2)
+  expect_identical(correlations, correlations2)
 
   expect_s3_class(
     get_correlations(scores_quantile),
@@ -35,7 +33,7 @@ test_that("get_correlations() works as expected", {
 })
 
 # ==============================================================================
-# plot_correlation()
+# plot_correlation() # nolint: commented_code_linter
 # ==============================================================================
 test_that("plot_correlations() works as expected", {
   correlations <- get_correlations(

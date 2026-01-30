@@ -101,11 +101,11 @@ test_that("Input checking for ordinal forecasts works", {
 # logs ordinal =============================================================== #
 # ============================================================================ #
 test_that("logs_categorical() works as expected with ordered factors", {
-  expect_no_condition(
-    res <- logs_categorical(observed, predicted, predicted_label)
+  res <- expect_no_condition(
+    logs_categorical(observed, predicted, predicted_label)
   )
   res_manual <- -log(c(predicted[1, 1], predicted[2, 2], predicted[3, 2]))
-  expect_equal(res, res_manual)
+  expect_equal(res, res_manual) # nolint: expect_identical_linter
 })
 
 # ============================================================================ #
@@ -113,22 +113,22 @@ test_that("logs_categorical() works as expected with ordered factors", {
 # ============================================================================ #
 result <- c(0.05, 0.5, 0.2)
 test_that("rps_ordinal() works as expected", {
-  expect_no_condition(
-    res <- rps_ordinal(observed, predicted, predicted_label)
+  res <- expect_no_condition(
+    rps_ordinal(observed, predicted, predicted_label)
   )
 
-  expect_equal(res, result)
+  expect_equal(res, result) # nolint: expect_identical_linter
 
   # works with changed order of levels
   predicted_label2 <- factor(c("three", "one", "two"), levels = factor_levels, ordered = TRUE)
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     rps_ordinal(observed, predicted, predicted_label2),
     scoringRules::rps_probs(as.numeric(observed), predicted[, c(3, 1, 2)])
   )
 })
 
 test_that("rps_ordinal() works with a single observation", {
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     rps_ordinal(observed[1], predicted[1, ], predicted_label),
     result[1]
   )

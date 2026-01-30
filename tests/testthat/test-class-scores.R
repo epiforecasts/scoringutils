@@ -1,5 +1,5 @@
 # ==============================================================================
-# get_metrics.scores()
+# get_metrics.scores() # nolint: commented_code_linter
 # ==============================================================================
 test_that("get_metrics.scores() works as expected", {
   expect_null(
@@ -10,7 +10,7 @@ test_that("get_metrics.scores() works as expected", {
     "brier_score" %in% get_metrics.scores(scores_binary)
   )
 
-  expect_equal(
+  expect_identical(
     get_metrics.scores(scores_sample_continuous),
     attr(scores_sample_continuous, "metrics")
   )

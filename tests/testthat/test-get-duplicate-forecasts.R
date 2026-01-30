@@ -1,5 +1,5 @@
 # ==============================================================================
-# get_duplicate_forecasts()
+# get_duplicate_forecasts() # nolint: commented_code_linter
 # ==============================================================================
 test_that("get_duplicate_forecasts() works as expected for quantile", {
   expect_no_condition(get_duplicate_forecasts(
@@ -11,43 +11,43 @@ test_that("get_duplicate_forecasts() works as expected for quantile", {
       )
   ))
 
-  expect_equal(nrow(get_duplicate_forecasts(example_quantile)), 0)
-  expect_equal(
+  expect_identical(nrow(get_duplicate_forecasts(example_quantile)), 0L)
+  expect_identical(
     nrow(
       get_duplicate_forecasts(rbind(example_quantile, example_quantile[1000:1010]))
     ),
-    22
+    22L
   )
 })
 
 test_that("get_duplicate_forecasts() works as expected for sample", {
-  expect_equal(nrow(get_duplicate_forecasts(example_sample_continuous)), 0)
-  expect_equal(
+  expect_identical(nrow(get_duplicate_forecasts(example_sample_continuous)), 0L)
+  expect_identical(
     nrow(
       get_duplicate_forecasts(rbind(example_sample_continuous, example_sample_continuous[1040:1050]))
     ),
-    22
+    22L
   )
 })
 
 
 test_that("get_duplicate_forecasts() works as expected for binary", {
-  expect_equal(nrow(get_duplicate_forecasts(example_binary)), 0)
-  expect_equal(
+  expect_identical(nrow(get_duplicate_forecasts(example_binary)), 0L)
+  expect_identical(
     nrow(
       get_duplicate_forecasts(rbind(example_binary, example_binary[1000:1010]))
     ),
-    22
+    22L
   )
 })
 
 test_that("get_duplicate_forecasts() works as expected for point", {
-  expect_equal(nrow(get_duplicate_forecasts(example_binary)), 0)
-  expect_equal(
+  expect_identical(nrow(get_duplicate_forecasts(example_binary)), 0L)
+  expect_identical(
     nrow(
       get_duplicate_forecasts(rbind(example_point, example_point[1010:1020]))
     ),
-    22
+    22L
   )
 
   expect_s3_class(
@@ -58,8 +58,8 @@ test_that("get_duplicate_forecasts() works as expected for point", {
 })
 
 test_that("get_duplicate_forecasts() returns the expected class", {
-  expect_equal(
-    class(get_duplicate_forecasts(example_point)),
+  expect_s3_class(
+    get_duplicate_forecasts(example_point),
     c("data.table", "data.frame")
   )
 })
@@ -68,7 +68,7 @@ test_that("get_duplicate_forecasts() works as expected with a data.frame", {
   duplicates <- get_duplicate_forecasts(
     rbind(example_quantile_df, example_quantile_df[101:110, ])
   )
-  expect_equal(nrow(duplicates), 20)
+  expect_identical(nrow(duplicates), 20L)
 })
 
 test_that("get_duplicate_forecasts() shows counts correctly", {
@@ -76,13 +76,13 @@ test_that("get_duplicate_forecasts() shows counts correctly", {
     rbind(example_quantile, example_quantile[101:110, ]),
     counts = TRUE
   )
-  expect_equal(nrow(duplicates), 2)
-  expect_equal(unique(duplicates$n_duplicates), 10)
+  expect_identical(nrow(duplicates), 2L)
+  expect_identical(unique(duplicates$n_duplicates), 10L)
 })
 
 
 # ==============================================================================
-# check_duplicates()
+# check_duplicates() # nolint: commented_code_linter
 # ==============================================================================
 test_that("check_duplicates works", {
   example_bin <- rbind(example_binary[1000:1002, ], example_binary[1000:1002, ])

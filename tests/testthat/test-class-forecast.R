@@ -1,11 +1,11 @@
 # ==============================================================================
-# as_forecast()
+# as_forecast() # nolint: commented_code_linter
 # ==============================================================================
 # see tests for each forecast type for more specific tests.
 
 
 # ==============================================================================
-# is_forecast()
+# is_forecast() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("is_forecast() works as expected", {
@@ -21,7 +21,7 @@ test_that("is_forecast() works as expected", {
 
 
 # ==============================================================================
-# assert_forecast() and assert_forecast_generic()
+# assert_forecast() and assert_forecast_generic() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("assert_forecast() works as expected", {
@@ -41,7 +41,7 @@ test_that("assert_forecast_generic() works as expected with a data.frame", {
 
 
 # ==============================================================================
-# new_forecast()
+# new_forecast() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("new_forecast() works as expected with a data.frame", {
@@ -53,7 +53,7 @@ test_that("new_forecast() works as expected with a data.frame", {
 
 
 # ==============================================================================
-# [.forecast()
+# [.forecast() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("[.forecast() immediately invalidates on change when necessary", {
@@ -68,23 +68,31 @@ test_that("[.forecast() immediately invalidates on change when necessary", {
   )
 
   expect_warning(
-    local(test[, "observed"] <- NULL),
+    local({
+      test[, "observed"] <- NULL
+    }),
     "Error in validating"
   )
 
   expect_warning(
-    local(test$observed <- NULL),
+    local({
+      test$observed <- NULL
+    }),
     "Error in validating"
   )
 
   expect_warning(
-    local(test[["observed"]] <- NULL),
+    local({
+      test[["observed"]] <- NULL
+    }),
     "Error in validating"
   )
 
   # For rows
   expect_warning(
-    local(test[2, ] <- test[1, ])
+    local({
+      test[2, ] <- test[1, ]
+    })
   )
 })
 
@@ -111,7 +119,7 @@ test_that("[.forecast() is compatible with data.table syntax", {
 
 
 # ==============================================================================
-# print.forecast()
+# print.forecast() # nolint: commented_code_linter
 # ==============================================================================
 test_that("print() works on forecast_* objects", {
   # Check print works on each forecast object
@@ -122,7 +130,7 @@ test_that("print() works on forecast_* objects", {
   )
   test_dat <- lapply(test_dat, na.omit)
   for (dat in test_dat) {
-    forecast_type <- scoringutils:::get_forecast_type(dat)
+    forecast_type <- scoringutils:::get_forecast_type(dat) # nolint: undesirable_operator_linter
     forecast_unit <- get_forecast_unit(dat)
 
     fn_name <- paste0("as_forecast_", forecast_type)
@@ -167,7 +175,7 @@ test_that("print() throws the expected messages", {
 
 
 # ==============================================================================
-# check_number_per_forecast()
+# check_number_per_forecast() # nolint: commented_code_linter
 # ==============================================================================
 test_that("check_number_per_forecast works", {
   expect_identical(
@@ -194,16 +202,16 @@ test_that("check_number_per_forecast works", {
 
 
 # ==============================================================================
-# Test removing `NA` values from the data
+# Test removing `NA` values from the data # nolint: commented_code_linter
 # ==============================================================================
 test_that("removing NA rows from data works as expected", {
-  expect_equal(nrow(na.omit(example_quantile)), 20401)
+  expect_identical(nrow(na.omit(example_quantile)), 20401L)
 
   ex <- data.frame(observed = c(NA, 1:3), predicted = 1:4)
-  expect_equal(nrow(na.omit(ex)), 3)
+  expect_identical(nrow(na.omit(ex)), 3L)
 
   ex$predicted <- c(1:3, NA)
-  expect_equal(nrow(na.omit(ex)), 2)
+  expect_identical(nrow(na.omit(ex)), 2L)
 
   # test that attributes and classes are retained
   ex <- as_forecast_sample(na.omit(example_sample_discrete))
@@ -214,7 +222,7 @@ test_that("removing NA rows from data works as expected", {
   )
 
   attributes <- attributes(ex)
-  expect_equal(
+  expect_identical(
     attributes(na.omit(ex)),
     attributes
   )

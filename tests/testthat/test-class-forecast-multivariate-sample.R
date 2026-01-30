@@ -1,5 +1,5 @@
 # ==============================================================================
-# as_forecast_multivariate_sample()
+# as_forecast_multivariate_sample() # nolint: commented_code_linter
 # ==============================================================================
 test_that("as_forecast_multivariate_sample() works as expected", {
   test <- na.omit(data.table::copy(example_sample_continuous))
@@ -43,18 +43,18 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
   # Snapshot the class and structure
   expect_snapshot({
     cat("Class:", class(result), "\n")
-    cat("Forecast type:", scoringutils:::get_forecast_type(result), "\n")
-    cat("Forecast unit:", paste(get_forecast_unit(result), collapse = ", "), "\n")
+    cat("Forecast type:", scoringutils:::get_forecast_type(result), "\n") # nolint: undesirable_operator_linter
+    cat("Forecast unit:", toString(get_forecast_unit(result)), "\n")
     cat("Number of rows:", nrow(result), "\n")
     cat("Number of columns:", ncol(result), "\n")
-    cat("Column names:", paste(names(result), collapse = ", "), "\n")
+    cat("Column names:", toString(names(result)), "\n")
     cat("Number of unique groups:", length(unique(result$.mv_group_id)), "\n")
   })
 })
 
 
 # ==============================================================================
-# is_forecast_sample()
+# is_forecast_sample() # nolint: commented_code_linter
 # ==============================================================================
 test_that("is_forecast_sample() works as expected", {
   expect_true(is_forecast_sample_multivariate(example_multivariate_sample))
@@ -64,12 +64,12 @@ test_that("is_forecast_sample() works as expected", {
 
 
 # ==============================================================================
-# get_metrics.forecast_sample()
+# get_metrics.forecast_sample() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("get_metrics.forecast_sample_multivariate() works as expected", {
-  expect_true(
-    is.list(get_metrics(example_multivariate_sample))
+  expect_type(
+    get_metrics(example_multivariate_sample), "list"
   )
 })
 
@@ -84,7 +84,7 @@ test_that("set_grouping() works as expected", {
   # Test basic functionality
   result <- set_grouping(data, grouping)
   expect_true(".mv_group_id" %in% names(result))
-  expect_true(is.numeric(result$.mv_group_id))
+  expect_type(result$.mv_group_id, "integer")
 
   # Test that groups are consistent
   group_counts <- as.data.table(result)[, .N, by = .mv_group_id]
@@ -95,7 +95,7 @@ test_that("get_grouping() works as expected", {
   data <- example_multivariate_sample
   grouping <- c("model", "target_type", "target_end_date", "horizon")
   joint_across <- setdiff(get_forecast_unit(data), grouping)
-  data <- scoringutils:::set_grouping(data, joint_across)
+  data <- scoringutils:::set_grouping(data, joint_across) # nolint: undesirable_operator_linter
 
   # Test that get_grouping returns the correct columns
   result <- get_grouping(data)
@@ -134,14 +134,14 @@ test_that("set_grouping() preserves existing keys correctly", {
   keys <- c("location", "model")
   setkeyv(data_with_keys, keys) # Set some keys
   original_keys <- key(data_with_keys)
-  expect_equal(original_keys, c("location", "model"))
+  expect_identical(original_keys, c("location", "model"))
 
-  result_with_keys <- scoringutils:::set_grouping(data_with_keys, grouping)
-  expect_equal(key(result_with_keys), original_keys) # Should preserve original keys
+  result_with_keys <- scoringutils:::set_grouping(data_with_keys, grouping) # nolint: undesirable_operator_linter
+  expect_identical(key(result_with_keys), original_keys) # Should preserve original keys
 
   # Test case 3: Verify functionality still works with keys preserved
   expect_true(".mv_group_id" %in% names(result_with_keys))
-  expect_true(is.numeric(result_with_keys$.mv_group_id))
+  expect_type(result_with_keys$.mv_group_id, "integer")
 
   # Test that groups are consistent
   group_counts <- as.data.table(result_with_keys)[, .N, by = .mv_group_id]
@@ -149,7 +149,7 @@ test_that("set_grouping() preserves existing keys correctly", {
 })
 
 # ==============================================================================
-# score.forecast_sample_multivariate()
+# score.forecast_sample_multivariate() # nolint: commented_code_linter
 # ==============================================================================
 test_that("score.forecast_sample_multivariate() works as expected", {
   data <- example_multivariate_sample
@@ -165,7 +165,7 @@ test_that("score.forecast_sample_multivariate() works as expected", {
   expect_true("energy_score" %in% names(scores))
 
   # Test that scores are numeric
-  expect_true(is.numeric(scores$energy_score))
+  expect_type(scores$energy_score, "double")
 })
 
 test_that("score.forecast_sample_multivariate() creates expected output structure", {
@@ -182,10 +182,10 @@ test_that("score.forecast_sample_multivariate() creates expected output structur
     cat("Class:", class(scores), "\n")
     cat("Number of rows:", nrow(scores), "\n")
     cat("Number of columns:", ncol(scores), "\n")
-    cat("Column names:", paste(names(scores), collapse = ", "), "\n")
+    cat("Column names:", toString(names(scores)), "\n")
     cat("Energy score range:", paste(range(scores$energy_score, na.rm = TRUE), collapse = " to "), "\n")
     cat("Number of non-NA energy scores:", sum(!is.na(scores$energy_score)), "\n")
-    cat("Sample of energy scores:", paste(head(scores$energy_score, 5), collapse = ", "), "\n")
+    cat("Sample of energy scores:", toString(head(scores$energy_score, 5)), "\n")
   })
 
   # Test with specific metrics and capture snapshot
@@ -196,7 +196,7 @@ test_that("score.forecast_sample_multivariate() creates expected output structur
     cat("Class:", class(scores_specific), "\n")
     cat("Number of rows:", nrow(scores_specific), "\n")
     cat("Number of columns:", ncol(scores_specific), "\n")
-    cat("Column names:", paste(names(scores_specific), collapse = ", "), "\n")
+    cat("Column names:", toString(names(scores_specific)), "\n")
     cat("Energy score range:", paste(range(scores_specific$energy_score, na.rm = TRUE), collapse = " to "), "\n")
   })
 })
@@ -210,7 +210,9 @@ test_that("as_forecast_multivariate_sample() handles errors appropriately", {
   # Test with missing required columns
   data_bad <- data[, !"sample_id"]
   expect_error(
-    as_forecast_multivariate_sample(data_bad, joint_across = c("location", "location_name")),
+    as_forecast_multivariate_sample(
+      data_bad, joint_across = c("location", "location_name")
+    ),
     "Assertion on 'forecast' failed: Column 'sample_id' not found in data."
   )
 
@@ -233,7 +235,7 @@ test_that("as_forecast_multivariate_sample() handles errors appropriately", {
   # Test with invalid grouping columns
   expect_error(
     as_forecast_multivariate_sample(data,
-      joint_across = c("nonexistent_column")
+      joint_across = "nonexistent_column"
     ),
     "Must be a subset of"
   )

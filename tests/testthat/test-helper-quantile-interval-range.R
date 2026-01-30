@@ -1,5 +1,5 @@
 # ==============================================================================
-# quantile_to_interval()
+# quantile_to_interval() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("quantile_to_interval_dataframe() works", {
@@ -8,7 +8,8 @@ test_that("quantile_to_interval_dataframe() works", {
     model = "model1",
     observed = 1:10,
     predicted = c(2:11, 4:13),
-    quantile_level = rep(c(0.25, 0.75), each = 10)
+    quantile_level = rep(c(0.25, 0.75), each = 10),
+    stringsAsFactors = FALSE
   )
   long <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
@@ -16,7 +17,8 @@ test_that("quantile_to_interval_dataframe() works", {
     observed = 1:10,
     predicted = c(2:11, 4:13),
     interval_range = 50,
-    boundary = rep(c("lower", "upper"), each = 10)
+    boundary = rep(c("lower", "upper"), each = 10),
+    stringsAsFactors = FALSE
   )
   long2 <- as.data.frame(quantile_to_interval(
     quantile,
@@ -26,7 +28,7 @@ test_that("quantile_to_interval_dataframe() works", {
   # for some reason this is needed to pass the unit tests on gh actions
   long2$boundary <- as.character(long2$boundary)
   long$boundary <- as.character(long$boundary)
-  expect_equal(long, as.data.frame(long2))
+  expect_identical(long, as.data.frame(long2))
 
   # check that it handles NA values
   setDT(quantile)
@@ -52,14 +54,14 @@ test_that("quantile_to_interval_dataframe() works", {
     regexp = "[Aa]ggregate.*default.*length"
   )
   quantile <- quantile[-c(1, 3), ]
-  wide2 <- scoringutils:::quantile_to_interval(
+  wide2 <- scoringutils:::quantile_to_interval( # nolint: undesirable_operator_linter
     quantile,
     keep_quantile_col = FALSE,
     format = "wide"
   )
-  expect_equal(nrow(wide2), 10)
-  expect_true(!("NA") %in% colnames(wide2))
-  expect_equal(sum(wide2$lower, na.rm = TRUE), 59)
+  expect_identical(nrow(wide2), 10L)
+  expect_false(("NA") %in% colnames(wide2))
+  expect_equal(sum(wide2$lower, na.rm = TRUE), 59) # nolint: expect_identical_linter
 })
 
 
@@ -69,7 +71,8 @@ test_that("sample_to_range_long works", {
     model = "model1",
     observed = 1:10,
     predicted = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
-    sample_id = rep(1:5, each = 10)
+    sample_id = rep(1:5, each = 10),
+    stringsAsFactors = FALSE
   )
 
   long <- data.frame(
@@ -78,10 +81,11 @@ test_that("sample_to_range_long works", {
     observed = 1:10,
     predicted = c(2:11, 4:13),
     interval_range = 50,
-    boundary = rep(c("lower", "upper"), each = 10)
+    boundary = rep(c("lower", "upper"), each = 10),
+    stringsAsFactors = FALSE
   )
 
-  long2 <- scoringutils:::sample_to_interval_long(as_forecast_sample(samples),
+  long2 <- scoringutils:::sample_to_interval_long(as_forecast_sample(samples), # nolint: undesirable_operator_linter
     interval_range = 50,
     keep_quantile_col = FALSE
   )
@@ -92,7 +96,7 @@ test_that("sample_to_range_long works", {
   long2$boundary <- as.character(long2$boundary)
   long$boundary <- as.character(long$boundary)
 
-  expect_equal(long, as.data.frame(long2))
+  expect_equal(long, as.data.frame(long2)) # nolint: expect_identical_linter
 })
 
 test_that("quantile_to_range works - scalar and vector case", {
@@ -108,7 +112,7 @@ test_that("quantile_to_range works - scalar and vector case", {
   predicted <- 1:9
   quantile <- seq(0.1, 0.9, 0.1)
   out2 <- quantile_to_interval(observed, predicted, quantile)
-  expect_equal(out1, out2)
+  expect_identical(out1, out2)
 
   # check error if observed is a vector and predicted is a vector as well
   expect_error(
@@ -127,14 +131,14 @@ test_that("quantile_to_range works - scalar and vector case", {
 
   # check non-symmetrical intervals are handled gracefully
   # result should be newly introduced ranges where one value is NA
-  predicted <- c(1:9)
+  predicted <- 1:9
   quantile <- c(seq(0.1, 0.8, 0.1), 0.95)
   observed <- 5
   out4 <- quantile_to_interval(observed, predicted, quantile)
   expect_snapshot(out4)
 
   # check function works without a median
-  predicted <- c(1:8)
+  predicted <- 1:8
   quantile <- c(seq(0.1, 0.4, 0.1), seq(0.6, 0.9, 0.1))
   observed <- 5
   expect_no_condition(
@@ -168,7 +172,7 @@ test_that("quantile_to_range works - matrix case", {
   )
   quantile <- rev(seq(0.1, 0.9, 0.1))
   out2 <- quantile_to_interval(observed, predicted, quantile)
-  expect_equal(out1, out2)
+  expect_identical(out1, out2)
 
   # check NA values are fine
   predicted[1, 1] <- NA
@@ -200,12 +204,12 @@ test_that("quantile_to_interval works - data.frame case", {
   n_preds <- nrow(ex)
   n_medians <- nrow(ex[quantile_level == 0.5])
   ex_interval <- quantile_to_interval(ex, keep_quantile_col = TRUE)
-  expect_equal(
+  expect_identical(
     nrow(ex_interval),
     n_preds + n_medians
   )
 
-  expect_equal(
+  expect_identical(
     colnames(ex_interval),
     c(colnames(ex), "boundary", "interval_range")
   )

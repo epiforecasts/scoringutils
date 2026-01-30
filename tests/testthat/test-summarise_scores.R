@@ -1,6 +1,6 @@
 test_that("summarise_scores() works as expected with by = forecast unit", {
-  expect_no_condition(
-    summarised_scores <- summarise_scores(scores_quantile)
+  summarised_scores <- expect_no_condition(
+    summarise_scores(scores_quantile)
   )
   expect_s3_class(summarised_scores, c("scores", "data.table", "data.frame"), exact = TRUE)
 })
@@ -13,8 +13,8 @@ test_that("summarise_scores() works as expected with by = forecast unit", {
     by = get_forecast_unit(scores_quantile)
   )
 
-  expect_equal(dim(summarised_scores), dim(scores_quantile))
-  expect_equal(summarised_scores$wis, scores_quantile$wis)
+  expect_identical(dim(summarised_scores), dim(scores_quantile))
+  expect_equal(summarised_scores$wis, scores_quantile$wis) # nolint: expect_identical_linter
 
   s2 <- summarise_scores(scores_quantile,
     by = c(
@@ -23,7 +23,7 @@ test_that("summarise_scores() works as expected with by = forecast unit", {
       "horizon"
     )
   )
-  expect_equal(dim(summarised_scores), dim(s2))
+  expect_identical(dim(summarised_scores), dim(s2))
 })
 
 test_that("summarise_scores() handles wrong by argument well", {

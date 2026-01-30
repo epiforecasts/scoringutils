@@ -1,5 +1,5 @@
 # =============================================================================
-# new_scores()
+# new_scores() # nolint: commented_code_linter
 # =============================================================================
 
 test_that("new_scores() works", {
@@ -16,8 +16,8 @@ test_that("new_scores() works", {
 })
 
 test_that("as_scores() works", {
-  expect_equal(
-    class(scoringutils:::as_scores(data.frame(wis = 1), metrics = "wis")),
+  expect_s3_class(
+    scoringutils:::as_scores(data.frame(wis = 1), metrics = "wis"), # nolint: undesirable_operator_linter
     c("scores", "data.table", "data.frame")
   )
 })
@@ -37,7 +37,7 @@ test_that("Output of `score()` has the class `scores()`", {
 })
 
 # =============================================================================
-# score()
+# score() # nolint: commented_code_linter
 # =============================================================================
 
 # common error handling --------------------------------------------------------
@@ -47,19 +47,6 @@ test_that("function throws an error if data is not a forecast object", {
     "The input needs to be a valid forecast object."
   )
 })
-
-# test_that("score() warns if column name equals a metric name", {
-#   data <- data.frame(
-#     observed = rep(1:10, each = 2),
-#     predicted = rep(c(-0.3, 0.3), 10) + rep(1:10, each = 2),
-#     model = "Model 1",
-#     date = as.Date("2020-01-01") + rep(1:10, each = 2),
-#     quantile = rep(c(0.1, 0.9), times = 10),
-#     bias = 3
-#   )
-#
-#   expect_warning(suppressMessages(score(forecast = data)))
-# })
 
 test_that("Manipulating scores objects with .[ works as expected", {
   expect_no_condition(scores_point[1:10])
@@ -84,14 +71,13 @@ test_that("function produces output for a continuous format case", {
     "After removing rows with NA values in the data, no forecasts are left."
   )
 
-  expect_equal(
-    nrow(eval) > 1,
-    TRUE
+  expect_gt(
+    nrow(eval), 1
   )
 
-  expect_equal(
+  expect_identical(
     nrow(eval),
-    887
+    887L
   )
 
   expect_s3_class(eval, c("scores", "data.table", "data.frame"), exact = TRUE)
@@ -104,8 +90,9 @@ test_that("function throws an error if data is missing", {
 test_that("score() works with only one sample", {
   # with only one sample, dss returns NaN and log_score fails
   onesample <- na.omit(example_sample_continuous)[sample_id == 20]
+  scoreonesample <- suppressWarnings(score(onesample))
   expect_warning(
-    scoreonesample <- score(onesample),
+    score(onesample),
     "Computation for `log_score` failed. Error: need at least 2 data points."
   )
 
@@ -122,29 +109,29 @@ test_that("function produces output for a nominal format case", {
 
 
 # =============================================================================
-# apply_metrics()
+# apply_metrics() # nolint: commented_code_linter
 # =============================================================================
 
 test_that("apply_metrics() works", {
   dt <- data.table::data.table(x = 1:10)
-  scoringutils:::apply_metrics(
-    forecast = dt, metrics = list("test" = function(x) x + 1),
+  scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+    forecast = dt, metrics = list(test = function(x) x + 1),
     dt$x
   )
-  expect_equal(dt$test, 2:11)
+  expect_equal(dt$test, 2:11) # nolint: expect_identical_linter
 
   # additional named argument works
   expect_no_condition(
-    scoringutils:::apply_metrics(
-      forecast = dt, metrics = list("test" = function(x) x + 1),
+    scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+      forecast = dt, metrics = list(test = function(x) x + 1),
       dt$x, y = dt$test
     )
   )
 
   # additional unnamed argument does not work
   expect_warning(
-    scoringutils:::apply_metrics(
-      forecast = dt, metrics = list("test" = function(x) x + 1),
+    scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+      forecast = dt, metrics = list(test = function(x) x + 1),
       dt$x, dt$test
     )
   )
@@ -160,7 +147,7 @@ test_that("`[` preserves attributes", {
 
 
 # =============================================================================
-# assert_scores()
+# assert_scores() # nolint: commented_code_linter
 # =============================================================================
 test_that("assert_scores() works", {
   expect_no_condition(assert_scores(scores_binary))
@@ -170,7 +157,7 @@ test_that("assert_scores() works", {
 })
 
 # ==============================================================================
-# validate_metrics()
+# validate_metrics() # nolint: commented_code_linter
 # ==============================================================================
 test_that("validate_metrics() works as expected", {
   test_fun <- function(x, y, ...) {
@@ -184,7 +171,7 @@ test_that("validate_metrics() works as expected", {
   expect_warning(
     expect_warning(
       score(as_forecast_binary(na.omit(example_binary)), metrics = list(
-        "test1" = test_fun, "test" = test_fun, "hi" = "hi", "2" = 3
+        test1 = test_fun, test = test_fun, hi = "hi", "2" = 3
       )),
       "`Metrics` element number 3 is not a valid function"
     ),
@@ -194,18 +181,18 @@ test_that("validate_metrics() works as expected", {
 
 
 # ==============================================================================
-# run_safely()
+# run_safely() # nolint: commented_code_linter
 # ==============================================================================
 test_that("run_safely() works as expected", {
   f <- function(x) {
     x
   }
-  expect_equal(run_safely(2, fun = f), 2)
-  expect_equal(run_safely(2, y = 3, fun = f), 2)
+  expect_identical(run_safely(2, fun = f), 2)
+  expect_identical(run_safely(2, y = 3, fun = f), 2)
   expect_warning(
     run_safely(fun = f, metric_name = "f"),
     'Computation for `f` failed. Error: argument "x" is missing, with no default',
     fixed = TRUE
   )
-  expect_equal(suppressWarnings(run_safely(y = 3, fun = f, metric_name = "f")), NULL)
+  expect_null(suppressWarnings(run_safely(y = 3, fun = f, metric_name = "f")))
 })

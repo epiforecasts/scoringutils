@@ -1,5 +1,5 @@
 # ==============================================================================
-# as_forecast_sample()
+# as_forecast_sample() # nolint: commented_code_linter
 # ==============================================================================
 test_that("as_forecast_sample() works as expected", {
   test <- na.omit(data.table::copy(example_sample_continuous))
@@ -30,7 +30,7 @@ test_that("Running `as_forecast_sample()` twice returns the same object", {
 
 
 # ==============================================================================
-# is_forecast_sample()
+# is_forecast_sample() # nolint: commented_code_linter
 # ==============================================================================
 test_that("is_forecast_sample() works as expected", {
   expect_true(is_forecast_sample(example_sample_continuous))
@@ -43,28 +43,28 @@ test_that("is_forecast_sample() works as expected", {
 
 
 # ==============================================================================
-# get_metrics.forecast_sample()
+# get_metrics.forecast_sample() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("get_metrics.forecast_sample() works as expected", {
-  expect_true(
-    is.list(get_metrics(example_sample_continuous))
+  expect_type(
+    get_metrics(example_sample_continuous), "list"
   )
-  expect_true(
-    is.list(get_metrics(example_sample_discrete))
+  expect_type(
+    get_metrics(example_sample_discrete), "list"
   )
 })
 
 
 # ==============================================================================
-# get_pit_histogram.forecast_sample()
+# get_pit_histogram.forecast_sample() # nolint: commented_code_linter
 # ==============================================================================
 test_that("get_pit_histogram.forecast_sample() works as expected", {
   pit_continuous <- get_pit_histogram(example_sample_continuous, by = c("model", "target_type"))
   pit_integer <- get_pit_histogram(example_sample_discrete, by = c("model", "location"))
 
-  expect_equal(names(pit_continuous), c("model", "target_type", "density", "bin", "mid"))
-  expect_equal(names(pit_integer), c("model", "location", "density", "bin", "mid"))
+  expect_named(pit_continuous, c("model", "target_type", "density", "bin", "mid"))
+  expect_named(pit_integer, c("model", "location", "density", "bin", "mid"))
 
   # check printing works
   expect_output(print(pit_continuous))

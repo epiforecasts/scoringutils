@@ -76,13 +76,13 @@ test_that("function throws an error for wrong input formats", {
     fixed = TRUE
   )
 
-  # predicted > 1
+  # predicted > 1 # nolint: commented_code_linter
   expect_error(
     assert_input_binary(observed, predicted + 1),
     "Assertion on 'predicted' failed: Element 1 is not <= 1."
   )
 
-  # predicted < 0
+  # predicted < 0 # nolint: commented_code_linter
   expect_error(
     assert_input_binary(observed, predicted - 1),
     "Assertion on 'predicted' failed: Element 1 is not >= 0."
@@ -124,13 +124,13 @@ test_that("function throws an error when missing observed or predicted", {
 
 test_that("Brier score works with different inputs", {
   # observed is a single number and does not have the same length as predicted
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     brier_score(factor(1, levels = c(0, 1)), predicted),
     (1 - predicted)^2
   )
 
   # predicted is a single number and does not have the same length as observed
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     brier_score(observed, predicted = 0.2),
     ifelse(observed == 1, (1 - 0.2)^2, (0.2)^2)
   )
@@ -151,12 +151,12 @@ test_that("Brier score works with different inputs", {
 
 test_that("Binary metrics work within and outside of `score()`", {
   result <- score(as_forecast_binary(df))
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     brier_score(observed, predicted),
     result$brier_score
   )
 
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_binary(observed, predicted),
     result$log_score
   )
@@ -165,19 +165,19 @@ test_that("Binary metrics work within and outside of `score()`", {
 test_that("`logs_binary()` works as expected", {
   # check against the function Metrics::ll
   obs2 <- as.numeric(as.character(observed))
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_binary(observed, predicted),
     Metrics::ll(obs2, predicted)
   )
 
   # check this works for a single observed value
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_binary(observed[1], predicted),
     Metrics::ll(obs2[1], predicted)
   )
 
   # check this works for a single predicted value
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_binary(observed, predicted[1]),
     Metrics::ll(obs2, predicted[1])
   )
