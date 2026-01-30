@@ -27,31 +27,6 @@ linters: linters_with_tags(
     # Disabled: vignette library() patterns are acceptable
     library_call_linter = NULL,
     # Disabled: package uses both pipe styles in different contexts
-    pipe_consistency_linter = NULL,
-    # Disabled: false positives when packages not installed in CI
-    missing_package_linter = NULL,
-    namespace_linter = NULL,
-    object_usage_linter = NULL,
-    # Disabled: Windows path compatibility not critical
-    nonportable_path_linter = NULL,
-    # Disabled: testthat style suggestions - project prefers existing patterns
-    expect_type_linter = NULL,
-    expect_length_linter = NULL,
-    expect_named_linter = NULL,
-    expect_s3_class_linter = NULL,
-    expect_true_false_linter = NULL,
-    expect_null_linter = NULL,
-    expect_not_linter = NULL,
-    # Disabled: minor style suggestions
-    any_is_na_linter = NULL,
-    paste_linter = NULL,
-    seq_linter = NULL,
-    lengths_linter = NULL,
-    comparison_negation_linter = NULL,
-    condition_call_linter = NULL,
-    nested_ifelse_linter = NULL,
-    missing_argument_linter = NULL,
-    indentation_linter = NULL,
-    object_length_linter = NULL
+    pipe_consistency_linter = NULL
   )
 exclude: "# nolint"
