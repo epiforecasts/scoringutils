@@ -45,7 +45,7 @@ select_metrics(
 #>     brierscore <- (observed - predicted)^2
 #>     return(brierscore)
 #> }
-#> <bytecode: 0x56520e9647c0>
+#> <bytecode: 0x565397430a50>
 #> <environment: namespace:scoringutils>
 #> 
 select_metrics(
@@ -60,7 +60,7 @@ select_metrics(
 #>     brierscore <- (observed - predicted)^2
 #>     return(brierscore)
 #> }
-#> <bytecode: 0x56520e9647c0>
+#> <bytecode: 0x565397430a50>
 #> <environment: namespace:scoringutils>
 #> 
 ```

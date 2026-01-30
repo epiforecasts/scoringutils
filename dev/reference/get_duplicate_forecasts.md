@@ -66,6 +66,7 @@ get_duplicate_forecasts(example)
 #> 21:       DE      2021-05-29       Cases    31653       Germany    2021-05-10
 #> 22:       DE      2021-05-29       Cases    31653       Germany    2021-05-10
 #>     location target_end_date target_type observed location_name forecast_date
+#>       <char>          <Date>      <char>    <num>        <char>        <Date>
 #>     quantile_level predicted                 model horizon
 #>              <num>     <int>                <char>   <num>
 #>  1:          0.950      1464  epiforecasts-EpiNow2       1
@@ -91,4 +92,5 @@ get_duplicate_forecasts(example)
 #> 21:          0.300     57739 EuroCOVIDhub-ensemble       3
 #> 22:          0.300     57739 EuroCOVIDhub-ensemble       3
 #>     quantile_level predicted                 model horizon
+#>              <num>     <int>                <char>   <num>
 ```

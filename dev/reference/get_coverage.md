@@ -173,6 +173,7 @@ example_quantile %>%
 #> 91:       UMass-MechBayes          0.010             98       0.984375000
 #> 92:       UMass-MechBayes          0.990             98       0.984375000
 #>                     model quantile_level interval_range interval_coverage
+#>                    <char>          <num>          <num>             <num>
 #>     interval_coverage_deviation quantile_coverage quantile_coverage_deviation
 #>                           <num>             <num>                       <num>
 #>  1:                 0.000000000        0.69921875                 0.199218750
@@ -268,4 +269,5 @@ example_quantile %>%
 #> 91:                 0.004375000        0.00781250                -0.002187500
 #> 92:                 0.004375000        0.99218750                 0.002187500
 #>     interval_coverage_deviation quantile_coverage quantile_coverage_deviation
+#>                           <num>             <num>                       <num>
 ```

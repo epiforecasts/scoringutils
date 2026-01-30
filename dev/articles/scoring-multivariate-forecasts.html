@@ -138,6 +138,7 @@ distribution.</p>
 <span><span class="co">#&gt; 39:       DE       Germany      2021-05-15       Cases    2021-05-03</span></span>
 <span><span class="co">#&gt; 40:       DE       Germany      2021-05-15       Cases    2021-05-03</span></span>
 <span><span class="co">#&gt;     location location_name target_end_date target_type forecast_date</span></span>
+<span><span class="co">#&gt;       &lt;char&gt;        &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;        &lt;Date&gt;</span></span>
 <span><span class="co">#&gt;                     model horizon predicted sample_id observed</span></span>
 <span><span class="co">#&gt;                    &lt;char&gt;   &lt;num&gt;     &lt;num&gt;     &lt;int&gt;    &lt;num&gt;</span></span>
 <span><span class="co">#&gt;  1: EuroCOVIDhub-ensemble       2 109365.73         1    64985</span></span>
@@ -180,7 +181,8 @@ distribution.</p>
 <span><span class="co">#&gt; 38: EuroCOVIDhub-ensemble       2 104926.13        38    64985</span></span>
 <span><span class="co">#&gt; 39: EuroCOVIDhub-ensemble       2 162582.41        39    64985</span></span>
 <span><span class="co">#&gt; 40: EuroCOVIDhub-ensemble       2 143421.88        40    64985</span></span>
-<span><span class="co">#&gt;                     model horizon predicted sample_id observed</span></span></code></pre></div>
+<span><span class="co">#&gt;                     model horizon predicted sample_id observed</span></span>
+<span><span class="co">#&gt;                    &lt;char&gt;   &lt;num&gt;     &lt;num&gt;     &lt;int&gt;    &lt;num&gt;</span></span></code></pre></div>
 <p>We can score this forecast and will receive a single score.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_univ_single</span><span class="op">)</span></span>

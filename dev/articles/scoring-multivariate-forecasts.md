@@ -70,6 +70,7 @@ example_univ_single
 #> 39:       DE       Germany      2021-05-15       Cases    2021-05-03
 #> 40:       DE       Germany      2021-05-15       Cases    2021-05-03
 #>     location location_name target_end_date target_type forecast_date
+#>       <char>        <char>          <Date>      <char>        <Date>
 #>                     model horizon predicted sample_id observed
 #>                    <char>   <num>     <num>     <int>    <num>
 #>  1: EuroCOVIDhub-ensemble       2 109365.73         1    64985
@@ -113,6 +114,7 @@ example_univ_single
 #> 39: EuroCOVIDhub-ensemble       2 162582.41        39    64985
 #> 40: EuroCOVIDhub-ensemble       2 143421.88        40    64985
 #>                     model horizon predicted sample_id observed
+#>                    <char>   <num>     <num>     <int>    <num>
 ```
 
 We can score this forecast and will receive a single score.

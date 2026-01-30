@@ -167,8 +167,8 @@ example.</p>
 <span>                             <span class="va">interval_range</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>  <span class="co"># split truth data and forecasts in order to apply different filtering</span></span>
-<span>  <span class="va">truth_data</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">observed</span><span class="op">)</span><span class="op">]</span></span>
-<span>  <span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">predicted</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="va">truth_data</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">observed</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">predicted</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span>  <span class="va">del_cols</span> <span class="op">&lt;-</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">truth_data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">truth_data</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">by</span>, <span class="st">"observed"</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
@@ -208,7 +208,7 @@ example.</p>
 <span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intervals</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># pivot wider and convert range to a factor</span></span>
-<span>    <span class="va">intervals</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="va">...</span> <span class="op">~</span> <span class="va">boundary</span>,</span>
+<span>    <span class="va">intervals</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="va">...</span> <span class="op">~</span> <span class="va">boundary</span>,</span>
 <span>                                   value.var <span class="op">=</span> <span class="st">"predicted"</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="co"># only plot interval ranges if there are interval ranges to plot</span></span>
@@ -319,7 +319,7 @@ the user to filter observations and forecasts independently.</p>
 <span>                    <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span>  <span class="va">what</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg</a></span><span class="op">(</span><span class="va">what</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># turn ... arguments into expressions</span></span>
@@ -358,7 +358,7 @@ effectively removing it from the plot.</p>
 <span>    x <span class="op">=</span> <span class="st">"target_end_date"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">location</span> <span class="op">~</span> <span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 <p>This is the same plot, but with a variety of prediction intervals
 shown, instead of just the median.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -375,7 +375,7 @@ shown, instead of just the median.</p>
 <span>    interval_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">location</span> <span class="op">~</span> <span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="700"></p>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700"></p>
 <p>And a similar plot, this time based on continuous forecasts. The
 predictions are automatically converted to a quantile-based forecasts
 for plotting.</p>
@@ -393,7 +393,7 @@ for plotting.</p>
 <span>    interval_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">90</span>, <span class="fl">95</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">location</span> <span class="op">~</span> <span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700"></p>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="700"></p>
 <p>Displaying two forecasts at a time with additional colours:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -407,7 +407,7 @@ for plotting.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">model</span>, fill <span class="op">=</span> <span class="va">model</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">target_type</span> <span class="op">~</span> <span class="va">location</span>, ncol <span class="op">=</span> <span class="fl">4</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Target end date"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="function-plot_interval_ranges-formerly-plot_ranges">Function <code>plot_interval_ranges()</code> (formerly
@@ -490,7 +490,7 @@ about different number of quantile levels for different forecasts
 all other prediction intervals have two (a lower and an upper
 bound)).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">range_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">range_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="va">.</span><span class="op">[</span>, <span class="va">range</span> <span class="op">:=</span> <span class="fu">scoringutils</span><span class="fu">:::</span><span class="fu"><a href="../reference/get_range_from_quantile.html">get_range_from_quantile</a></span><span class="op">(</span><span class="va">quantile_level</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
@@ -502,12 +502,12 @@ bound)).</p>
 <span></span>
 <span><span class="fu">plot_interval_ranges</span><span class="op">(</span><span class="va">sum_scores</span>, x <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="700"></p>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
 <p>Plotting dispersion instead of WIS:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">plot_interval_ranges</span><span class="op">(</span><span class="va">sum_scores</span>, y <span class="op">=</span> <span class="st">"dispersion"</span>, x <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">target_type</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="700"></p>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="function-plot_score_table">Function <code>plot_score_table()</code><a class="anchor" aria-label="anchor" href="#function-plot_score_table"></a>
@@ -600,7 +600,7 @@ function.</p>
 <span>  <span class="op">}</span></span>
 <span></span>
 <span>  <span class="co"># pivot longer and add scaled values</span></span>
-<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">scores</span>,</span>
+<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">scores</span>,</span>
 <span>    value.vars <span class="op">=</span> <span class="va">metrics</span>,</span>
 <span>    id.vars <span class="op">=</span> <span class="va">id_vars</span>,</span>
 <span>    variable.name <span class="op">=</span> <span class="st">"metric"</span></span>
@@ -623,7 +623,7 @@ function.</p>
 <span>    <span class="va">df</span><span class="op">[</span>, <span class="va">identifCol</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">paste</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">.SD</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>       .SDcols <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">y</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">df</span>, old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, new <span class="op">=</span> <span class="st">"identifCol"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">df</span>, old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, new <span class="op">=</span> <span class="st">"identifCol"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
 <span>  <span class="co"># plot -----------------------------------------------------------------------</span></span>
@@ -664,7 +664,7 @@ according to the same grouping).</p>
 <span></span>
 <span><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>, y <span class="op">=</span> <span class="st">"model"</span>, by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">target_type</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="700"></p>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="700"></p>
 <p>The function also allowed users to combine different facets into one,
 by creating a combined y-variable. This was done by passing a vector of
 column names to the <code>y</code> argument.</p>
@@ -673,7 +673,7 @@ column names to the <code>y</code> argument.</p>
 <span><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>,</span>
 <span>                 y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
 <span>                 by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="700"></p>
+<p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
