@@ -1,5 +1,5 @@
 # ==============================================================================
-# as_forecast_quantile()
+# as_forecast_quantile() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("as_forecast_quantile() works as expected", {
@@ -44,8 +44,9 @@ test_that("as_forecast_quantile() errors if there is both a sample_id and a quan
 
 test_that("as_forecast_quantile() warns if there are different numbers of quantiles", {
   example <- as.data.table(example_quantile)[-1000, ]
+  w <- suppressWarnings(as_forecast_quantile(na.omit(example)))
   expect_warning(
-    w <- as_forecast_quantile(na.omit(example)),
+    as_forecast_quantile(na.omit(example)),
     "Some forecasts have different numbers of rows"
   )
   # printing should work without a warning because printing is silent
@@ -98,8 +99,9 @@ test_that("as_forecast_quantiles works", {
     model = "model1",
     observed = 1:10,
     predicted = c(rep(0, 10), 2:11, 3:12, 4:13, rep(100, 10)),
-    sample_id = rep(1:5, each = 10)
-  ) %>%
+    sample_id = rep(1:5, each = 10),
+    stringsAsFactors = FALSE
+  ) |>
     as_forecast_sample()
 
   quantile <- data.frame(
@@ -107,7 +109,8 @@ test_that("as_forecast_quantiles works", {
     model = "model1",
     observed = rep(1:10, each = 2),
     quantile_level = c(0.25, 0.75),
-    predicted = rep(2:11, each = 2) + c(0, 2)
+    predicted = rep(2:11, each = 2) + c(0, 2),
+    stringsAsFactors = FALSE
   )
 
   expect_no_condition(
@@ -127,7 +130,7 @@ test_that("as_forecast_quantiles works", {
     probs = c(0.25, 0.75)
   )
 
-  expect_equal(quantile, as.data.frame(quantile2))
+  expect_identical(quantile, as.data.frame(quantile2))
 
   # Verify that `type` is correctly scoped in as_forecast_quantile(), as it is
   # also an argument.
@@ -147,14 +150,14 @@ test_that("as_forecast_quantiles works", {
 })
 
 test_that("as_forecast_quantiles issue 557 fix", {
-  out <- example_sample_discrete %>%
-    na.omit() %>%
+  out <- example_sample_discrete |>
+    na.omit() |>
     as_forecast_quantile(
       probs = c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
-    ) %>%
+    ) |>
     score()
 
-  expect_equal(any(is.na(out$interval_coverage_deviation)), FALSE)
+  expect_false(anyNA(out$interval_coverage_deviation))
 })
 
 test_that("as_forecast_quantile doesn't modify column names in place", {
@@ -165,15 +168,15 @@ test_that("as_forecast_quantile doesn't modify column names in place", {
   )
   pre <- names(quantile_data)
 
-  quantile_forecast <- quantile_data %>%
-    as_forecast_quantile(
-      predicted = "forecast_value",
-      observed = "observed_value",
-      quantile_level = "my_quantile"
-    )
+  quantile_forecast <- as_forecast_quantile(
+    quantile_data,
+    predicted = "forecast_value",
+    observed = "observed_value",
+    quantile_level = "my_quantile"
+  )
 
   post <- names(quantile_data)
-  expect_equal(pre, post)
+  expect_identical(pre, post)
 })
 
 test_that("as_forecast_quantile handles rounding issues correctly", {
@@ -183,9 +186,9 @@ test_that("as_forecast_quantile handles rounding issues correctly", {
     observed = c(5, 5, 5, 5),
     location = c(1, 1, 2, 2)
   )
+  quantile_forecast <- suppressWarnings(as_forecast_quantile(quantile_data))
   expect_warning(
-    quantile_forecast <- quantile_data %>%
-      as_forecast_quantile(),
+    as_forecast_quantile(quantile_data),
     "rounding issue"
   )
   expect_no_condition(
@@ -198,7 +201,7 @@ test_that("as_forecast_quantile handles rounding issues correctly", {
 
 
 # ==============================================================================
-# is_forecast_quantile()
+# is_forecast_quantile() # nolint: commented_code_linter
 # ==============================================================================
 test_that("is_forecast_quantile() works as expected", {
   expect_true(is_forecast_quantile(example_quantile))
@@ -209,7 +212,7 @@ test_that("is_forecast_quantile() works as expected", {
 })
 
 # ==============================================================================
-# score.forecast_quantile()
+# score.forecast_quantile() # nolint: commented_code_linter
 # ==============================================================================
 test_that("score_quantile correctly handles separate results = FALSE", {
   df <- example_quantile[model == "EuroCOVIDhub-ensemble" &
@@ -218,9 +221,8 @@ test_that("score_quantile correctly handles separate results = FALSE", {
   metrics$wis <- purrr::partial(wis, separate_results = FALSE)
   eval <- score(df[!is.na(predicted)], metrics = metrics)
 
-  expect_equal(
-    nrow(eval) > 1,
-    TRUE
+  expect_gt(
+    nrow(eval), 1
   )
   expect_true(all(names(get_metrics(example_quantile)) %in% colnames(eval)))
 
@@ -234,10 +236,11 @@ test_that("score() quantile produces desired metrics", {
     predicted = rep(c(-0.3, 0, 0.3), 10) + rep(1:10, each = 3),
     model = "Model 1",
     date = as.Date("2020-01-01") + rep(1:10, each = 3),
-    quantile_level = rep(c(0.1, 0.5, 0.9), times = 10)
+    quantile_level = rep(c(0.1, 0.5, 0.9), times = 10),
+    stringsAsFactors = FALSE
   )
 
-  data <-suppressWarnings(suppressMessages(as_forecast_quantile(data)))
+  data <- suppressWarnings(suppressMessages(as_forecast_quantile(data)))
 
   out <- score(forecast = data, metrics = metrics_no_cov)
   metrics <- c(
@@ -250,14 +253,16 @@ test_that("score() quantile produces desired metrics", {
 
 
 test_that("calculation of ae_median is correct for a quantile format case", {
-  eval <- summarise_scores(scores_quantile,by = "model")
+  eval <- summarise_scores(scores_quantile, by = "model")
 
   example <- as.data.table(example_quantile)
   ae <- example[quantile_level == 0.5, ae := abs(observed - predicted)][!is.na(model), .(mean = mean(ae, na.rm = TRUE)),
-                                                                        by = "model"
+    by = "model"
   ]$mean
 
-  expect_equal(sort(eval$ae_median), sort(ae))
+  expect_equal( # nolint: expect_identical_linter
+    sort(eval$ae_median), sort(ae)
+  )
 })
 
 
@@ -267,22 +272,25 @@ test_that("all quantile and range formats yield the same result", {
   df <- as.data.table(example_quantile)
 
   ae <- df[
-    quantile_level == 0.5, ae := abs(observed - predicted)][
-      !is.na(model), .(mean = mean(ae, na.rm = TRUE)),
-      by = "model"
-    ]$mean
+    quantile_level == 0.5, ae := abs(observed - predicted)
+  ][
+    !is.na(model), .(mean = mean(ae, na.rm = TRUE)),
+    by = "model"
+  ]$mean
 
-  expect_equal(sort(eval1$ae_median), sort(ae))
+  expect_equal( # nolint: expect_identical_linter
+    sort(eval1$ae_median), sort(ae)
+  )
 })
 
 test_that("WIS is the same with other metrics omitted or included", {
   eval <- score(example_quantile,
-                metrics = list("wis" = wis)
+    metrics = list(wis = wis)
   )
 
   eval2 <- scores_quantile
 
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     sum(eval$wis),
     sum(eval2$wis)
   )
@@ -303,21 +311,28 @@ test_that("score.forecast_quantile() errors with only NA values", {
 test_that("score.forecast_quantile() works as expected in edge cases", {
   # only the median
   onlymedian <- example_quantile[quantile_level == 0.5]
-  expect_no_condition(
-    s <- score(onlymedian, metrics = get_metrics(
+  s <- expect_no_condition(
+    score(onlymedian, metrics = get_metrics(
       example_quantile,
       exclude = c("interval_coverage_50", "interval_coverage_90")
     ))
   )
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     s$wis, abs(onlymedian$observed - onlymedian$predicted)
   )
 
   # only one symmetric interval is present
-  oneinterval <- example_quantile[quantile_level %in% c(0.25,0.75)] %>%
+  oneinterval <- example_quantile[quantile_level %in% c(0.25, 0.75)] |>
     as_forecast_quantile()
+  s <- suppressMessages(score(
+    oneinterval,
+    metrics = get_metrics(
+      example_quantile,
+      exclude = c("interval_coverage_90", "ae_median")
+    )
+  ))
   expect_message(
-    s <- score(
+    score(
       oneinterval,
       metrics = get_metrics(
         example_quantile,
@@ -329,7 +344,6 @@ test_that("score.forecast_quantile() works as expected in edge cases", {
 })
 
 test_that("score() works even if only some quantiles are missing", {
-
   # only the median is there
   onlymedian <- example_quantile[quantile_level == 0.5]
   expect_no_condition(
@@ -340,17 +354,22 @@ test_that("score() works even if only some quantiles are missing", {
   )
 
   # asymmetric intervals
-  asymm <- example_quantile[!quantile_level > 0.6]
+  asymm <- example_quantile[quantile_level <= 0.6]
   metrics <- get_metrics(
     example_quantile,
     exclude = c("overprediction", "underprediction", "dispersion")
   )
   metrics$wis <- purrr::partial(wis, na.rm = TRUE)
+  score_a <- suppressWarnings({
+    scores_temp <- score(asymm, metrics = metrics)
+    summarise_scores(scores_temp, by = "model")
+  })
   expect_warning(
-    expect_warning(
-      score_a <- score(asymm, metrics = metrics) %>%
-        summarise_scores(by = "model"),
-      "Computation for `interval_coverage_50` failed."
+    expect_warning({
+      scores_temp <- score(asymm, metrics = metrics)
+      summarise_scores(scores_temp, by = "model")
+    },
+    "Computation for `interval_coverage_50` failed."
     ),
     "Computation for `interval_coverage_90` failed."
   )
@@ -364,16 +383,16 @@ test_that("score() works even if only some quantiles are missing", {
   # check that the result is equal to a case where we discard the entire
   # interval in terms of WIS
   inner <- example_quantile[quantile_level %in% c(0.4, 0.45, 0.5, 0.55, 0.6)]
-  score_b <- score(inner, metrics = c(wis = wis)) %>%
+  score_b <- score(inner, metrics = c(wis = wis)) |>
     summarise_scores(by = "model")
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     score_a$wis,
     score_b$wis
   )
 
   # median is not there, but only in a single model
   test <- data.table::copy(example_quantile)
-  test_no_median <- test[model == "epiforecasts-EpiNow2" & !(quantile_level %in% c(0.5)), ]
+  test_no_median <- test[model == "epiforecasts-EpiNow2" & quantile_level != 0.5, ]
   test <- rbind(test[model != "epiforecasts-EpiNow2"], test_no_median)
 
   test <- suppressWarnings(as_forecast_quantile(test))
@@ -387,22 +406,22 @@ test_that("score() works even if only some quantiles are missing", {
 })
 
 # ==============================================================================
-# get_metrics.forecast_quantile()
+# get_metrics.forecast_quantile() # nolint: commented_code_linter
 # ==============================================================================
 test_that("get_metrics.forecast_quantile() works as expected", {
-  expect_true(
-    is.list(get_metrics(example_quantile))
+  expect_type(
+    get_metrics(example_quantile), "list"
   )
 })
 
 
 # ==============================================================================
-# get_pit_histogram.forecast_quantile()
+# get_pit_histogram.forecast_quantile() # nolint: commented_code_linter
 # ==============================================================================
 test_that("get_pit_histogram.forecast_quantile() works as expected", {
   pit_quantile <- get_pit_histogram(example_quantile, by = "model")
 
-  expect_equal(names(pit_quantile), c("model", "density", "bin", "mid"))
+  expect_named(pit_quantile, c("model", "density", "bin", "mid"))
   expect_s3_class(pit_quantile, c("data.table", "data.frame"), exact = TRUE)
 
   # check printing works

@@ -1,8 +1,8 @@
 # ==============================================================================
-# as_forecast_nominal()
+# as_forecast_nominal() # nolint: commented_code_linter
 # ==============================================================================
 test_that("as_forecast.forecast_ordinal() works as expected", {
-  ex <- data.table::copy(example_ordinal) %>%
+  ex <- data.table::copy(example_ordinal) |>
     na.omit()
 
 
@@ -39,7 +39,7 @@ test_that("assert_forecast.forecast_ordinal() fails if factors are not ordered",
 })
 
 # ==============================================================================
-# is_forecast_nominal()
+# is_forecast_nominal() # nolint: commented_code_linter
 # ==============================================================================
 test_that("is_forecast_nominal() works as expected", {
   expect_true(is_forecast_ordinal(example_ordinal))
@@ -52,18 +52,18 @@ test_that("is_forecast_nominal() works as expected", {
 
 
 # ==============================================================================
-# get_metrics.forecast_nominal()
+# get_metrics.forecast_nominal() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("get_metrics.forecast_nominal() works as expected", {
-  expect_true(
-    is.list(get_metrics(example_ordinal))
+  expect_type(
+    get_metrics(example_ordinal), "list"
   )
 })
 
 
 # ==============================================================================
-# Printing
+# Printing # nolint: commented_code_linter
 # ==============================================================================
 test_that("Printing works as expected", {
   suppressMessages(
@@ -72,6 +72,7 @@ test_that("Printing works as expected", {
         capture.output(print(example_ordinal)),
         "Forecast type: ordinal"
       ),
-      "Forecast unit:")
+      "Forecast unit:"
+    )
   )
 })
