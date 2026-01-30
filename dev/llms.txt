@@ -270,7 +270,8 @@ specification. Contributions of any kind are welcome!
 [jcken95](https://github.com/epiforecasts/scoringutils/commits?author=jcken95),
 [athowes](https://github.com/epiforecasts/scoringutils/commits?author=athowes),
 [nickreich](https://github.com/epiforecasts/scoringutils/commits?author=nickreich),
-[damonbayer](https://github.com/epiforecasts/scoringutils/commits?author=damonbayer)
+[damonbayer](https://github.com/epiforecasts/scoringutils/commits?author=damonbayer),
+[seabbs-bot](https://github.com/epiforecasts/scoringutils/commits?author=seabbs-bot)
 
 ### Issue Authors
 
