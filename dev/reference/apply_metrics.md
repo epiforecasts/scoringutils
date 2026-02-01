@@ -23,8 +23,11 @@ apply_metrics(forecast, metrics, ...)
 
 - metrics:
 
-  A named list of scoring functions. Names will be used as column names
-  in the output. See
+  A named list of scoring functions. Each element should be a function
+  reference, not a function call. For example, use
+  `list("crps" = crps_sample)` rather than
+  `list("crps" = crps_sample())`. Names will be used as column names in
+  the output. See
   [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md)
   for more information on the default metrics used. See the *Customising
   metrics* section below for information on how to pass custom arguments

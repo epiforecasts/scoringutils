@@ -52,8 +52,11 @@ score(forecast, metrics, ...)
 
 - metrics:
 
-  A named list of scoring functions. Names will be used as column names
-  in the output. See
+  A named list of scoring functions. Each element should be a function
+  reference, not a function call. For example, use
+  `list("crps" = crps_sample)` rather than
+  `list("crps" = crps_sample())`. Names will be used as column names in
+  the output. See
   [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md)
   for more information on the default metrics used. See the *Customising
   metrics* section below for information on how to pass custom arguments
@@ -199,6 +202,80 @@ score(as_forecast_point(example_point))
 score(as_forecast_sample(example_sample_discrete))
 score(as_forecast_sample(example_sample_continuous))
 } # }
+
+# passing a subset of metrics using select_metrics()
+# (the preferred approach for selecting from default metrics)
+example_sample_continuous %>%
+  as_forecast_sample() %>%
+  score(metrics = select_metrics(
+    get_metrics(as_forecast_sample(example_sample_continuous)),
+    select = c("crps", "mad")
+  ))
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#>      location location_name target_end_date target_type forecast_date
+#>        <char>        <char>          <Date>      <char>        <Date>
+#>   1:       DE       Germany      2021-05-08       Cases    2021-05-03
+#>   2:       DE       Germany      2021-05-08       Cases    2021-05-03
+#>   3:       DE       Germany      2021-05-08       Cases    2021-05-03
+#>   4:       DE       Germany      2021-05-08      Deaths    2021-05-03
+#>   5:       DE       Germany      2021-05-08      Deaths    2021-05-03
+#>  ---                                                                 
+#> 883:       IT         Italy      2021-07-24      Deaths    2021-07-12
+#> 884:       IT         Italy      2021-07-24      Deaths    2021-07-05
+#> 885:       IT         Italy      2021-07-24      Deaths    2021-07-12
+#> 886:       IT         Italy      2021-07-24      Deaths    2021-07-05
+#> 887:       IT         Italy      2021-07-24      Deaths    2021-07-12
+#>                      model horizon         crps         mad
+#>                     <char>   <num>        <num>       <num>
+#>   1: EuroCOVIDhub-ensemble       1  7482.975177 17641.24334
+#>   2: EuroCOVIDhub-baseline       1 20371.250988 19341.68942
+#>   3:  epiforecasts-EpiNow2       1 24810.424753 32348.79978
+#>   4: EuroCOVIDhub-ensemble       1    67.510511   267.13585
+#>   5: EuroCOVIDhub-baseline       1    86.462930   397.09371
+#>  ---                                                       
+#> 883: EuroCOVIDhub-baseline       2    66.515150   168.03093
+#> 884:       UMass-MechBayes       3     6.616381    24.76457
+#> 885:       UMass-MechBayes       2    29.446723    39.96542
+#> 886:  epiforecasts-EpiNow2       3    28.863742   107.93293
+#> 887:  epiforecasts-EpiNow2       2    49.998906    93.54245
+
+# passing a custom list of metrics manually
+# make sure to pass the function itself, not the result of calling it,
+# i.e. use `crps_sample` (correct) instead of `crps_sample()` (incorrect)
+example_sample_continuous %>%
+  as_forecast_sample() %>%
+  score(metrics = list("crps" = crps_sample, "mad" = mad_sample))
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+#>      location location_name target_end_date target_type forecast_date
+#>        <char>        <char>          <Date>      <char>        <Date>
+#>   1:       DE       Germany      2021-05-08       Cases    2021-05-03
+#>   2:       DE       Germany      2021-05-08       Cases    2021-05-03
+#>   3:       DE       Germany      2021-05-08       Cases    2021-05-03
+#>   4:       DE       Germany      2021-05-08      Deaths    2021-05-03
+#>   5:       DE       Germany      2021-05-08      Deaths    2021-05-03
+#>  ---                                                                 
+#> 883:       IT         Italy      2021-07-24      Deaths    2021-07-12
+#> 884:       IT         Italy      2021-07-24      Deaths    2021-07-05
+#> 885:       IT         Italy      2021-07-24      Deaths    2021-07-12
+#> 886:       IT         Italy      2021-07-24      Deaths    2021-07-05
+#> 887:       IT         Italy      2021-07-24      Deaths    2021-07-12
+#>                      model horizon         crps         mad
+#>                     <char>   <num>        <num>       <num>
+#>   1: EuroCOVIDhub-ensemble       1  7482.975177 17641.24334
+#>   2: EuroCOVIDhub-baseline       1 20371.250988 19341.68942
+#>   3:  epiforecasts-EpiNow2       1 24810.424753 32348.79978
+#>   4: EuroCOVIDhub-ensemble       1    67.510511   267.13585
+#>   5: EuroCOVIDhub-baseline       1    86.462930   397.09371
+#>  ---                                                       
+#> 883: EuroCOVIDhub-baseline       2    66.515150   168.03093
+#> 884:       UMass-MechBayes       3     6.616381    24.76457
+#> 885:       UMass-MechBayes       2    29.446723    39.96542
+#> 886:  epiforecasts-EpiNow2       3    28.863742   107.93293
+#> 887:  epiforecasts-EpiNow2       2    49.998906    93.54245
 
 # multivariate forecasts
 if (FALSE) { # \dontrun{

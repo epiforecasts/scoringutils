@@ -106,10 +106,13 @@ observed values).</p></dd>
 
 
 <dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
-<dd><p>A named list of scoring functions. Names will be used as
-column names in the output. See <code><a href="get_metrics.html">get_metrics()</a></code> for more information on the
-default metrics used. See the <em>Customising metrics</em> section below for
-information on how to pass custom arguments to scoring functions.</p></dd>
+<dd><p>A named list of scoring functions. Each element should be a
+function reference, not a function call. For example, use
+<code>list("crps" = crps_sample)</code> rather than <code>list("crps" = crps_sample())</code>.
+Names will be used as column names in the output. See <code><a href="get_metrics.html">get_metrics()</a></code> for
+more information on the default metrics used. See the <em>Customising metrics</em>
+section below for information on how to pass custom arguments to scoring
+functions.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -246,6 +249,80 @@ function is created. Consider the following example:</p>
 <span class="r-in"><span><span class="fu">score</span><span class="op">(</span><span class="fu"><a href="as_forecast_sample.html">as_forecast_sample</a></span><span class="op">(</span><span class="va">example_sample_discrete</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">score</span><span class="op">(</span><span class="fu"><a href="as_forecast_sample.html">as_forecast_sample</a></span><span class="op">(</span><span class="va">example_sample_continuous</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># passing a subset of metrics using select_metrics()</span></span></span>
+<span class="r-in"><span><span class="co"># (the preferred approach for selecting from default metrics)</span></span></span>
+<span class="r-in"><span><span class="va">example_sample_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_forecast_sample.html">as_forecast_sample</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">score</span><span class="op">(</span>metrics <span class="op">=</span> <span class="fu"><a href="select_metrics.html">select_metrics</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="fu"><a href="as_forecast_sample.html">as_forecast_sample</a></span><span class="op">(</span><span class="va">example_sample_continuous</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"crps"</span>, <span class="st">"mad"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      location location_name target_end_date target_type forecast_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;        &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;        &lt;Date&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:       DE       Germany      2021-05-08      Deaths    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:       DE       Germany      2021-05-08      Deaths    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:       IT         Italy      2021-07-24      Deaths    2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:       IT         Italy      2021-07-24      Deaths    2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      model horizon         crps         mad</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     &lt;char&gt;   &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: EuroCOVIDhub-ensemble       1  7482.975177 17641.24334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: EuroCOVIDhub-baseline       1 20371.250988 19341.68942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  epiforecasts-EpiNow2       1 24810.424753 32348.79978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: EuroCOVIDhub-ensemble       1    67.510511   267.13585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: EuroCOVIDhub-baseline       1    86.462930   397.09371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883: EuroCOVIDhub-baseline       2    66.515150   168.03093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:       UMass-MechBayes       3     6.616381    24.76457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:       UMass-MechBayes       2    29.446723    39.96542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:  epiforecasts-EpiNow2       3    28.863742   107.93293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:  epiforecasts-EpiNow2       2    49.998906    93.54245</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># passing a custom list of metrics manually</span></span></span>
+<span class="r-in"><span><span class="co"># make sure to pass the function itself, not the result of calling it,</span></span></span>
+<span class="r-in"><span><span class="co"># i.e. use `crps_sample` (correct) instead of `crps_sample()` (incorrect)</span></span></span>
+<span class="r-in"><span><span class="va">example_sample_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_forecast_sample.html">as_forecast_sample</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">score</span><span class="op">(</span>metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"crps"</span> <span class="op">=</span> <span class="va">crps_sample</span>, <span class="st">"mad"</span> <span class="op">=</span> <span class="va">mad_sample</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   unexpected.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      location location_name target_end_date target_type forecast_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;        &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;        &lt;Date&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:       DE       Germany      2021-05-08       Cases    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:       DE       Germany      2021-05-08      Deaths    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:       DE       Germany      2021-05-08      Deaths    2021-05-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:       IT         Italy      2021-07-24      Deaths    2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:       IT         Italy      2021-07-24      Deaths    2021-07-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:       IT         Italy      2021-07-24      Deaths    2021-07-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      model horizon         crps         mad</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     &lt;char&gt;   &lt;num&gt;        &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: EuroCOVIDhub-ensemble       1  7482.975177 17641.24334</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: EuroCOVIDhub-baseline       1 20371.250988 19341.68942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  epiforecasts-EpiNow2       1 24810.424753 32348.79978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: EuroCOVIDhub-ensemble       1    67.510511   267.13585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: EuroCOVIDhub-baseline       1    86.462930   397.09371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 883: EuroCOVIDhub-baseline       2    66.515150   168.03093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 884:       UMass-MechBayes       3     6.616381    24.76457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 885:       UMass-MechBayes       2    29.446723    39.96542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 886:  epiforecasts-EpiNow2       3    28.863742   107.93293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 887:  epiforecasts-EpiNow2       2    49.998906    93.54245</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># multivariate forecasts</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>

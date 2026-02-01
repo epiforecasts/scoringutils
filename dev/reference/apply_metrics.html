@@ -73,10 +73,13 @@ observed values).</p></dd>
 
 
 <dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
-<dd><p>A named list of scoring functions. Names will be used as
-column names in the output. See <code><a href="get_metrics.html">get_metrics()</a></code> for more information on the
-default metrics used. See the <em>Customising metrics</em> section below for
-information on how to pass custom arguments to scoring functions.</p></dd>
+<dd><p>A named list of scoring functions. Each element should be a
+function reference, not a function call. For example, use
+<code>list("crps" = crps_sample)</code> rather than <code>list("crps" = crps_sample())</code>.
+Names will be used as column names in the output. See <code><a href="get_metrics.html">get_metrics()</a></code> for
+more information on the default metrics used. See the <em>Customising metrics</em>
+section below for information on how to pass custom arguments to scoring
+functions.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
