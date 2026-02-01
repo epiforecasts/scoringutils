@@ -9,7 +9,8 @@ test_that("get_pairwise_comparisons() works", {
       sort(c(4, 1, 5, 5, 6)), sort(c(12, 4, 5, 12, 53)),
       sort(c(8, 6, 3, 1, 46)), sort(c(6, 3, 5, 8, 5)),
       sort(c(3, 1, 5, 7, 7)), sort(c(3, 2, 6, 8, 5))
-      )
+    ),
+    stringsAsFactors = FALSE
   )
 
   test_forecasts <- data.table::as.data.table(test_truth)
@@ -27,9 +28,9 @@ test_that("get_pairwise_comparisons() works", {
 
   set.seed(123)
   test_forecasts[, value := sapply(value, function(x) {
-      abs(rnorm(n = 1, mean = x, sd = model_sd))
-    }),
-    by = .(model, target_end_date, location, target_variable)
+    abs(rnorm(n = 1, mean = x, sd = model_sd))
+  }),
+  by = .(model, target_end_date, location, target_variable)
   ]
 
   quantiles <- c(0.05, 0.25, 0.5, 0.75, 0.95)
@@ -50,7 +51,7 @@ test_that("get_pairwise_comparisons() works", {
   data_formatted <- merge(
     forecasts_formatted,
     truth_formatted
-  ) %>%
+  ) |>
     as_forecast_quantile()
 
   # evaluate the toy forecasts, once with and once without a baseline model specified
@@ -113,14 +114,14 @@ test_that("get_pairwise_comparisons() works", {
 
     # perform permutation tests:
     if (permutation_test) {
-      pval <- scoringutils:::permutation_test(sub$wis.x, sub$wis.y,
+      pval <- scoringutils:::permutation_test(sub$wis.x, sub$wis.y, # nolint: undesirable_operator_linter
         n_permutation = 999,
         comparison_mode = "difference"
       )
 
       # aggregate by forecast date:
       sub_fcd <- aggregate(cbind(wis.x, wis.y) ~ timezero, data = sub, FUN = mean)
-      pval_fcd <- scoringutils:::permutation_test(sub_fcd$wis.x, sub_fcd$wis.y,
+      pval_fcd <- scoringutils:::permutation_test(sub_fcd$wis.x, sub_fcd$wis.y, # nolint: undesirable_operator_linter
         n_permutation = 999
       )
     } else {
@@ -159,7 +160,7 @@ test_that("get_pairwise_comparisons() works", {
   # compare results without a baseline specified
   geometric_mean_ratios <- exp(rowMeans(log(results_ratio), na.rm = TRUE))
   names(geometric_mean_ratios) <- NULL
-  expect_equal(relative_skills_without$relative_skill, geometric_mean_ratios)
+  expect_equal(relative_skills_without$relative_skill, geometric_mean_ratios) # nolint: expect_identical_linter
 
   # comparison with a baseline
   ind_baseline <- which(rownames(results_ratio) == "m1")
@@ -168,7 +169,7 @@ test_that("get_pairwise_comparisons() works", {
   ratios_scaled <- geometric_mean_ratios / geometric_mean_ratios["m1"]
 
   names(ratios_scaled) <- NULL
-  expect_equal(relative_skills_with$relative_skill, ratios_scaled)
+  expect_equal(relative_skills_with$relative_skill, ratios_scaled) # nolint: expect_identical_linter
 
 
   # scoringutils can also do pairwise comparisons for different subcategories
@@ -214,7 +215,7 @@ test_that("get_pairwise_comparisons() works", {
     )
   ]
 
-  expect_equal(relative_skills_with$relative_skill, ratios_scaled)
+  expect_equal(relative_skills_with$relative_skill, ratios_scaled) # nolint: expect_identical_linter
 })
 
 test_that("get_pairwise_comparisons() work in score() with integer data", {
@@ -241,7 +242,8 @@ test_that("get_pairwise_comparisons() works", {
     date = as.Date("2020-01-01") + rep(1:5, each = 2),
     location = c(1, 2),
     wis = (abs(rnorm(30))),
-    ae_median = (abs(rnorm(30)))
+    ae_median = (abs(rnorm(30))),
+    stringsAsFactors = FALSE
   )
   attr(df, "metrics") <- c("wis", "ae_median")
 
@@ -258,7 +260,8 @@ test_that("get_pairwise_comparisons() works", {
   expect_s3_class(res, c("data.table", "data.frame"), exact = TRUE)
   expect_s3_class(
     get_pairwise_comparisons(scores_quantile),
-    c("data.table", "data.frame"), exact = TRUE
+    c("data.table", "data.frame"),
+    exact = TRUE
   )
 })
 
@@ -274,7 +277,7 @@ test_that("get_pairwise_comparisons() and `add_relative_skill()` give same resul
   eval2 <- add_relative_skill(scores_sample_continuous, compare = "model")
   eval2 <- summarise_scores(eval2, by = "model")
 
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     sort(unique(pairwise$crps_relative_skill)), sort(eval2$crps_relative_skill)
   )
 })
@@ -292,23 +295,26 @@ test_that("Basic input checks for `add_relative_skill() work", {
   # check that model column + columns in 'by' + baseline model are present
   expect_error(
     add_relative_skill(
-      eval, compare = "model", by = "missing", metric = "crps"
+      eval,
+      compare = "model", by = "missing", metric = "crps"
     ),
-    "Not all columns specified in `by` are present:"
+    "Not all columns specified in `by` are present:" # nolint: nonportable_path_linter
   )
 
   # check that none of the columns in `by` are in `compare`
   expect_error(
     add_relative_skill(
-      eval, by = c("model", "target_type"), metric = "crps"
+      eval,
+      by = c("model", "target_type"), metric = "crps"
     ),
-    "Must be disjunct from \\{'model'\\}"
+    "Must be disjunct from \\{'model'\\}" # nolint: nonportable_path_linter
   )
 
   # error if baseline is not present
   expect_error(
     add_relative_skill(
-      eval, compare = "model", baseline = "missing", metric = "crps"
+      eval,
+      compare = "model", baseline = "missing", metric = "crps"
     ),
     "Assertion on 'baseline' failed: Must be a subset of"
   )
@@ -317,12 +323,14 @@ test_that("Basic input checks for `add_relative_skill() work", {
   eval_few <- eval[model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")]
   expect_no_error(
     add_relative_skill(
-      eval_few, compare = "model", metric = "crps"
+      eval_few,
+      compare = "model", metric = "crps"
     )
   )
   expect_error(
     add_relative_skill(
-      eval_few, compare = "model", baseline = "EuroCOVIDhub-baseline",
+      eval_few,
+      compare = "model", baseline = "EuroCOVIDhub-baseline",
       metric = "crps"
     ),
     "More than one non-baseline model is needed to compute pairwise compairisons."
@@ -331,14 +339,16 @@ test_that("Basic input checks for `add_relative_skill() work", {
   # error if no relative skill metric is found
   expect_error(
     add_relative_skill(
-      eval, compare = "model",
+      eval,
+      compare = "model",
       metric = "missing"
     )
   )
   eval_nometric <- data.table::copy(eval)[, "crps" := NULL]
   expect_error(
     suppressWarnings(add_relative_skill(
-      eval_nometric, compare = "model"
+      eval_nometric,
+      compare = "model"
     )),
     "Assertion on 'metric' failed: Must be a subset of "
   )
@@ -347,7 +357,8 @@ test_that("Basic input checks for `add_relative_skill() work", {
   eval_nomodel <- data.table::copy(eval)[, "model" := NULL]
   expect_error(
     add_relative_skill(
-      eval_nomodel, by = "target_type", metric = "crps"
+      eval_nomodel,
+      by = "target_type", metric = "crps"
     ),
     "Assertion on 'scores' failed: Column 'model' not found in data."
   )
@@ -357,7 +368,8 @@ test_that("Basic input checks for `add_relative_skill() work", {
   attr(eval_noattribute, "metrics") <- NULL
   expect_error(
     add_relative_skill(
-      eval_noattribute, compare = "model", metric = "crps"
+      eval_noattribute,
+      compare = "model", metric = "crps"
     ),
     "needs an attribute `metrics`"
   )
@@ -367,7 +379,8 @@ test_that("Basic input checks for `add_relative_skill() work", {
   eval_nas[1:10, "crps" := NA]
   expect_warning(
     add_relative_skill(
-      eval_nas, compare = "model", metric = "crps"
+      eval_nas,
+      compare = "model", metric = "crps"
     ),
     "Some values for the metric `crps` are NA. These have been removed."
   )
@@ -376,7 +389,8 @@ test_that("Basic input checks for `add_relative_skill() work", {
   eval_nas[, "crps" := NA]
   expect_error(
     add_relative_skill(
-      eval_nas, compare = "model", metric = "crps"
+      eval_nas,
+      compare = "model", metric = "crps"
     ),
     "After removing \"NA\" values for `crps`, no values were left."
   )
@@ -386,7 +400,8 @@ test_that("Basic input checks for `add_relative_skill() work", {
   eval_diffsign[1:10, "crps" := -eval_diffsign[1:10, "crps"]]
   expect_error(
     add_relative_skill(
-      eval_diffsign, compare = "model", metric = "crps"
+      eval_diffsign,
+      compare = "model", metric = "crps"
     ),
     "To compute pairwise comparisons, all values of `crps` must have the same sign."
   )
@@ -395,16 +410,18 @@ test_that("Basic input checks for `add_relative_skill() work", {
   fu <- get_forecast_unit(eval)
   expect_message(
     add_relative_skill(
-      eval, compare = "model", by = setdiff(fu, "model"), metric = "crps"
+      eval,
+      compare = "model", by = setdiff(fu, "model"), metric = "crps"
     ),
-    "relative skill can only be computed if the combination of `compare` and `by` is different from the unit of a single forecast."
+    "relative skill can only be computed if the combination"
   )
 
   # warning if by is equal to the forecast unit and also by is "model"
   eval_summ <- summarise_scores(eval, by = "model")
   expect_warning(
     add_relative_skill(
-      eval_summ, compare = "model", metric = "crps"
+      eval_summ,
+      compare = "model", metric = "crps"
     ),
     "`compare` is set to the unit of a single forecast."
   )
@@ -465,8 +482,8 @@ test_that("compare_forecasts() throws error with wrong inputs", {
 })
 
 test_that("add_relative_skill() works with point forecasts", {
-  expect_no_condition(
-    pw_point <- add_relative_skill(
+  pw_point <- expect_no_condition(
+    add_relative_skill(
       scores_point,
       metric = "se_point"
     )
@@ -474,10 +491,11 @@ test_that("add_relative_skill() works with point forecasts", {
   pw_point <- summarise_scores(pw_point, by = "model")
 
   pw_manual <- get_pairwise_comparisons(
-    scores_point, compare = "model", metric = "se_point"
+    scores_point,
+    compare = "model", metric = "se_point"
   )
 
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     pw_point$relative_skill,
     unique(pw_manual$relative_skill)
   )
@@ -497,18 +515,21 @@ test_that("add_relative_skill() can compute relative measures", {
 
   expect_equal(
     scores_with[, wis_relative_skill],
-    c(1.6, 0.81, 0.75, 1.03), tolerance = 0.01
+    c(1.6, 0.81, 0.75, 1.03),
+    tolerance = 0.01
   )
 
   scores_with <- add_relative_skill(
-    scores_quantile, compare = "model",
+    scores_quantile,
+    compare = "model",
     metric = "ae_median"
   )
   scores_with <- summarise_scores(scores_with, by = "model")
 
   expect_equal(
     scores_with[, ae_median_relative_skill],
-    c(1.6, 0.78, 0.77, 1.04), tolerance = 0.01
+    c(1.6, 0.78, 0.77, 1.04),
+    tolerance = 0.01
   )
 })
 
@@ -526,7 +547,7 @@ test_that("permutation_tests work as expected", {
 
 
 # ==============================================================================
-# plot_pairwise_comparison()
+# plot_pairwise_comparison() # nolint: commented_code_linter
 # ==============================================================================
 pairwise <- get_pairwise_comparisons(scores_quantile, by = "target_type")
 
@@ -547,8 +568,8 @@ test_that("plot_pairwise_comparisons() works when showing p values", {
 })
 
 test_that("add_relative_skill() works without warnings when not computing p-values", {
-  forecast_quantile <- example_quantile %>%
-    na.omit() %>%
+  forecast_quantile <- example_quantile |>
+    na.omit() |>
     as_forecast_quantile(
       forecast_unit = c(
         "location", "forecast_date", "target_end_date",
@@ -556,21 +577,21 @@ test_that("add_relative_skill() works without warnings when not computing p-valu
       )
     )
 
-  scores <- forecast_quantile %>%
+  scores <- forecast_quantile |>
     score(metrics = get_metrics(forecast_quantile, "ae_median"))
 
-  expect_no_warning(
-    scores_w_rel_skill <- scores %>%
-      add_relative_skill(
-        compare = "model",
-        by = "location",
-        metric = "ae_median",
-        test_type = NULL
-      )
+  scores_w_rel_skill <- expect_no_warning(
+    add_relative_skill(
+      scores,
+      compare = "model",
+      by = "location",
+      metric = "ae_median",
+      test_type = NULL
+    )
   )
 
   # Additional checks to ensure the function worked correctly
   expect_true("ae_median_relative_skill" %in% names(scores_w_rel_skill))
-  expect_true(is.numeric(scores_w_rel_skill$ae_median_relative_skill))
-  expect_false(any(is.na(scores_w_rel_skill$ae_median_relative_skill)))
+  expect_type(scores_w_rel_skill$ae_median_relative_skill, "double")
+  expect_false(anyNA(scores_w_rel_skill$ae_median_relative_skill))
 })

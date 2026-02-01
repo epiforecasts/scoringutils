@@ -1,8 +1,8 @@
 # ==============================================================================
-# as_forecast_nominal()
+# as_forecast_nominal() # nolint: commented_code_linter
 # ==============================================================================
 test_that("as_forecast.forecast_nominal() works as expected", {
-  ex <- data.table::copy(example_nominal) %>%
+  ex <- data.table::copy(example_nominal) |>
     na.omit()
 
 
@@ -32,7 +32,7 @@ test_that("as_forecast.forecast_nominal() breaks when rows with zero probability
 
 
 # ==============================================================================
-# is_forecast_nominal()
+# is_forecast_nominal() # nolint: commented_code_linter
 # ==============================================================================
 test_that("is_forecast_nominal() works as expected", {
   expect_true(is_forecast_nominal(example_nominal))
@@ -45,18 +45,18 @@ test_that("is_forecast_nominal() works as expected", {
 
 
 # ==============================================================================
-# get_metrics.forecast_nominal()
+# get_metrics.forecast_nominal() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("get_metrics.forecast_nominal() works as expected", {
-  expect_true(
-    is.list(get_metrics(example_nominal))
+  expect_type(
+    get_metrics(example_nominal), "list"
   )
 })
 
 
 # ==============================================================================
-# Printing
+# Printing # nolint: commented_code_linter
 # ==============================================================================
 test_that("Printing works as expected", {
   suppressMessages(
@@ -65,6 +65,7 @@ test_that("Printing works as expected", {
         capture.output(print(example_nominal)),
         "Forecast type: nominal"
       ),
-      "Forecast unit:")
+      "Forecast unit:"
+    )
   )
 })
