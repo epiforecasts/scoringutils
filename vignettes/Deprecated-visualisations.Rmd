@@ -26,6 +26,7 @@ The example data used is the data shipped with the `scoringutils` package. It co
 library(scoringutils)
 library(data.table)
 library(ggplot2)
+library(ggdist)
 library(magrittr)
 library(magrittr) # pipe operator
 ```
@@ -35,67 +36,67 @@ library(magrittr) # pipe operator
 In previous versions of `scoringutils`, forecasts and observed values could be visualised using the function `plot_predictions()` and its `make_na()` helper function. The following shows the function code first and then an example. 
 
 ```{r eval=require("ggdist", quietly = TRUE)}
-# " @title Plot Predictions vs True Values
-# "
-# " @description
-# " Make a plot of observed and predicted values
-# "
-# " @param data a data.frame that follows the same specifications outlined in
-# " [score()]. To customise your plotting, you can filter your data using the
-# " function [make_NA()].
-# " @param by character vector with column names that denote categories by which
-# " the plot should be stratified. If for example you want to have a facetted
-# " plot, this should be a character vector with the columns used in facetting
-# " (note that the facetting still needs to be done outside of the function call)
-# " @param x character vector of length one that denotes the name of the variable
-# " @param interval_range numeric vector indicating the interval ranges to plot.
-# " If 0 is included in `interval_range`, the median prediction will be shown.
-# " @return ggplot object with a plot of true vs predicted values
-# " @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
-# " @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data geom_point
-# " @importFrom data.table dcast
-# " @importFrom ggdist geom_lineribbon
-# " @export
-# " @examples
-# " library(ggplot2)
-# " library(magrittr)
-# "
-# " example_sample_continuous %>%
-# "   make_NA (
-# "     what = "truth",
-# "     target_end_date >= "2021-07-22",
-# "     target_end_date < "2021-05-01"
-# "   ) %>%
-# "   make_NA (
-# "     what = "forecast",
-# "     model != "EuroCOVIDhub-ensemble",
-# "     forecast_date != "2021-06-07"
-# "   ) %>%
-# "   plot_predictions (
-# "     x = "target_end_date",
-# "     by = c("target_type", "location"),
-# "     interval_range = c(0, 50, 90, 95)
-# "   ) +
-# "   facet_wrap(~ location + target_type, scales = "free_y") +
-# "   aes(fill = model, color = model)
-# "
-# " example_sample_continuous %>%
-# "   make_NA (
-# "     what = "truth",
-# "     target_end_date >= "2021-07-22",
-# "     target_end_date < "2021-05-01"
-# "   ) %>%
-# "   make_NA (
-# "     what = "forecast",
-# "     forecast_date != "2021-06-07"
-# "   ) %>%
-# "   plot_predictions (
-# "     x = "target_end_date",
-# "     by = c("target_type", "location"),
-# "     interval_range = 0
-# "   ) +
-# "   facet_wrap(~ location + target_type, scales = "free_y") +
-# "   aes(fill = model, color = model)
+#" @title Plot Predictions vs True Values
+#"
+#" @description
+#" Make a plot of observed and predicted values
+#"
+#" @param data a data.frame that follows the same specifications outlined in
+#" [score()]. To customise your plotting, you can filter your data using the
+#" function [make_NA()].
+#" @param by character vector with column names that denote categories by which
+#" the plot should be stratified. If for example you want to have a facetted
+#" plot, this should be a character vector with the columns used in facetting
+#" (note that the facetting still needs to be done outside of the function call)
+#" @param x character vector of length one that denotes the name of the variable
+#" @param interval_range numeric vector indicating the interval ranges to plot.
+#" If 0 is included in `interval_range`, the median prediction will be shown.
+#" @return ggplot object with a plot of true vs predicted values
+#" @importFrom ggplot2 ggplot scale_colour_manual scale_fill_manual theme_light
+#" @importFrom ggplot2 facet_wrap facet_grid aes geom_line .data geom_point
+#" @importFrom data.table dcast
+#" @importFrom ggdist geom_lineribbon
+#" @export
+#" @examples
+#" library(ggplot2)
+#" library(magrittr)
+#"
+#" example_sample_continuous %>%
+#"   make_NA (
+#"     what = "truth",
+#"     target_end_date >= "2021-07-22",
+#"     target_end_date < "2021-05-01"
+#"   ) %>%
+#"   make_NA (
+#"     what = "forecast",
+#"     model != "EuroCOVIDhub-ensemble",
+#"     forecast_date != "2021-06-07"
+#"   ) %>%
+#"   plot_predictions (
+#"     x = "target_end_date",
+#"     by = c("target_type", "location"),
+#"     interval_range = c(0, 50, 90, 95)
+#"   ) +
+#"   facet_wrap(~ location + target_type, scales = "free_y") +
+#"   aes(fill = model, color = model)
+#"
+#" example_sample_continuous %>%
+#"   make_NA (
+#"     what = "truth",
+#"     target_end_date >= "2021-07-22",
+#"     target_end_date < "2021-05-01"
+#"   ) %>%
+#"   make_NA (
+#"     what = "forecast",
+#"     forecast_date != "2021-06-07"
+#"   ) %>%
+#"   plot_predictions (
+#"     x = "target_end_date",
+#"     by = c("target_type", "location"),
+#"     interval_range = 0
+#"   ) +
+#"   facet_wrap(~ location + target_type, scales = "free_y") +
+#"   aes(fill = model, color = model)
 
 
 library(ggdist) # nolint: unused_import_linter
@@ -281,7 +282,7 @@ In the following are a few examples of using the two functions to create a plot 
 
 Visualising the median forecasts for the example data. The truth data is restricted to a period between 2021-05-01 and 2021-07-22. The forecast data is a forecast from the model "EuroCOVIDhub-ensemble" made on the "2021-06-07". All other data is set to `NA`, effectively removing it from the plot. 
 
-```{r eval=require("ggdist", quietly = TRUE)}
+```{r}
 median_forecasts <- example_quantile[quantile_level == 0.5]
 median_forecasts %>%
   make_NA(
@@ -303,7 +304,7 @@ median_forecasts %>%
 
 This is the same plot, but with a variety of prediction intervals shown, instead of just the median. 
 
-```{r eval=require("ggdist", quiet = TRUE)}
+```{r}
 example_quantile %>%
   make_NA(
     what = "truth",
@@ -325,7 +326,7 @@ example_quantile %>%
 
 And a similar plot, this time based on continuous forecasts. The predictions are automatically converted to a quantile-based forecasts for plotting.
 
-```{r eval=require("ggdist", quietly = TRUE)}
+```{r}
 example_sample_continuous %>%
   make_NA(
     what = "truth",
@@ -347,7 +348,7 @@ example_sample_continuous %>%
 
 Displaying two forecasts at a time with additional colours: 
 
-```{r eval=require("ggdist", quietly = TRUE)}
+```{r}
 example_quantile %>%
   make_NA(
     what = "truth",
