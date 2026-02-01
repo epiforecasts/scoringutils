@@ -19,6 +19,7 @@ for more information.
 library(scoringutils)
 library(data.table)
 library(ggplot2)
+library(ggdist)
 library(magrittr)
 library(magrittr) #pipe operator
 ```
@@ -94,7 +95,6 @@ and then an example.
 #"   aes(fill = model, color = model)
 
 
-library(ggdist)
 plot_predictions <- function(data,
                              by = NULL,
                              x = "date",

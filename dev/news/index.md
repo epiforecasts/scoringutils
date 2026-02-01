@@ -17,6 +17,10 @@
   when continuous predictions were equal to observations. These ties
   could lead to incorrect bias scores. New calculations now use
   mid-ranks to deal with ties.
+- Removed workaround for
+  [distributional](https://pkg.mitchelloharawild.com/distributional/)
+  native pipe issue which has now been fixed upstream
+  ([\#947](https://github.com/epiforecasts/scoringutils/issues/947)).
 
 ## scoringutils 2.1.2
 
