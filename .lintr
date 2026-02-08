@@ -18,7 +18,7 @@ linters: linters_with_tags(
     keyword_quote_linter = NULL, # stylistic preference
     unnecessary_concatenation_linter = NULL, # intentional patterns
     library_call_linter = NULL, # intentional patterns in scripts
-    pipe_consistency_linter = NULL # package uses both pipe styles intentionally
+    pipe_consistency_linter = NULL # one_call_pipe_linter exclusion triggers false positives
   )
 exclude: "# nolint"
 exclusions: list(

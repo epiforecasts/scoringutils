@@ -19,15 +19,15 @@ system("svn checkout https://github.com/epiforecasts/covid19-forecast-hub-europe
 system("svn checkout https://github.com/epiforecasts/covid19-forecast-hub-europe/trunk/data-processed/epiforecasts-EpiNow2") # nolint
 
 # load truth data using the covidHubutils package ------------------------------
-truth <- covidHubUtils::load_truth(hub = "ECDC") %>%
-  filter(target_variable %in% c("inc case", "inc death")) %>%
+truth <- covidHubUtils::load_truth(hub = "ECDC") |>
+  filter(target_variable %in% c("inc case", "inc death")) |>
   mutate(target_variable = ifelse(target_variable == "inc case",
     "Cases", "Deaths"
-  )) %>%
+  )) |>
   rename(
     target_type = target_variable,
     observed = value
-  ) %>%
+  ) |>
   select(-model)
 
 # get the correct file paths to all forecasts ----------------------------------
@@ -39,7 +39,7 @@ file_paths <- purrr::map(folders,
     out <- here::here(folder, files)
     return(out)
   }
-) %>%
+) |>
   unlist()
 file_paths <- file_paths[grepl(".csv", file_paths, fixed = TRUE)]
 
@@ -63,19 +63,19 @@ prediction_data <- map_dfr(file_paths,
     )]
     return(data)
   }
-) %>%
-  filter(grepl("case", target, fixed = TRUE) | grepl("death", target, fixed = TRUE)) %>%
+) |>
+  filter(grepl("case", target, fixed = TRUE) | grepl("death", target, fixed = TRUE)) |>
   mutate(
     target_type = ifelse(grepl("death", target, fixed = TRUE),
       "Deaths", "Cases"
     ),
     horizon = as.numeric(substr(target, 1, 1))
-  ) %>%
-  rename(predicted = value) %>%
+  ) |>
+  rename(predicted = value) |>
   filter(
     type == "quantile",
     grepl("inc", target, fixed = TRUE)
-  ) %>%
+  ) |>
   select(
     location, forecast_date, quantile, predicted,
     model, target_end_date, target, target_type, horizon
@@ -86,22 +86,22 @@ hub_data <- mutate(prediction_data,
   forecast_date = calc_submission_due_date(forecast_date)
 )
 
-hub_data <- hub_data %>%
+hub_data <- hub_data |>
   filter(
     horizon <= 3,
     forecast_date > "2021-05-01",
     forecast_date < "2021-07-15",
     location %in% c("DE", "GB", "FR", "IT")
-  ) %>%
-  select(-target) %>%
+  ) |>
+  select(-target) |>
   rename(quantile_level = quantile)
 
-truth <- truth %>%
+truth <- truth |>
   filter(
     target_end_date > "2021-01-01",
     target_end_date < max(hub_data$target_end_date),
     location %in% c("DE", "GB", "FR", "IT")
-  ) %>%
+  ) |>
   select(-population)
 
 # save example data with forecasts only

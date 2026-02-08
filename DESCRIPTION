@@ -67,7 +67,6 @@ Suggests:
     ggdist,
     kableExtra,
     knitr,
-    magrittr,
     rmarkdown,
     testthat (>= 3.1.9),
     vdiffr

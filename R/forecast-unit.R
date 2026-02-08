@@ -25,8 +25,7 @@
 #' @importFrom checkmate assert_character assert_subset
 #' @keywords as_forecast
 #' @examples
-#' library(magrittr) # pipe operator
-#' example_quantile %>%
+#' example_quantile |>
 #'   scoringutils:::set_forecast_unit(
 #'     c("location", "target_end_date", "target_type", "horizon", "model")
 #'   )

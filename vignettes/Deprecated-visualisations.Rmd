@@ -27,8 +27,6 @@ library(scoringutils)
 library(data.table)
 library(ggplot2)
 library(ggdist)
-library(magrittr)
-library(magrittr) # pipe operator
 ```
 
 # Functions `plot_predictions()` and `make_na()`
@@ -59,19 +57,18 @@ In previous versions of `scoringutils`, forecasts and observed values could be v
 #" @export
 #" @examples
 #" library(ggplot2)
-#" library(magrittr)
 #"
-#" example_sample_continuous %>%
+#" example_sample_continuous |>
 #"   make_NA (
 #"     what = "truth",
 #"     target_end_date >= "2021-07-22",
 #"     target_end_date < "2021-05-01"
-#"   ) %>%
+#"   ) |>
 #"   make_NA (
 #"     what = "forecast",
 #"     model != "EuroCOVIDhub-ensemble",
 #"     forecast_date != "2021-06-07"
-#"   ) %>%
+#"   ) |>
 #"   plot_predictions (
 #"     x = "target_end_date",
 #"     by = c("target_type", "location"),
@@ -80,16 +77,16 @@ In previous versions of `scoringutils`, forecasts and observed values could be v
 #"   facet_wrap(~ location + target_type, scales = "free_y") +
 #"   aes(fill = model, color = model)
 #"
-#" example_sample_continuous %>%
+#" example_sample_continuous |>
 #"   make_NA (
 #"     what = "truth",
 #"     target_end_date >= "2021-07-22",
 #"     target_end_date < "2021-05-01"
-#"   ) %>%
+#"   ) |>
 #"   make_NA (
 #"     what = "forecast",
 #"     forecast_date != "2021-06-07"
-#"   ) %>%
+#"   ) |>
 #"   plot_predictions (
 #"     x = "target_end_date",
 #"     by = c("target_type", "location"),
@@ -284,17 +281,17 @@ Visualising the median forecasts for the example data. The truth data is restric
 
 ```{r}
 median_forecasts <- example_quantile[quantile_level == 0.5]
-median_forecasts %>%
+median_forecasts |>
   make_NA(
     what = "truth",
     target_end_date <= "2021-05-01",
     target_end_date > "2021-07-22"
-  ) %>%
+  ) |>
   make_NA(
     what = "forecast",
     model != "EuroCOVIDhub-ensemble",
     forecast_date != "2021-06-07"
-  ) %>%
+  ) |>
   plot_predictions(
     by = c("location", "target_type"),
     x = "target_end_date"
@@ -305,17 +302,17 @@ median_forecasts %>%
 This is the same plot, but with a variety of prediction intervals shown, instead of just the median. 
 
 ```{r}
-example_quantile %>%
+example_quantile |>
   make_NA(
     what = "truth",
     target_end_date <= "2021-05-01",
     target_end_date > "2021-07-22"
-  ) %>%
+  ) |>
   make_NA(
     what = "forecast",
     model != "EuroCOVIDhub-ensemble",
     forecast_date != "2021-06-07"
-  ) %>%
+  ) |>
   plot_predictions(
     by = c("location", "target_type"),
     x = "target_end_date",
@@ -327,17 +324,17 @@ example_quantile %>%
 And a similar plot, this time based on continuous forecasts. The predictions are automatically converted to a quantile-based forecasts for plotting.
 
 ```{r}
-example_sample_continuous %>%
+example_sample_continuous |>
   make_NA(
     what = "truth",
     target_end_date <= "2021-05-01",
     target_end_date > "2021-07-22"
-  ) %>%
+  ) |>
   make_NA(
     what = "forecast",
     model != "EuroCOVIDhub-ensemble",
     forecast_date != "2021-06-07"
-  ) %>%
+  ) |>
   plot_predictions(
     by = c("location", "target_type"),
     x = "target_end_date",
@@ -349,17 +346,17 @@ example_sample_continuous %>%
 Displaying two forecasts at a time with additional colours: 
 
 ```{r}
-example_quantile %>%
+example_quantile |>
   make_NA(
     what = "truth",
     target_end_date > "2021-07-15",
     target_end_date <= "2021-05-22"
-  ) %>%
+  ) |>
   make_NA(
     what = "forecast",
     !(model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")),
     forecast_date != "2021-06-28"
-  ) %>%
+  ) |>
   plot_predictions(x = "target_end_date", by = c("target_type", "location")) +
   aes(colour = model, fill = model) +
   facet_wrap(target_type ~ location, ncol = 4, scales = "free_y") +
@@ -439,14 +436,14 @@ plot_interval_ranges <- function(scores,
 The functionality currently relies on a hack. In previous versions of `scoringutils`, scores were computed per interval range/per quantile. Now, `scoringutils` returns one score per forecast, not per interval range/quantile. We therefore need to add a `range` column, using an internal function `get_range_from_quantile()`. This column will be interpreted as one that defines the unit of a single forecast by `scoringutils`. It also means that we will get a warning about different number of quantile levels for different forecasts (because the 0% prediction interval only has one median forecast, while all other prediction intervals have two (a lower and an upper bound)).
 
 ```{r}
-range_example <- copy(example_quantile) %>%
-  na.omit() %>%
-  .[, range := scoringutils:::get_range_from_quantile(quantile_level)] # nolint: undesirable_operator_linter
+range_example <- copy(example_quantile) |>
+  na.omit()
+range_example[, range := scoringutils:::get_range_from_quantile(quantile_level)] # nolint: undesirable_operator_linter
 
-sum_scores <- range_example %>%
-  as_forecast_quantile() %>%
-  score(metrics = list(wis = wis, dispersion = dispersion_quantile)) %>%
-  summarise_scores(by = c("model", "target_type", "range")) %>%
+sum_scores <- range_example |>
+  as_forecast_quantile() |>
+  score(metrics = list(wis = wis, dispersion = dispersion_quantile)) |>
+  summarise_scores(by = c("model", "target_type", "range")) |>
   suppressWarnings()
 
 plot_interval_ranges(sum_scores, x = "model") +
@@ -491,13 +488,12 @@ This function allowed users to turn a table of (summarised) scores into a colour
 #'
 #' @examples
 #' library(ggplot2)
-#' library(magrittr) # pipe operator
 #' \dontshow{
 #' data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' scores <- score(as_forecast_quantile(example_quantile)) %>%
-#'   summarise_scores(by = c("model", "target_type")) %>%
+#' scores <- score(as_forecast_quantile(example_quantile)) |>
+#'   summarise_scores(by = c("model", "target_type")) |>
 #'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
 #'
 #' plot_score_table(scores, y = "model", by = "target_type") +
@@ -599,8 +595,8 @@ plot_score_table <- function(scores,
 The main functionality the old function provided, was scaling the scores in order to obtain reasonable colour shades. It would do this per metric, but one could also pass in additional grouping variables through the `by` argument. This allowed users to achieve a faceting of the table (note that of course scores also needed to be summarised according to the same grouping). 
 
 ```{r}
-scores <- score(as_forecast_quantile(example_quantile)) %>%
-  summarise_scores(by = c("model", "target_type")) %>%
+scores <- score(as_forecast_quantile(example_quantile)) |>
+  summarise_scores(by = c("model", "target_type")) |>
   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)
 
 plot_score_table(scores, y = "model", by = "target_type") +

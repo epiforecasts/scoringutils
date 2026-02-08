@@ -89,7 +89,6 @@ options(prompt = "R> ", continue = "+ ", width = 70)
 library("scoringutils")
 library("knitr")
 library("dplyr")
-library("magrittr")
 library("kableExtra")
 library("xtable")
 library("formatR")
@@ -221,7 +220,7 @@ The raw input data needs to be processed and validated by converting it into a `
 
 ```{r, eval=TRUE, echo=TRUE, cache=FALSE}
 library("scoringutils")
-forecast_quantile <- example_quantile[horizon == 2] %>%
+forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast_quantile()
 ```
 
@@ -229,7 +228,7 @@ Every forecast type has a corresponding `as_forecast_<type>()` function that tra
 
 All `as_forecast_<type>()` functions can take additional arguments that help facilitate the process of creating a forecast object: 
 ```{r, eval=FALSE, echo=TRUE}
-forecast_quantile <- example_quantile[horizon == 2] %>%
+forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast_quantile(
     forecast_unit = c(
       "model", "location", "target_end_date",
@@ -259,7 +258,7 @@ Internally, the print method calls \fct{get\_forecast\_type} and \fct{get\_forec
 One common issue that causes transformation to a `forecast` object to fail are "duplicates" in the data. \pkg{scoringutils} strictly requires that there be only one forecast per forecast unit and only one predicted value per quantile level or sample id within a single forecast. Duplicates usually occur if the forecast unit is misspecified. For example, if we removed the column `target_type` from the example data, we would now have two forecasts (one for cases and one for deaths of COVID-19) that appear to have the same forecast unit (since the information that distinguished between case and death forecasts is no longer there). The function \fct{get\_duplicate\_forecasts} returns duplicate rows for the user to inspect. To remedy the issue, the user needs to add additional columns that uniquely identify a single forecast.
 
 ```{r}
-rbind(example_quantile, example_quantile[1001:1002]) %>%
+rbind(example_quantile, example_quantile[1001:1002]) |>
   get_duplicate_forecasts()
 ```
 
@@ -279,11 +278,11 @@ The function \fct{transform\_forecasts} takes a validated forecast object as inp
 The example data contains negative values which need to be handled before applying the logarithm. Presumably, negative values for count data should be dropped altogether, but for illustrative purposes, we will call \fct{transform\_forecasts} twice to replace them with zeroes first before appending transformed counts. 
 
 ```{r, message=TRUE, warning=TRUE, cache=FALSE}
-forecast_quantile %>%
+forecast_quantile |>
   transform_forecasts(fun = \(x) {
     pmax(x, 0)
-  }, append = FALSE) %>%
-  transform_forecasts(fun = log_shift, offset = 1) %>%
+  }, append = FALSE) |>
+  transform_forecasts(fun = log_shift, offset = 1) |>
   print(2)
 ```
 
@@ -296,7 +295,7 @@ forecast_quantile %>%
 Users can get an overview of how many forecasts there are using \fct{get\_forecast\_counts}. The function takes a validated forecast object as input and returns a data.table of forecast counts, which helps obtain an overview of missing forecasts. This can impact the evaluation, if missingness correlates with performance. Users can specify the level of summary through the `by` argument. For example, to see how many forecasts there are per `model`, `target_type` and `forecast_date`, we can run
 
 ```{r get-forecast-counts}
-forecast_counts <- forecast_quantile %>%
+forecast_counts <- forecast_quantile |>
   get_forecast_counts(
     by = c("model", "target_type", "forecast_date")
   )
@@ -306,7 +305,7 @@ We can visualise the results by calling \fct{plot\_forecast\_counts} on the outp
 
 ```{r plot-forecast-counts, fig.pos = "!h", fig.width = 8, out.width="100%", fig.cap = "Visualistion of forecast counts for the example data. Numbers (and colour shade) indicate the number of forecasts available for a given model, target type and forecast date."}
 library("ggplot2")
-forecast_counts %>%
+forecast_counts |>
   plot_forecast_counts(x = "forecast_date") +
   facet_wrap(~target_type) +
   labs(y = "Model", x = "Forecast date")
@@ -336,8 +335,8 @@ A common way to visualise probabilistic calibration is the probability integral 
 Users can obtain PIT histograms based on validated forecast objects using the function \fct{get\_pit\_histogram}. Once again, the argument `by` controls the summary level. The output of the following is shown in Figure \ref{fig:pit-plots}: 
 
 ```{r pit-plots, fig.pos = "!h", fig.cap="PIT histograms of all models stratified by forecast target. Histograms should ideally be uniform. A u-shape usually indicates overconfidence (forecasts are too narrow), a hump-shaped form indicates underconfidence (forecasts are too uncertain) and a triangle-shape indicates bias.", fig.width = 8, fig.height=4}
-example_sample_continuous %>%
-  get_pit_histogram(by = c("model", "target_type")) %>%
+example_sample_continuous |>
+  get_pit_histogram(by = c("model", "target_type")) |>
   ggplot(aes(x = mid, y = density)) +
   geom_col() +
   facet_grid(target_type ~ model) +
@@ -355,8 +354,8 @@ For forecasts in a quantile-based format, there exists a second way to assess pr
 Interval and quantile coverage can easily be computed by calling \fct{get_coverage} on a validated forecast object (in a quantile-based format). The function computes interval coverage, quantile coverage, interval coverage deviation and quantile coverage deviation and returns a `data.table` with corresponding columns. Coverage values will be summarised according to the level specified in the `by` argument and one value per quantile level/interval range is returned. 
 
 ```{r eval=TRUE}
-forecast_quantile %>%
-  get_coverage(by = "model") %>%
+forecast_quantile |>
+  get_coverage(by = "model") |>
   print(2)
 ```
 
@@ -398,8 +397,8 @@ Metrics and scoring rules can be applied to data in two different ways: They can
 The function \fct{score} is the workhorse of the package and applies a set of metrics and scoring rules to predicted and observed values. It is a generic function that dispatches to different methods depending on the class of the input. The input of \fct{score} is a validated forecast object and its output is an object of class `scores`, which is a essentially `data.table` with an additional attribute `metrics` (containing the names of the metrics used for scoring). 
 
 ```{r, message=TRUE, warning=TRUE, cache=FALSE}
-example_point[horizon == 2] %>%
-  score() %>%
+example_point[horizon == 2] |>
+  score() |>
   print(2)
 ```
 
@@ -413,7 +412,7 @@ include_graphics("../../man/figures/input-formats-scoring-rules.png")
 For every forecast type, there exists a default list of scoring rules that are applied to the data when calling \fct{score}. The default lists can be accessed by calling the function \fct{get\_metrics} on a `forecast` object. \fct{get\_metrics} takes additional arguments `exclude` and `select` which can be used to customise which scoring rules are included. Alternatively, users can call the function \fct{select\_metrics} on a list of scoring rules, which achieves the same purposes and allows users to compose custom lists of metrics and scoring rules. 
 
 ```{r eval=FALSE}
-custom_metrics <- get_metrics(example_quantile) %>%
+custom_metrics <- get_metrics(example_quantile) |>
   select_metrics(select = c("wis", "overprediction"))
 
 score(metrics = custom_metrics)
@@ -449,8 +448,8 @@ include_graphics("../../man/figures/pairwise-illustration.png")
 To compute relative skill scores, users can call \fct{add\_pairwise\_comparison} on the output of \fct{score}. This function computes relative skill values with respect to a score specified in the argument `metric` and adds them as an additional column to the input data. Optionally, users can specify a baseline model to also compute relative skill scores scaled with respect to that baseline. Scaled relative skill scores are obtained by simply dividing the relative skill score for every individual model by the relative skill score of the baseline model. Pairwise comparisons are computed according to the grouping specified in the argument \code{by}: internally, the \code{data.table} with all scores gets split into different \code{data.table}s according to the values specified in \code{by} (excluding the column 'model'). Relative scores are then computed for every individual group separately. In the example below we specify \code{by = c("model", "target_type")}, which means that there is one relative skill score per model, calculated completely separately for the different forecasting targets. 
 
 ```{r pairwise-comparison-code, eval = FALSE}
-forecast_quantile %>%
-  score() %>%
+forecast_quantile |>
+  score() |>
   add_relative_skill(
     by = c("model", "target_type"),
     baseline = "EuroCOVIDhub-baseline"
@@ -472,9 +471,9 @@ Pairwise comparisons should usually be made based on raw, unsummarised scores (m
 The mean score ratios resulting from \fct{pairwise\_comparison} can then be visualised using the function \fct{plot\_pairwise\_comparison}. An example is shown in Figure \ref{fig:pairwise-plot}. 
 
 ```{r pairwise-plot, echo=TRUE, fig.width = 8, fig.cap="Ratios of mean weighted interval scores based on overlapping forecast sets. When interpreting the plot one should look at the model on the y-axis, and the model on the x-axis is the one it is compared against. If a tile is blue, then the model on the y-axis performed better (assuming that scores are negatively oriented, i.e., that lower scores are better). If it is red, the model on the x-axis performed better in direct comparison. In the example above, the EuroCOVIDhub-ensemble performs best (it only has values smaller than one), while the EuroCOVIDhub-baseline performs worst (and only has values larger than one). For cases, the UMass-MechBayes model is excluded as there are no case forecasts available and therefore the set of overlapping forecasts is empty."}
-forecast_quantile %>%
-  score() %>%
-  get_pairwise_comparisons(compare = "model", by = "target_type") %>%
+forecast_quantile |>
+  score() |>
+  get_pairwise_comparisons(compare = "model", by = "target_type") |>
   plot_pairwise_comparisons() +
   facet_wrap(~target_type)
 ```
@@ -486,12 +485,12 @@ forecast_quantile %>%
 Users can examine correlations between scores using the function \fct{correlations} and plot the result using \fct{plot\_correlations}. The plot resulting from the following code is shown in Figure \ref{fig:correlation-plot}. 
 
 ```{r correlation-plot, fig.pos = "!h", fig.width=8, fig.height=5, fig.cap = "Plot of correlations between different scores. Numbers, as well as the shade of the cells, indicate the correlation between two scores."}
-correlations <- forecast_quantile %>%
-  score() %>%
-  summarise_scores() %>%
+correlations <- forecast_quantile |>
+  score() |>
+  summarise_scores() |>
   get_correlations()
 
-correlations %>%
+correlations |>
   plot_correlations(digits = 2)
 ```
 
@@ -506,9 +505,9 @@ correlations %>%
 Usually, one will not be interested in scores for each individual forecast, but rather in summarised scores. This can be achieved using the function \fct{summarise\_scores}. The function takes a `scores` object (a data.table with an additional attribute `metrics`) as input and applies a summary function to it (by default the mean), returning a `data.table` with summarised scores. Users can set the summary level using the argument `by` and will obtain a summarised score for each combination of the value in the specified columns (e.g., `by = c("model", "target_type")` will return one summarised score per model and target type). To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{summarise\_scores}.
 
 ```{r, eval = TRUE}
-forecast_quantile %>%
-  score(metrics = list("wis" = wis)) %>%
-  summarise_scores(by = c("model", "target_type")) %>%
+forecast_quantile |>
+  score(metrics = list("wis" = wis)) |>
+  summarise_scores(by = c("model", "target_type")) |>
   summarise_scores(fun = signif, digits = 2)
 ```
 
@@ -524,10 +523,10 @@ The user must exercise additional caution and should usually avoid aggregating s
 <!-- Summarised scores can be displayed more visually using the function \fct{plot\_score\_table}. To display scores it is often useful to round the output, for example to two significant digits, which can be achieved with another call to \fct{summarise\_scores}. The output of the following is shown in Figure \ref{fig:score-table}: -->
 
 <!-- ```{r score-table, fig.width = 12, fig.cap="Coloured table to visualise the computed scores. Red colours indicate that a value is higher than ideal, blue indicates it is lower than ideal and the opacity indicates the strength of the deviation from the ideal."} -->
-<!-- example_quantile[horizon == 2] %>% -->
-<!--   score() %>% -->
-<!--   summarise_scores(by = c("model", "target_type")) %>% -->
-<!--   summarise_scores(fun = signif, digits = 2) %>% -->
+<!-- example_quantile[horizon == 2] |> -->
+<!--   score() |> -->
+<!--   summarise_scores(by = c("model", "target_type")) |> -->
+<!--   summarise_scores(fun = signif, digits = 2) |> -->
 <!--   plot_score_table(y = "model", by = "target_type") +  -->
 <!--   facet_wrap(~ target_type) -->
 <!-- ``` -->
@@ -537,13 +536,13 @@ The user must exercise additional caution and should usually avoid aggregating s
 To detect systematic patterns it may be useful to visualise a single score across several dimensions. The function \fct{plot\_heatmap} can be used to create a heatmap that achieves this. The following produces a heatmap of bias values across different locations and forecast targets (output shown in Figure \ref{fig:score-heatmap}). 
 
 ```{r score-heatmap, fig.pos = "!h", fig.width = 8, fig.cap = "Heatmap of bias values for different models across different locations and forecast targets. Bias values are bound between -1 (underprediction) and 1 (overprediction) and should be 0 ideally. Red tiles indicate an upwards bias (overprediction), while blue tiles indicate a downwards bias (underprediction)"}
-example_sample_continuous[horizon == 2] %>%
-  score() %>%
-  summarise_scores(by = c("model", "location", "target_type")) %>%
+example_sample_continuous[horizon == 2] |>
+  score() |>
+  summarise_scores(by = c("model", "location", "target_type")) |>
   summarise_scores(
     by = c("model", "location", "target_type"),
     fun = signif, digits = 2
-  ) %>%
+  ) |>
   plot_heatmap(x = "location", metric = "bias") +
   facet_wrap(~target_type)
 ```
@@ -553,9 +552,9 @@ example_sample_continuous[horizon == 2] %>%
 For quantile-based forecasts, the weighted interval score \citep[WIS, ][see Section \ref{sec:wis} in the Appendix]{bracherEvaluatingEpidemicForecasts2021} is a commonly used strictly proper scoring rule for forecasts in a quantile-based format. The score is the sum of three components: overprediction, underprediction and dispersion (width of the forecast). These can be visualised using the function \fct{plot\_wis}, as shown in Figure \ref{fig:wis-components}. 
 
 ```{r wis-components-code, eval = FALSE, fig.pos = "!h", fig.width = 8, fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. The WIS components measure over- and underprediction in absolute, rather than relative terms."}
-forecast_quantile %>%
-  score() %>%
-  summarise_scores(by = c("model", "target_type")) %>%
+forecast_quantile |>
+  score() |>
+  summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = FALSE) +
   facet_wrap(~target_type,
     scales = "free_x"
@@ -563,18 +562,18 @@ forecast_quantile %>%
 ```
 
 ```{r wis-components, echo = FALSE, fig.pos = "!h", fig.width = 9.5, fig.show = "hold", fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. A: absolute contributions, B: contributions normalised to 1."}
-p1 <- forecast_quantile %>%
-  score() %>%
-  summarise_scores(by = c("model", "target_type")) %>%
+p1 <- forecast_quantile |>
+  score() |>
+  summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = FALSE) +
   facet_wrap(~target_type,
     scales = "free_x"
   ) +
   theme(panel.spacing = unit(1.5, "lines"))
 
-p2 <- forecast_quantile %>%
-  score() %>%
-  summarise_scores(by = c("model", "target_type")) %>%
+p2 <- forecast_quantile |>
+  score() |>
+  summarise_scores(by = c("model", "target_type")) |>
   plot_wis(relative_contributions = TRUE) +
   facet_wrap(~target_type,
     scales = "free_x"
@@ -782,7 +781,7 @@ df <- data.table(
     ),
     each = n_truth * n_samples
   )
-) %>%
+) |>
   as_forecast_sample()
 
 res <- score(df)
@@ -797,7 +796,7 @@ df[, model := factor(`model`,
 
 res_summarised <- summarise_scores(res, by = "model")
 
-scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) %>%
+scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) |>
   plot_score_table(y = "model") +
   coord_flip() +
   theme_scoringutils() +
@@ -806,7 +805,7 @@ scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) 
 
 
 # create histogram true vs. predicted ------------------------------------------
-pred_hist <- df %>%
+pred_hist <- df |>
   ggplot(aes(x = observed)) +
   facet_wrap(~model, nrow = 1) +
   geom_histogram(aes(y = after_stat(density)),
@@ -821,7 +820,7 @@ pred_hist <- df %>%
 
 
 # create pit plots -------------------------------------------------------------
-pit_plots <- pit %>%
+pit_plots <- pit |>
   ggplot(aes(x = mid, y = density)) +
   geom_col() +
   facet_wrap(~model, nrow = 1) +

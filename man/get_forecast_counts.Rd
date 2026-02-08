@@ -46,9 +46,8 @@ This is useful to determine whether there are any missing forecasts.
   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 }
 
-library(magrittr) # pipe operator
-example_quantile \%>\%
-  as_forecast_quantile() \%>\%
+example_quantile |>
+  as_forecast_quantile() |>
   get_forecast_counts(by = c("model", "target_type"))
 }
 \keyword{gain-insights}

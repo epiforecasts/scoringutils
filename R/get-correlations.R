@@ -19,10 +19,9 @@
 #' @export
 #' @keywords scoring
 #' @examples
-#' library(magrittr) # pipe operator
 #'
-#' scores <- example_quantile %>%
-#'  as_forecast_quantile() %>%
+#' scores <- example_quantile |>
+#'  as_forecast_quantile() |>
 #'  score()
 #'
 #' get_correlations(scores)
@@ -65,12 +64,11 @@ get_correlations <- function(scores,
 #' @export
 #' @returns A ggplot object with a visualisation of correlations between metrics
 #' @examples
-#' library(magrittr) # pipe operator
-#' scores <- example_quantile %>%
-#'   as_forecast_quantile %>%
+#' scores <- example_quantile |>
+#'   as_forecast_quantile |>
 #'   score()
-#' correlations <- scores %>%
-#'   summarise_scores() %>%
+#' correlations <- scores |>
+#'   summarise_scores() |>
 #'   get_correlations()
 #' plot_correlations(correlations, digits = 2)
 

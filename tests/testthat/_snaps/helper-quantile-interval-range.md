@@ -75,5 +75,4 @@
       24:           5       25             60    10    40
       25:           5       25             80     5    45
           forecast_id observed interval_range lower upper
-                <int>    <num>          <num> <int> <int>
 

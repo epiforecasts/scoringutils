@@ -64,49 +64,46 @@
 #' <https://www.medrxiv.org/content/10.1101/2023.01.23.23284722v1>
 #' @keywords transform
 #' @examples
-#' library(magrittr) # pipe operator
 #'
 #' # transform forecasts using the natural logarithm
 #' # negative values need to be handled (here by replacing them with 0)
-#' example_quantile %>%
-#'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
-#'   as_forecast_quantile() %>%
+#' example_quantile[, observed := ifelse(observed < 0, 0, observed)] |>
+#'   as_forecast_quantile() |>
 #' # Here we use the default function log_shift() which is essentially the same
 #' # as log(), but has an additional arguments (offset) that allows you add an
 #' # offset before applying the logarithm.
-#'   transform_forecasts(append = FALSE) %>%
+#'   transform_forecasts(append = FALSE) |>
 #'   head()
 #'
 #' # alternatively, integrating the truncation in the transformation function:
-#' example_quantile %>%
-#'   as_forecast_quantile() %>%
+#' example_quantile |>
+#'   as_forecast_quantile() |>
 #'  transform_forecasts(
 #'    fun = function(x) {log_shift(pmax(0, x))}, append = FALSE
-#'  ) %>%
+#'  ) |>
 #'  head()
 #'
 #' # specifying an offset for the log transformation removes the
 #' # warning caused by zeros in the data
-#' example_quantile %>%
-#'   as_forecast_quantile() %>%
-#'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
-#'   transform_forecasts(offset = 1, append = FALSE) %>%
+#' example_quantile |>
+#'   as_forecast_quantile() |>
+#'   (\(x) x[, observed := ifelse(observed < 0, 0, observed)])() |>
+#'   transform_forecasts(offset = 1, append = FALSE) |>
 #'   head()
 #'
 #' # adding square root transformed forecasts to the original ones
-#' example_quantile %>%
-#'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
-#'   as_forecast_quantile() %>%
-#'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
-#'   score() %>%
+#' example_quantile[, observed := ifelse(observed < 0, 0, observed)] |>
+#'   as_forecast_quantile() |>
+#'   transform_forecasts(fun = sqrt, label = "sqrt") |>
+#'   score() |>
 #'   summarise_scores(by = c("model", "scale"))
 #'
 #' # adding multiple transformations
-#' example_quantile %>%
-#'   as_forecast_quantile() %>%
-#'   .[, observed := ifelse(observed < 0, 0, observed)] %>%
-#'   transform_forecasts(fun = log_shift, offset = 1) %>%
-#'   transform_forecasts(fun = sqrt, label = "sqrt") %>%
+#' example_quantile |>
+#'   as_forecast_quantile() |>
+#'   (\(x) x[, observed := ifelse(observed < 0, 0, observed)])() |>
+#'   transform_forecasts(fun = log_shift, offset = 1) |>
+#'   transform_forecasts(fun = sqrt, label = "sqrt") |>
 #'   head()
 
 transform_forecasts <- function(forecast,
@@ -206,12 +203,11 @@ transform_forecasts <- function(forecast,
 #' @keywords transform
 #' @importFrom checkmate assert_numeric assert_number
 #' @examples
-#' library(magrittr) # pipe operator
 #' log_shift(1:10)
 #' log_shift(0:9, offset = 1)
 #'
-#' example_quantile[observed > 0, ] %>%
-#'   as_forecast_quantile() %>%
+#' example_quantile[observed > 0, ] |>
+#'   as_forecast_quantile() |>
 #'   transform_forecasts(fun = log_shift, offset = 1)
 
 log_shift <- function(x, offset = 0, base = exp(1)) {
