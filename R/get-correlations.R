@@ -65,7 +65,7 @@ get_correlations <- function(scores,
 #' @returns A ggplot object with a visualisation of correlations between metrics
 #' @examples
 #' scores <- example_quantile |>
-#'   as_forecast_quantile |>
+#'   as_forecast_quantile() |>
 #'   score()
 #' correlations <- scores |>
 #'   summarise_scores() |>

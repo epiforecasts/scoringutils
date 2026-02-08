@@ -87,7 +87,7 @@
 #' # warning caused by zeros in the data
 #' example_quantile |>
 #'   as_forecast_quantile() |>
-#'   (\(x) x[, observed := ifelse(observed < 0, 0, observed)])() |>
+#'   (function(x) x[, observed := ifelse(observed < 0, 0, observed)])() |>
 #'   transform_forecasts(offset = 1, append = FALSE) |>
 #'   head()
 #'
@@ -101,7 +101,7 @@
 #' # adding multiple transformations
 #' example_quantile |>
 #'   as_forecast_quantile() |>
-#'   (\(x) x[, observed := ifelse(observed < 0, 0, observed)])() |>
+#'   (function(x) x[, observed := ifelse(observed < 0, 0, observed)])() |>
 #'   transform_forecasts(fun = log_shift, offset = 1) |>
 #'   transform_forecasts(fun = sqrt, label = "sqrt") |>
 #'   head()

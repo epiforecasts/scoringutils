@@ -21,7 +21,7 @@
 #' @export
 #' @examples
 #' scores <- example_quantile |>
-#'   as_forecast_quantile |>
+#'   as_forecast_quantile() |>
 #'   score()
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #' scores <- summarise_scores(

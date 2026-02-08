@@ -23,7 +23,7 @@ Plots a heatmap of correlations between different metrics.
 }
 \examples{
 scores <- example_quantile |>
-  as_forecast_quantile |>
+  as_forecast_quantile() |>
   score()
 correlations <- scores |>
   summarise_scores() |>
