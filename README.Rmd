@@ -147,6 +147,7 @@ The development of `scoringutils` was funded via the Health Protection Research 
 
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -167,7 +168,8 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=jcken95">jcken95</a>, 
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=athowes">athowes</a>, 
 <a href="https://github.com/epiforecasts/scoringutils/commits?author=nickreich">nickreich</a>, 
-<a href="https://github.com/epiforecasts/scoringutils/commits?author=damonbayer">damonbayer</a>
+<a href="https://github.com/epiforecasts/scoringutils/commits?author=damonbayer">damonbayer</a>, 
+<a href="https://github.com/epiforecasts/scoringutils/commits?author=seabbs-bot">seabbs-bot</a>
 
 
 
@@ -200,6 +202,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 
 
