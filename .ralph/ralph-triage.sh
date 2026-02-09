@@ -111,9 +111,13 @@ while true; do
   if [ "$EXIT_CODE" -ne 0 ]; then
     FAILED=true
   elif [ "$STREAM" = true ] && [ -f "$LOG_FILE.raw" ]; then
-    if grep -q '"is_error":true' "$LOG_FILE.raw"; then
+    # Only check the final result line, not the entire log.
+    # Tool results with "is_error":true are normal during Claude operation
+    # (e.g. a grep that finds nothing exits with code 1).
+    RESULT_LINE=$(grep '"type":"result"' "$LOG_FILE.raw" | tail -1)
+    if echo "$RESULT_LINE" | grep -q '"is_error":true'; then
       FAILED=true
-    elif grep -q '"subtype":"error"' "$LOG_FILE.raw"; then
+    elif echo "$RESULT_LINE" | grep -q '"subtype":"error"'; then
       FAILED=true
     fi
   fi
