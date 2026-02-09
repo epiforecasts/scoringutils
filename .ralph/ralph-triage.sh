@@ -88,11 +88,11 @@ while true; do
           if .event.delta.type? == "text_delta" then
             .event.delta.text
           elif .event.type? == "content_block_start" and .event.content_block.type? == "tool_use" then
-            "\n[" + .event.content_block.name + "] "
+            "\n\n  > [" + .event.content_block.name + "] "
           elif .event.delta.type? == "input_json_delta" then
             .event.delta.partial_json
           elif .event.type? == "content_block_start" and .event.content_block.type? == "text" then
-            "\n"
+            "\n\n"
           else empty end
         else empty end' \
       || EXIT_CODE=$?
