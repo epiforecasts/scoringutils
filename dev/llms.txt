@@ -1,5 +1,11 @@
 # scoringutils
 
+[![R-CMD-check](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/scoringutils/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/github/epiforecasts/scoringutils/branch/main/graph/badge.svg)](https://app.codecov.io/gh/epiforecasts/scoringutils)
+[![CRAN_Release_Badge](https://www.r-pkg.org/badges/version-ago/scoringutils)](https://CRAN.R-project.org/package=scoringutils)
+![GitHub R package
+version](https://img.shields.io/github/r-package/v/epiforecasts/scoringutils)[![metacrandownloads](http://cranlogs.r-pkg.org/badges/grand-total/scoringutils)](https://cran.r-project.org/package=scoringutils)
+
 ***Note***: [*This
 documentation*](https://epiforecasts.io/scoringutils/dev/) *refers to
 the development version of `scoringutils`.* *You can also view the*
