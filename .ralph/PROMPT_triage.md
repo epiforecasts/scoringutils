@@ -25,8 +25,6 @@ Your goal is to fill in the triage columns of the `## Issues` table in `.ralph/I
    - **Dependencies**: Does it depend on or block other issues?
    - **Action Summary**: 1-2 sentences on what concretely needs to happen.
 
-4. Update the `## Progress` section at the bottom of `.ralph/ISSUE_TRIAGE.md`.
-
 ## Completion criteria
 
 When ALL issues have their triage columns filled in:
