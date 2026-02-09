@@ -25,9 +25,13 @@ mkdir -p "$LOG_DIR"
 
 # Ctrl+C handler: kill all child processes and exit
 cleanup() {
+  trap - INT TERM          # reset traps so kill won't re-enter
   echo ""
   echo ">>> Interrupted! Cleaning up..."
-  kill 0 2>/dev/null
+  pkill -P $$ 2>/dev/null  # kill children only, not ourselves
+  sleep 1
+  pkill -9 -P $$ 2>/dev/null  # SIGKILL stragglers (e.g. claude)
+  wait 2>/dev/null
   exit 130
 }
 trap cleanup INT TERM
