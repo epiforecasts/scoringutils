@@ -72,9 +72,8 @@ a data.table with columns "interval_coverage",
 ## Examples
 
 ``` r
-library(magrittr) # pipe operator
-example_quantile %>%
-  as_forecast_quantile() %>%
+example_quantile |>
+  as_forecast_quantile() |>
   get_coverage(by = "model")
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.

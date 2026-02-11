@@ -42,8 +42,7 @@ or denote the unit of a single forecast as specified by the user.
 ## Examples
 
 ``` r
-library(magrittr) # pipe operator
-example_quantile %>%
+example_quantile |>
   scoringutils:::set_forecast_unit(
     c("location", "target_end_date", "target_type", "horizon", "model")
   )

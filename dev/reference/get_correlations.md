@@ -37,10 +37,8 @@ different metrics
 ## Examples
 
 ``` r
-library(magrittr) # pipe operator
-
-scores <- example_quantile %>%
- as_forecast_quantile() %>%
+scores <- example_quantile |>
+ as_forecast_quantile() |>
  score()
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.

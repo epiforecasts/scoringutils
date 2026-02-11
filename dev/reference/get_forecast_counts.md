@@ -49,9 +49,8 @@ A data.table with columns as specified in `by` and an additional column
 ## Examples
 
 ``` r
-library(magrittr) # pipe operator
-example_quantile %>%
-  as_forecast_quantile() %>%
+example_quantile |>
+  as_forecast_quantile() |>
   get_forecast_counts(by = c("model", "target_type"))
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.

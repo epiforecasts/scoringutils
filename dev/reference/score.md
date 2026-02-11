@@ -117,12 +117,10 @@ Nikos Bosse <nikosbosse@gmail.com>
 ## Examples
 
 ``` r
-library(magrittr) # pipe operator
-
 validated <- as_forecast_quantile(example_quantile)
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
-score(validated) %>%
+score(validated) |>
   summarise_scores(by = c("model", "target_type"))
 #>                    model target_type         wis overprediction underprediction
 #>                   <char>      <char>       <num>          <num>           <num>
@@ -145,12 +143,12 @@ score(validated) %>%
 
 # set forecast unit manually (to avoid issues with scoringutils trying to
 # determine the forecast unit automatically)
-example_quantile %>%
+example_quantile |>
   as_forecast_quantile(
     forecast_unit = c(
       "location", "target_end_date", "target_type", "horizon", "model"
     )
-  ) %>%
+  ) |>
   score()
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
@@ -205,8 +203,8 @@ score(as_forecast_sample(example_sample_continuous))
 
 # passing a subset of metrics using select_metrics()
 # (the preferred approach for selecting from default metrics)
-example_sample_continuous %>%
-  as_forecast_sample() %>%
+example_sample_continuous |>
+  as_forecast_sample() |>
   score(metrics = select_metrics(
     get_metrics(as_forecast_sample(example_sample_continuous)),
     select = c("crps", "mad")
@@ -245,8 +243,8 @@ example_sample_continuous %>%
 # passing a custom list of metrics manually
 # make sure to pass the function itself, not the result of calling it,
 # i.e. use `crps_sample` (correct) instead of `crps_sample()` (incorrect)
-example_sample_continuous %>%
-  as_forecast_sample() %>%
+example_sample_continuous |>
+  as_forecast_sample() |>
   score(metrics = list("crps" = crps_sample, "mad" = mad_sample))
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.

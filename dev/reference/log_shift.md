@@ -44,7 +44,6 @@ nolint
 ## Examples
 
 ``` r
-library(magrittr) # pipe operator
 log_shift(1:10)
 #>  [1] 0.0000000 0.6931472 1.0986123 1.3862944 1.6094379 1.7917595 1.9459101
 #>  [8] 2.0794415 2.1972246 2.3025851
@@ -52,8 +51,8 @@ log_shift(0:9, offset = 1)
 #>  [1] 0.0000000 0.6931472 1.0986123 1.3862944 1.6094379 1.7917595 1.9459101
 #>  [8] 2.0794415 2.1972246 2.3025851
 
-example_quantile[observed > 0, ] %>%
-  as_forecast_quantile() %>%
+example_quantile[observed > 0, ] |>
+  as_forecast_quantile() |>
   transform_forecasts(fun = log_shift, offset = 1)
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.

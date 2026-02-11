@@ -53,9 +53,8 @@ the `fun` passed to `summarise_scores()`.
 ## Examples
 
 ``` r
-library(magrittr) # pipe operator
-scores <- example_sample_continuous %>%
- as_forecast_sample() %>%
+scores <- example_sample_continuous |>
+ as_forecast_sample() |>
  score()
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.
@@ -121,7 +120,7 @@ summarise_scores(scores, by = "model", fun = sd)
 #> 4:        36.98584   29.60927  1.126019   123.3465    76.09471 2.994664e+04
 
 # round digits
-summarise_scores(scores, by = "model") %>%
+summarise_scores(scores, by = "model") |>
   summarise_scores(fun = signif, digits = 2)
 #>                    model    bias   dss  crps overprediction underprediction
 #>                   <char>   <num> <num> <num>          <num>           <num>

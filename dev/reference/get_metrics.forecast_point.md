@@ -84,11 +84,10 @@ get_metrics(example_point, select = "ape")
 #> {
 #>     return(ae(actual, predicted)/abs(actual))
 #> }
-#> <bytecode: 0x55ee7645c2c8>
+#> <bytecode: 0x55ae89de39a8>
 #> <environment: namespace:Metrics>
 #> 
 
-library(magrittr)
 set.seed(123)
 n <- 500
 observed <- rnorm(n, 5, 4)^2
@@ -101,9 +100,9 @@ df <- data.frame(
   predicted = c(rep(predicted_mu, n), predicted_not_mu),
   observed = rep(observed, 2),
   id = rep(1:n, 2)
-) %>%
+) |>
   as_forecast_point()
-score(df) %>%
+score(df) |>
   summarise_scores()
 #>      model ae_point se_point      ape
 #>     <char>    <num>    <num>    <num>

@@ -51,9 +51,8 @@ A ggplot object with a plot of forecast counts
 
 ``` r
 library(ggplot2)
-library(magrittr) # pipe operator
-forecast_counts <- example_quantile %>%
-  as_forecast_quantile %>%
+forecast_counts <- example_quantile |>
+  as_forecast_quantile() |>
   get_forecast_counts(by = c("model", "target_type", "target_end_date"))
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.

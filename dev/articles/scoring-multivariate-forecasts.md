@@ -304,8 +304,8 @@ Let’s construct a simple multivariate forecast:
 ``` r
 # parameters for multivariate normal example
 set.seed(123)
-d <- 10  # number of dimensions
-m <- 50  # number of samples from multivariate forecast distribution
+d <- 10 # number of dimensions
+m <- 50 # number of samples from multivariate forecast distribution
 
 mu0 <- rep(0, d)
 mu <- rep(1, d)

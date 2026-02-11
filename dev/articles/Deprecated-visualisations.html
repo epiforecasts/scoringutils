@@ -85,9 +85,7 @@ for more information.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link">scoringutils</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/ggdist/" class="external-link">ggdist</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co">#pipe operator</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/ggdist/" class="external-link">ggdist</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="functions-plot_predictions-and-make_na">Functions <code>plot_predictions()</code> and
 <code>make_na()</code><a class="anchor" aria-label="anchor" href="#functions-plot_predictions-and-make_na"></a>
@@ -121,19 +119,18 @@ example.</p>
 <span><span class="co">#" @export</span></span>
 <span><span class="co">#" @examples</span></span>
 <span><span class="co">#" library(ggplot2)</span></span>
-<span><span class="co">#" library(magrittr)</span></span>
 <span><span class="co">#"</span></span>
-<span><span class="co">#" example_sample_continuous %&gt;%</span></span>
+<span><span class="co">#" example_sample_continuous |&gt;</span></span>
 <span><span class="co">#"   make_NA (</span></span>
 <span><span class="co">#"     what = "truth",</span></span>
 <span><span class="co">#"     target_end_date &gt;= "2021-07-22",</span></span>
 <span><span class="co">#"     target_end_date &lt; "2021-05-01"</span></span>
-<span><span class="co">#"   ) %&gt;%</span></span>
+<span><span class="co">#"   ) |&gt;</span></span>
 <span><span class="co">#"   make_NA (</span></span>
 <span><span class="co">#"     what = "forecast",</span></span>
 <span><span class="co">#"     model != "EuroCOVIDhub-ensemble",</span></span>
 <span><span class="co">#"     forecast_date != "2021-06-07"</span></span>
-<span><span class="co">#"   ) %&gt;%</span></span>
+<span><span class="co">#"   ) |&gt;</span></span>
 <span><span class="co">#"   plot_predictions (</span></span>
 <span><span class="co">#"     x = "target_end_date",</span></span>
 <span><span class="co">#"     by = c("target_type", "location"),</span></span>
@@ -142,16 +139,16 @@ example.</p>
 <span><span class="co">#"   facet_wrap(~ location + target_type, scales = "free_y") +</span></span>
 <span><span class="co">#"   aes(fill = model, color = model)</span></span>
 <span><span class="co">#"</span></span>
-<span><span class="co">#" example_sample_continuous %&gt;%</span></span>
+<span><span class="co">#" example_sample_continuous |&gt;</span></span>
 <span><span class="co">#"   make_NA (</span></span>
 <span><span class="co">#"     what = "truth",</span></span>
 <span><span class="co">#"     target_end_date &gt;= "2021-07-22",</span></span>
 <span><span class="co">#"     target_end_date &lt; "2021-05-01"</span></span>
-<span><span class="co">#"   ) %&gt;%</span></span>
+<span><span class="co">#"   ) |&gt;</span></span>
 <span><span class="co">#"   make_NA (</span></span>
 <span><span class="co">#"     what = "forecast",</span></span>
 <span><span class="co">#"     forecast_date != "2021-06-07"</span></span>
-<span><span class="co">#"   ) %&gt;%</span></span>
+<span><span class="co">#"   ) |&gt;</span></span>
 <span><span class="co">#"   plot_predictions (</span></span>
 <span><span class="co">#"     x = "target_end_date",</span></span>
 <span><span class="co">#"     by = c("target_type", "location"),</span></span>
@@ -161,11 +158,11 @@ example.</p>
 <span><span class="co">#"   aes(fill = model, color = model)</span></span>
 <span></span>
 <span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/ggdist/" class="external-link">ggdist</a></span><span class="op">)</span> <span class="co"># nolint: unused_import_linter</span></span>
 <span><span class="va">plot_predictions</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>,</span>
 <span>                             <span class="va">by</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                             <span class="va">x</span> <span class="op">=</span> <span class="st">"date"</span>,</span>
 <span>                             <span class="va">interval_range</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span></span>
 <span>  <span class="co"># split truth data and forecasts in order to apply different filtering</span></span>
 <span>  <span class="va">truth_data</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">observed</span><span class="op">)</span><span class="op">]</span></span>
 <span>  <span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">predicted</span><span class="op">)</span><span class="op">]</span></span>
@@ -179,17 +176,21 @@ example.</p>
 <span>  <span class="co"># interval range data</span></span>
 <span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="st">"quantile_level"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># nolint start: undesirable_operator_linter</span></span>
 <span>    <span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">:::</span><span class="fu"><a href="../reference/quantile_to_interval.html">quantile_to_interval</a></span><span class="op">(</span></span>
 <span>      <span class="va">forecasts</span>,</span>
 <span>      keep_quantile_col <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>    <span class="op">)</span></span>
+<span>    <span class="co"># nolint end</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="st">"sample_id"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># using a scoringutils internal function</span></span>
+<span>    <span class="co"># nolint start: undesirable_operator_linter</span></span>
 <span>    <span class="va">forecasts</span> <span class="op">&lt;-</span> <span class="fu">scoringutils</span><span class="fu">:::</span><span class="fu"><a href="../reference/sample_to_interval_long.html">sample_to_interval_long</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="../reference/as_forecast_sample.html">as_forecast_sample</a></span><span class="op">(</span><span class="va">forecasts</span><span class="op">)</span>,</span>
 <span>      interval_range <span class="op">=</span> <span class="va">interval_range</span>,</span>
 <span>      keep_quantile_col <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>    <span class="op">)</span></span>
+<span>    <span class="co"># nolint end</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
 <span>  <span class="co"># select appropriate boundaries and pivot wider</span></span>
@@ -209,7 +210,8 @@ example.</p>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">intervals</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># pivot wider and convert range to a factor</span></span>
 <span>    <span class="va">intervals</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="va">...</span> <span class="op">~</span> <span class="va">boundary</span>,</span>
-<span>                                   value.var <span class="op">=</span> <span class="st">"predicted"</span><span class="op">)</span></span>
+<span>      value.var <span class="op">=</span> <span class="st">"predicted"</span></span>
+<span>    <span class="op">)</span></span>
 <span></span>
 <span>    <span class="co"># only plot interval ranges if there are interval ranges to plot</span></span>
 <span>    <span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span></span>
@@ -286,38 +288,37 @@ but instead of filtering entire rows, the relevant entries in the
 columns “predicted” or “observed” are made <code>NA</code>. This allows
 the user to filter observations and forecasts independently.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#" @title Make Rows NA in Data for Plotting</span></span>
-<span><span class="co">#"</span></span>
-<span><span class="co">#" @description</span></span>
-<span><span class="co">#" Filters the data and turns values into `NA` before the data gets passed to</span></span>
-<span><span class="co">#" [plot_predictions()]. The reason to do this is to this is that it allows to</span></span>
-<span><span class="co">#" "filter" prediction and truth data separately. Any value that is NA will then</span></span>
-<span><span class="co">#" be removed in the subsequent call to [plot_predictions()].</span></span>
-<span><span class="co">#"</span></span>
-<span><span class="co">#" @inheritParams score</span></span>
-<span><span class="co">#" @param what character vector that determines which values should be turned</span></span>
-<span><span class="co">#" into `NA`. If `what = "truth"`, values in the column "observed" will be</span></span>
-<span><span class="co">#" turned into `NA`. If `what = "forecast"`, values in the column "prediction"</span></span>
-<span><span class="co">#" will be turned into `NA`. If `what = "both"`, values in both column will be</span></span>
-<span><span class="co">#" turned into `NA`.</span></span>
-<span><span class="co">#" @param ... logical statements used to filter the data</span></span>
-<span><span class="co">#" @return A data.table</span></span>
-<span><span class="co">#" @importFrom rlang enexprs</span></span>
-<span><span class="co">#" @keywords plotting</span></span>
-<span><span class="co">#" @export</span></span>
-<span><span class="co">#"</span></span>
-<span><span class="co">#" @examples</span></span>
-<span><span class="co">#" make_NA (</span></span>
-<span><span class="co">#"     example_sample_continuous,</span></span>
-<span><span class="co">#"     what = "truth",</span></span>
-<span><span class="co">#"     target_end_date &gt;= "2021-07-22",</span></span>
-<span><span class="co">#"     target_end_date &lt; "2021-05-01"</span></span>
-<span><span class="co">#"   )</span></span>
+<code class="sourceCode R"><span><span class="co"># " @title Make Rows NA in Data for Plotting</span></span>
+<span><span class="co"># "</span></span>
+<span><span class="co"># " @description</span></span>
+<span><span class="co"># " Filters the data and turns values into `NA` before the data gets passed to</span></span>
+<span><span class="co"># " [plot_predictions()]. The reason to do this is to this is that it allows to</span></span>
+<span><span class="co"># " "filter" prediction and truth data separately. Any value that is NA will then</span></span>
+<span><span class="co"># " be removed in the subsequent call to [plot_predictions()].</span></span>
+<span><span class="co"># "</span></span>
+<span><span class="co"># " @inheritParams score</span></span>
+<span><span class="co"># " @param what character vector that determines which values should be turned</span></span>
+<span><span class="co"># " into `NA`. If `what = "truth"`, values in the column "observed" will be</span></span>
+<span><span class="co"># " turned into `NA`. If `what = "forecast"`, values in the column "prediction"</span></span>
+<span><span class="co"># " will be turned into `NA`. If `what = "both"`, values in both column will be</span></span>
+<span><span class="co"># " turned into `NA`.</span></span>
+<span><span class="co"># " @param ... logical statements used to filter the data</span></span>
+<span><span class="co"># " @return A data.table</span></span>
+<span><span class="co"># " @importFrom rlang enexprs</span></span>
+<span><span class="co"># " @keywords plotting</span></span>
+<span><span class="co"># " @export</span></span>
+<span><span class="co"># "</span></span>
+<span><span class="co"># " @examples</span></span>
+<span><span class="co"># " make_NA (</span></span>
+<span><span class="co"># "     example_sample_continuous,</span></span>
+<span><span class="co"># "     what = "truth",</span></span>
+<span><span class="co"># "     target_end_date &gt;= "2021-07-22",</span></span>
+<span><span class="co"># "     target_end_date &lt; "2021-05-01"</span></span>
+<span><span class="co"># "   )</span></span>
 <span></span>
 <span><span class="va">make_NA</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                    <span class="va">what</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"truth"</span>, <span class="st">"forecast"</span>, <span class="st">"both"</span><span class="op">)</span>,</span>
 <span>                    <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span>  <span class="va">what</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg</a></span><span class="op">(</span><span class="va">what</span><span class="op">)</span></span>
@@ -346,13 +347,17 @@ on the “2021-06-07”. All other data is set to <code>NA</code>,
 effectively removing it from the plot.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">median_forecasts</span> <span class="op">&lt;-</span> <span class="va">example_quantile</span><span class="op">[</span><span class="va">quantile_level</span> <span class="op">==</span> <span class="fl">0.5</span><span class="op">]</span></span>
-<span><span class="va">median_forecasts</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>,</span>
-<span>          <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-01"</span>,</span>
-<span>          <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-22"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
-<span>          <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>,</span>
-<span>          <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-07"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">median_forecasts</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">make_NA</span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"truth"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-01"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-22"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">make_NA</span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
+<span>    <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>,</span>
+<span>    <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-07"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">plot_predictions</span><span class="op">(</span></span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"target_end_date"</span></span>
@@ -362,13 +367,17 @@ effectively removing it from the plot.</p>
 <p>This is the same plot, but with a variety of prediction intervals
 shown, instead of just the median.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>,</span>
-<span>          <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-01"</span>,</span>
-<span>          <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-22"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
-<span>          <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>,</span>
-<span>          <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-07"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">make_NA</span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"truth"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-01"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-22"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">make_NA</span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
+<span>    <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>,</span>
+<span>    <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-07"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">plot_predictions</span><span class="op">(</span></span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"target_end_date"</span>,</span>
@@ -380,13 +389,17 @@ shown, instead of just the median.</p>
 predictions are automatically converted to a quantile-based forecasts
 for plotting.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_sample_continuous</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>,</span>
-<span>          <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-01"</span>,</span>
-<span>          <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-22"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
-<span>          <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>,</span>
-<span>          <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-07"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">example_sample_continuous</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">make_NA</span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"truth"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-01"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-22"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">make_NA</span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
+<span>    <span class="va">model</span> <span class="op">!=</span> <span class="st">"EuroCOVIDhub-ensemble"</span>,</span>
+<span>    <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-07"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">plot_predictions</span><span class="op">(</span></span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"target_end_date"</span>,</span>
@@ -396,13 +409,17 @@ for plotting.</p>
 <p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="700"></p>
 <p>Displaying two forecasts at a time with additional colours:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"truth"</span>,</span>
-<span>          <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-15"</span>,</span>
-<span>          <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-22"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">make_NA</span><span class="op">(</span>what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
-<span>          <span class="op">!</span><span class="op">(</span><span class="va">model</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EuroCOVIDhub-ensemble"</span>, <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>          <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-28"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">example_quantile</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">make_NA</span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"truth"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&gt;</span> <span class="st">"2021-07-15"</span>,</span>
+<span>    <span class="va">target_end_date</span> <span class="op">&lt;=</span> <span class="st">"2021-05-22"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">make_NA</span><span class="op">(</span></span>
+<span>    what <span class="op">=</span> <span class="st">"forecast"</span>,</span>
+<span>    <span class="op">!</span><span class="op">(</span><span class="va">model</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EuroCOVIDhub-ensemble"</span>, <span class="st">"EuroCOVIDhub-baseline"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="va">forecast_date</span> <span class="op">!=</span> <span class="st">"2021-06-28"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">plot_predictions</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"target_end_date"</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target_type"</span>, <span class="st">"location"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">model</span>, fill <span class="op">=</span> <span class="va">model</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">target_type</span> <span class="op">~</span> <span class="va">location</span>, ncol <span class="op">=</span> <span class="fl">4</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -414,38 +431,38 @@ for plotting.</p>
 <code>plot_ranges()</code>)<a class="anchor" aria-label="anchor" href="#function-plot_interval_ranges-formerly-plot_ranges"></a>
 </h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#" @title Plot Metrics by Range of the Prediction Interval</span></span>
-<span><span class="co">#"</span></span>
-<span><span class="co">#" @description</span></span>
-<span><span class="co">#" Visualise the metrics by range, e.g. if you are interested how different</span></span>
-<span><span class="co">#" interval ranges contribute to the overall interval score, or how</span></span>
-<span><span class="co">#" sharpness / dispersion changes by range.</span></span>
-<span><span class="co">#"</span></span>
-<span><span class="co">#" @param scores A data.frame of scores based on quantile forecasts as</span></span>
-<span><span class="co">#" produced by [score()] or [summarise_scores()]. Note that "range" must be included</span></span>
-<span><span class="co">#" in the `by` argument when running [summarise_scores()]</span></span>
-<span><span class="co">#" @param y The variable from the scores you want to show on the y-Axis.</span></span>
-<span><span class="co">#" This could be something like "wis" (the default) or "dispersion"</span></span>
-<span><span class="co">#" @param x The variable from the scores you want to show on the x-Axis.</span></span>
-<span><span class="co">#" Usually this will be "model"</span></span>
-<span><span class="co">#" @param colour Character vector of length one used to determine a variable</span></span>
-<span><span class="co">#" for colouring dots. The Default is "range".</span></span>
-<span><span class="co">#" @return A ggplot2 object showing a contributions from the three components of</span></span>
-<span><span class="co">#" the weighted interval score</span></span>
-<span><span class="co">#" @importFrom ggplot2 ggplot aes aes geom_point geom_line</span></span>
-<span><span class="co">#" expand_limits theme theme_light element_text scale_color_continuous labs</span></span>
-<span><span class="co">#" @export</span></span>
-<span><span class="co">#" @examples</span></span>
-<span><span class="co">#" library(ggplot2)</span></span>
-<span><span class="co">#" ex &lt;- data.table::copy(example_quantile)</span></span>
-<span><span class="co">#" ex$range &lt;- scoringutils:::get_range_from_quantile(ex$quantile)</span></span>
-<span><span class="co">#" scores &lt;- suppressWarnings(score(as_forecast_quantile(ex), metrics = list("wis" = wis)))</span></span>
-<span><span class="co">#" summarised &lt;- summarise_scores(</span></span>
-<span><span class="co">#"   scores,</span></span>
-<span><span class="co">#"   by = c("model", "target_type", "range")</span></span>
-<span><span class="co">#" )</span></span>
-<span><span class="co">#" plot_interval_ranges(summarised, x = "model") +</span></span>
-<span><span class="co">#"   facet_wrap(~target_type, scales = "free")</span></span>
+<code class="sourceCode R"><span><span class="co"># " @title Plot Metrics by Range of the Prediction Interval</span></span>
+<span><span class="co"># "</span></span>
+<span><span class="co"># " @description</span></span>
+<span><span class="co"># " Visualise the metrics by range, e.g. if you are interested how different</span></span>
+<span><span class="co"># " interval ranges contribute to the overall interval score, or how</span></span>
+<span><span class="co"># " sharpness / dispersion changes by range.</span></span>
+<span><span class="co"># "</span></span>
+<span><span class="co"># " @param scores A data.frame of scores based on quantile forecasts as</span></span>
+<span><span class="co"># " produced by [score()] or [summarise_scores()]. Note that "range" must be included</span></span>
+<span><span class="co"># " in the `by` argument when running [summarise_scores()]</span></span>
+<span><span class="co"># " @param y The variable from the scores you want to show on the y-Axis.</span></span>
+<span><span class="co"># " This could be something like "wis" (the default) or "dispersion"</span></span>
+<span><span class="co"># " @param x The variable from the scores you want to show on the x-Axis.</span></span>
+<span><span class="co"># " Usually this will be "model"</span></span>
+<span><span class="co"># " @param colour Character vector of length one used to determine a variable</span></span>
+<span><span class="co"># " for colouring dots. The Default is "range".</span></span>
+<span><span class="co"># " @return A ggplot2 object showing a contributions from the three components of</span></span>
+<span><span class="co"># " the weighted interval score</span></span>
+<span><span class="co"># " @importFrom ggplot2 ggplot aes aes geom_point geom_line</span></span>
+<span><span class="co"># " expand_limits theme theme_light element_text scale_color_continuous labs</span></span>
+<span><span class="co"># " @export</span></span>
+<span><span class="co"># " @examples</span></span>
+<span><span class="co"># " library(ggplot2)</span></span>
+<span><span class="co"># " ex &lt;- data.table::copy(example_quantile)</span></span>
+<span><span class="co"># " ex$range &lt;- scoringutils:::get_range_from_quantile(ex$quantile)</span></span>
+<span><span class="co"># " scores &lt;- suppressWarnings(score(as_forecast_quantile(ex), metrics = list("wis" = wis)))</span></span>
+<span><span class="co"># " summarised &lt;- summarise_scores(</span></span>
+<span><span class="co"># "   scores,</span></span>
+<span><span class="co"># "   by = c("model", "target_type", "range")</span></span>
+<span><span class="co"># " )</span></span>
+<span><span class="co"># " plot_interval_ranges(summarised, x = "model") +</span></span>
+<span><span class="co"># "   facet_wrap(~target_type, scales = "free")</span></span>
 <span></span>
 <span><span class="va">plot_interval_ranges</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">scores</span>,</span>
 <span>                                 <span class="va">y</span> <span class="op">=</span> <span class="st">"wis"</span>,</span>
@@ -490,14 +507,59 @@ about different number of quantile levels for different forecasts
 all other prediction intervals have two (a lower and an upper
 bound)).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">range_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="va">.</span><span class="op">[</span>, <span class="va">range</span> <span class="op">:=</span> <span class="fu">scoringutils</span><span class="fu">:::</span><span class="fu"><a href="../reference/get_range_from_quantile.html">get_range_from_quantile</a></span><span class="op">(</span><span class="va">quantile_level</span><span class="op">)</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">range_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">range_example</span><span class="op">[</span>, <span class="va">range</span> <span class="op">:=</span> <span class="fu">scoringutils</span><span class="fu">:::</span><span class="fu"><a href="../reference/get_range_from_quantile.html">get_range_from_quantile</a></span><span class="op">(</span><span class="va">quantile_level</span><span class="op">)</span><span class="op">]</span> <span class="co"># nolint: undesirable_operator_linter</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">Forecast type: </span>quantile</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">Forecast unit:</span></span></span>
+<span><span class="co">#&gt; location, target_end_date, target_type, location_name, forecast_date, model,</span></span>
+<span><span class="co">#&gt; horizon, and range</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Key: &lt;location, target_end_date, target_type&gt;</span></span>
+<span><span class="co">#&gt;        location target_end_date target_type observed location_name</span></span>
+<span><span class="co">#&gt;          &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;    &lt;num&gt;        &lt;char&gt;</span></span>
+<span><span class="co">#&gt;     1:       DE      2021-05-08       Cases   106987       Germany</span></span>
+<span><span class="co">#&gt;     2:       DE      2021-05-08       Cases   106987       Germany</span></span>
+<span><span class="co">#&gt;     3:       DE      2021-05-08       Cases   106987       Germany</span></span>
+<span><span class="co">#&gt;     4:       DE      2021-05-08       Cases   106987       Germany</span></span>
+<span><span class="co">#&gt;     5:       DE      2021-05-08       Cases   106987       Germany</span></span>
+<span><span class="co">#&gt;    ---                                                            </span></span>
+<span><span class="co">#&gt; 20397:       IT      2021-07-24      Deaths       78         Italy</span></span>
+<span><span class="co">#&gt; 20398:       IT      2021-07-24      Deaths       78         Italy</span></span>
+<span><span class="co">#&gt; 20399:       IT      2021-07-24      Deaths       78         Italy</span></span>
+<span><span class="co">#&gt; 20400:       IT      2021-07-24      Deaths       78         Italy</span></span>
+<span><span class="co">#&gt; 20401:       IT      2021-07-24      Deaths       78         Italy</span></span>
+<span><span class="co">#&gt;        forecast_date quantile_level predicted                 model horizon</span></span>
+<span><span class="co">#&gt;               &lt;Date&gt;          &lt;num&gt;     &lt;int&gt;                &lt;char&gt;   &lt;num&gt;</span></span>
+<span><span class="co">#&gt;     1:    2021-05-03          0.010     82466 EuroCOVIDhub-ensemble       1</span></span>
+<span><span class="co">#&gt;     2:    2021-05-03          0.025     86669 EuroCOVIDhub-ensemble       1</span></span>
+<span><span class="co">#&gt;     3:    2021-05-03          0.050     90285 EuroCOVIDhub-ensemble       1</span></span>
+<span><span class="co">#&gt;     4:    2021-05-03          0.100     95341 EuroCOVIDhub-ensemble       1</span></span>
+<span><span class="co">#&gt;     5:    2021-05-03          0.150     99171 EuroCOVIDhub-ensemble       1</span></span>
+<span><span class="co">#&gt;    ---                                                                     </span></span>
+<span><span class="co">#&gt; 20397:    2021-07-12          0.850       352  epiforecasts-EpiNow2       2</span></span>
+<span><span class="co">#&gt; 20398:    2021-07-12          0.900       397  epiforecasts-EpiNow2       2</span></span>
+<span><span class="co">#&gt; 20399:    2021-07-12          0.950       499  epiforecasts-EpiNow2       2</span></span>
+<span><span class="co">#&gt; 20400:    2021-07-12          0.975       611  epiforecasts-EpiNow2       2</span></span>
+<span><span class="co">#&gt; 20401:    2021-07-12          0.990       719  epiforecasts-EpiNow2       2</span></span>
+<span><span class="co">#&gt;        range</span></span>
+<span><span class="co">#&gt;        &lt;num&gt;</span></span>
+<span><span class="co">#&gt;     1:    98</span></span>
+<span><span class="co">#&gt;     2:    95</span></span>
+<span><span class="co">#&gt;     3:    90</span></span>
+<span><span class="co">#&gt;     4:    80</span></span>
+<span><span class="co">#&gt;     5:    70</span></span>
+<span><span class="co">#&gt;    ---      </span></span>
+<span><span class="co">#&gt; 20397:    70</span></span>
+<span><span class="co">#&gt; 20398:    80</span></span>
+<span><span class="co">#&gt; 20399:    90</span></span>
+<span><span class="co">#&gt; 20400:    95</span></span>
+<span><span class="co">#&gt; 20401:    98</span></span>
 <span></span>
-<span><span class="va">sum_scores</span> <span class="op">&lt;-</span> <span class="va">range_example</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/as_forecast_quantile.html">as_forecast_quantile</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span>metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>wis <span class="op">=</span> <span class="va">wis</span>, dispersion <span class="op">=</span> <span class="va">dispersion_quantile</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"range"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">sum_scores</span> <span class="op">&lt;-</span> <span class="va">range_example</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/as_forecast_quantile.html">as_forecast_quantile</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span>metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>wis <span class="op">=</span> <span class="va">wis</span>, dispersion <span class="op">=</span> <span class="va">dispersion_quantile</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span>, <span class="st">"range"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">plot_interval_ranges</span><span class="op">(</span><span class="va">sum_scores</span>, x <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -546,13 +608,12 @@ function.</p>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @examples</span></span>
 <span><span class="co">#' library(ggplot2)</span></span>
-<span><span class="co">#' library(magrittr) # pipe operator</span></span>
 <span><span class="co">#' \dontshow{</span></span>
-<span><span class="co">#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN</span></span>
+<span><span class="co">#' data.table::setDTthreads(2) # restricts number of cores used on CRAN</span></span>
 <span><span class="co">#' }</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' scores &lt;- score(as_forecast_quantile(example_quantile)) %&gt;%</span></span>
-<span><span class="co">#'   summarise_scores(by = c("model", "target_type")) %&gt;%</span></span>
+<span><span class="co">#' scores &lt;- score(as_forecast_quantile(example_quantile)) |&gt;</span></span>
+<span><span class="co">#'   summarise_scores(by = c("model", "target_type")) |&gt;</span></span>
 <span><span class="co">#'   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 2)</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' plot_score_table(scores, y = "model", by = "target_type") +</span></span>
@@ -560,14 +621,13 @@ function.</p>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' # can also put target description on the y-axis</span></span>
 <span><span class="co">#' plot_score_table(scores,</span></span>
-<span><span class="co">#'                  y = c("model", "target_type"),</span></span>
-<span><span class="co">#'                  by = "target_type")</span></span>
-<span></span>
+<span><span class="co">#'   y = c("model", "target_type"),</span></span>
+<span><span class="co">#'   by = "target_type"</span></span>
+<span><span class="co">#' )</span></span>
 <span><span class="va">plot_score_table</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">scores</span>,</span>
 <span>                             <span class="va">y</span> <span class="op">=</span> <span class="st">"model"</span>,</span>
 <span>                             <span class="va">by</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                             <span class="va">metrics</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
-<span></span>
 <span>  <span class="co"># identify metrics -----------------------------------------------------------</span></span>
 <span>  <span class="va">id_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_forecast_unit.html">get_forecast_unit</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
 <span>  <span class="va">metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">scores</span><span class="op">)</span></span>
@@ -621,7 +681,8 @@ function.</p>
 <span>  <span class="co"># users can then pass in a factor and keep the ordering of that column intact</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">df</span><span class="op">[</span>, <span class="va">identifCol</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">paste</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">.SD</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>       .SDcols <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">y</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span>      .SDcols <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="va">y</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">]</span></span>
+<span>    <span class="op">]</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">df</span>, old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, new <span class="op">=</span> <span class="st">"identifCol"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
@@ -656,8 +717,8 @@ the <code>by</code> argument. This allowed users to achieve a faceting
 of the table (note that of course scores also needed to be summarised
 according to the same grouping).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_forecast_quantile.html">as_forecast_quantile</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_forecast_quantile.html">as_forecast_quantile</a></span><span class="op">(</span><span class="va">example_quantile</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/summarise_scores.html">summarise_scores</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">signif</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Some rows containing NA values may be removed. This is fine if not</span></span>
 <span><span class="co">#&gt;   unexpected.</span></span>
@@ -671,8 +732,9 @@ column names to the <code>y</code> argument.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># can also put target description on the y-axis</span></span>
 <span><span class="fu">plot_score_table</span><span class="op">(</span><span class="va">scores</span>,</span>
-<span>                 y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
-<span>                 by <span class="op">=</span> <span class="st">"target_type"</span><span class="op">)</span></span></code></pre></div>
+<span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"target_type"</span><span class="op">)</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"target_type"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="Deprecated-visualisations_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
