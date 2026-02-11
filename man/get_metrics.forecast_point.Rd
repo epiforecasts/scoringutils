@@ -54,7 +54,6 @@ results! Consider the example in the section below.
 \examples{
 get_metrics(example_point, select = "ape")
 
-library(magrittr)
 set.seed(123)
 n <- 500
 observed <- rnorm(n, 5, 4)^2
@@ -67,9 +66,9 @@ df <- data.frame(
   predicted = c(rep(predicted_mu, n), predicted_not_mu),
   observed = rep(observed, 2),
   id = rep(1:n, 2)
-) \%>\%
+) |>
   as_forecast_point()
-score(df) \%>\%
+score(df) |>
   summarise_scores()
 }
 \references{

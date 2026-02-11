@@ -1,5 +1,5 @@
 # ==============================================================================
-# `get_forecast_counts()`
+# `get_forecast_counts()` # nolint: commented_code_linter
 # ==============================================================================
 test_that("get_forecast_counts() works as expected", {
   af <- data.table::copy(example_quantile)
@@ -10,25 +10,24 @@ test_that("get_forecast_counts() works as expected", {
 
   expect_type(af, "list")
   expect_type(af$target_type, "character")
-  expect_type(af$`count`, "integer")
-  expect_equal(nrow(af[is.na(`count`)]), 0)
-  af <- example_quantile %>%
-    get_forecast_counts(by = "model")
-  expect_equal(nrow(af), 4)
-  expect_equal(af$`count`, c(256, 256, 128, 247))
+  expect_type(af$count, "integer")
+  expect_identical(nrow(af[is.na(count)]), 0L)
+  af <- get_forecast_counts(example_quantile, by = "model")
+  expect_identical(nrow(af), 4L)
+  expect_identical(af$count, c(256L, 256L, 128L, 247L))
 
   # Ensure the returning object class is exactly same as a data.table.
   expect_s3_class(af, c("data.table", "data.frame"), exact = TRUE)
 
   # Setting `collapse = c()` means that all quantiles and samples are counted
-  af <- example_quantile %>%
-    get_forecast_counts(by = "model", collapse = c())
-  expect_equal(nrow(af), 4)
-  expect_equal(af$`count`, c(5888, 5888, 2944, 5681))
+  af <- get_forecast_counts(
+    example_quantile, by = "model", collapse = character(0)
+  )
+  expect_identical(nrow(af), 4L)
+  expect_identical(af$count, c(5888L, 5888L, 2944L, 5681L))
 
-  af <- example_quantile %>%
-    get_forecast_counts()
-  expect_equal(nrow(af), 50688)
+  af <- get_forecast_counts(example_quantile)
+  expect_identical(nrow(af), 50688L)
 
   expect_error(
     get_forecast_counts(example_quantile, by = NULL),
@@ -36,22 +35,22 @@ test_that("get_forecast_counts() works as expected", {
   )
 
   # check whether collapsing also works for model-based forecasts
-  af <- example_sample_discrete %>%
-    get_forecast_counts(by = "model")
-  expect_equal(nrow(af), 4)
+  af <- get_forecast_counts(example_sample_discrete, by = "model")
+  expect_identical(nrow(af), 4L)
 
-  af <- example_sample_discrete %>%
-    get_forecast_counts(by = "model", collapse = c())
-  expect_equal(af$count, c(10240, 10240, 5120, 9880))
+  af <- get_forecast_counts(
+    example_sample_discrete, by = "model", collapse = character(0)
+  )
+  expect_identical(af$count, c(10240L, 10240L, 5120L, 9880L))
 })
 
 
 # ==============================================================================
-# `plot_forecast_counts()`
+# `plot_forecast_counts()` # nolint: commented_code_linter
 # ==============================================================================
 test_that("plot_forecast_counts() works as expected", {
-  available_forecasts <- na.omit(example_quantile) %>%
-    as_forecast_quantile() %>%
+  available_forecasts <- na.omit(example_quantile) |>
+    as_forecast_quantile() |>
     get_forecast_counts(
       by = c("model", "target_type", "target_end_date")
     )

@@ -124,7 +124,6 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
 #' @examples
 #' get_metrics(example_point, select = "ape")
 #'
-#' library(magrittr)
 #' set.seed(123)
 #' n <- 500
 #' observed <- rnorm(n, 5, 4)^2
@@ -137,9 +136,9 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
 #'   predicted = c(rep(predicted_mu, n), predicted_not_mu),
 #'   observed = rep(observed, 2),
 #'   id = rep(1:n, 2)
-#' ) %>%
+#' ) |>
 #'   as_forecast_point()
-#' score(df) %>%
+#' score(df) |>
 #'   summarise_scores()
 #' @references
 #' Making and Evaluating Point Forecasts, Gneiting, Tilmann, 2011,

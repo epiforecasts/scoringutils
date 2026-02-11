@@ -60,23 +60,22 @@
 #' @importFrom stats na.omit
 #' @keywords scoring
 #' @examples
-#' library(magrittr) # pipe operator
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
 #' validated <- as_forecast_quantile(example_quantile)
-#' score(validated) %>%
+#' score(validated) |>
 #'   summarise_scores(by = c("model", "target_type"))
 #'
 #' # set forecast unit manually (to avoid issues with scoringutils trying to
 #' # determine the forecast unit automatically)
-#' example_quantile %>%
+#' example_quantile |>
 #'   as_forecast_quantile(
 #'     forecast_unit = c(
 #'       "location", "target_end_date", "target_type", "horizon", "model"
 #'     )
-#'   ) %>%
+#'   ) |>
 #'   score()
 #'
 #' # forecast formats with different metrics
@@ -90,8 +89,8 @@
 #'
 #' # passing a subset of metrics using select_metrics()
 #' # (the preferred approach for selecting from default metrics)
-#' example_sample_continuous %>%
-#'   as_forecast_sample() %>%
+#' example_sample_continuous |>
+#'   as_forecast_sample() |>
 #'   score(metrics = select_metrics(
 #'     get_metrics(as_forecast_sample(example_sample_continuous)),
 #'     select = c("crps", "mad")
@@ -100,8 +99,8 @@
 #' # passing a custom list of metrics manually
 #' # make sure to pass the function itself, not the result of calling it,
 #' # i.e. use `crps_sample` (correct) instead of `crps_sample()` (incorrect)
-#' example_sample_continuous %>%
-#'   as_forecast_sample() %>%
+#' example_sample_continuous |>
+#'   as_forecast_sample() |>
 #'   score(metrics = list("crps" = crps_sample, "mad" = mad_sample))
 #'
 #' # multivariate forecasts

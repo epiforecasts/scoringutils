@@ -98,10 +98,9 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' library(magrittr) # pipe operator
 #'
-#' scores <- example_quantile %>%
-#'  as_forecast_quantile() %>%
+#' scores <- example_quantile |>
+#'  as_forecast_quantile() |>
 #'  score()
 #'
 #' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
@@ -654,9 +653,8 @@ add_relative_skill <- function(
 #' @export
 #' @examples
 #' library(ggplot2)
-#' library(magrittr) # pipe operator
-#' scores <- example_quantile %>%
-#'   as_forecast_quantile %>%
+#' scores <- example_quantile |>
+#'   as_forecast_quantile() |>
 #'   score()
 #' pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 #' plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +

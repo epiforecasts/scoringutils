@@ -49,9 +49,8 @@
 #' @importFrom data.table setcolorder
 #' @importFrom checkmate assert_subset
 #' @examples
-#' library(magrittr) # pipe operator
-#' example_quantile %>%
-#'   as_forecast_quantile() %>%
+#' example_quantile |>
+#'   as_forecast_quantile() |>
 #'   get_coverage(by = "model")
 #' @export
 #' @keywords scoring

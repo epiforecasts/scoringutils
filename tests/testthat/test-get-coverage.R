@@ -1,13 +1,13 @@
 # ==============================================================================
-# `get_coverage()`
+# `get_coverage()` # nolint: commented_code_linter
 # ==============================================================================
 ex_coverage <- example_quantile[model == "EuroCOVIDhub-ensemble"]
 
 test_that("get_coverage() works as expected", {
-  cov <- example_quantile %>%
+  cov <- example_quantile |>
     get_coverage(by = get_forecast_unit(example_quantile))
 
-  expect_equal(
+  expect_identical(
     sort(colnames(cov)),
     sort(c(get_forecast_unit(example_quantile), c(
       "interval_range", "quantile_level", "interval_coverage", "interval_coverage_deviation",
@@ -15,7 +15,7 @@ test_that("get_coverage() works as expected", {
     )))
   )
 
-  expect_equal(nrow(cov), nrow(na.omit(example_quantile)))
+  expect_identical(nrow(cov), nrow(na.omit(example_quantile)))
 
   expect_s3_class(
     cov,
@@ -35,7 +35,7 @@ test_that("get_coverage() can deal with non-symmetric prediction intervals", {
   test <- data.table::copy(example_quantile)
   test <- test[!quantile_level %in% c(0.2, 0.3, 0.5)]
 
-  expect_no_condition(cov <- get_coverage(test))
+  cov <- expect_no_condition(get_coverage(test))
 
   prediction_intervals <- get_range_from_quantile(c(0.2, 0.3, 0.5))
 
@@ -43,25 +43,25 @@ test_that("get_coverage() can deal with non-symmetric prediction intervals", {
   not_missing <- cov[!interval_range %in% prediction_intervals]
 
   expect_true(all(is.na(missing$interval_coverage)))
-  expect_false(any(is.na(not_missing)))
+  expect_false(anyNA(not_missing))
 
   # test for a version where values are not missing, but just `NA`
   # since `get_coverage()` calls `na.omit`, the result should be the same.
   test <- data.table::copy(example_quantile)
   test <- test[quantile_level %in% c(0.2, 0.3, 0.5), predicted := NA]
   cov2 <- get_coverage(test)
-  expect_equal(cov, cov2)
+  expect_identical(cov, cov2)
 })
 
 
 # ==============================================================================
-# plot_interval_coverage()
+# plot_interval_coverage() # nolint: commented_code_linter
 # ==============================================================================
 test_that("plot_interval_coverage() works as expected", {
-  coverage <- example_quantile %>%
-    na.omit() %>%
-    as_forecast_quantile() %>%
-    get_coverage(by = c("model"))
+  coverage <- example_quantile |>
+    na.omit() |>
+    as_forecast_quantile() |>
+    get_coverage(by = "model")
   p <- plot_interval_coverage(coverage)
   expect_s3_class(p, "ggplot")
   skip_on_cran()
@@ -77,12 +77,12 @@ test_that("plot_interval_coverage() works as expected", {
 
 
 # ==============================================================================
-# plot_quantile_coverage()
+# plot_quantile_coverage() # nolint: commented_code_linter
 # ==============================================================================
 test_that("plot_quantile_coverage() works as expected", {
-  coverage <- example_quantile %>%
-    na.omit() %>%
-    as_forecast_quantile() %>%
+  coverage <- example_quantile |>
+    na.omit() |>
+    as_forecast_quantile() |>
     get_coverage(by = c("model", "quantile_level"))
 
   p <- plot_quantile_coverage(coverage)

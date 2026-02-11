@@ -1,17 +1,15 @@
 # ==============================================================================
-# as_forecast_binary()
+# as_forecast_binary() # nolint: commented_code_linter
 # ==============================================================================
 test_that("output of as_forecast_binary() is accepted as input to score()", {
   check <- suppressMessages(as_forecast_binary(example_binary))
-  expect_no_error(
-    score_check <- score(na.omit(check))
-  )
-  expect_equal(score_check, suppressMessages(score(as_forecast_binary(example_binary))))
+  score_check <- expect_no_error(score(na.omit(check)))
+  expect_identical(score_check, suppressMessages(score(as_forecast_binary(example_binary))))
 })
 
 
 # ==============================================================================
-# is_forecast_binary()
+# is_forecast_binary() # nolint: commented_code_linter
 # ==============================================================================
 test_that("is_forecast_binary() works as expected", {
   expect_true(is_forecast_binary(example_binary))
@@ -23,16 +21,19 @@ test_that("is_forecast_binary() works as expected", {
 
 
 # ==============================================================================
-# assert_forecast.forecast_binary()
+# assert_forecast.forecast_binary() # nolint: commented_code_linter
 # ==============================================================================
 test_that("assert_forecast.forecast_binary works as expected", {
   test <- na.omit(as.data.table(example_binary))
-  test[, "sample_id" := 1:nrow(test)]
+  test[, "sample_id" := seq_len(nrow(test))]
 
   # error if there is a superfluous sample_id column
   expect_error(
     as_forecast_binary(test),
-    "Input looks like a binary forecast, but an additional column called `sample_id` or `quantile` was found."
+    paste(
+      "Input looks like a binary forecast, but an additional column",
+      "called `sample_id` or `quantile` was found."
+    )
   )
 
   # expect error if probabilties are not in [0, 1]
@@ -47,22 +48,20 @@ test_that("assert_forecast.forecast_binary works as expected", {
 
 
 # ==============================================================================
-# score.forecast_binary()
+# score.forecast_binary() # nolint: commented_code_linter
 # ==============================================================================
 test_that("function produces output for a binary case", {
-
-  expect_equal(
-    names(scores_binary),
+  expect_named(
+    scores_binary,
     c(get_forecast_unit(example_binary), names(get_metrics(example_binary)))
   )
 
   eval <- summarise_scores(scores_binary, by = c("model", "target_type"))
 
-  expect_equal(
-    nrow(eval) > 1,
-    TRUE
+  expect_gt(
+    nrow(eval), 1
   )
-  expect_equal(
+  expect_identical(
     colnames(eval),
     c(
       "model", "target_type",
@@ -92,11 +91,14 @@ test_that("score() gives same result for binary as regular function", {
     factor(example_binary$observed),
     example_binary$predicted
   )
-  expect_equal(scores_binary$brier_score, manual_eval[!is.na(manual_eval)])
+  expect_equal( # nolint: expect_identical_linter
+    scores_binary$brier_score, manual_eval[!is.na(manual_eval)]
+  )
 })
 
 test_that(
-  "passing additional functions to score binary works handles them", {
+  "passing additional functions to score binary works handles them",
+  {
     test_fun <- function(x, y, ...) {
       if (hasArg("test")) {
         message("test argument found")
@@ -104,25 +106,29 @@ test_that(
       return(y)
     }
 
-    df <- example_binary[model == "EuroCOVIDhub-ensemble" &
-                           target_type == "Cases" & location == "DE"] %>%
-      as_forecast_binary()
+    df <- as_forecast_binary(
+      example_binary[model == "EuroCOVIDhub-ensemble" &
+                       target_type == "Cases" & location == "DE"]
+    )
 
     # passing a simple function works
-    expect_equal(
+    expect_identical(
       score(df,
-            metrics = list("identity" = function(x, y) {return(y)}))$identity,
+        metrics = list(identity = function(x, y) {
+          return(y)
+        })
+      )$identity,
       df$predicted
     )
   }
 )
 
 # ==============================================================================
-# get_metrics.forecast_binary()
+# get_metrics.forecast_binary() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("get_metrics.forecast_binary() works as expected", {
-  expect_true(
-    is.list(get_metrics(example_binary))
+  expect_type(
+    get_metrics(example_binary), "list"
   )
 })

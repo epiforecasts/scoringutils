@@ -20,9 +20,8 @@
 #' @importFrom checkmate assert_subset
 #' @export
 #' @examples
-#' library(magrittr) # pipe operator
-#' scores <- example_quantile %>%
-#'   as_forecast_quantile %>%
+#' scores <- example_quantile |>
+#'   as_forecast_quantile() |>
 #'   score()
 #' scores <- summarise_scores(scores, by = c("model", "target_type"))
 #' scores <- summarise_scores(

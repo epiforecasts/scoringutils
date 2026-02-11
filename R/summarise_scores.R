@@ -27,9 +27,8 @@
 #' \dontshow{
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
-#' library(magrittr) # pipe operator
-#' scores <- example_sample_continuous %>%
-#'  as_forecast_sample() %>%
+#' scores <- example_sample_continuous |>
+#'  as_forecast_sample() |>
 #'  score()
 #'
 #' # get scores by model
@@ -42,7 +41,7 @@
 #' summarise_scores(scores, by = "model", fun = sd)
 #'
 #' # round digits
-#' summarise_scores(scores, by = "model") %>%
+#' summarise_scores(scores, by = "model") |>
 #'   summarise_scores(fun = signif, digits = 2)
 #' @export
 #' @importFrom checkmate assert_subset assert_function test_subset
