@@ -20,8 +20,25 @@ MAX_CONSECUTIVE_FAILURES=3
 RALPH_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROMPT_FILE="$RALPH_DIR/PROMPT_triage.md"
 LOG_DIR="$RALPH_DIR/logs/run-$(date '+%Y%m%d-%H%M%S')"
-
 mkdir -p "$LOG_DIR"
+
+# Check if an error is a token/rate-limit exhaustion
+is_token_limit_error() {
+  local result_line="$1"
+  local error_text
+  error_text=$(echo "$result_line" | jq -r '.result // empty' 2>/dev/null)
+  [ -z "$error_text" ] && return 1
+
+  # Match common token/rate-limit error patterns (case-insensitive)
+  echo "$error_text" | grep -iqE \
+    'rate.?limit|token.*limit|too many requests|quota|overloaded|429|no more token|token.*exhaust|usage.*exceed|capacity' \
+    && return 0
+  return 1
+}
+
+# TODO: schedule_restart() — one-shot launchd job to restart ralph after token limits
+# Commented out until we're ready to enable auto-restart.
+# schedule_restart() { ... }
 
 # Ctrl+C handler: kill all child processes and exit
 cleanup() {
@@ -112,13 +129,17 @@ while true; do
 
   # Check for errors in the raw log
   FAILED=false
+  RESULT_LINE=""
+  if [ "$STREAM" = true ] && [ -f "$LOG_FILE.raw" ]; then
+    RESULT_LINE=$(grep '"type":"result"' "$LOG_FILE.raw" | tail -1)
+  fi
+
   if [ "$EXIT_CODE" -ne 0 ]; then
     FAILED=true
-  elif [ "$STREAM" = true ] && [ -f "$LOG_FILE.raw" ]; then
+  elif [ -n "$RESULT_LINE" ]; then
     # Only check the final result line, not the entire log.
     # Tool results with "is_error":true are normal during Claude operation
     # (e.g. a grep that finds nothing exits with code 1).
-    RESULT_LINE=$(grep '"type":"result"' "$LOG_FILE.raw" | tail -1)
     if echo "$RESULT_LINE" | grep -q '"is_error":true'; then
       FAILED=true
     elif echo "$RESULT_LINE" | grep -q '"subtype":"error"'; then
@@ -131,6 +152,15 @@ while true; do
     WAIT_SECS=$((CONSECUTIVE_FAILURES * 60))
 
     echo ">>> Iteration $ITERATION FAILED ($(date '+%H:%M:%S'))"
+
+    # Check if this is a token/rate-limit error
+    if [ -n "${RESULT_LINE:-}" ] && is_token_limit_error "$RESULT_LINE"; then
+      ERROR_TEXT=$(echo "$RESULT_LINE" | jq -r '.result // "unknown"' 2>/dev/null)
+      echo ">>> Token/rate-limit error detected. Stopping."
+      echo "    Error: $ERROR_TEXT"
+      # TODO: schedule_restart to auto-resume after the limit resets
+      break
+    fi
 
     if [ "$CONSECUTIVE_FAILURES" -ge "$MAX_CONSECUTIVE_FAILURES" ]; then
       echo ">>> $MAX_CONSECUTIVE_FAILURES consecutive failures. Stopping."
