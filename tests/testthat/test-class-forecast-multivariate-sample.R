@@ -49,13 +49,13 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
       )
       cat(
         "Forecast unit:",
-        paste(get_forecast_unit(result), collapse = ", "), "\n"
+        toString(get_forecast_unit(result)), "\n"
       )
       cat("Number of rows:", nrow(result), "\n")
       cat("Number of columns:", ncol(result), "\n")
       cat(
         "Column names:",
-        paste(names(result), collapse = ", "), "\n"
+        toString(names(result)), "\n"
       )
       cat(
         "Number of unique groups:",
@@ -250,7 +250,7 @@ test_that(
       cat("Number of columns:", ncol(scores), "\n")
       cat(
         "Column names:",
-        paste(names(scores), collapse = ", "), "\n"
+        toString(names(scores)), "\n"
       )
       cat(
         "Energy score range:",
@@ -265,9 +265,7 @@ test_that(
       )
       cat(
         "Sample of energy scores:",
-        paste(
-          head(scores$energy_score, 5), collapse = ", "
-        ), "\n"
+        toString(head(scores$energy_score, 5)), "\n"
       )
     })
 
@@ -288,7 +286,7 @@ test_that(
       )
       cat(
         "Column names:",
-        paste(names(scores_specific), collapse = ", "), "\n"
+        toString(names(scores_specific)), "\n"
       )
       cat(
         "Energy score range:",
