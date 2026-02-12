@@ -84,12 +84,11 @@ output:
 ---
 
 ```{r, setup, include=FALSE}
-options(prompt = 'R> ', continue = '+ ', width = 70)
+options(prompt = "R> ", continue = "+ ", width = 70)
 
 library("scoringutils")
 library("knitr")
 library("dplyr")
-library("magrittr")
 library("kableExtra")
 library("xtable")
 library("formatR")
@@ -105,8 +104,8 @@ xtable2kable <- function(x) {
 
 opts_chunk$set(
   cache = FALSE,
-  warning = FALSE, 
-  message = FALSE, 
+  warning = FALSE,
+  message = FALSE,
   out.width = "100%"
 )
 ```
@@ -222,7 +221,7 @@ The raw input data needs to be processed and validated by converting it into a `
 ```{r, eval=TRUE, echo=TRUE, cache=FALSE}
 library("scoringutils")
 forecast_quantile <- example_quantile[horizon == 2] |>
-  as_forecast_quantile() 
+  as_forecast_quantile()
 ```
 
 Every forecast type has a corresponding `as_forecast_<type>()` function that transforms the input into a `forecast` object and validates it. A forecast object is a `data.table` that has passed some input validations. It behaves like a `data.table`, but has an additional class `forecast` as well as a class corresponding to the forecast type (`forecast_point`, `forecast_binary`, `forecast_nominal`, `forecast_quantile` or `forecast_sample`). 
@@ -232,14 +231,14 @@ All `as_forecast_<type>()` functions can take additional arguments that help fac
 forecast_quantile <- example_quantile[horizon == 2] |>
   as_forecast_quantile(
     forecast_unit = c(
-      "model", "location", "target_end_date", 
+      "model", "location", "target_end_date",
       "forecast_date", "horizon", "location"
     ),
-    observed = "observed", 
+    observed = "observed",
     predicted = "predicted",
     model = "model",
     quantile_level = "quantile_level",
-  ) 
+  )
 ```
 
 The argument `forecast_unit` allows the user to manually set the unit of a single forecast. This is done by dropping all columns that are not either specified in the `forecast_unit` or are "protected" columns (such as `observed`, `predicted`, `model`, `quantile_level`, or `sample_id`). The other arguments can be used to specify the column names of the input data that correspond to the required columns. The function will rename the specified columns to the corresponding required columns. 
@@ -260,7 +259,7 @@ One common issue that causes transformation to a `forecast` object to fail are "
 
 ```{r}
 rbind(example_quantile, example_quantile[1001:1002]) |>
-  get_duplicate_forecasts() 
+  get_duplicate_forecasts()
 ```
 
 <!-- Protected columns are for example those columns that define the forecast and observations, as well as the names of all scores computed throughout the evaluation process. Protected columns will be ignored e.g., by \fct{get\_forecast\_unit} and \fct{set\_forecast\_unit}. You can call \fct{get\_protected\_columns} either on the data to obtain the protected columns currently present or without any arguments to obtain all protected columns.  -->
@@ -279,8 +278,10 @@ The function \fct{transform\_forecasts} takes a validated forecast object as inp
 The example data contains negative values which need to be handled before applying the logarithm. Presumably, negative values for count data should be dropped altogether, but for illustrative purposes, we will call \fct{transform\_forecasts} twice to replace them with zeroes first before appending transformed counts. 
 
 ```{r, message=TRUE, warning=TRUE, cache=FALSE}
-forecast_quantile |> 
-  transform_forecasts(fun = \(x) {pmax(x, 0)}, append = FALSE) |>
+forecast_quantile |>
+  transform_forecasts(fun = \(x) {
+    pmax(x, 0)
+  }, append = FALSE) |>
   transform_forecasts(fun = log_shift, offset = 1) |>
   print(2)
 ```
@@ -305,8 +306,8 @@ We can visualise the results by calling \fct{plot\_forecast\_counts} on the outp
 ```{r plot-forecast-counts, fig.pos = "!h", fig.width = 8, out.width="100%", fig.cap = "Visualistion of forecast counts for the example data. Numbers (and colour shade) indicate the number of forecasts available for a given model, target type and forecast date."}
 library("ggplot2")
 forecast_counts |>
-  plot_forecast_counts(x = "forecast_date") + 
-  facet_wrap(~ target_type) +
+  plot_forecast_counts(x = "forecast_date") +
+  facet_wrap(~target_type) +
   labs(y = "Model", x = "Forecast date")
 ```
 
@@ -361,31 +362,31 @@ forecast_quantile |>
 Results can then be visualised using the functions `plot_interval_coverage()` (see Figure \ref{fig:coverage}A) and `plot_quantile_coverage()` (see \ref{fig:coverage}B). Both show nominal against empirical coverage. Ideally, forecasters should lie on the diagonal line. If the line moves into the green-shaded area, the forecaster is too conservative, i.e., the predictive distributions are too wide/overdispersed on average. The white area implies overconfidence/predictive distributions that are too narrow on average (see Figure \ref{fig:calibration-plots}) for more details).
 
 ```{r coverage-code, eval = FALSE, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage and quantile coverage plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow prediction intervals."}
-coverage <- get_coverage(forecast_quantile, by = c("model", "target_type")) 
+coverage <- get_coverage(forecast_quantile, by = c("model", "target_type"))
 
-plot_interval_coverage(coverage) + 
-  facet_wrap(~ target_type)
+plot_interval_coverage(coverage) +
+  facet_wrap(~target_type)
 
-plot_quantile_coverage(coverage) + 
-  facet_wrap(~ target_type)
+plot_quantile_coverage(coverage) +
+  facet_wrap(~target_type)
 ```
 
 Note that users can also compute individual coverage values as scores using \fct{score}. This represents a separate workflow that allows users to obtain coverage values as a summary measure to be computed alongside other scores, rather than providing a way to visually assess calibration. 
 
 ```{r coverage, echo = FALSE, fig.height = 6, fig.width = 10, fig.pos = "!h", fig.show='hold', fig.cap = "Interval coverage (A) and quantile coverage (B) plots. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), while areas in white indicate that the model is overconfident and generates too narrow prediction intervals."}
-coverage <- get_coverage(forecast_quantile, by = c("model", "target_type")) 
-p1 <- plot_interval_coverage(coverage) + 
-  facet_wrap(~ target_type) + 
+coverage <- get_coverage(forecast_quantile, by = c("model", "target_type"))
+p1 <- plot_interval_coverage(coverage) +
+  facet_wrap(~target_type) +
   theme(panel.spacing = unit(2, "lines"))
 
 p2 <- plot_quantile_coverage(coverage) +
-  facet_wrap(~ target_type) + 
+  facet_wrap(~target_type) +
   theme(panel.spacing = unit(2, "lines"))
 
 p1 / p2 +
-  plot_annotation(tag_levels = "A") + 
+  plot_annotation(tag_levels = "A") +
   plot_layout(guides = "collect") &
-  theme(legend.position = "bottom") 
+  theme(legend.position = "bottom")
 ```
 
 \section{Scoring forecasts} \label{sec:scoring}
@@ -449,8 +450,10 @@ To compute relative skill scores, users can call \fct{add\_pairwise\_comparison}
 ```{r pairwise-comparison-code, eval = FALSE}
 forecast_quantile |>
   score() |>
-  add_relative_skill(by = c("model", "target_type"), 
-                     baseline = "EuroCOVIDhub-baseline")
+  add_relative_skill(
+    by = c("model", "target_type"),
+    baseline = "EuroCOVIDhub-baseline"
+  )
 ```
 
 Pairwise comparisons should usually be made based on raw, unsummarised scores (meaning that `add_relative_skill()` should be called before `summarise_scores()` (see Section \ref{sec:summarising})). Summarising scores, for example by computing an average across several dimensions, can change the set of overlapping forecasts between two models and distort relative skill scores.
@@ -471,8 +474,8 @@ The mean score ratios resulting from \fct{pairwise\_comparison} can then be visu
 forecast_quantile |>
   score() |>
   get_pairwise_comparisons(compare = "model", by = "target_type") |>
-  plot_pairwise_comparisons() + 
-  facet_wrap(~ target_type)
+  plot_pairwise_comparisons() +
+  facet_wrap(~target_type)
 ```
 
 <!-- WE MIGHT WANT TO RETHINK THE FOLLOWING PART A BIT: A) MAYBE WE SHOULD SEPARATE COMPUTING $p$~valueS FROM THE PAIRWISE COMPARISONS AND B) WE NEED TO THINK A BIT MORE ABOUT HOW WE WANT TO HYPOTHESIS TESTING MORE GENERALLY.  -->
@@ -537,10 +540,11 @@ example_sample_continuous[horizon == 2] |>
   score() |>
   summarise_scores(by = c("model", "location", "target_type")) |>
   summarise_scores(
-    by = c("model", "location", "target_type"), 
-    fun = signif, digits = 2) |>
-  plot_heatmap(x = "location", metric = "bias") + 
-    facet_wrap(~ target_type) 
+    by = c("model", "location", "target_type"),
+    fun = signif, digits = 2
+  ) |>
+  plot_heatmap(x = "location", metric = "bias") +
+  facet_wrap(~target_type)
 ```
 
 ### Weighted interval score decomposition
@@ -551,35 +555,40 @@ For quantile-based forecasts, the weighted interval score \citep[WIS, ][see Sect
 forecast_quantile |>
   score() |>
   summarise_scores(by = c("model", "target_type")) |>
-  plot_wis(relative_contributions = FALSE) + 
-  facet_wrap(~ target_type, 
-             scales = "free_x") 
+  plot_wis(relative_contributions = FALSE) +
+  facet_wrap(~target_type,
+    scales = "free_x"
+  )
 ```
 
 ```{r wis-components, echo = FALSE, fig.pos = "!h", fig.width = 9.5, fig.show = "hold", fig.cap = "Decomposition of the weighted interval score (WIS) into dispersion, overprediction and underprediction. A: absolute contributions, B: contributions normalised to 1."}
 p1 <- forecast_quantile |>
   score() |>
   summarise_scores(by = c("model", "target_type")) |>
-  plot_wis(relative_contributions = FALSE) + 
-  facet_wrap(~ target_type, 
-             scales = "free_x") + 
+  plot_wis(relative_contributions = FALSE) +
+  facet_wrap(~target_type,
+    scales = "free_x"
+  ) +
   theme(panel.spacing = unit(1.5, "lines"))
 
 p2 <- forecast_quantile |>
   score() |>
   summarise_scores(by = c("model", "target_type")) |>
-  plot_wis(relative_contributions = TRUE) + 
-  facet_wrap(~ target_type, 
-             scales = "free_x") + 
-  theme(axis.title.y = element_blank(), 
-        axis.text.y = element_blank()) + 
-  theme(panel.spacing = unit(1.5, "lines")) + 
+  plot_wis(relative_contributions = TRUE) +
+  facet_wrap(~target_type,
+    scales = "free_x"
+  ) +
+  theme(
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank()
+  ) +
+  theme(panel.spacing = unit(1.5, "lines")) +
   labs(x = "Normalised WIS contributions")
 
 p1 + p2 +
-  plot_annotation(tag_levels = "A") + 
+  plot_annotation(tag_levels = "A") +
   plot_layout(guides = "collect") &
-  theme(legend.position = "bottom") 
+  theme(legend.position = "bottom")
 ```
 
 <!-- ## Bias -->
@@ -660,35 +669,32 @@ The following section gives an overview of how \pkg{scoringutils} constructs for
 The following Figure gives a more detailed overview of how to interpret different calibration plots (showing the actual forecasts and observations that produced the corresponding visualisations). 
 
 ```{r calibration-plots, echo = FALSE, cache = TRUE, fig.pos = "!h", out.extra = "", fig.cap= "A: Different forecasting distributions (black) against observations sampled from a standard normal distribution (grey histograms). B: PIT histograms based on the predictive distributions and the sampled observations shown in A. C: Empirical vs. nominal coverage of the central prediction intervals for simulated observations and predictions. Areas shaded in green indicate that the forecasts are too wide (i.e., underconfident), covering more true values than they actually should, while areas in white indicate that the model generates too narrow predictions and fails to cover the desired proportion of true values with its prediction intervals. D: Quantile coverage values, with green areas indicating too wide (i.e., conservative) forecasts. E: Scores for the standard normal predictive distribution and the observations drawn from different data-generating distributions.", fig.height=12, fig.width=10}
-
-
 # helper function to plot scores
 plot_score_table <- function(scores,
                              y = "model",
                              by = NULL,
                              metrics = NULL) {
-  
   # identify metrics -----------------------------------------------------------
   id_vars <- get_forecast_unit(scores)
   metrics <- get_metrics(scores)
-  
+
   cols_to_delete <- names(scores)[!(names(scores) %in% c(metrics, id_vars))]
   suppressWarnings(scores[, eval(cols_to_delete) := NULL])
-  
+
   # compute scaled values ------------------------------------------------------
   # scaling is done in order to colour the different scores
   # for most metrics larger is worse, but others like bias are better if they
   # are close to zero and deviations in both directions are bad
-  
+
   # define which metrics are scaled using min (larger is worse) and
   # which not (metrics like bias where deviations in both directions are bad)
   metrics_zero_good <- c("bias", "interval_coverage_deviation")
   metrics_no_color <- "coverage"
-  
+
   metrics_min_good <- setdiff(metrics, c(
     metrics_zero_good, metrics_no_color
   ))
-  
+
   # write scale functions that can be used in data.table
   scale <- function(x) {
     scaled <- x / sd(x, na.rm = TRUE)
@@ -698,34 +704,35 @@ plot_score_table <- function(scores,
     scaled <- (x - min(x)) / sd(x, na.rm = TRUE)
     return(scaled)
   }
-  
+
   # pivot longer and add scaled values
   df <- data.table::melt(scores,
-                         value.vars = metrics,
-                         id.vars = id_vars,
-                         variable.name = "metric"
+    value.vars = metrics,
+    id.vars = id_vars,
+    variable.name = "metric"
   )
-  
+
   df[metric %in% metrics_min_good, value_scaled := scale_min_good(value),
-     by = c("metric", by)
+    by = c("metric", by)
   ]
   df[metric %in% metrics_zero_good, value_scaled := scale(value),
-     by = c("metric", by)
+    by = c("metric", by)
   ]
   df[metric %in% metrics_no_color, value_scaled := 0,
-     by = c("metric", by)
+    by = c("metric", by)
   ]
-  
+
   # create identifier column for plot ------------------------------------------
   # if there is only one column, leave column as is. Reason to do that is that
   # users can then pass in a factor and keep the ordering of that column intact
   if (length(y) > 1) {
     df[, identifCol := do.call(paste, c(.SD, sep = "_")),
-       .SDcols = y[y %in% names(df)]]
+      .SDcols = y[y %in% names(df)]
+    ]
   } else {
     setnames(df, old = eval(y), new = "identifCol")
   }
-  
+
   # plot -----------------------------------------------------------------------
   # make plot with all metrics that are not NA
   plot <- ggplot(
@@ -746,37 +753,48 @@ plot_score_table <- function(scores,
     ) +
     labs(x = "", y = "") +
     coord_cartesian(expand = FALSE)
-  
+
   return(plot)
 }
 
 # generate predictions data.table
-n_truth = 2000
-n_samples = 2000
+n_truth <- 2000
+n_samples <- 2000
 truth <- rnorm(n_truth, mean = 0, sd = 1)
 predictions1 <- rnorm(n_truth * n_samples, mean = 0, sd = 1)
 predictions2 <- rnorm(n_truth * n_samples, mean = 0.5, sd = 1)
 predictions3 <- rnorm(n_truth * n_samples, mean = 0, sd = 2)
-predictions4 <- rnorm(n_truth * n_samples, mean = 0, sd =  0.5)
+predictions4 <- rnorm(n_truth * n_samples, mean = 0, sd = 0.5)
 
-df <- data.table(observed = rep(truth, each = n_samples),
-                 id = rep(1:n_truth, each = n_samples),
-                 predicted = c(predictions1, predictions2,
-                               predictions3, predictions4),
-                 sample_id = 1:n_samples,
-                 `model` = rep(c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
-                                 "Pred: N(0, 2)", "Pred: N(0, 0.5)"),
-                               each = n_truth * n_samples)) %>%
+df <- data.table(
+  observed = rep(truth, each = n_samples),
+  id = rep(1:n_truth, each = n_samples),
+  predicted = c(
+    predictions1, predictions2,
+    predictions3, predictions4
+  ),
+  sample_id = 1:n_samples,
+  `model` = rep(
+    c(
+      "Pred: N(0, 1)", "Pred: N(0.5, 1)",
+      "Pred: N(0, 2)", "Pred: N(0, 0.5)"
+    ),
+    each = n_truth * n_samples
+  )
+) |>
   as_forecast_sample()
 
 res <- score(df)
 pit <- get_pit_histogram(df, by = "model")
 
 df[, model := factor(`model`,
-                     levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
-                                "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
+  levels = c(
+    "Pred: N(0, 1)", "Pred: N(0.5, 1)",
+    "Pred: N(0, 2)", "Pred: N(0, 0.5)"
+  )
+)]
 
-res_summarised <- summarise_scores(res,by = "model")
+res_summarised <- summarise_scores(res, by = "model")
 
 scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) |>
   plot_score_table(y = "model") +
@@ -789,12 +807,14 @@ scores_table_plot <- summarise_scores(res_summarised, fun = signif, digits = 2) 
 # create histogram true vs. predicted ------------------------------------------
 pred_hist <- df |>
   ggplot(aes(x = observed)) +
-  facet_wrap(~ model, nrow = 1) +
-  geom_histogram(aes(y=after_stat(density)),
-                 fill = "grey",
-                 colour = "dark grey") +
-  geom_density(aes(y=after_stat(density), x = predicted),
-               colour = "black") +
+  facet_wrap(~model, nrow = 1) +
+  geom_histogram(aes(y = after_stat(density)),
+    fill = "grey",
+    colour = "dark grey"
+  ) +
+  geom_density(aes(y = after_stat(density), x = predicted),
+    colour = "black"
+  ) +
   theme_scoringutils() +
   labs(y = "Density", x = "Value")
 
@@ -803,7 +823,7 @@ pred_hist <- df |>
 pit_plots <- pit |>
   ggplot(aes(x = mid, y = density)) +
   geom_col() +
-  facet_wrap(~ model, nrow = 1) +
+  facet_wrap(~model, nrow = 1) +
   theme_scoringutils() +
   labs(y = "Density", x = "Quantile")
 
@@ -811,20 +831,24 @@ pit_plots <- pit |>
 # create coverage plots by transforming to quantile format first
 quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
 df_quantile <- as_forecast_quantile(df,
-                                  quantiles = quantiles)
+  quantiles = quantiles
+)
 
 coverage <- get_coverage(df_quantile, by = "model")
 
 coverage[, model := factor(model,
-                           levels = c("Pred: N(0, 1)", "Pred: N(0.5, 1)",
-                                      "Pred: N(0, 2)", "Pred: N(0, 0.5)"))]
+  levels = c(
+    "Pred: N(0, 1)", "Pred: N(0.5, 1)",
+    "Pred: N(0, 2)", "Pred: N(0, 0.5)"
+  )
+)]
 
 interval_coverage <- plot_interval_coverage(coverage) +
-  facet_wrap(~ model, nrow = 1) +
+  facet_wrap(~model, nrow = 1) +
   theme_scoringutils()
 
 quantile_coverage <- plot_quantile_coverage(coverage) +
-  facet_wrap(~ model, nrow = 1) +
+  facet_wrap(~model, nrow = 1) +
   theme_scoringutils()
 
 
@@ -834,7 +858,7 @@ p <- pred_hist /
   interval_coverage /
   quantile_coverage /
   scores_table_plot +
-  plot_layout(guides = 'collect') &
+  plot_layout(guides = "collect") &
   theme(legend.position = "none") &
   theme(panel.spacing = unit(2, "lines")) &
   plot_annotation(tag_levels = "A")

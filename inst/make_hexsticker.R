@@ -8,9 +8,9 @@
 
 
 # # Make standard plot
-# scores <- example_quantile %>%
-#   as_forecast_quantile() %>%
-#   score() %>%
+# scores <- example_quantile |>
+#   as_forecast_quantile() |>
+#   score() |>
 #   summarise_scores(by = c("model", "target_type")) |>
 #   filter(target_type == "Cases")
 

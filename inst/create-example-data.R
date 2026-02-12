@@ -1,8 +1,9 @@
 library(data.table)
 library(dplyr)
-library(devtools)
 library(here)
-library(covidHubUtils) # devtools::install_github("reichlab/covidHubUtils@v0.1.8") # nolint
+# nolint start: namespace_linter
+library(covidHubUtils) # devtools::install_github("reichlab/covidHubUtils@v0.1.8")
+# nolint end
 library(purrr)
 library(data.table)
 library(stringr)
@@ -38,14 +39,14 @@ file_paths <- purrr::map(folders,
     out <- here::here(folder, files)
     return(out)
   }
-) %>%
+) |>
   unlist()
-file_paths <- file_paths[grepl(".csv", file_paths)]
+file_paths <- file_paths[grepl(".csv", file_paths, fixed = TRUE)]
 
 # load all past forecasts ------------------------------------------------------
 # ceate a helper function to get model name from a file path
 get_model_name <- function(file_path) {
-  split <- str_split(file_path, pattern = "/")[[1]]
+  split <- str_split(file_path, pattern = stringr::fixed("/"))[[1]]
   model <- split[length(split) - 1]
   return(model)
 }
@@ -62,19 +63,19 @@ prediction_data <- map_dfr(file_paths,
     )]
     return(data)
   }
-) %>%
-  filter(grepl("case", target) | grepl("death", target)) %>%
+) |>
+  filter(grepl("case", target, fixed = TRUE) | grepl("death", target, fixed = TRUE)) |>
   mutate(
-    target_type = ifelse(grepl("death", target),
+    target_type = ifelse(grepl("death", target, fixed = TRUE),
       "Deaths", "Cases"
     ),
     horizon = as.numeric(substr(target, 1, 1))
-  ) %>%
-  rename(predicted = value) %>%
+  ) |>
+  rename(predicted = value) |>
   filter(
     type == "quantile",
-    grepl("inc", target)
-  ) %>%
+    grepl("inc", target, fixed = TRUE)
+  ) |>
   select(
     location, forecast_date, quantile, predicted,
     model, target_end_date, target, target_type, horizon
@@ -90,7 +91,6 @@ hub_data <- hub_data |>
     horizon <= 3,
     forecast_date > "2021-05-01",
     forecast_date < "2021-07-15",
-    # quantile %in% c(seq(0.05, 0.45, 0.1), 0.5, seq(0.55, 0.95, 0.1)),
     location %in% c("DE", "GB", "FR", "IT")
   ) |>
   select(-target) |>
@@ -269,16 +269,21 @@ example_nominal[, high := (predicted > high_bound)]
 example_nominal[, observed := ifelse(
   observed < low_bound, "low",
   ifelse(observed >= low_bound & observed <= high_bound,
-         "medium", "high"))]
+    "medium", "high"
+  )
+)]
 
 example_nominal <- example_nominal[
-  , .(low = mean(low),
-      medium = mean(medium),
-      high = mean(high)),
+  , .(
+    low = mean(low),
+    medium = mean(medium),
+    high = mean(high)
+  ),
   by = c(by_vars, "model", "observed")
 ]
 example_nominal <- melt(
-  example_nominal, measure.vars = c("low", "high", "medium"),
+  example_nominal,
+  measure.vars = c("low", "high", "medium"),
   value.name = "predicted", variable.name = "predicted_label"
 )
 

@@ -7,12 +7,34 @@ linters: linters_with_tags(
     line_length_linter(120),
     cyclocomp_linter(20L),
     return_linter = NULL,
-    object_overwrite_linter = NULL
-  )
-exclusions: c(
-    list.files("tests", recursive = TRUE, full.names = TRUE),
-    list.files("inst", recursive = TRUE, full.names = TRUE),
-    list.files("vignettes", pattern = ".R$", full.names = TRUE),
-    "vignettes/Deprecated-visualisations.Rmd"
+    object_overwrite_linter = NULL,
+    # Exclusions for project-specific patterns
+    undesirable_operator_linter = NULL, # ::: needed for testing internal functions
+    expect_identical_linter = NULL, # project uses expect_equal() for flexibility
+    commented_code_linter = NULL, # test comments serve as documentation
+    implicit_assignment_linter = NULL, # false positives with data.table :=
+    strings_as_factors_linter = NULL, # R 4.0+ defaults to stringsAsFactors = FALSE
+    one_call_pipe_linter = NULL, # stylistic preference
+    keyword_quote_linter = NULL, # stylistic preference
+    unnecessary_concatenation_linter = NULL, # intentional patterns
+    library_call_linter = NULL, # intentional patterns in scripts
+    pipe_consistency_linter = NULL # one_call_pipe_linter exclusion triggers false positives
   )
 exclude: "# nolint"
+exclusions: list(
+    "inst/create-example-data.R" = list(
+      missing_package_linter = Inf,
+      namespace_linter = Inf,
+      object_usage_linter = Inf,
+      nonportable_path_linter = Inf,
+      nested_ifelse_linter = Inf,
+      missing_argument_linter = Inf,
+      any_is_na_linter = Inf,
+      object_length_linter = Inf
+    ),
+    "inst/manuscript" = list(
+      missing_package_linter = Inf,
+      namespace_linter = Inf,
+      object_usage_linter = Inf
+    )
+  )

@@ -1,24 +1,24 @@
 # ============================================================================ #
-# `transform_forecasts()`
+# `transform_forecasts()` # nolint: commented_code_linter
 # ============================================================================ #
 test_that("function transform_forecasts works", {
   predictions_original <- example_quantile$predicted
-  predictions <- example_quantile %>%
+  predictions <- example_quantile |>
     transform_forecasts(
-    fun = function(x) pmax(0, x),
-    append = FALSE
-  )
+      fun = function(x) pmax(0, x),
+      append = FALSE
+    )
 
-  expect_equal(predictions$predicted, pmax(0, predictions_original))
+  expect_equal(predictions$predicted, pmax(0, predictions_original)) # nolint: expect_identical_linter
 
   one <- transform_forecasts(predictions, offset = 1)
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     one$predicted,
     c(predictions$predicted, log(predictions$predicted + 1))
   )
 
   two <- transform_forecasts(predictions, fun = sqrt, label = "sqrt")
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     two$predicted,
     c(predictions$predicted, sqrt(predictions$predicted))
   )
@@ -36,7 +36,7 @@ test_that("function transform_forecasts works", {
 
   # multiple transformations
   three <- transform_forecasts(one, fun = sqrt, label = "sqrt")
-  expect_equal(unique(three$scale), c("natural", "log", "sqrt"))
+  expect_identical(unique(three$scale), c("natural", "log", "sqrt"))
 
   # expect_error if there is a scale column, but no value "natural"
   no_natural <- three[three$scale != "natural", ]
@@ -52,7 +52,7 @@ test_that("function transform_forecasts works", {
     three$predicted[three$scale == "sqrt"]
   )
 
-  expect_equal(four$predicted, compare)
+  expect_equal(four$predicted, compare) # nolint: expect_identical_linter
 })
 
 test_that("transform_forecasts() outputs an object of class forecast_*", {
@@ -86,10 +86,10 @@ test_that("transform_forecasts() works on multivariate sample forecasts", {
 
 
 # ============================================================================ #
-# `log_shift()`
+# `log_shift()` # nolint: commented_code_linter
 # ============================================================================ #
 test_that("log_shift() works as expected", {
-  expect_equal(log_shift(1:10, 1), log(1:10 + 1))
+  expect_equal(log_shift(1:10, 1), log(1:10 + 1)) # nolint: expect_identical_linter
 
   # expect errors if there are values < 0
   expect_error(

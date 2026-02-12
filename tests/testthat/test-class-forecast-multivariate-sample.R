@@ -1,40 +1,40 @@
 # ==============================================================================
-# as_forecast_multivariate_sample()
+# as_forecast_multivariate_sample() # nolint: commented_code_linter
 # ==============================================================================
 test_that("as_forecast_multivariate_sample() works as expected", {
   test <- na.omit(data.table::copy(example_sample_continuous))
   data.table::setnames(test,
-      old = c("observed", "predicted", "sample_id"),
-      new = c("obs", "pred", "sample")
+    old = c("observed", "predicted", "sample_id"),
+    new = c("obs", "pred", "sample")
   )
   expect_no_condition(
-      as_forecast_multivariate_sample(test,
-          observed = "obs", predicted = "pred",
-          forecast_unit = c(
-              "location", "model", "target_type",
-              "target_end_date", "horizon"
-          ),
-          joint_across = "location",
-          sample_id = "sample"
-      )
+    as_forecast_multivariate_sample(test,
+      observed = "obs", predicted = "pred",
+      forecast_unit = c(
+        "location", "model", "target_type",
+        "target_end_date", "horizon"
+      ),
+      joint_across = "location",
+      sample_id = "sample"
+    )
   )
 })
 
 test_that("as_forecast_multivariate_sample() creates expected structure", {
   test <- na.omit(data.table::copy(example_sample_continuous))
   data.table::setnames(test,
-      old = c("observed", "predicted", "sample_id"),
-      new = c("obs", "pred", "sample")
+    old = c("observed", "predicted", "sample_id"),
+    new = c("obs", "pred", "sample")
   )
 
   result <- as_forecast_multivariate_sample(test,
-      observed = "obs", predicted = "pred",
-      forecast_unit = c(
-          "location", "model", "target_type",
-          "target_end_date", "horizon"
-      ),
-      joint_across = "location",
-      sample_id = "sample"
+    observed = "obs", predicted = "pred",
+    forecast_unit = c(
+      "location", "model", "target_type",
+      "target_end_date", "horizon"
+    ),
+    joint_across = "location",
+    sample_id = "sample"
   )
 
   # Snapshot the print output to capture the structure
@@ -125,17 +125,17 @@ test_that(
 # set_grouping() and get_grouping()
 # ==============================================================================
 test_that("set_grouping() works as expected", {
-data <- example_multivariate_sample
-grouping <- c("model", "target_type", "target_end_date", "horizon")
+  data <- example_multivariate_sample
+  grouping <- c("model", "target_type", "target_end_date", "horizon")
 
-# Test basic functionality
-result <- set_grouping(data, grouping)
-expect_true(".mv_group_id" %in% names(result))
-expect_true(is.numeric(result$.mv_group_id))
+  # Test basic functionality
+  result <- set_grouping(data, grouping)
+  expect_true(".mv_group_id" %in% names(result))
+  expect_type(result$.mv_group_id, "integer")
 
-# Test that groups are consistent
-group_counts <- as.data.table(result)[, .N, by = .mv_group_id]
-expect_true(all(group_counts$N > 0))
+  # Test that groups are consistent
+  group_counts <- as.data.table(result)[, .N, by = .mv_group_id]
+  expect_true(all(group_counts$N > 0))
 })
 
 test_that("get_grouping() works as expected", {

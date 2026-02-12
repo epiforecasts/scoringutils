@@ -35,9 +35,8 @@
 #'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
 #' }
 #'
-#' library(magrittr) # pipe operator
-#' example_quantile %>%
-#'   as_forecast_quantile() %>%
+#' example_quantile |>
+#'   as_forecast_quantile() |>
 #'   get_forecast_counts(by = c("model", "target_type"))
 get_forecast_counts <- function(forecast,
                                 by = get_forecast_unit(forecast),
@@ -98,9 +97,8 @@ get_forecast_counts <- function(forecast,
 #' @export
 #' @examples
 #' library(ggplot2)
-#' library(magrittr) # pipe operator
-#' forecast_counts <- example_quantile %>%
-#'   as_forecast_quantile %>%
+#' forecast_counts <- example_quantile |>
+#'   as_forecast_quantile() |>
 #'   get_forecast_counts(by = c("model", "target_type", "target_end_date"))
 #' plot_forecast_counts(
 #'  forecast_counts, x = "target_end_date", show_counts = FALSE

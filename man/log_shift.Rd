@@ -26,12 +26,11 @@ natural logarithm to it.
 The output is computed as log(x + offset)
 }
 \examples{
-library(magrittr) # pipe operator
 log_shift(1:10)
 log_shift(0:9, offset = 1)
 
-example_quantile[observed > 0, ] \%>\%
-  as_forecast_quantile() \%>\%
+example_quantile[observed > 0, ] |>
+  as_forecast_quantile() |>
   transform_forecasts(fun = log_shift, offset = 1)
 }
 \references{

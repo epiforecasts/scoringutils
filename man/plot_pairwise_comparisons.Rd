@@ -28,9 +28,8 @@ between models.
 }
 \examples{
 library(ggplot2)
-library(magrittr) # pipe operator
-scores <- example_quantile \%>\%
-  as_forecast_quantile \%>\%
+scores <- example_quantile |>
+  as_forecast_quantile() |>
   score()
 pairwise <- get_pairwise_comparisons(scores, by = "target_type")
 plot_pairwise_comparisons(pairwise, type = "mean_scores_ratio") +

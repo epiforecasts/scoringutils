@@ -1,65 +1,71 @@
 # ==============================================================================
-# select_metrics()
+# select_metrics() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("`select_metrics` works as expected", {
-  expect_equal(
-    scoringutils:::select_metrics(get_metrics(example_point), select = NULL),
+  expect_identical(
+    scoringutils::select_metrics(get_metrics(example_point), select = NULL),
     get_metrics(example_point)
   )
 
-  expect_equal(
-    scoringutils:::select_metrics(get_metrics(example_point), select = NULL),
-    scoringutils:::select_metrics(get_metrics(example_point))
+  expect_identical(
+    scoringutils::select_metrics(get_metrics(example_point), select = NULL),
+    scoringutils::select_metrics(get_metrics(example_point))
   )
 
-  expect_equal(
-    names(scoringutils:::select_metrics(get_metrics(example_point), select = "ape")),
+  expect_named(
+    scoringutils::select_metrics(get_metrics(example_point), select = "ape"),
     "ape"
   )
 
-  expect_equal(
-    length(scoringutils:::select_metrics(get_metrics(example_point), select = NULL, exclude = "ape")),
+  expect_length(
+    scoringutils::select_metrics(
+      get_metrics(example_point), select = NULL, exclude = "ape"
+    ),
     length(get_metrics(example_point)) - 1
   )
 
   # if both select and exclude are specified, exclude is ignored
-  expect_equal(
-    names(scoringutils:::select_metrics(get_metrics(example_point), select = "ape", exclude = "ape")),
+  expect_named(
+    scoringutils::select_metrics(
+      get_metrics(example_point), select = "ape", exclude = "ape"
+    ),
     "ape"
   )
 
   # expect error if possibilities is not a list
   expect_error(
-    scoringutils:::select_metrics(get_metrics, select = NULL),
+    scoringutils::select_metrics(get_metrics, select = NULL),
     "Assertion on 'metrics' failed: Must be of type 'list', not 'closure'."
   )
 
   expect_type(
-    scoringutils:::select_metrics(get_metrics(example_point), select = NULL),
+    scoringutils::select_metrics(get_metrics(example_point), select = NULL),
     "list"
   )
 })
 
 
 # ==============================================================================
-# get_metrics()
+# get_metrics() # nolint: commented_code_linter
 # ==============================================================================
 # See additional tests for individual classes.
 test_that("selecting metrics in get_metrics() works as expected", {
-  expect_equal(
-    names(get_metrics(example_point, select = "ape")),
+  expect_named(
+    get_metrics(example_point, select = "ape"),
     "ape"
   )
 
-  expect_equal(
-    length(get_metrics(example_binary, select = NULL, exclude = "brier_score")),
+  expect_length(
+    get_metrics(example_binary, select = NULL, exclude = "brier_score"),
     length(get_metrics(example_binary)) - 1
   )
 
   # if both select and exclude are specified, exclude is ignored
-  expect_equal(
-    names(scoringutils:::select_metrics(get_metrics(example_quantile), select = "wis", exclude = "wis")),
+  expect_named(
+    scoringutils::select_metrics(
+      get_metrics(example_quantile), select = "wis", exclude = "wis"
+    ),
     "wis"
   )
 
@@ -86,11 +92,11 @@ test_that("customising metrics via purr::partial works correctly", {
 
   # Use the customised metric function
   values <- c(1, 2, NA, 4, 5)
-  expect_equal(custom_metric(values), 3)
+  expect_equal(custom_metric(values), 3) # nolint: expect_identical_linter
 
   # Test with a different metric function
   custom_metric <- purrr::partial(sum, na.rm = TRUE)
-  expect_equal(custom_metric(values), 12)
+  expect_equal(custom_metric(values), 12) # nolint: expect_identical_linter
 
   # Test with no additional arguments
   custom_metric <- purrr::partial(mean)
@@ -110,7 +116,7 @@ test_that("customising metrics via purr::partial works correctly", {
   dots <- "test"
   expect_output(
     # dots argument should be ignored and output should stay the same
-    expect_equal(custom_metric(dots = dots), c("hi", "hello", "I'm here")),
+    expect_identical(custom_metric(dots = dots), c("hi", "hello", "I'm here")),
     "I'm here"
   )
 })

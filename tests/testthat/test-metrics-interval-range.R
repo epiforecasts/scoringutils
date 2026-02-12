@@ -6,7 +6,7 @@ upper <- qnorm((1 - alpha / 2), rnorm(30, mean = 11:40))
 
 
 # ==============================================================================
-# assert_input_interval()
+# assert_input_interval() # nolint: commented_code_linter
 # ==============================================================================
 test_that("assert_input_interval() works as expected", {
   expect_no_condition(

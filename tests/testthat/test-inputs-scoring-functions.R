@@ -1,8 +1,5 @@
-
-
-
 # ==============================================================================
-# assert_dims_ok_point()
+# assert_dims_ok_point() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("assert_dims_ok_point() works as expected", {
@@ -24,7 +21,7 @@ test_that("assert_dims_ok_point() works as expected", {
 
 
 # ==============================================================================
-# check_input_sample()
+# check_input_sample() # nolint: commented_code_linter
 # ==============================================================================
 
 test_that("check_input_sample() works as expected", {

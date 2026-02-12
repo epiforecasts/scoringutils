@@ -6,8 +6,10 @@ metrics_no_cov <- get_metrics(
 )
 metrics_no_cov_no_ae <- get_metrics(
   example_quantile,
-  exclude = c("interval_coverage_50", "interval_coverage_90",
-              "ae_median")
+  exclude = c(
+    "interval_coverage_50", "interval_coverage_90",
+    "ae_median"
+  )
 )
 
 example_quantile_df <- as.data.frame(na.omit(example_quantile))

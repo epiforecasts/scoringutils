@@ -3,9 +3,8 @@ sum_scores <- suppressMessages(
 )
 
 test_that("plot_wis() throws an error if WIS components are missing", {
-  ex_score <- na.omit(example_quantile) %>%
-    as_forecast_quantile() %>%
-    score(metrics = get_metrics(., select = "wis"))
+  ex_forecast <- as_forecast_quantile(na.omit(example_quantile))
+  ex_score <- score(ex_forecast, metrics = get_metrics(ex_forecast, select = "wis"))
 
   expect_error(
     plot_wis(ex_score),

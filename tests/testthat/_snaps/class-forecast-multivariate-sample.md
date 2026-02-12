@@ -46,7 +46,7 @@
     Output
       Forecast type: multivariate_sample 
     Code
-      cat("Forecast unit:", paste(get_forecast_unit(result), collapse = ", "), "\n")
+      cat("Forecast unit:", toString(get_forecast_unit(result)), "\n")
     Output
       Forecast unit: location, model, target_type, target_end_date, horizon 
     Code
@@ -58,7 +58,7 @@
     Output
       Number of columns: 9 
     Code
-      cat("Column names:", paste(names(result), collapse = ", "), "\n")
+      cat("Column names:", toString(names(result)), "\n")
     Output
       Column names: predicted, sample_id, observed, location, model, target_type, target_end_date, horizon, .mv_group_id 
     Code
@@ -113,7 +113,7 @@
     Output
       Number of columns: 7 
     Code
-      cat("Column names:", paste(names(scores), collapse = ", "), "\n")
+      cat("Column names:", toString(names(scores)), "\n")
     Output
       Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, .mv_group_id 
     Code
@@ -126,8 +126,7 @@
     Output
       Number of non-NA energy scores: 224 
     Code
-      cat("Sample of energy scores:", paste(head(scores$energy_score, 5), collapse = ", "),
-      "\n")
+      cat("Sample of energy scores:", toString(head(scores$energy_score, 5)), "\n")
     Output
       Sample of energy scores: 23454.2837522622, 34263.4664789642, 67609.0941230609, 138.968094149042, 401.574009570395 
 
@@ -150,7 +149,7 @@
     Output
       Number of columns: 7 
     Code
-      cat("Column names:", paste(names(scores_specific), collapse = ", "), "\n")
+      cat("Column names:", toString(names(scores_specific)), "\n")
     Output
       Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, .mv_group_id 
     Code

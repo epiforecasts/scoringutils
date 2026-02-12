@@ -1,10 +1,14 @@
 factor_levels <- c("one", "two", "three")
 predicted_label <- factor(c("one", "two", "three"), levels = factor_levels)
 observed <- factor(c("one", "two", "two"), levels = factor_levels)
-predicted <- matrix(c(0.8, 0.1, 0.4,
-                      0.1, 0.2, 0.4,
-                      0.1, 0.7, 0.2),
-                    nrow = 3)
+predicted <- matrix(
+  c(
+    0.8, 0.1, 0.4,
+    0.1, 0.2, 0.4,
+    0.1, 0.7, 0.2
+  ),
+  nrow = 3
+)
 
 # ============================================================================ #
 # Input handling ===============================================================
@@ -59,10 +63,10 @@ test_that("Input checking for nominal forecasts works", {
 
   # a single observation
   expect_no_condition(
-    assert_input_nominal(observed[1], predicted[1, ], predicted_label),
+    assert_input_nominal(observed[1], predicted[1, ], predicted_label)
   )
   expect_no_condition(
-    assert_input_nominal(observed[1], as.numeric(predicted[1, ]), predicted_label),
+    assert_input_nominal(observed[1], as.numeric(predicted[1, ]), predicted_label)
   )
 
   # wrong dimensions
@@ -96,18 +100,18 @@ test_that("Input checking for nominal forecasts works", {
 # logs nominal =============================================================== #
 # ============================================================================ #
 test_that("logs_categorical() works as expected", {
-  expect_no_condition(
-    res <- logs_categorical(observed, predicted, predicted_label)
+  res <- expect_no_condition(
+    logs_categorical(observed, predicted, predicted_label)
   )
   res_manual <- -log(c(predicted[1, 1], predicted[2, 2], predicted[3, 2]))
-  expect_equal(res, res_manual)
+  expect_equal(res, res_manual) # nolint: expect_identical_linter
 
   # works with a single observations
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_categorical(observed[1], predicted[1, ], predicted_label),
     res_manual[1]
   )
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_categorical(observed[1], matrix(predicted[1, ], nrow = 1), predicted_label),
     res_manual[1]
   )
@@ -116,21 +120,21 @@ test_that("logs_categorical() works as expected", {
   # not materialised
   predicted2 <- predicted
   predicted2[2, c(1, 3)] <- c(NA, 0.8)
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_categorical(observed, predicted2, predicted_label),
     res_manual
   )
 
   # relevant NAs in predictions lead to NA outcomes
   predicted2[1, 1:2] <- c(NA, 0.9)
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_categorical(observed, predicted2, predicted_label),
     c(NA, res_manual[-1])
   )
 
   # NA values in observed values lead to NAs in result
   observed2 <- factor(c(NA, "two", "two"), levels = c("one", "two", "three"))
-  expect_equal(
+  expect_equal( # nolint: expect_identical_linter
     logs_categorical(observed2, predicted, predicted_label),
     c(NA, res_manual[-1])
   )
