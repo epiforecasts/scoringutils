@@ -5,6 +5,7 @@
 %   R/class-forecast-quantile.R, R/class-forecast-sample.R, R/score.R
 \name{score.forecast_binary}
 \alias{score.forecast_binary}
+\alias{score.forecast_multivariate_sample}
 \alias{score.forecast_sample_multivariate}
 \alias{score.forecast_nominal}
 \alias{score.forecast_ordinal}
@@ -15,6 +16,8 @@
 \title{Evaluate forecasts}
 \usage{
 \method{score}{forecast_binary}(forecast, metrics = get_metrics(forecast), ...)
+
+\method{score}{forecast_multivariate_sample}(forecast, metrics = get_metrics(forecast), ...)
 
 \method{score}{forecast_sample_multivariate}(forecast, metrics = get_metrics(forecast), ...)
 

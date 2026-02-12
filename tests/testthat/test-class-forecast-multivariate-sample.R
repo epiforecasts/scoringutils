@@ -43,35 +43,82 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
   # Snapshot the class and structure
   expect_snapshot({
       cat("Class:", class(result), "\n")
-      cat("Forecast type:", scoringutils:::get_forecast_type(result), "\n")
-      cat("Forecast unit:", paste(get_forecast_unit(result), collapse = ", "), "\n")
+      cat(
+        "Forecast type:",
+        scoringutils:::get_forecast_type(result), "\n"
+      )
+      cat(
+        "Forecast unit:",
+        paste(get_forecast_unit(result), collapse = ", "), "\n"
+      )
       cat("Number of rows:", nrow(result), "\n")
       cat("Number of columns:", ncol(result), "\n")
-      cat("Column names:", paste(names(result), collapse = ", "), "\n")
-      cat("Number of unique groups:", length(unique(result$.mv_group_id)), "\n")
+      cat(
+        "Column names:",
+        paste(names(result), collapse = ", "), "\n"
+      )
+      cat(
+        "Number of unique groups:",
+        length(unique(result$.mv_group_id)), "\n"
+      )
   })
 })
 
-
-# ==============================================================================
-# is_forecast_sample()
-# ==============================================================================
-test_that("is_forecast_sample() works as expected", {
-  expect_true(is_forecast_sample_multivariate(example_multivariate_sample))
-  expect_false(is_forecast_sample_multivariate(example_binary))
-  expect_false(is_forecast_sample(example_multivariate_sample))
-})
-
-
-# ==============================================================================
-# get_metrics.forecast_sample()
-# ==============================================================================
-
-test_that("get_metrics.forecast_sample_multivariate() works as expected", {
+test_that("class includes both new and deprecated class names", {
+  result <- as_forecast_multivariate_sample(
+    na.omit(data.table::copy(example_sample_continuous)),
+    joint_across = "location"
+  )
+  expect_true(inherits(result, "forecast_multivariate_sample"))
+  expect_true(inherits(result, "forecast_sample_multivariate"))
+  expect_true(inherits(result, "forecast"))
+  # New class should come before deprecated class
+  cls <- class(result)
   expect_true(
-      is.list(get_metrics(example_multivariate_sample))
+    which(cls == "forecast_multivariate_sample") <
+      which(cls == "forecast_sample_multivariate")
   )
 })
+
+
+# ==============================================================================
+# is_forecast_multivariate_sample()
+# ==============================================================================
+test_that("is_forecast_multivariate_sample() works as expected", {
+  expect_true(
+    is_forecast_multivariate_sample(example_multivariate_sample)
+  )
+  expect_false(
+    is_forecast_multivariate_sample(example_binary)
+  )
+  expect_false(
+    is_forecast_sample(example_multivariate_sample)
+  )
+})
+
+test_that("is_forecast_sample_multivariate() is deprecated", {
+  expect_warning(
+    result <- is_forecast_sample_multivariate(
+      example_multivariate_sample
+    ),
+    "deprecated"
+  )
+  expect_true(result)
+})
+
+
+# ==============================================================================
+# get_metrics.forecast_multivariate_sample()
+# ==============================================================================
+
+test_that(
+  "get_metrics.forecast_multivariate_sample() works as expected",
+  {
+    expect_true(
+        is.list(get_metrics(example_multivariate_sample))
+    )
+  }
+)
 
 
 # ==============================================================================
@@ -93,7 +140,9 @@ expect_true(all(group_counts$N > 0))
 
 test_that("get_grouping() works as expected", {
 data <- example_multivariate_sample
-grouping <- c("model", "target_type", "target_end_date", "horizon")
+grouping <- c(
+  "model", "target_type", "target_end_date", "horizon"
+)
 joint_across <- setdiff(get_forecast_unit(data), grouping)
 data <- scoringutils:::set_grouping(data, joint_across)
 
@@ -103,18 +152,21 @@ expect_type(result, "character")
 expect_true(all(grouping %in% result))
 })
 
-test_that("get_grouping() falls back to forecast_unit when mv_group_id is missing", {
-data <- example_multivariate_sample
+test_that(
+  "get_grouping() errors when mv_group_id is missing",
+  {
+    data <- example_multivariate_sample
 
-# Remove the mv_group_id column
-data_bad <- as.data.table(data)
-data_bad[, .mv_group_id := NULL]
+    # Remove the mv_group_id column
+    data_bad <- as.data.table(data)
+    data_bad[, .mv_group_id := NULL]
 
-expect_error(
-  get_grouping(data_bad),
-  "No column `.mv_group_id` found in the forecast object."
+    expect_error(
+      get_grouping(data_bad),
+      "No column `.mv_group_id` found in the forecast object."
+    )
+  }
 )
-})
 
 test_that("set_grouping() preserves existing keys correctly", {
 data <- example_multivariate_sample
@@ -136,102 +188,163 @@ setkeyv(data_with_keys, keys)  # Set some keys
 original_keys <- key(data_with_keys)
 expect_equal(original_keys, c("location", "model"))
 
-result_with_keys <- scoringutils:::set_grouping(data_with_keys, grouping)
-expect_equal(key(result_with_keys), original_keys)  # Should preserve original keys
+result_with_keys <- scoringutils:::set_grouping(
+  data_with_keys, grouping
+)
+expect_equal(key(result_with_keys), original_keys)
 
 # Test case 3: Verify functionality still works with keys preserved
 expect_true(".mv_group_id" %in% names(result_with_keys))
 expect_true(is.numeric(result_with_keys$.mv_group_id))
 
 # Test that groups are consistent
-group_counts <- as.data.table(result_with_keys)[, .N, by = .mv_group_id]
+group_counts <- as.data.table(
+  result_with_keys
+)[, .N, by = .mv_group_id]
 expect_true(all(group_counts$N > 0))
 })
 
 # ==============================================================================
-# score.forecast_sample_multivariate()
+# score.forecast_multivariate_sample()
 # ==============================================================================
-test_that("score.forecast_sample_multivariate() works as expected", {
-data <- example_multivariate_sample
+test_that(
+  "score.forecast_multivariate_sample() works as expected",
+  {
+    data <- example_multivariate_sample
 
-# Test basic scoring
-scores <- score(data)
-expect_true(is.data.table(scores))
-expect_true("energy_score" %in% names(scores))
+    # Test basic scoring
+    scores <- score(data)
+    expect_true(is.data.table(scores))
+    expect_true("energy_score" %in% names(scores))
 
-# Test with specific metrics
-scores <- score(data, metrics = list(energy_score = energy_score_multivariate))
-expect_true(is.data.table(scores))
-expect_true("energy_score" %in% names(scores))
+    # Test with specific metrics
+    scores <- score(
+      data,
+      metrics = list(
+        energy_score = energy_score_multivariate
+      )
+    )
+    expect_true(is.data.table(scores))
+    expect_true("energy_score" %in% names(scores))
 
-# Test that scores are numeric
-expect_true(is.numeric(scores$energy_score))
-})
+    # Test that scores are numeric
+    expect_true(is.numeric(scores$energy_score))
+  }
+)
 
-test_that("score.forecast_sample_multivariate() creates expected output structure", {
-data <- example_multivariate_sample
+test_that(
+  "score.forecast_multivariate_sample() creates expected output",
+  {
+    data <- example_multivariate_sample
 
-# Test basic scoring and capture snapshot
-scores <- score(data)
+    # Test basic scoring and capture snapshot
+    scores <- score(data)
 
-# Snapshot the print output to capture the structure
-expect_snapshot(print(scores))
+    # Snapshot the print output to capture the structure
+    expect_snapshot(print(scores))
 
-# Snapshot the detailed structure
-expect_snapshot({
-  cat("Class:", class(scores), "\n")
-  cat("Number of rows:", nrow(scores), "\n")
-  cat("Number of columns:", ncol(scores), "\n")
-  cat("Column names:", paste(names(scores), collapse = ", "), "\n")
-  cat("Energy score range:", paste(range(scores$energy_score, na.rm = TRUE), collapse = " to "), "\n")
-  cat("Number of non-NA energy scores:", sum(!is.na(scores$energy_score)), "\n")
-  cat("Sample of energy scores:", paste(head(scores$energy_score, 5), collapse = ", "), "\n")
-})
+    # Snapshot the detailed structure
+    expect_snapshot({
+      cat("Class:", class(scores), "\n")
+      cat("Number of rows:", nrow(scores), "\n")
+      cat("Number of columns:", ncol(scores), "\n")
+      cat(
+        "Column names:",
+        paste(names(scores), collapse = ", "), "\n"
+      )
+      cat(
+        "Energy score range:",
+        paste(
+          range(scores$energy_score, na.rm = TRUE),
+          collapse = " to "
+        ), "\n"
+      )
+      cat(
+        "Number of non-NA energy scores:",
+        sum(!is.na(scores$energy_score)), "\n"
+      )
+      cat(
+        "Sample of energy scores:",
+        paste(
+          head(scores$energy_score, 5), collapse = ", "
+        ), "\n"
+      )
+    })
 
-# Test with specific metrics and capture snapshot
-scores_specific <- score(data, metrics = list(energy_score = energy_score_multivariate))
+    # Test with specific metrics and capture snapshot
+    scores_specific <- score(
+      data,
+      metrics = list(
+        energy_score = energy_score_multivariate
+      )
+    )
 
-expect_snapshot({
-  cat("=== Specific Metrics Test ===\n")
-  cat("Class:", class(scores_specific), "\n")
-  cat("Number of rows:", nrow(scores_specific), "\n")
-  cat("Number of columns:", ncol(scores_specific), "\n")
-  cat("Column names:", paste(names(scores_specific), collapse = ", "), "\n")
-  cat("Energy score range:", paste(range(scores_specific$energy_score, na.rm = TRUE), collapse = " to "), "\n")
-})
-})
+    expect_snapshot({
+      cat("=== Specific Metrics Test ===\n")
+      cat("Class:", class(scores_specific), "\n")
+      cat("Number of rows:", nrow(scores_specific), "\n")
+      cat(
+        "Number of columns:", ncol(scores_specific), "\n"
+      )
+      cat(
+        "Column names:",
+        paste(names(scores_specific), collapse = ", "), "\n"
+      )
+      cat(
+        "Energy score range:",
+        paste(
+          range(
+            scores_specific$energy_score, na.rm = TRUE
+          ),
+          collapse = " to "
+        ), "\n"
+      )
+    })
+  }
+)
 
 # ==============================================================================
 # Error cases for as_forecast_multivariate_sample()
 # ==============================================================================
-test_that("as_forecast_multivariate_sample() handles errors appropriately", {
-data <- as.data.table(example_multivariate_sample)
+test_that(
+  "as_forecast_multivariate_sample() handles errors appropriately",
+  {
+    data <- as.data.table(example_multivariate_sample)
 
-# Test with missing required columns
-data_bad <- data[, !"sample_id"]
-expect_error(
-  as_forecast_multivariate_sample(data_bad, joint_across = c("location", "location_name")),
-  "Assertion on 'forecast' failed: Column 'sample_id' not found in data."
-)
+    # Test with missing required columns
+    data_bad <- data[, !"sample_id"]
+    expect_error(
+      as_forecast_multivariate_sample(
+        data_bad,
+        joint_across = c("location", "location_name")
+      ),
+      "Column 'sample_id' not found in data."
+    )
 
-# Test with inconsistent sample lengths within groups
-data_bad <- copy(data)
-data_bad <- rbind(data_bad[1000:1010], data_bad)
-expect_error(
-  as_forecast_multivariate_sample(data_bad, joint_across = c("location", "location_name")),
-  "All univariate forecasts \\(as defined by the univariate forecast unit\\) in a group must have the same number of samples"
-)
+    # Test with inconsistent sample lengths within groups
+    data_bad <- copy(data)
+    data_bad <- rbind(data_bad[1000:1010], data_bad)
+    expect_error(
+      as_forecast_multivariate_sample(
+        data_bad,
+        joint_across = c("location", "location_name")
+      ),
+      "All univariate forecasts"
+    )
 
-# Test with inconsistent sample lengths after forecast object creation
-expect_warning(
-  example_multivariate_sample[-(1000:1010), ],
-  "Found the following group with an inconsistent sample length"
-)
+    # Test with inconsistent sample lengths after object creation
+    expect_warning(
+      example_multivariate_sample[-(1000:1010), ],
+      "Found the following group with an inconsistent"
+    )
 
-  # Test with invalid grouping columns
-expect_error(
-  as_forecast_multivariate_sample(data,
-    joint_across = c("nonexistent_column")),
-  "Must be a subset of"
+    # Test with invalid grouping columns
+    expect_error(
+      as_forecast_multivariate_sample(
+        data,
+        joint_across = c("nonexistent_column")
+      ),
+      "Must be a subset of"
+    )
+  }
 )
-})

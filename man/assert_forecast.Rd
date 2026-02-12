@@ -4,6 +4,7 @@
 %   R/class-forecast-quantile.R, R/class-forecast-sample.R, R/class-forecast.R
 \name{assert_forecast.forecast_binary}
 \alias{assert_forecast.forecast_binary}
+\alias{assert_forecast.forecast_multivariate_sample}
 \alias{assert_forecast.forecast_sample_multivariate}
 \alias{assert_forecast.forecast_point}
 \alias{assert_forecast.forecast_quantile}
@@ -13,6 +14,8 @@
 \title{Assert that input is a forecast object and passes validations}
 \usage{
 \method{assert_forecast}{forecast_binary}(forecast, forecast_type = NULL, verbose = TRUE, ...)
+
+\method{assert_forecast}{forecast_multivariate_sample}(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
 \method{assert_forecast}{forecast_sample_multivariate}(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
