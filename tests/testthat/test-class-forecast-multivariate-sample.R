@@ -336,6 +336,13 @@ test_that(
       "Found the following group with an inconsistent"
     )
 
+    # Test that joint_across is required when .mv_group_id is absent
+    data_no_group <- data[, !".mv_group_id"]
+    expect_error(
+      as_forecast_multivariate_sample(data_no_group),
+      "joint_across.*must be provided"
+    )
+
     # Test with invalid grouping columns
     expect_error(
       as_forecast_multivariate_sample(
