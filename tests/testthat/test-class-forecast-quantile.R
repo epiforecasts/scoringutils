@@ -364,15 +364,14 @@ test_that("score() works even if only some quantiles are missing", {
     scores_temp <- score(asymm, metrics = metrics)
     summarise_scores(scores_temp, by = "model")
   })
-  expect_warning(
-    expect_warning({
-      scores_temp <- score(asymm, metrics = metrics)
-      summarise_scores(scores_temp, by = "model")
-    },
-    "Computation for `interval_coverage_50` failed."
-    ),
-    "Computation for `interval_coverage_90` failed."
+  w <- expect_warning({
+    scores_temp <- score(asymm, metrics = metrics)
+    summarise_scores(scores_temp, by = "model")
+  },
+  "Computation failed for"
   )
+  expect_match(conditionMessage(w), "interval_coverage_50", fixed = TRUE)
+  expect_match(conditionMessage(w), "interval_coverage_90", fixed = TRUE)
 
   # expect a failure with the regular wis wihtout ma.rm=TRUE
   expect_warning(
@@ -399,7 +398,7 @@ test_that("score() works even if only some quantiles are missing", {
   expect_message(
     expect_warning(
       score(test),
-      "Computation for `ae_median` failed."
+      "Computation failed for"
     ),
     "interpolating median from the two innermost quantiles"
   )

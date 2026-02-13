@@ -91,14 +91,33 @@ test_that("score() works with only one sample", {
   # with only one sample, dss returns NaN and log_score fails
   onesample <- na.omit(example_sample_continuous)[sample_id == 20]
   scoreonesample <- suppressWarnings(score(onesample))
-  expect_warning(
+  w <- expect_warning(
     score(onesample),
-    "Computation for `log_score` failed. Error: need at least 2 data points."
+    "log_score"
   )
+  expect_match(conditionMessage(w), "need at least 2 data points")
 
   # verify that all goes well with two samples
   twosample <- na.omit(example_sample_continuous)[sample_id %in% c(20, 21)]
   expect_no_condition(score(twosample))
+})
+
+test_that("score() emits a single batched warning when multiple metrics fail", {
+  onesample <- na.omit(example_sample_continuous)[sample_id == 20]
+  always_fail <- function(observed, predicted) stop("intentional")
+  metrics <- c(
+    get_metrics(onesample),
+    list("always_fail" = always_fail)
+  )
+  w <- expect_warning(
+    score(onesample, metrics = metrics)
+  )
+  msg <- conditionMessage(w)
+  # both failures mentioned in a single warning
+
+  expect_match(msg, "log_score", fixed = TRUE)
+  expect_match(msg, "always_fail", fixed = TRUE)
+  expect_match(msg, "intentional", fixed = TRUE)
 })
 
 
@@ -135,6 +154,71 @@ test_that("apply_metrics() works", {
       dt$x, dt$test
     )
   )
+})
+
+test_that("apply_metrics() emits a single batched warning when multiple metrics fail", {
+  dt <- data.table::data.table(x = 1:10)
+  fail1 <- function(x) stop("error in fail1")
+  fail2 <- function(x) stop("error in fail2")
+  good <- function(x) x + 1
+
+  w <- expect_warning(
+    scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+      forecast = dt,
+      metrics = list("fail1" = fail1, "good" = good, "fail2" = fail2),
+      dt$x
+    )
+  )
+  # single warning mentions both failed metrics
+  expect_match(conditionMessage(w), "fail1", fixed = TRUE)
+  expect_match(conditionMessage(w), "fail2", fixed = TRUE)
+  expect_match(conditionMessage(w), "error in fail1", fixed = TRUE)
+  expect_match(conditionMessage(w), "error in fail2", fixed = TRUE)
+  # successful metric is computed
+
+  expect_true("good" %in% names(dt))
+  # failed metrics are not present
+  expect_false("fail1" %in% names(dt))
+  expect_false("fail2" %in% names(dt))
+})
+
+test_that("apply_metrics() emits no warning when all metrics succeed", {
+  dt <- data.table::data.table(x = 1:10)
+  m1 <- function(x) x + 1
+  m2 <- function(x) x * 2
+  expect_no_condition(
+    scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+      forecast = dt,
+      metrics = list("m1" = m1, "m2" = m2),
+      dt$x
+    )
+  )
+  expect_true("m1" %in% names(dt))
+  expect_true("m2" %in% names(dt))
+  expect_equal(dt$m1, 2:11) # nolint: expect_identical_linter
+  expect_equal(dt$m2, (1:10) * 2) # nolint: expect_identical_linter
+})
+
+test_that("batched warning message includes metric name and error details for each failure", {
+  dt <- data.table::data.table(x = 1:5)
+  bad_a <- function(x) stop("missing argument foo")
+  bad_b <- function(x) stop("division by zero")
+  ok <- function(x) x
+
+  w <- expect_warning(
+    scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+      forecast = dt,
+      metrics = list("bad_a" = bad_a, "ok" = ok, "bad_b" = bad_b),
+      dt$x
+    )
+  )
+  msg <- conditionMessage(w)
+  expect_match(msg, "bad_a", fixed = TRUE)
+  expect_match(msg, "missing argument foo", fixed = TRUE)
+  expect_match(msg, "bad_b", fixed = TRUE)
+  expect_match(msg, "division by zero", fixed = TRUE)
+  # successful metric not mentioned in warning
+  expect_false(grepl("\\bok\\b", msg))
 })
 
 # attributes
@@ -189,10 +273,18 @@ test_that("run_safely() works as expected", {
   }
   expect_identical(run_safely(2, fun = f), 2)
   expect_identical(run_safely(2, y = 3, fun = f), 2)
-  expect_warning(
-    run_safely(fun = f, metric_name = "f"),
-    'Computation for `f` failed. Error: argument "x" is missing, with no default',
-    fixed = TRUE
-  )
-  expect_null(suppressWarnings(run_safely(y = 3, fun = f, metric_name = "f")))
+  # run_safely() no longer warns directly; it returns error info for batching
+  result <- run_safely(fun = f, metric_name = "f")
+  expect_null(result$result)
+  expect_type(result$error, "character")
+  expect_match(result$error, "missing, with no default")
+
+  result2 <- run_safely(y = 3, fun = f, metric_name = "f")
+  expect_null(result2$result)
+})
+
+test_that("run_safely() returns result directly on success", {
+  f <- function(x) x + 1
+  result <- run_safely(2, fun = f, metric_name = "f")
+  expect_identical(result, 3)
 })
