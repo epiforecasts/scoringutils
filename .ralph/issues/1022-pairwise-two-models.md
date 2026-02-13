@@ -116,3 +116,25 @@ This must be changed to `expect_warning()` (with the corrected spelling "compari
 ### Note: Typo fix
 
 The error/warning message at line 166 of `R/pairwise-comparisons.R` contains the typo "compairisons" which should be corrected to "comparisons". This affects the message pattern in the existing test at line 336 as well.
+
+## Resolution
+
+**Implemented**: 2026-02-13
+**Files changed**:
+- `R/pairwise-comparisons.R` — Changed `cli_abort()` to `cli_warn()` for the two-model-with-baseline case; added `!is.null(baseline)` guard; fixed "compairisons" typo; improved warning message
+- `tests/testthat/test-pairwise_comparison.R` — Updated existing `expect_error` to `expect_warning`; added 5 new test cases for two-model scenarios
+
+### What was changed
+The check at line 161 of `R/pairwise-comparisons.R` previously called `cli_abort()` whenever `length(setdiff(comparators, baseline)) < 2`, blocking the legitimate case of 2 models with one as baseline. The fix:
+1. Added `!is.null(baseline)` guard so the check only applies when a baseline is specified (single-model without baseline case is caught downstream by `pairwise_comparison_one_group()`)
+2. Changed `cli_abort()` to `cli_warn()` so the function proceeds with a warning instead of erroring
+3. Fixed the "compairisons" typo to "comparisons" and improved the message
+
+### Test results
+- `test_that("get_pairwise_comparisons() warns but works with two models and a baseline")` — PASS
+- `test_that("add_relative_skill() warns but works with two models and a baseline")` — PASS
+- `test_that("get_pairwise_comparisons() two-model ratio is mathematically correct")` — PASS
+- `test_that("get_pairwise_comparisons() still errors with only one model")` — PASS
+- `test_that("two models without baseline still works without warning")` — PASS
+- Full test suite — PASS (695 tests)
+- R CMD check — 0 errors, 0 warnings, 2 notes (pre-existing)
