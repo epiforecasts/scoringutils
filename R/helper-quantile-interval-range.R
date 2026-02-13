@@ -68,7 +68,7 @@ quantile_to_interval_dataframe <- function(forecast,
   forecast <- as.data.table(forecast)
 
   forecast[, boundary := ifelse(quantile_level <= 0.5, "lower", "upper")]
-  forecast[, interval_range := get_range_from_quantile(quantile_level)]
+  forecast[, interval_range := get_interval_range(quantile_level)]
 
   # add median quantile
   median <- forecast[quantile_level == 0.5, ]
@@ -172,7 +172,7 @@ sample_to_interval_long <- function(data,
 #' Get interval range belonging to a quantile
 #' @description
 #' Every quantile can be thought of either as the lower or the
-#' upper bound of a symmetric central prediction interval. This helper function
+#' upper bound of a symmetric central prediction interval. This function
 #' returns the range of the central prediction interval to which the quantile
 #' belongs.
 #'
@@ -181,8 +181,10 @@ sample_to_interval_long <- function(data,
 #' use cases, but it is something to be aware of.
 #' @param quantile_level A numeric vector of quantile levels of size N.
 #' @returns a numeric vector of interval ranges of size N
-#' @keywords internal
-get_range_from_quantile <- function(quantile_level) {
+#' @examples
+#' get_interval_range(c(0.05, 0.25, 0.5, 0.75, 0.95))
+#' @export
+get_interval_range <- function(quantile_level) {
   boundary <- ifelse(quantile_level <= 0.5, "lower", "upper")
   interval_range <- ifelse(
     boundary == "lower",
@@ -190,4 +192,33 @@ get_range_from_quantile <- function(quantile_level) {
     round((2 * quantile_level - 1) * 100, digits = 10)
   )
   return(interval_range)
+}
+
+
+#' Add interval range column to a data.table with quantile-level forecasts
+#'
+#' @description
+#' Adds an `interval_range` column to a data.table that has a
+#' `quantile_level` column. The interval range is computed using
+#' [get_interval_range()].
+#'
+#' @param data A data.table (or object coercible to data.table) with a
+#'   `quantile_level` column.
+#' @returns A data.table with an additional `interval_range` column.
+#' @examples
+#' library(data.table)
+#' dt <- data.table(
+#'   observed = 5,
+#'   predicted = c(1, 3, 5, 7, 9),
+#'   quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95)
+#' )
+#' add_interval_range(dt)
+#' @importFrom data.table as.data.table
+#' @importFrom checkmate assert_names
+#' @export
+add_interval_range <- function(data) {
+  data <- ensure_data.table(data)
+  assert_names(colnames(data), must.include = "quantile_level")
+  data[, interval_range := get_interval_range(quantile_level)]
+  return(data[])
 }
