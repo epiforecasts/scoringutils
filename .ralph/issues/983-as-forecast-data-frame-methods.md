@@ -209,3 +209,45 @@
 - `expect_s3_class(result, "forecast_binary")`
 **Fails now because**:
 - Should PASS both before and after. But it's an important edge case because tibble is a common input type and has class `c("tbl_df", "tbl", "data.frame")`.
+
+## Resolution
+
+**Implemented**: 2026-02-13
+**Files changed**:
+- `R/class-forecast-binary.R` — renamed `.default` to `.data.frame`, added new `.default` that errors
+- `R/class-forecast-point.R` — same pattern
+- `R/class-forecast-sample.R` — same pattern
+- `R/class-forecast-quantile.R` — same pattern
+- `R/class-forecast-nominal.R` — same pattern
+- `R/class-forecast-ordinal.R` — same pattern
+- `R/class-forecast-multivariate-sample.R` — same pattern
+- `NAMESPACE` — regenerated to register `.data.frame` and `.default` methods
+- `DESCRIPTION` — added `tibble` to Suggests for test coverage
+- `man/as_forecast_*.Rd` — regenerated documentation
+- `tests/testthat/test-class-forecast.R` — 5 new cross-cutting tests (data.table dispatch, .default error, matrix error, column renaming, tibble)
+- `tests/testthat/test-class-forecast-binary.R` — 1 new data.frame regression test
+- `tests/testthat/test-class-forecast-quantile.R` — 1 new data.frame regression test
+- `tests/testthat/test-class-forecast-sample.R` — 1 new data.frame regression test
+- `tests/testthat/test-class-forecast-point.R` — 1 new data.frame regression test
+- `tests/testthat/test-class-forecast-nominal.R` — 1 new data.frame regression test
+- `tests/testthat/test-class-forecast-ordinal.R` — 1 new data.frame regression test
+- `tests/testthat/test-class-forecast-multivariate-sample.R` — 1 new data.frame regression test
+
+### What was changed
+Renamed all 7 `.default` methods for `as_forecast_*()` generics to `.data.frame` methods. Created new `.default` methods that immediately error with a clear message: "Input must be a data.frame or similar (e.g. a data.table or tibble), not <class>." S3 dispatch ensures data.table and tibble inputs still route to the `.data.frame` method since both inherit from data.frame.
+
+### Test results
+- `test_that("as_forecast_binary.data.frame works with a plain data.frame")` — PASS
+- `test_that("as_forecast_quantile.data.frame works with a plain data.frame")` — PASS
+- `test_that("as_forecast_sample.data.frame works with a plain data.frame")` — PASS
+- `test_that("as_forecast_point.data.frame works with a plain data.frame")` — PASS
+- `test_that("as_forecast_nominal.data.frame works with a plain data.frame")` — PASS
+- `test_that("as_forecast_ordinal.data.frame works with a plain data.frame")` — PASS
+- `test_that("as_forecast_multivariate_sample.data.frame works with a plain data.frame")` — PASS
+- `test_that("as_forecast_*.data.frame methods work with data.table input via S3 dispatch")` — PASS
+- `test_that("as_forecast_*.default errors with helpful message for non-data.frame input")` — PASS
+- `test_that("as_forecast_*.default errors for matrix input")` — PASS
+- `test_that("as_forecast_*.data.frame methods preserve column renaming functionality")` — PASS
+- `test_that("as_forecast_*.data.frame methods work with tibble input")` — PASS
+- Full test suite — PASS (712 tests)
+- R CMD check — 0 errors, 0 warnings, 2 notes (pre-existing)
