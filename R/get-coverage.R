@@ -68,7 +68,7 @@ get_coverage <- function(forecast, by = "model") {
   # convert to wide interval format and compute interval coverage --------------
   interval_forecast <- quantile_to_interval(forecast, format = "wide")
   interval_forecast[,
-    interval_coverage := (observed <= upper) & (observed >= lower)
+    interval_coverage := check_interval_coverage(observed, lower, upper)
   ][, c("lower", "upper", "observed") := NULL]
   interval_forecast[, interval_coverage_deviation :=
                       interval_coverage - interval_range / 100]

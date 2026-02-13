@@ -687,6 +687,25 @@ test_that("interval_coverage rejects wrong inputs", {
   )
 })
 
+test_that("interval_coverage() produces correct results for boundary cases", {
+  # Observation exactly on lower bound, upper bound, and inside
+  obs <- c(3, 7, 5)
+  pred <- matrix(c(3, 5, 7), nrow = 3, ncol = 3, byrow = TRUE)
+  ql <- c(0.25, 0.5, 0.75)
+  result <- interval_coverage(obs, pred, ql, interval_range = 50)
+  expect_equal(result, c(TRUE, TRUE, TRUE))
+})
+
+test_that("interval_coverage() handles multiple interval ranges correctly", {
+  obs <- c(5)
+  pred <- matrix(c(1, 3, 5, 7, 9), nrow = 1)
+  ql <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+  # 50% interval: [3, 7]
+  expect_equal(interval_coverage(obs, pred, ql, interval_range = 50), TRUE)
+  # 80% interval: [1, 9]
+  expect_equal(interval_coverage(obs, pred, ql, interval_range = 80), TRUE)
+})
+
 test_that("interval_coverage_quantile throws a warning when a required quantile is not available", {
   dropped_quantile_pred <- predicted[, -4]
   dropped_quantiles <- quantile_level[-4]
