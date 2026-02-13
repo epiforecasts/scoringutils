@@ -43,3 +43,19 @@ The tests below verify the configuration is correct and that the underlying R do
 - `expect_true(any(grepl(...)))` — confirming LaTeX documentation is present and hasn't been accidentally removed
 **Fails now because**:
 - This test would actually PASS now (the LaTeX is already present — it just doesn't render). This is a regression-prevention test ensuring the formulas remain in the docs. Combined with Test 1, these tests ensure the config + content are both in place.
+
+## Resolution
+
+**Implemented**: 2026-02-13
+**Files changed**:
+- `_pkgdown.yml` — Added `math-rendering: katex` under `template:` key
+- `tests/testthat/test-pkgdown-config.R` — New test file with 2 regression-prevention tests
+
+### What was changed
+Added `math-rendering: katex` to the `template:` section of `_pkgdown.yml`. pkgdown defaults to `mathml` which cannot render the 63 `\eqn{}`/`\deqn{}` LaTeX expressions in function reference pages. The `katex` renderer handles these correctly. Used plain text matching (grep) instead of `yaml::read_yaml()` to avoid adding a test dependency. Both tests skip gracefully during R CMD check since `_pkgdown.yml` and R source files aren't available in the installed package tree.
+
+### Test results
+- `test_that("_pkgdown.yml has math-rendering configured")` — PASS
+- `test_that("R documentation files with LaTeX formulas exist and are parseable")` — PASS
+- Full test suite — PASS (688 tests)
+- R CMD check — 0 errors, 0 warnings, 2 pre-existing notes
