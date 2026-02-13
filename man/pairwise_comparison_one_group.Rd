@@ -10,7 +10,9 @@ pairwise_comparison_one_group(
   baseline,
   compare = "model",
   by,
-  ...
+  test_type = c("non_parametric", "permutation"),
+  one_sided = FALSE,
+  n_permutations = 999
 )
 }
 \arguments{
@@ -37,8 +39,19 @@ will be one relative skill score per distinct entry of the column selected
 in \code{compare}. If further columns are given here, for example, \code{by = "location"} with \code{compare = "model"}, then one separate relative skill
 score is calculated for every model in every location.}
 
-\item{...}{Additional arguments for the comparison between two models. See
-\code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
+\item{test_type}{Character, either "non_parametric" (the default),
+"permutation", or NULL. Determines which test is used to compute
+p-values. "non_parametric" uses a paired Wilcoxon signed-rank test,
+"permutation" uses a permutation test. If NULL, no test is conducted
+and p-values will be \code{NA}. See \code{\link[=compare_forecasts]{compare_forecasts()}} for details.}
+
+\item{one_sided}{Boolean, default is \code{FALSE}. Whether to conduct a
+one-sided instead of a two-sided test to determine significance in a
+pairwise comparison.}
+
+\item{n_permutations}{Numeric, the number of permutations for a
+permutation test. Default is 999. Only used if
+\code{test_type = "permutation"}.}
 }
 \value{
 A data.table with the results of pairwise comparisons

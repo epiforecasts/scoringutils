@@ -75,8 +75,17 @@
 #'   given, then a scaled relative skill with respect to the baseline will be
 #'   returned. By default (`NULL`), relative skill will not be scaled with
 #'   respect to a baseline model.
-#' @param ... Additional arguments for the comparison between two models. See
-#'   [compare_forecasts()] for more information.
+#' @param test_type Character, either "non_parametric" (the default),
+#'   "permutation", or NULL. Determines which test is used to compute
+#'   p-values. "non_parametric" uses a paired Wilcoxon signed-rank test,
+#'   "permutation" uses a permutation test. If NULL, no test is conducted
+#'   and p-values will be `NA`. See [compare_forecasts()] for details.
+#' @param one_sided Boolean, default is `FALSE`. Whether to conduct a
+#'   one-sided instead of a two-sided test to determine significance in a
+#'   pairwise comparison.
+#' @param n_permutations Numeric, the number of permutations for a
+#'   permutation test. Default is 999. Only used if
+#'   `test_type = "permutation"`.
 #' @inheritParams summarise_scores
 #' @returns A data.table with the results of pairwise comparisons
 #' containing the mean score ratios (`mean_scores_ratio`),
@@ -118,7 +127,9 @@ get_pairwise_comparisons <- function(
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
-  ...
+  test_type = c("non_parametric", "permutation"),
+  one_sided = FALSE,
+  n_permutations = 999
 ) {
 
   # input checks ---------------------------------------------------------------
@@ -244,7 +255,9 @@ get_pairwise_comparisons <- function(
         baseline = baseline,
         compare = compare,
         by = by,
-        ...
+        test_type = test_type,
+        one_sided = one_sided,
+        n_permutations = n_permutations
       )
     }
   )
@@ -275,7 +288,9 @@ pairwise_comparison_one_group <- function(scores,
                                           baseline,
                                           compare = "model",
                                           by,
-                                          ...) {
+                                          test_type = c("non_parametric", "permutation"),
+                                          one_sided = FALSE,
+                                          n_permutations = 999) {
   if (!(compare %in% names(scores))) {
     cli_abort(
       "pairwise comparisons require a column as given by `compare`"
@@ -307,7 +322,9 @@ pairwise_comparison_one_group <- function(scores,
     name_comparator1 = ..compare,
     name_comparator2 = compare_against,
     metric = metric,
-    ...
+    test_type = test_type,
+    one_sided = one_sided,
+    n_permutations = n_permutations
   ),
   by = seq_len(NROW(combinations))
   ]
@@ -588,7 +605,9 @@ add_relative_skill <- function(
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
-  ...
+  test_type = c("non_parametric", "permutation"),
+  one_sided = FALSE,
+  n_permutations = 999
 ) {
 
   # input checks are done in `get_pairwise_comparisons()`
@@ -599,7 +618,9 @@ add_relative_skill <- function(
     baseline = baseline,
     compare = compare,
     by = by,
-    ...
+    test_type = test_type,
+    one_sided = one_sided,
+    n_permutations = n_permutations
   )
 
   # store original metrics
