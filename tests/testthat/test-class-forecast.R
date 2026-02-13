@@ -5,6 +5,82 @@
 
 
 # ==============================================================================
+# as_forecast_*.data.frame dispatch and .default error handling
+# ==============================================================================
+
+test_that("as_forecast_*.data.frame methods work with data.table input via S3 dispatch", {
+  expect_s3_class(
+    suppressMessages(as_forecast_binary(na.omit(example_binary))),
+    "forecast_binary"
+  )
+  expect_s3_class(
+    as_forecast_quantile(na.omit(example_quantile)),
+    "forecast_quantile"
+  )
+  expect_s3_class(
+    as_forecast_sample(na.omit(example_sample_continuous)),
+    "forecast_sample"
+  )
+  expect_s3_class(
+    as_forecast_point(na.omit(example_point)),
+    "forecast_point"
+  )
+  expect_s3_class(
+    as_forecast_nominal(na.omit(example_nominal)),
+    "forecast_nominal"
+  )
+  expect_s3_class(
+    as_forecast_ordinal(na.omit(example_ordinal)),
+    "forecast_ordinal"
+  )
+})
+
+test_that("as_forecast_*.default errors with helpful message for non-data.frame input", {
+  vec <- 1:10
+  mat <- matrix(1:12, nrow = 3)
+  lst <- list(a = 1, b = 2)
+  chr <- "not a data.frame"
+
+  expect_error(as_forecast_binary(vec), "data.frame")
+  expect_error(as_forecast_binary(mat), "data.frame")
+  expect_error(as_forecast_binary(lst), "data.frame")
+  expect_error(as_forecast_binary(chr), "data.frame")
+
+  expect_error(as_forecast_sample(vec), "data.frame")
+  expect_error(as_forecast_quantile(mat), "data.frame")
+})
+
+test_that("as_forecast_*.default errors for matrix input", {
+  mat <- matrix(1:20, nrow = 4,
+    dimnames = list(NULL, c("observed", "predicted", "model", "date", "sample_id"))
+  )
+  expect_error(as_forecast_sample(mat), "data.frame")
+})
+
+test_that("as_forecast_*.data.frame methods preserve column renaming functionality", {
+  set.seed(123)
+  df <- data.frame(
+    model = rep("m1", 10),
+    date = as.Date("2020-01-01") + 1:10,
+    obs = 1:10,
+    pred = rnorm(10),
+    sid = rep(1:2, each = 5)
+  )
+  result <- as_forecast_sample(df, observed = "obs", predicted = "pred", sample_id = "sid")
+  expect_true("observed" %in% colnames(result))
+  expect_true("predicted" %in% colnames(result))
+  expect_true("sample_id" %in% colnames(result))
+})
+
+test_that("as_forecast_*.data.frame methods work with tibble input", {
+  skip_if_not_installed("tibble")
+  tbl <- tibble::as_tibble(na.omit(as.data.frame(example_binary)))
+  result <- expect_no_error(as_forecast_binary(tbl))
+  expect_s3_class(result, "forecast_binary")
+})
+
+
+# ==============================================================================
 # is_forecast() # nolint: commented_code_linter
 # ==============================================================================
 

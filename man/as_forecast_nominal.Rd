@@ -2,12 +2,13 @@
 % Please edit documentation in R/class-forecast-nominal.R
 \name{as_forecast_nominal}
 \alias{as_forecast_nominal}
+\alias{as_forecast_nominal.data.frame}
 \alias{as_forecast_nominal.default}
 \title{Create a \code{forecast} object for nominal forecasts}
 \usage{
 as_forecast_nominal(data, ...)
 
-\method{as_forecast_nominal}{default}(
+\method{as_forecast_nominal}{data.frame}(
   data,
   forecast_unit = NULL,
   observed = NULL,
@@ -15,6 +16,8 @@ as_forecast_nominal(data, ...)
   predicted_label = NULL,
   ...
 )
+
+\method{as_forecast_nominal}{default}(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.

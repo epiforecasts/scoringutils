@@ -48,14 +48,14 @@ as_forecast_ordinal <- function(data, ...) {
 #'   the outcome to which a predicted probability corresponds to.
 #'   This column will be renamed to "predicted_label".
 #' @export
-#' @method as_forecast_ordinal default
+#' @method as_forecast_ordinal data.frame
 #' @importFrom cli cli_warn
-as_forecast_ordinal.default <- function(data,
-                                        forecast_unit = NULL,
-                                        observed = NULL,
-                                        predicted = NULL,
-                                        predicted_label = NULL,
-                                        ...) {
+as_forecast_ordinal.data.frame <- function(data,
+                                           forecast_unit = NULL,
+                                           observed = NULL,
+                                           predicted = NULL,
+                                           predicted_label = NULL,
+                                           ...) {
   data <- as_forecast_generic(
     data,
     forecast_unit,
@@ -66,6 +66,16 @@ as_forecast_ordinal.default <- function(data,
   data <- new_forecast(data, "forecast_ordinal")
   assert_forecast(data)
   return(data)
+}
+
+#' @rdname as_forecast_ordinal
+#' @export
+#' @method as_forecast_ordinal default
+as_forecast_ordinal.default <- function(data, ...) {
+  cli_abort(
+    "Input must be a data.frame or similar (e.g. a {.cls data.table} or
+    {.cls tibble}), not {.cls {class(data)}}."
+  )
 }
 
 

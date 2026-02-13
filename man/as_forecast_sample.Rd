@@ -2,12 +2,13 @@
 % Please edit documentation in R/class-forecast-sample.R
 \name{as_forecast_sample}
 \alias{as_forecast_sample}
+\alias{as_forecast_sample.data.frame}
 \alias{as_forecast_sample.default}
 \title{Create a \code{forecast} object for sample-based forecasts}
 \usage{
 as_forecast_sample(data, ...)
 
-\method{as_forecast_sample}{default}(
+\method{as_forecast_sample}{data.frame}(
   data,
   forecast_unit = NULL,
   observed = NULL,
@@ -15,6 +16,8 @@ as_forecast_sample(data, ...)
   sample_id = NULL,
   ...
 )
+
+\method{as_forecast_sample}{default}(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.

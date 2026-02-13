@@ -7,6 +7,13 @@ test_that("output of as_forecast_binary() is accepted as input to score()", {
   expect_identical(score_check, suppressMessages(score(as_forecast_binary(example_binary))))
 })
 
+test_that("as_forecast_binary.data.frame works with a plain data.frame", {
+  df <- as.data.frame(na.omit(example_binary))
+  result <- expect_no_condition(as_forecast_binary(df))
+  expect_s3_class(result, "forecast_binary")
+  expect_no_error(score(result))
+})
+
 
 # ==============================================================================
 # is_forecast_binary() # nolint: commented_code_linter

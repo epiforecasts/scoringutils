@@ -20,6 +20,20 @@ test_that("as_forecast_multivariate_sample() works as expected", {
   )
 })
 
+test_that("as_forecast_multivariate_sample.data.frame works with a plain data.frame", {
+  df <- as.data.frame(example_sample_continuous[
+    target_type == "Cases" &
+    forecast_date == "2021-05-03" &
+    target_end_date == "2021-05-15" &
+    horizon == 2 &
+    model == "EuroCOVIDhub-ensemble"
+  ])
+  result <- expect_no_condition(
+    as_forecast_multivariate_sample(df, c("location", "location_name"))
+  )
+  expect_s3_class(result, "forecast_sample_multivariate")
+})
+
 test_that("as_forecast_multivariate_sample() creates expected structure", {
   test <- na.omit(data.table::copy(example_sample_continuous))
   data.table::setnames(test,

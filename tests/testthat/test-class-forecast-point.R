@@ -9,6 +9,13 @@ test_that("as_forecast_point() works", {
 })
 
 
+test_that("as_forecast_point.data.frame works with a plain data.frame", {
+  df <- as.data.frame(na.omit(example_point))
+  result <- expect_no_condition(as_forecast_point(df))
+  expect_s3_class(result, "forecast_point")
+})
+
+
 # ==============================================================================
 # is_forecast_point() # nolint: commented_code_linter
 # ==============================================================================

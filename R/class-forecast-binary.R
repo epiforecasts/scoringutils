@@ -37,13 +37,13 @@ as_forecast_binary <- function(data, ...) {
 
 #' @rdname as_forecast_binary
 #' @export
-#' @method as_forecast_binary default
+#' @method as_forecast_binary data.frame
 #' @importFrom cli cli_warn
-as_forecast_binary.default <- function(data,
-                                       forecast_unit = NULL,
-                                       observed = NULL,
-                                       predicted = NULL,
-                                       ...) {
+as_forecast_binary.data.frame <- function(data,
+                                          forecast_unit = NULL,
+                                          observed = NULL,
+                                          predicted = NULL,
+                                          ...) {
   data <- as_forecast_generic(
     data,
     forecast_unit,
@@ -53,6 +53,16 @@ as_forecast_binary.default <- function(data,
   data <- new_forecast(data, "forecast_binary")
   assert_forecast(data)
   return(data)
+}
+
+#' @rdname as_forecast_binary
+#' @export
+#' @method as_forecast_binary default
+as_forecast_binary.default <- function(data, ...) {
+  cli_abort(
+    "Input must be a data.frame or similar (e.g. a {.cls data.table} or
+    {.cls tibble}), not {.cls {class(data)}}."
+  )
 }
 
 #' @export

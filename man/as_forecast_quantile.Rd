@@ -3,13 +3,14 @@
 %   R/class-forecast-sample.R
 \name{as_forecast_quantile}
 \alias{as_forecast_quantile}
+\alias{as_forecast_quantile.data.frame}
 \alias{as_forecast_quantile.default}
 \alias{as_forecast_quantile.forecast_sample}
 \title{Create a \code{forecast} object for quantile-based forecasts}
 \usage{
 as_forecast_quantile(data, ...)
 
-\method{as_forecast_quantile}{default}(
+\method{as_forecast_quantile}{data.frame}(
   data,
   forecast_unit = NULL,
   observed = NULL,
@@ -17,6 +18,8 @@ as_forecast_quantile(data, ...)
   quantile_level = NULL,
   ...
 )
+
+\method{as_forecast_quantile}{default}(data, ...)
 
 \method{as_forecast_quantile}{forecast_sample}(
   data,

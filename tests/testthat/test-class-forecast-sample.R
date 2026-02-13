@@ -19,6 +19,13 @@ test_that("as_forecast_sample() works as expected", {
   )
 })
 
+test_that("as_forecast_sample.data.frame works with a plain data.frame", {
+  df <- as.data.frame(na.omit(example_sample_continuous))
+  result <- expect_no_condition(as_forecast_sample(df))
+  expect_s3_class(result, "forecast_sample")
+  expect_no_error(score(result))
+})
+
 test_that("Running `as_forecast_sample()` twice returns the same object", {
   ex <- na.omit(example_sample_continuous)
 
