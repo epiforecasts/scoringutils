@@ -1,6 +1,6 @@
 # Implement Fix for Next Test-Designed Issue
 
-Pick up the next issue that has test specifications but no implementation, write the tests, verify they fail, implement the fix, and verify the tests pass.
+Pick up the next automatable issue that hasn't been implemented yet. If it has test specifications, write the tests, verify they fail, implement the fix, and verify the tests pass. If the test-design stage marked the issue as not needing tests (Has Tests = N/A), skip test writing and implement the fix directly.
 
 **Important**: The `.ralph/` files only exist on the `ralph` branch. When you switch to a feature branch (based on `origin/main`), they disappear from disk. You must read everything you need BEFORE switching branches, and update `.ralph/` files only AFTER switching back.
 
@@ -21,12 +21,12 @@ If any check fails, stop and report the error. Do NOT proceed in the wrong workt
 1. Read `.ralph/ISSUE_TRIAGE.md`
 2. Find the first row where:
    - **Automatable** is `yes`
-   - **Has Tests** is `[x]`
-   - **Implemented** is `[ ]` (unchecked)
+   - **Has Tests** is `[x]` or `N/A` (test-design stage has processed it)
+   - **Implemented** is `[ ]` (unchecked — not `N/A`)
 3. If no such issue exists:
    - Set the `- [x] **Implement**` pipeline checkpoint in `.ralph/ISSUE_TRIAGE.md` if not already set
    - Report that all implementations are complete, and stop
-4. Read the corresponding issue file at `.ralph/issues/<#>-*.md` — especially the **Test Specifications** section. **Memorize the full test specs** — you won't be able to re-read this file after switching branches.
+4. Read the corresponding issue file at `.ralph/issues/<#>-*.md`. If **Has Tests** is `[x]`, pay close attention to the **Test Specifications** section and **memorize the full test specs** — you won't be able to re-read this file after switching branches. If **Has Tests** is `N/A`, the issue needs no tests (e.g., vignette-only changes).
 5. Note the **Action Summary** and **Status Note** from the triage table row
 6. Run `gh issue view <#> --comments` for additional context
 
@@ -52,15 +52,17 @@ For example: `git checkout -b fix/1022-pairwise-two-models origin/main`
 
 **After this point, `.ralph/` files are gone from disk.** Work from memory of what you read in Step 1.
 
-## Step 4: Write the tests
+## Step 4: Write the tests (skip if Has Tests = N/A)
 
-Translate the test specifications (from Step 1) into actual R test code:
+**If the issue has Has Tests = `N/A`**, skip this step and Step 5 — go directly to Step 6.
+
+**If the issue has Has Tests = `[x]`**, translate the test specifications (from Step 1) into actual R test code:
 - Follow the file path, naming, and setup described in the specs
 - Match the project's existing testthat conventions (use `test_that()`, `expect_*()` functions)
 - Each test should map directly to a spec from the issue file
 - Place tests in the specified file under `tests/testthat/`
 
-## Step 5: Verify tests fail
+## Step 5: Verify tests fail (skip if Has Tests = N/A)
 
 Run the new tests and confirm they fail against the current code:
 
