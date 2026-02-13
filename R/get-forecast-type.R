@@ -43,20 +43,24 @@ assert_forecast_type <- function(data,
 }
 
 
-#' @title Get type of a vector or matrix of observed values or predictions
+#' @title Get type of a vector or matrix
 #'
 #' @description
-#' Internal helper function to get the type of a vector (usually
-#' of observed or predicted values). The function checks whether the input is
-#' a factor, or else whether it is integer (or can be coerced to integer) or
-#' whether it's continuous.
+#' Determine the type of a vector or matrix of values. The function checks
+#' whether the input is a factor (returns "classification"), or else whether it
+#' is integer (or can be coerced to integer without loss, returns "integer") or
+#' whether it's continuous (returns "continuous").
 #' @param x Input the type should be determined for.
 #' @importFrom cli cli_abort
 #' @return
 #' Character vector of length one with either "classification",
 #' "integer", or "continuous".
-#' @keywords internal_input_check
-get_type <- function(x) {
+#' @export
+#' @examples
+#' get_vector_type(1:3)
+#' get_vector_type(c(1.5, 2.3))
+#' get_vector_type(factor(c("a", "b")))
+get_vector_type <- function(x) {
   if (is.factor(x)) {
     return("classification")
   }
@@ -74,4 +78,42 @@ get_type <- function(x) {
   } else {
     return("continuous")
   }
+}
+
+
+#' @title Get type of the observed values in a forecast object
+#'
+#' @description
+#' Extract the `observed` column from a forecast object and determine its type
+#' using [get_vector_type()].
+#' @inheritParams score
+#' @return
+#' Character vector of length one with either "classification",
+#' "integer", or "continuous".
+#' @export
+#' @examples
+#' get_observed_type(example_sample_continuous)
+#' get_observed_type(example_binary)
+get_observed_type <- function(forecast) {
+  assert_forecast(forecast)
+  get_vector_type(forecast$observed)
+}
+
+
+#' @title Get type of the predicted values in a forecast object
+#'
+#' @description
+#' Extract the `predicted` column from a forecast object and determine its type
+#' using [get_vector_type()].
+#' @inheritParams score
+#' @return
+#' Character vector of length one with either "classification",
+#' "integer", or "continuous".
+#' @export
+#' @examples
+#' get_predicted_type(example_sample_continuous)
+#' get_predicted_type(example_quantile)
+get_predicted_type <- function(forecast) {
+  assert_forecast(forecast)
+  get_vector_type(forecast$predicted)
 }
