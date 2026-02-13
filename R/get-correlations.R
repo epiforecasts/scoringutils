@@ -60,7 +60,7 @@ get_correlations <- function(scores,
 #' @importFrom ggplot2 ggplot geom_tile geom_text aes scale_fill_gradient2
 #' element_text labs coord_cartesian theme element_blank
 #' @importFrom data.table setDT melt
-#' @importFrom checkmate assert_data_frame
+#' @importFrom checkmate assert_data_frame check_subset
 #' @export
 #' @returns A ggplot object with a visualisation of correlations between metrics
 #' @examples
@@ -85,7 +85,7 @@ plot_correlations <- function(correlations, digits = NULL) {
 
 
   # check correlations is actually a matrix of correlations
-  col_present <- check_columns_present(correlations, "metric")
+  col_present <- check_subset("metric", colnames(correlations))
   if (any(lower_triangle > 1, na.rm = TRUE) || !isTRUE(col_present)) {
     #nolint start: keyword_quote_linter
     cli_abort(

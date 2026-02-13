@@ -71,21 +71,21 @@ test_that("as_forecast_quantile() function throws an error when no predictions o
     suppressMessages(suppressWarnings(as_forecast_quantile(
       data.table::copy(example_quantile)[, predicted := NULL]
     ))),
-    "Assertion on 'data' failed: Column 'predicted' not found in data."
+    "Must be a subset of"
   )
 
   expect_error(
     suppressMessages(suppressWarnings(as_forecast_quantile(
       data.table::copy(example_quantile)[, observed := NULL]
     ))),
-    "Assertion on 'data' failed: Column 'observed' not found in data."
+    "Must be a subset of"
   )
 
   expect_error(
     suppressMessages(suppressWarnings(as_forecast_quantile(
       data.table::copy(example_quantile)[, c("observed", "predicted") := NULL]
     ))),
-    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data."
+    "Must be a subset of"
   )
 })
 

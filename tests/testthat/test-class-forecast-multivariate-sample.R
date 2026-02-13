@@ -213,7 +213,7 @@ test_that("as_forecast_multivariate_sample() handles errors appropriately", {
     as_forecast_multivariate_sample(
       data_bad, joint_across = c("location", "location_name")
     ),
-    "Assertion on 'forecast' failed: Column 'sample_id' not found in data."
+    "Must be a subset of"
   )
 
   # Test with inconsistent sample lengths within groups

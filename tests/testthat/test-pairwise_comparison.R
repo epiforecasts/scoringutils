@@ -360,7 +360,7 @@ test_that("Basic input checks for `add_relative_skill() work", {
       eval_nomodel,
       by = "target_type", metric = "crps"
     ),
-    "Assertion on 'scores' failed: Column 'model' not found in data."
+    "Must be a subset of"
   )
 
   # error if there isn't a metrics attribute
@@ -434,7 +434,7 @@ test_that("get_pairwise_comparisons() throws errors with wrong inputs", {
   # expect error if no model column is found
   expect_error(
     get_pairwise_comparisons(test, compare = "model", metric = "crps"),
-    "Assertion on 'scores' failed: Column 'model' not found in data."
+    "Must be a subset of"
   )
 })
 
