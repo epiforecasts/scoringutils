@@ -547,7 +547,7 @@ pit_histogram_sample <- function(observed,
   }
 
   if (integers != "random" && !is.null(n_replicates)) {
-    cli::cli_warn("`n_replicates` is ignored when `integers` is not `random`")
+    cli_warn("`n_replicates` is ignored when `integers` is not `random`")
   }
 
   # calculate PIT-values -------------------------------------------------------

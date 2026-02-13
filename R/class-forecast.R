@@ -284,7 +284,7 @@ is_forecast <- function(x) {
   # print.data.table will internally subset the data.table before printing.
   # this subsetting triggers the validation, which is not desired in this case.
   # this is a hack and ideally, we'd do things differently.
-  if (nrow(out) > 30 && data.table::is.data.table(out) && !is_dt_force_print) {
+  if (nrow(out) > 30 && is.data.table(out) && !is_dt_force_print) {
     # check whether subset object passes validation
     validation <- try(
       assert_forecast(forecast = out, verbose = FALSE),

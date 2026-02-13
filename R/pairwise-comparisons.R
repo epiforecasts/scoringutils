@@ -249,7 +249,7 @@ get_pairwise_comparisons <- function(
     }
   )
 
-  out <- data.table::rbindlist(results)
+  out <- rbindlist(results)
 
   return(out[])
 }
@@ -298,7 +298,7 @@ pairwise_comparison_one_group <- function(scores,
   # be the same
 
   # set up initial data.frame with all possible pairwise comparisons
-  combinations <- data.table::as.data.table(t(combn(comparators, m = 2)))
+  combinations <- as.data.table(t(combn(comparators, m = 2)))
   colnames(combinations) <- c("..compare", "compare_against")
 
   combinations[, c("ratio", "pval") := compare_forecasts(
@@ -316,7 +316,7 @@ pairwise_comparison_one_group <- function(scores,
   combinations[, adj_pval := p.adjust(pval)]
 
   # mirror computations
-  combinations_mirrored <- data.table::copy(combinations)
+  combinations_mirrored <- copy(combinations)
   setnames(combinations_mirrored,
     old = c("..compare", "compare_against"),
     new = c("compare_against", "..compare")
@@ -324,14 +324,14 @@ pairwise_comparison_one_group <- function(scores,
   combinations_mirrored[, ratio := 1 / ratio]
 
   # add a one for those that are the same
-  combinations_equal <- data.table::data.table(
+  combinations_equal <- data.table(
     ..compare = comparators,
     compare_against = comparators,
     ratio = 1,
     pval = 1,
     adj_pval = 1
   )
-  result <- data.table::rbindlist(list(
+  result <- rbindlist(list(
     combinations,
     combinations_mirrored,
     combinations_equal
@@ -374,7 +374,7 @@ pairwise_comparison_one_group <- function(scores,
   out <- merge(scores, result, by = compare, all = TRUE)
 
   # rename ratio to mean_scores_ratio
-  data.table::setnames(out,
+  setnames(out,
     old = c("ratio", "theta"),
     new = c(
       "mean_scores_ratio",
@@ -382,7 +382,7 @@ pairwise_comparison_one_group <- function(scores,
     )
   )
   if (!is.null(baseline)) {
-    data.table::setnames(out,
+    setnames(out,
       old = "rel_to_baseline",
       new = paste(metric, "scaled_relative_skill", sep = "_")
     )
@@ -429,7 +429,7 @@ compare_forecasts <- function(scores,
                               one_sided = FALSE,
                               test_type = c("non_parametric", "permutation", NULL),
                               n_permutations = 999) {
-  scores <- data.table::as.data.table(scores)
+  scores <- as.data.table(scores)
 
   forecast_unit <- get_forecast_unit(scores)
 
