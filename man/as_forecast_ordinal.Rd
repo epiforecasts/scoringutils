@@ -127,7 +127,9 @@ Other functions to create forecast objects:
 \code{\link{as_forecast_multivariate_sample}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_point}()},
+\code{\link{as_forecast_point.forecast_quantile}()},
 \code{\link{as_forecast_quantile}()},
+\code{\link{as_forecast_quantile.forecast_sample}()},
 \code{\link{as_forecast_sample}()}
 }
 \concept{functions to create forecast objects}

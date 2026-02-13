@@ -8,6 +8,15 @@ test_that("as_forecast_point() works", {
   )
 })
 
+test_that("as_forecast_point.forecast_quantile() extracts median without extra args", {
+  quantile_forecast <- as_forecast_quantile(na.omit(example_quantile))
+  result <- as_forecast_point(quantile_forecast)
+  expect_true(is_forecast_point(result))
+  expect_false("quantile_level" %in% colnames(result))
+  expect_false("sample_id" %in% colnames(result))
+  expect_no_condition(as_forecast_point(quantile_forecast))
+})
+
 
 # ==============================================================================
 # is_forecast_point() # nolint: commented_code_linter
