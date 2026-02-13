@@ -23,3 +23,18 @@ This issue involves only deleting HTML comment blocks from two vignette `.Rmd` f
 The fix is purely mechanical: delete lines 88-100 from `vignettes/scoring-multivariate-forecasts.Rmd` and lines 444-493 from `vignettes/scoring-rules.Rmd`.
 
 **Verification approach**: The implementing agent should confirm that both vignettes still render successfully after the deletions (e.g., via `rmarkdown::render()`), but this is a build check, not a unit test.
+
+## Resolution
+
+**Implemented**: 2026-02-13
+**Files changed**:
+- `vignettes/scoring-multivariate-forecasts.Rmd` — deleted WIP "Details on the grouping" HTML comment block (lines 88-100)
+- `vignettes/scoring-rules.Rmd` — deleted ~50-line PIT/Calibration HTML comment block (lines 444-493)
+
+### What was changed
+Removed both HTML comment blocks that were flagged in the PR #998 review. These blocks were invisible in rendered output and contained only WIP/draft content that is no longer needed. No R code or rendered vignette output was affected.
+
+### Test results
+- No unit tests required (vignette-only change)
+- Vignettes rebuild successfully
+- R CMD check — 0 errors, 0 warnings, 2 notes (pre-existing)
