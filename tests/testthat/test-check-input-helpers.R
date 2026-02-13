@@ -36,15 +36,6 @@ test_that("check_columns_present works", {
   )
 })
 
-test_that("test_columns_not_present works", {
-  expect_true(
-    test_columns_not_present(example_binary, "sample_id")
-  )
-  expect_false(
-    test_columns_not_present(example_binary, "location")
-  )
-})
-
 test_that("check_columns_present() works", {
   expect_identical(
     check_columns_present(example_quantile, c("observed", "predicted", "nop")),

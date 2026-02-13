@@ -45,6 +45,25 @@ test_that("assert_forecast.forecast_binary works as expected", {
   )
 })
 
+test_that("assert_forecast.forecast_binary() rejects data with quantile_level column", {
+  test <- na.omit(as.data.table(example_binary))
+  test[, "quantile_level" := 0.5]
+  expect_error(
+    as_forecast_binary(test),
+    "Input looks like a binary forecast, but an additional column"
+  )
+})
+
+test_that("assert_forecast.forecast_binary() accepts valid binary data without sample_id or quantile_level", {
+  expect_no_error(assert_forecast(example_binary))
+})
+
+test_that("test_columns_not_present() is no longer exported or defined", {
+  expect_false(
+    exists("test_columns_not_present",
+           where = asNamespace("scoringutils"), mode = "function")
+  )
+})
 
 
 # ==============================================================================
