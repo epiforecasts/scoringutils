@@ -100,7 +100,7 @@ assert_forecast.forecast_nominal <- function(
   if (!all(complete$correct)) {
     first_issue <- complete[(correct), ..forecast_unit][1]
     first_issue <- lapply(first_issue, FUN = as.character)
-    #nolint start: keyword_quote_linter object_usage_linter duplicate_argument_linter
+    #nolint start: object_usage_linter duplicate_argument_linter
     issue_location <- paste(names(first_issue), "==", first_issue)
     cli_abort(
       c(`!` = "Found incomplete forecasts",

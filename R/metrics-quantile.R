@@ -191,11 +191,11 @@ wis <- function(observed,
   complete_intervals <-
     duplicated(interval_ranges) | duplicated(interval_ranges, fromLast = TRUE)
   if (!all(complete_intervals) && !isTRUE(na.rm)) {
-    #nolint start: keyword_quote_linter object_usage_linter
+    #nolint start: object_usage_linter
     incomplete <- quantile_level[quantile_level != 0.5][!complete_intervals]
     cli_abort(
       c(
-        "!" = "Not all quantile levels specified form symmetric prediction
+        `!` = "Not all quantile levels specified form symmetric prediction
         intervals.
         The following quantile levels miss a corresponding lower/upper bound:
         {.val {incomplete}}.
@@ -347,10 +347,10 @@ interval_coverage <- function(observed, predicted,
     100 - (100 - interval_range) / 2
   ) / 100
   if (!all(necessary_quantiles %in% quantile_level)) {
-    #nolint start: keyword_quote_linter object_usage_linter
+    #nolint start: object_usage_linter
     cli_abort(
       c(
-        "!" = "To compute the interval coverage for an interval range of
+        `!` = "To compute the interval coverage for an interval range of
         {.val {interval_range}%}, the {.val {necessary_quantiles}} quantiles
         are required"
       )
@@ -442,14 +442,12 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
     dim(predicted) <- c(n, N)
   }
   if (!(0.5 %in% quantile_level)) {
-    #nolint start: keyword_quote_linter
     cli_inform(
       c(
-        "i" = "Median not available, interpolating median from the two
+        `i` = "Median not available, interpolating median from the two
         innermost quantiles in order to compute bias."
       )
     )
-    #nolint end
   }
   bias <- sapply(1:n, function(i) {
     bias_quantile_single_vector(
@@ -493,14 +491,12 @@ bias_quantile_single_vector <- function(observed, predicted,
   order <- order(quantile_level)
   predicted <- predicted[order]
   if (!all(diff(predicted) >= 0)) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Predictions must not be decreasing with increasing
+        `!` = "Predictions must not be decreasing with increasing
         quantile level."
       )
     )
-    #nolint end
   }
 
   median_prediction <- interpolate_median(predicted, quantile_level)
@@ -581,14 +577,12 @@ interpolate_median <- function(predicted, quantile_level) {
 ae_median_quantile <- function(observed, predicted, quantile_level) {
   assert_input_quantile(observed, predicted, quantile_level)
   if (!any(quantile_level == 0.5)) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "In order to compute the absolute error of the median,
+        `!` = "In order to compute the absolute error of the median,
         {.val 0.5} must be among the quantiles given"
       )
     )
-    #nolint end
   }
   if (is.null(dim(predicted))) {
     predicted <- matrix(predicted, nrow = 1)

@@ -114,25 +114,23 @@ get_metrics.scores <- function(x, error = FALSE, ...) {
   assert_data_frame(x)
   metrics <- attr(x, "metrics")
   if (error && is.null(metrics)) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Input needs an attribute `metrics` with the names of the
+        `!` = "Input needs an attribute `metrics` with the names of the
          scoring rules that were used for scoring.",
-        "i" = "See `?get_metrics` for further information."
+        `i` = "See `?get_metrics` for further information."
       )
     )
-    #nolint end
   }
 
   if (!all(metrics %in% names(x))) {
-    #nolint start: keyword_quote_linter object_usage_linter
+    #nolint start: object_usage_linter
     missing <- setdiff(metrics, names(x))
     cli_warn(
       c(
-        "!" = "The following scores have been previously computed, but are no
+        `!` = "The following scores have been previously computed, but are no
             longer column names of the data: {.val {missing}}",
-        "i" = "See {.code ?get_metrics} for further information."
+        `i` = "See {.code ?get_metrics} for further information."
       )
     )
     #nolint end

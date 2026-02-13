@@ -137,13 +137,13 @@ get_pairwise_comparisons <- function(
   assert_character(metric, len = 1)
 
   # check that columns in 'by' are present
-  #nolint start: keyword_quote_linter object_usage_linter
+  #nolint start: object_usage_linter
   if (length(by) > 0) {
     by_cols <- check_columns_present(scores, by)
     if (!isTRUE(by_cols)) {
       cli_abort(
         c(
-          "!" = "Not all columns specified in `by` are present: {.var {by_cols}}"
+          `!` = "Not all columns specified in `by` are present: {.var {by_cols}}"
         )
       )
       #nolint end
@@ -159,33 +159,31 @@ get_pairwise_comparisons <- function(
 
   # check there are enough comparators
   if (length(setdiff(comparators, baseline)) < 2) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "More than one non-baseline model is needed to compute
+        `!` = "More than one non-baseline model is needed to compute
         pairwise compairisons."
       )
     )
-    #nolint end
   }
 
   # check that values of the chosen metric are not NA
   if (anyNA(scores[[metric]])) {
     scores <- scores[!is.na(scores[[metric]])]
     if (nrow(scores) == 0) {
-      #nolint start: keyword_quote_linter object_usage_linter
+      #nolint start: object_usage_linter
       cli_abort(
         c(
-          "!" = "After removing {.val NA} values for {.var {metric}},
+          `!` = "After removing {.val NA} values for {.var {metric}},
          no values were left."
         )
       )
     }
     cli_warn(
       c(
-        "!" = "Some values for the metric {.var {metric}}
+        `!` = "Some values for the metric {.var {metric}}
          are NA. These have been removed.",
-        "i" = "Maybe choose a different metric?"
+        `i` = "Maybe choose a different metric?"
       )
     )
     #nolint end
@@ -193,10 +191,10 @@ get_pairwise_comparisons <- function(
 
   # check that all values of the chosen metric are positive
   if (any(sign(scores[[metric]]) < 0) && any(sign(scores[[metric]]) > 0)) {
-    #nolint start: keyword_quote_linter object_usage_linter
+    #nolint start: object_usage_linter
     cli_abort(
       c(
-        "!" = "To compute pairwise comparisons, all values of {.var {metric}}
+        `!` = "To compute pairwise comparisons, all values of {.var {metric}}
        must have the same sign."
       )
     )
@@ -210,25 +208,21 @@ get_pairwise_comparisons <- function(
   # sense
   # if compare == forecast_unit then all relative skill scores will simply be 1.
   if (setequal(compare, forecast_unit)) {
-    #nolint start: keyword_quote_linter
     cli_warn(
       c(
-        "!" = "`compare` is set to the unit of a single forecast. This doesn't
+        `!` = "`compare` is set to the unit of a single forecast. This doesn't
             look right.",
-        "i" = "All relative skill scores will be equal to 1."
+        `i` = "All relative skill scores will be equal to 1."
       )
     )
-    #nolint end
   } else if (setequal(c(compare, by), forecast_unit)) {
-    #nolint start: keyword_quote_linter
     cli_inform(
       c(
-        "!" = "relative skill can only be computed if the combination of
+        `!` = "relative skill can only be computed if the combination of
         `compare` and `by` is different from the unit of a single forecast.",
-        "i" = "`by` was set to an empty character vector"
+        `i` = "`by` was set to an empty character vector"
       )
     )
-    #nolint end
     by <- character(0)
   }
 
@@ -288,7 +282,7 @@ pairwise_comparison_one_group <- function(scores,
   # if there aren't enough models to do any comparison, abort
   if (length(comparators) < 2) {
     cli_abort(
-      c("!" = "There are not enough comparators to do any comparison")
+      c(`!` = "There are not enough comparators to do any comparison")
     )
   }
 

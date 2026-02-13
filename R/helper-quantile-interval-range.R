@@ -82,12 +82,10 @@ quantile_to_interval_dataframe <- function(forecast,
   if (length(unique(forecast$boundary)) < 2) {
     cli_abort(
       c(
-        #nolint start: keyword_quote_linter
         `!` = "No valid forecast intervals found.",
         `i` = "A forecast interval comprises two
       quantiles with quantile levels symmetric around the median
       (e.g. 0.25 and 0.75)"
-        #nolint end
       )
     )
   }
