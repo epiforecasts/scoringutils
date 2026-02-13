@@ -20,9 +20,21 @@ test_that("assert_input_interval() works as expected", {
   )
 
   # expect warning if interval range is < 1
+  rlang::reset_warning_verbosity("small_interval_range")
   expect_warning(
     assert_input_interval(observed, lower, upper, 0.5),
     "Found interval ranges between 0 and 1. Are you sure that's right?"
+  )
+})
+
+
+test_that("assert_input_interval() warns about small interval_range on repeated calls", {
+  rlang::reset_warning_verbosity("small_interval_range")
+  suppressWarnings(assert_input_interval(observed, lower, upper, 0.5))
+  rlang::reset_warning_verbosity("small_interval_range")
+  expect_warning(
+    assert_input_interval(observed, lower, upper, 0.5),
+    "Found interval ranges between 0 and 1"
   )
 })
 
