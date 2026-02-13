@@ -35,9 +35,11 @@ If any check fails, stop and report the error. Do NOT proceed in the wrong workt
 If there are any uncommitted changes to `.ralph/` files (from previous pipeline runs), commit them now so the branch switch is clean:
 
 ```bash
-git add .ralph/
+git add .ralph/ISSUE_TRIAGE.md .ralph/issues/ .ralph/pipeline/*.md .ralph/pipeline/*.sh
 git diff --cached --quiet || git commit -m "Pipeline: save triage state before implementing #<number>"
 ```
+
+**Important**: Do NOT `git add .ralph/pipeline/logs/` — log files are gitignored and must stay untracked, otherwise they conflict with branch switches (the log file is being actively written by the outer shell script).
 
 This ensures `git checkout` won't refuse to switch due to uncommitted tracked files.
 

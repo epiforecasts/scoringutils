@@ -1,0 +1,4 @@
+# Pipeline logs are local-only; do not track in git.
+# They conflict with branch switches during the implement stage.
+*
+!.gitignore
