@@ -13,6 +13,7 @@ as_forecast_ordinal(data, ...)
   observed = NULL,
   predicted = NULL,
   predicted_label = NULL,
+  verbose = TRUE,
   ...
 )
 }
@@ -39,6 +40,9 @@ predicted values. This column will be renamed to "predicted".}
 \item{predicted_label}{(optional) Name of the column in \code{data} that denotes
 the outcome to which a predicted probability corresponds to.
 This column will be renamed to "predicted_label".}
+
+\item{verbose}{Logical. If \code{FALSE} (default is \code{TRUE}), no messages and
+warnings will be created.}
 }
 \value{
 A \code{forecast} object of class \code{forecast_ordinal}

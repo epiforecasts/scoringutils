@@ -36,6 +36,7 @@ as_forecast_binary <- function(data, ...) {
 }
 
 #' @rdname as_forecast_binary
+#' @inheritParams assert_forecast
 #' @export
 #' @method as_forecast_binary default
 #' @importFrom cli cli_warn
@@ -43,6 +44,7 @@ as_forecast_binary.default <- function(data,
                                        forecast_unit = NULL,
                                        observed = NULL,
                                        predicted = NULL,
+                                       verbose = TRUE,
                                        ...) {
   data <- as_forecast_generic(
     data,
@@ -51,7 +53,7 @@ as_forecast_binary.default <- function(data,
     predicted = predicted
   )
   data <- new_forecast(data, "forecast_binary")
-  assert_forecast(data)
+  assert_forecast(data, verbose = verbose)
   return(data)
 }
 

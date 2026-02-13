@@ -53,6 +53,7 @@ as_forecast_multivariate_sample <- function(data, ...) {
 #'   For example, if you have a column `country` and want to define
 #'   a multivariate forecast for several countries at once, you could set
 #'   `joint_across = "country"`.
+#' @inheritParams assert_forecast
 #' @export
 #' @importFrom cli cli_warn
 as_forecast_multivariate_sample.default <- function(data,
@@ -61,6 +62,7 @@ as_forecast_multivariate_sample.default <- function(data,
                                                     observed = NULL,
                                                     predicted = NULL,
                                                     sample_id = NULL,
+                                                    verbose = TRUE,
                                                     ...) {
   data <- as_forecast_generic(
     data,
@@ -72,7 +74,7 @@ as_forecast_multivariate_sample.default <- function(data,
   data <- set_grouping(data, joint_across)
 
   data <- new_forecast(data, "forecast_sample_multivariate")
-  assert_forecast(data)
+  assert_forecast(data, verbose = verbose)
   return(data)
 }
 

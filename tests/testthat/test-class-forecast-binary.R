@@ -7,6 +7,14 @@ test_that("output of as_forecast_binary() is accepted as input to score()", {
   expect_identical(score_check, suppressMessages(score(as_forecast_binary(example_binary))))
 })
 
+test_that("as_forecast_binary() accepts verbose argument and suppresses messages", {
+  expect_no_condition(
+    as_forecast_binary(example_binary, verbose = FALSE)
+  )
+  result <- as_forecast_binary(example_binary, verbose = FALSE)
+  expect_s3_class(result, "forecast_binary")
+})
+
 
 # ==============================================================================
 # is_forecast_binary() # nolint: commented_code_linter

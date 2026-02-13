@@ -8,6 +8,14 @@ test_that("as_forecast_point() works", {
   )
 })
 
+test_that("as_forecast_point() accepts verbose argument and suppresses messages", {
+  expect_no_condition(
+    as_forecast_point(example_point, verbose = FALSE)
+  )
+  result <- as_forecast_point(example_point, verbose = FALSE)
+  expect_s3_class(result, "forecast_point")
+})
+
 
 # ==============================================================================
 # is_forecast_point() # nolint: commented_code_linter
