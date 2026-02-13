@@ -70,6 +70,7 @@ globalVariables(c(
   "rn",
   "sample_id",
   "scoringutils_InternalDuplicateCheck",
+  "scoringutils_InternalMonoCheck",
   "scoringutils_InternalNumCheck",
   "se_mean",
   "sharpness",

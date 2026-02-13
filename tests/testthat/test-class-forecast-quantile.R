@@ -201,6 +201,66 @@ test_that("as_forecast_quantile handles rounding issues correctly", {
 
 
 # ==============================================================================
+# assert_forecast.forecast_quantile() monotonicity warning
+# ==============================================================================
+
+test_that("assert_forecast.forecast_quantile() warns about non-monotonic predictions", {
+  data <- data.table(
+    model = "model1",
+    date = as.Date("2020-01-01"),
+    observed = 5,
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = c(3, 7, 4)
+  )
+  expect_warning(
+    as_forecast_quantile(data),
+    "predictions that are not monotonically non-decreasing"
+  )
+  # Should still succeed and return a valid forecast_quantile object
+  result <- suppressWarnings(as_forecast_quantile(data))
+  expect_s3_class(result, "forecast_quantile")
+})
+
+test_that("assert_forecast.forecast_quantile() does not warn for well-formed data", {
+  test <- na.omit(data.table::copy(example_quantile))
+  expect_no_condition(
+    as_forecast_quantile(test,
+      forecast_unit = c(
+        "location", "model", "target_type",
+        "target_end_date", "horizon"
+      )
+    )
+  )
+})
+
+test_that("assert_forecast.forecast_quantile() suppresses monotonicity warning when verbose = FALSE", {
+  data <- data.table(
+    model = "model1",
+    date = as.Date("2020-01-01"),
+    observed = 5,
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = c(3, 7, 4)
+  )
+  forecast_obj <- suppressWarnings(as_forecast_quantile(data))
+  expect_no_condition(assert_forecast(forecast_obj, verbose = FALSE))
+})
+
+test_that("score() works end-to-end with non-monotonic predictions when bias is excluded", {
+  data <- data.table(
+    model = "model1",
+    date = as.Date("2020-01-01"),
+    observed = 5,
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = c(3, 7, 4)
+  )
+  data <- suppressWarnings(as_forecast_quantile(data))
+  result <- score(data, metrics = list(wis = wis))
+  expect_s3_class(result, "scores")
+  expect_true("wis" %in% colnames(result))
+})
+
+
+# ==============================================================================
 # is_forecast_quantile() # nolint: commented_code_linter
 # ==============================================================================
 test_that("is_forecast_quantile() works as expected", {
