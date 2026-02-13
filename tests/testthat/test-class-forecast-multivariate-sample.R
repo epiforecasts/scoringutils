@@ -42,25 +42,25 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
 
   # Snapshot the class and structure
   expect_snapshot({
-      cat("Class:", class(result), "\n")
-      cat(
-        "Forecast type:",
-        scoringutils:::get_forecast_type(result), "\n"
-      )
-      cat(
-        "Forecast unit:",
-        toString(get_forecast_unit(result)), "\n"
-      )
-      cat("Number of rows:", nrow(result), "\n")
-      cat("Number of columns:", ncol(result), "\n")
-      cat(
-        "Column names:",
-        toString(names(result)), "\n"
-      )
-      cat(
-        "Number of unique groups:",
-        length(unique(result$.mv_group_id)), "\n"
-      )
+    cat("Class:", class(result), "\n")
+    cat(
+      "Forecast type:",
+      scoringutils:::get_forecast_type(result), "\n"
+    )
+    cat(
+      "Forecast unit:",
+      toString(get_forecast_unit(result)), "\n"
+    )
+    cat("Number of rows:", nrow(result), "\n")
+    cat("Number of columns:", ncol(result), "\n")
+    cat(
+      "Column names:",
+      toString(names(result)), "\n"
+    )
+    cat(
+      "Number of unique groups:",
+      length(unique(result$.mv_group_id)), "\n"
+    )
   })
 })
 
@@ -69,14 +69,14 @@ test_that("class includes both new and deprecated class names", {
     na.omit(data.table::copy(example_sample_continuous)),
     joint_across = "location"
   )
-  expect_true(inherits(result, "forecast_multivariate_sample"))
-  expect_true(inherits(result, "forecast_sample_multivariate"))
-  expect_true(inherits(result, "forecast"))
+  expect_s3_class(result, "forecast_multivariate_sample")
+  expect_s3_class(result, "forecast_sample_multivariate")
+  expect_s3_class(result, "forecast")
   # New class should come before deprecated class
   cls <- class(result)
-  expect_true(
-    which(cls == "forecast_multivariate_sample") <
-      which(cls == "forecast_sample_multivariate")
+  expect_lt(
+    which(cls == "forecast_multivariate_sample"),
+    which(cls == "forecast_sample_multivariate")
   )
 })
 
@@ -114,8 +114,8 @@ test_that("is_forecast_sample_multivariate() is deprecated", {
 test_that(
   "get_metrics.forecast_multivariate_sample() works as expected",
   {
-    expect_true(
-        is.list(get_metrics(example_multivariate_sample))
+    expect_type(
+      get_metrics(example_multivariate_sample), "list"
     )
   }
 )
@@ -139,17 +139,17 @@ test_that("set_grouping() works as expected", {
 })
 
 test_that("get_grouping() works as expected", {
-data <- example_multivariate_sample
-grouping <- c(
-  "model", "target_type", "target_end_date", "horizon"
-)
-joint_across <- setdiff(get_forecast_unit(data), grouping)
-data <- scoringutils:::set_grouping(data, joint_across)
+  data <- example_multivariate_sample
+  grouping <- c(
+    "model", "target_type", "target_end_date", "horizon"
+  )
+  joint_across <- setdiff(get_forecast_unit(data), grouping)
+  data <- scoringutils:::set_grouping(data, joint_across)
 
-# Test that get_grouping returns the correct columns
-result <- get_grouping(data)
-expect_type(result, "character")
-expect_true(all(grouping %in% result))
+  # Test that get_grouping returns the correct columns
+  result <- get_grouping(data)
+  expect_type(result, "character")
+  expect_true(all(grouping %in% result))
 })
 
 test_that(
@@ -169,39 +169,41 @@ test_that(
 )
 
 test_that("set_grouping() preserves existing keys correctly", {
-data <- example_multivariate_sample
-grouping <- c("model", "target_type", "target_end_date", "horizon")
+  data <- example_multivariate_sample
+  grouping <- c(
+    "model", "target_type", "target_end_date", "horizon"
+  )
 
-# Test case 1: No existing keys
-data_no_keys <- copy(data)
-nokeys <- NULL
-setkeyv(data_no_keys, nokeys)  # Ensure no keys
-expect_null(key(data_no_keys))
+  # Test case 1: No existing keys
+  data_no_keys <- copy(data)
+  nokeys <- NULL
+  setkeyv(data_no_keys, nokeys)  # Ensure no keys
+  expect_null(key(data_no_keys))
 
-result_no_keys <- set_grouping(data_no_keys, grouping)
-expect_null(key(result_no_keys))  # Should still have no keys
+  result_no_keys <- set_grouping(data_no_keys, grouping)
+  expect_null(key(result_no_keys))  # Should still have no keys
 
-# Test case 2: With existing keys
-data_with_keys <- copy(data)
-keys <- c("location", "model")
-setkeyv(data_with_keys, keys)  # Set some keys
-original_keys <- key(data_with_keys)
-expect_equal(original_keys, c("location", "model"))
+  # Test case 2: With existing keys
+  data_with_keys <- copy(data)
+  keys <- c("location", "model")
+  setkeyv(data_with_keys, keys)  # Set some keys
+  original_keys <- key(data_with_keys)
+  expect_equal(original_keys, c("location", "model"))
 
-result_with_keys <- scoringutils:::set_grouping(
-  data_with_keys, grouping
-)
-expect_equal(key(result_with_keys), original_keys)
+  result_with_keys <- scoringutils:::set_grouping(
+    data_with_keys, grouping
+  )
+  expect_equal(key(result_with_keys), original_keys)
 
-# Test case 3: Verify functionality still works with keys preserved
-expect_true(".mv_group_id" %in% names(result_with_keys))
-expect_true(is.numeric(result_with_keys$.mv_group_id))
+  # Test case 3: Verify functionality still works with keys preserved
+  expect_true(".mv_group_id" %in% names(result_with_keys))
+  expect_type(result_with_keys$.mv_group_id, "double")
 
-# Test that groups are consistent
-group_counts <- as.data.table(
-  result_with_keys
-)[, .N, by = .mv_group_id]
-expect_true(all(group_counts$N > 0))
+  # Test that groups are consistent
+  group_counts <- as.data.table(
+    result_with_keys
+  )[, .N, by = .mv_group_id]
+  expect_true(all(group_counts$N > 0))
 })
 
 # ==============================================================================
@@ -228,7 +230,7 @@ test_that(
     expect_true("energy_score" %in% names(scores))
 
     # Test that scores are numeric
-    expect_true(is.numeric(scores$energy_score))
+    expect_type(scores$energy_score, "double")
   }
 )
 

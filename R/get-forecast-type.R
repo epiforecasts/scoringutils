@@ -10,7 +10,7 @@ get_forecast_type <- function(forecast) {
     forecast_type <- gsub(
       "forecast_", "", forecast_class[1], fixed = TRUE
     )
-    if (nchar(forecast_type) == 0) {
+    if (!nzchar(forecast_type)) {
       cli_abort(
         "Input is not a valid forecast object
         (Column `forecast_` prefix found but no type suffix)."
