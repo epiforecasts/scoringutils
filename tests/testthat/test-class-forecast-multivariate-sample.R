@@ -197,7 +197,7 @@ test_that("set_grouping() preserves existing keys correctly", {
 
   # Test case 3: Verify functionality still works with keys preserved
   expect_true(".mv_group_id" %in% names(result_with_keys))
-  expect_type(result_with_keys$.mv_group_id, "double")
+  expect_type(result_with_keys$.mv_group_id, "integer")
 
   # Test that groups are consistent
   group_counts <- as.data.table(
