@@ -95,3 +95,25 @@ The recommended implementation approach:
 7. Update the existing snapshot in `_snaps/class-forecast-multivariate-sample.md` to reflect the new "Joint across:" line
 
 Alternative approach: Store `joint_across` as an attribute during `as_forecast_multivariate_sample.default()` (e.g., `attr(data, "joint_across") <- joint_across`) so the print method can retrieve it directly without recomputing. This is more robust but requires updating `set_grouping()` or the constructor.
+
+## Resolution
+
+**Implemented**: 2026-02-13
+**Files changed**:
+- `R/class-forecast-multivariate-sample.R` — Added `print.forecast_sample_multivariate()` S3 method
+- `NAMESPACE` — Registered new S3 method
+- `man/print.forecast_sample_multivariate.Rd` — Generated documentation
+- `tests/testthat/test-class-forecast-multivariate-sample.R` — Added 5 new tests
+- `tests/testthat/_snaps/class-forecast-multivariate-sample.md` — Updated snapshots
+
+### What was changed
+Added a dedicated `print.forecast_sample_multivariate()` S3 method that computes `joint_across` as `setdiff(get_forecast_unit(x), get_grouping(x))` and displays it between the forecast unit and data table output. The method replicates the parent `print.forecast()` logic for type/unit display (to avoid double-printing from `NextMethod()`) and adds the "Joint across:" line using `cli_text(col_blue(...))` following the existing pattern. Prints the data table via `print(as.data.table(x))`.
+
+### Test results
+- `test_that("print.forecast_sample_multivariate() displays joint_across columns")` — PASS
+- `test_that("print.forecast_sample_multivariate() shows correct joint_across for single-column grouping")` — PASS
+- `test_that("print.forecast_sample_multivariate() computes joint_across correctly from grouping")` — PASS
+- `test_that("print.forecast_sample_multivariate() returns object invisibly")` — PASS
+- `test_that("print.forecast_sample_multivariate() still calls parent print.forecast()")` — PASS
+- Full test suite — PASS (686 tests)
+- R CMD check — 0 errors, 0 warnings, 2 notes (pre-existing)
