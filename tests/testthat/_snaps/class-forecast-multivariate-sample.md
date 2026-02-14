@@ -6,6 +6,8 @@
       Forecast type: sample_multivariate
       Forecast unit:
       location, model, target_type, target_end_date, and horizon
+      Joint across:
+      location
     Output
       
                 predicted sample_id observed location                 model
@@ -157,4 +159,83 @@
       collapse = " to "), "\n")
     Output
       Energy score range: 37.8373892350605 to 433525.521054322 
+
+# print.forecast_sample_multivariate() displays joint_across columns
+
+    Code
+      print(example_multivariate_sample)
+    Message
+      Forecast type: sample_multivariate
+      Forecast unit:
+      location, location_name, target_end_date, target_type, forecast_date, model,
+      and horizon
+      Joint across:
+      location and location_name
+    Output
+      
+             location location_name target_end_date target_type forecast_date
+               <char>        <char>          <Date>      <char>        <Date>
+          1:       DE       Germany      2021-01-02       Cases          <NA>
+          2:       DE       Germany      2021-01-02      Deaths          <NA>
+          3:       DE       Germany      2021-01-09       Cases          <NA>
+          4:       DE       Germany      2021-01-09      Deaths          <NA>
+          5:       DE       Germany      2021-01-16       Cases          <NA>
+         ---                                                                 
+      35620:       IT         Italy      2021-07-24      Deaths    2021-07-12
+      35621:       IT         Italy      2021-07-24      Deaths    2021-07-12
+      35622:       IT         Italy      2021-07-24      Deaths    2021-07-12
+      35623:       IT         Italy      2021-07-24      Deaths    2021-07-12
+      35624:       IT         Italy      2021-07-24      Deaths    2021-07-12
+                            model horizon predicted sample_id observed .mv_group_id
+                           <char>   <num>     <num>     <int>    <num>        <int>
+          1:                 <NA>      NA        NA        NA   127300            1
+          2:                 <NA>      NA        NA        NA     4534            2
+          3:                 <NA>      NA        NA        NA   154922            3
+          4:                 <NA>      NA        NA        NA     6117            4
+          5:                 <NA>      NA        NA        NA   110183            5
+         ---                                                                       
+      35620: epiforecasts-EpiNow2       2 159.84534        36       78          260
+      35621: epiforecasts-EpiNow2       2 128.21214        37       78          260
+      35622: epiforecasts-EpiNow2       2 190.52560        38       78          260
+      35623: epiforecasts-EpiNow2       2 141.06659        39       78          260
+      35624: epiforecasts-EpiNow2       2  24.43419        40       78          260
+
+# print.forecast_sample_multivariate() shows correct joint_across for single-column grouping
+
+    Code
+      print(result)
+    Message
+      Forecast type: sample_multivariate
+      Forecast unit:
+      location, model, target_type, target_end_date, and horizon
+      Joint across:
+      location
+    Output
+      
+                predicted sample_id observed location                 model
+                    <num>     <int>    <num>   <char>                <char>
+          1: 102672.00034         1   106987       DE EuroCOVIDhub-ensemble
+          2: 164763.08492         2   106987       DE EuroCOVIDhub-ensemble
+          3: 153042.63536         3   106987       DE EuroCOVIDhub-ensemble
+          4: 119544.25389         4   106987       DE EuroCOVIDhub-ensemble
+          5:  81230.71875         5   106987       DE EuroCOVIDhub-ensemble
+         ---                                                               
+      35476:    159.84534        36       78       IT  epiforecasts-EpiNow2
+      35477:    128.21214        37       78       IT  epiforecasts-EpiNow2
+      35478:    190.52560        38       78       IT  epiforecasts-EpiNow2
+      35479:    141.06659        39       78       IT  epiforecasts-EpiNow2
+      35480:     24.43419        40       78       IT  epiforecasts-EpiNow2
+             target_type target_end_date horizon .mv_group_id
+                  <char>          <Date>   <num>        <int>
+          1:       Cases      2021-05-08       1            1
+          2:       Cases      2021-05-08       1            1
+          3:       Cases      2021-05-08       1            1
+          4:       Cases      2021-05-08       1            1
+          5:       Cases      2021-05-08       1            1
+         ---                                                 
+      35476:      Deaths      2021-07-24       2          224
+      35477:      Deaths      2021-07-24       2          224
+      35478:      Deaths      2021-07-24       2          224
+      35479:      Deaths      2021-07-24       2          224
+      35480:      Deaths      2021-07-24       2          224
 

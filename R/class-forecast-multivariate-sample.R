@@ -124,6 +124,68 @@ is_forecast_sample_multivariate <- function(x) {
 # nolint end
 
 
+#' @title Print information about a multivariate forecast object
+#' @description
+#' This function prints information about a multivariate forecast object,
+#' including "Forecast type", "Forecast unit", and "Joint across" columns.
+#'
+#' @param x A forecast object of class `forecast_sample_multivariate`.
+#' @param ... Additional arguments for [print()].
+#' @returns Returns `x` invisibly.
+#' @importFrom cli col_blue cli_text
+#' @export
+#' @keywords gain-insights
+print.forecast_sample_multivariate <- function(x, ...) {
+  forecast_type <- try(
+    do.call(get_forecast_type, list(forecast = x)),
+    silent = TRUE
+  )
+  forecast_unit <- try(
+    do.call(get_forecast_unit, list(data = x)),
+    silent = TRUE
+  )
+
+  if (inherits(forecast_type, "try-error")) {
+    cli_inform(
+      c(
+        "!" = "Could not determine forecast type due to error in validation."
+      )
+    )
+  } else {
+    cli_text(
+      col_blue("Forecast type: "),
+      "{forecast_type}"
+    )
+  }
+
+  if (inherits(forecast_unit, "try-error")) {
+    cli_inform(
+      c(
+        "!" = "Could not determine forecast unit."
+      )
+    )
+  } else {
+    cli_text(col_blue("Forecast unit:"))
+    cli_text("{forecast_unit}")
+  }
+
+  joint_across <- try(
+    setdiff(get_forecast_unit(x), get_grouping(x)),
+    silent = TRUE
+  )
+  if (!inherits(joint_across, "try-error") && length(joint_across) > 0) {
+    cli_text(col_blue("Joint across:"))
+    cli_text("{joint_across}")
+  }
+
+  cat("\n")
+
+  print(as.data.table(x), ...)
+
+  return(invisible(x))
+}
+
+
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr copy
 #' @importFrom methods formalArgs
