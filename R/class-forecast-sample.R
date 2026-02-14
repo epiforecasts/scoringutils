@@ -33,12 +33,12 @@ as_forecast_sample <- function(data, ...) {
 #'   sample id. This column will be renamed to "sample_id".
 #' @export
 #' @importFrom cli cli_warn
-as_forecast_sample.default <- function(data,
-                                       forecast_unit = NULL,
-                                       observed = NULL,
-                                       predicted = NULL,
-                                       sample_id = NULL,
-                                       ...) {
+as_forecast_sample.data.frame <- function(data,
+                                          forecast_unit = NULL,
+                                          observed = NULL,
+                                          predicted = NULL,
+                                          sample_id = NULL,
+                                          ...) {
   data <- as_forecast_generic(
     data,
     forecast_unit,
@@ -49,6 +49,16 @@ as_forecast_sample.default <- function(data,
   data <- new_forecast(data, "forecast_sample")
   assert_forecast(data)
   return(data)
+}
+
+#' @rdname as_forecast_sample
+#' @export
+#' @method as_forecast_sample default
+as_forecast_sample.default <- function(data, ...) {
+  cli_abort(
+    "Input must be a data.frame or similar (e.g. a {.cls data.table} or
+    {.cls tibble}), not {.cls {class(data)}}."
+  )
 }
 
 

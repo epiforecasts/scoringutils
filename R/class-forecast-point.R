@@ -25,13 +25,13 @@ as_forecast_point <- function(data, ...) {
 
 #' @rdname as_forecast_point
 #' @export
-#' @method as_forecast_point default
+#' @method as_forecast_point data.frame
 #' @importFrom cli cli_warn
-as_forecast_point.default <- function(data,
-                                      forecast_unit = NULL,
-                                      observed = NULL,
-                                      predicted = NULL,
-                                      ...) {
+as_forecast_point.data.frame <- function(data,
+                                         forecast_unit = NULL,
+                                         observed = NULL,
+                                         predicted = NULL,
+                                         ...) {
   data <- as_forecast_generic(
     data,
     forecast_unit,
@@ -41,6 +41,16 @@ as_forecast_point.default <- function(data,
   data <- new_forecast(data, "forecast_point")
   assert_forecast(data)
   return(data)
+}
+
+#' @rdname as_forecast_point
+#' @export
+#' @method as_forecast_point default
+as_forecast_point.default <- function(data, ...) {
+  cli_abort(
+    "Input must be a data.frame or similar (e.g. a {.cls data.table} or
+    {.cls tibble}), not {.cls {class(data)}}."
+  )
 }
 
 

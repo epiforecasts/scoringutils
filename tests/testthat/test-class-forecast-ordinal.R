@@ -18,6 +18,12 @@ test_that("as_forecast.forecast_ordinal() works as expected", {
   )
 })
 
+test_that("as_forecast_ordinal.data.frame works with a plain data.frame", {
+  df <- as.data.frame(na.omit(example_ordinal))
+  result <- expect_no_condition(as_forecast_ordinal(df))
+  expect_s3_class(result, "forecast_ordinal")
+})
+
 test_that("as_forecast.forecast_ordinal() breaks when rows with zero probability are missing", {
   ex_faulty <- as.data.table(example_ordinal)
   ex_faulty <- ex_faulty[predicted != 0]

@@ -55,13 +55,15 @@ as_forecast_multivariate_sample <- function(data, ...) {
 #'   `joint_across = "country"`.
 #' @export
 #' @importFrom cli cli_warn
-as_forecast_multivariate_sample.default <- function(data,
-                                                    joint_across,
-                                                    forecast_unit = NULL,
-                                                    observed = NULL,
-                                                    predicted = NULL,
-                                                    sample_id = NULL,
-                                                    ...) {
+# nolint start: object_name_linter
+as_forecast_multivariate_sample.data.frame <- function(data,
+                                                       joint_across,
+                                                       forecast_unit = NULL,
+                                                       observed = NULL,
+                                                       predicted = NULL,
+                                                       sample_id = NULL,
+                                                       ...) {
+  # nolint end
   data <- as_forecast_generic(
     data,
     forecast_unit,
@@ -74,6 +76,18 @@ as_forecast_multivariate_sample.default <- function(data,
   data <- new_forecast(data, "forecast_sample_multivariate")
   assert_forecast(data)
   return(data)
+}
+
+#' @rdname as_forecast_multivariate_sample
+#' @export
+#' @method as_forecast_multivariate_sample default
+# nolint start: object_name_linter
+as_forecast_multivariate_sample.default <- function(data, ...) {
+  # nolint end
+  cli_abort(
+    "Input must be a data.frame or similar (e.g. a {.cls data.table} or
+    {.cls tibble}), not {.cls {class(data)}}."
+  )
 }
 
 

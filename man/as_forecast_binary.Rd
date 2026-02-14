@@ -2,18 +2,21 @@
 % Please edit documentation in R/class-forecast-binary.R
 \name{as_forecast_binary}
 \alias{as_forecast_binary}
+\alias{as_forecast_binary.data.frame}
 \alias{as_forecast_binary.default}
 \title{Create a \code{forecast} object for binary forecasts}
 \usage{
 as_forecast_binary(data, ...)
 
-\method{as_forecast_binary}{default}(
+\method{as_forecast_binary}{data.frame}(
   data,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
   ...
 )
+
+\method{as_forecast_binary}{default}(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.

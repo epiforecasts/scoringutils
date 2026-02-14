@@ -93,6 +93,11 @@ test_that("as_forecast_quantile() works with a data.frame", {
   expect_no_condition(as_forecast_quantile(example_quantile_df))
 })
 
+test_that("as_forecast_quantile.data.frame works with a plain data.frame", {
+  result <- expect_no_condition(as_forecast_quantile(example_quantile_df))
+  expect_s3_class(result, "forecast_quantile")
+})
+
 test_that("as_forecast_quantiles works", {
   samples <- data.frame(
     date = as.Date("2020-01-01") + 1:10,

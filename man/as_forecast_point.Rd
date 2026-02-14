@@ -3,19 +3,22 @@
 %   R/class-forecast-quantile.R
 \name{as_forecast_point}
 \alias{as_forecast_point}
+\alias{as_forecast_point.data.frame}
 \alias{as_forecast_point.default}
 \alias{as_forecast_point.forecast_quantile}
 \title{Create a \code{forecast} object for point forecasts}
 \usage{
 as_forecast_point(data, ...)
 
-\method{as_forecast_point}{default}(
+\method{as_forecast_point}{data.frame}(
   data,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
   ...
 )
+
+\method{as_forecast_point}{default}(data, ...)
 
 \method{as_forecast_point}{forecast_quantile}(data, ...)
 }

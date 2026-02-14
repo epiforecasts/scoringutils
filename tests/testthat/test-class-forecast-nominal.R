@@ -18,6 +18,12 @@ test_that("as_forecast.forecast_nominal() works as expected", {
   )
 })
 
+test_that("as_forecast_nominal.data.frame works with a plain data.frame", {
+  df <- as.data.frame(na.omit(example_nominal))
+  result <- expect_no_condition(as_forecast_nominal(df))
+  expect_s3_class(result, "forecast_nominal")
+})
+
 test_that("as_forecast.forecast_nominal() breaks when rows with zero probability are missing", {
   ex_faulty <- as.data.table(example_nominal)
   ex_faulty <- ex_faulty[predicted != 0]

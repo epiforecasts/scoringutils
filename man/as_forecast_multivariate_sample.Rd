@@ -2,12 +2,13 @@
 % Please edit documentation in R/class-forecast-multivariate-sample.R
 \name{as_forecast_multivariate_sample}
 \alias{as_forecast_multivariate_sample}
+\alias{as_forecast_multivariate_sample.data.frame}
 \alias{as_forecast_multivariate_sample.default}
 \title{Create a \code{forecast} object for sample-based multivariate forecasts}
 \usage{
 as_forecast_multivariate_sample(data, ...)
 
-\method{as_forecast_multivariate_sample}{default}(
+\method{as_forecast_multivariate_sample}{data.frame}(
   data,
   joint_across,
   forecast_unit = NULL,
@@ -16,6 +17,8 @@ as_forecast_multivariate_sample(data, ...)
   sample_id = NULL,
   ...
 )
+
+\method{as_forecast_multivariate_sample}{default}(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.

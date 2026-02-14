@@ -40,14 +40,14 @@ as_forecast_quantile <- function(data, ...) {
 #'   the quantile level of the predicted values. This column will be renamed to
 #'   "quantile_level". Only applicable to quantile-based forecasts.
 #' @export
-#' @method as_forecast_quantile default
+#' @method as_forecast_quantile data.frame
 #' @importFrom cli cli_warn
-as_forecast_quantile.default <- function(data,
-                                         forecast_unit = NULL,
-                                         observed = NULL,
-                                         predicted = NULL,
-                                         quantile_level = NULL,
-                                         ...) {
+as_forecast_quantile.data.frame <- function(data,
+                                            forecast_unit = NULL,
+                                            observed = NULL,
+                                            predicted = NULL,
+                                            quantile_level = NULL,
+                                            ...) {
   data <- as_forecast_generic(
     data,
     forecast_unit,
@@ -72,6 +72,16 @@ as_forecast_quantile.default <- function(data,
   data <- new_forecast(data, "forecast_quantile")
   assert_forecast(data)
   return(data)
+}
+
+#' @rdname as_forecast_quantile
+#' @export
+#' @method as_forecast_quantile default
+as_forecast_quantile.default <- function(data, ...) {
+  cli_abort(
+    "Input must be a data.frame or similar (e.g. a {.cls data.table} or
+    {.cls tibble}), not {.cls {class(data)}}."
+  )
 }
 
 
