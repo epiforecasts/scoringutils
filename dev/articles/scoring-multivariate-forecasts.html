@@ -345,19 +345,6 @@ this appropriately.)</p>
 <p>If, at any point, you want to score the same forecast using different
 groupings, you’d have create a new separate forecast object with a
 different grouping and score that new forecast object.</p>
-<!-- ## Details on the grouping - WIP
-
-As mentioned above, you can set the grouping with the `set_grouping` function. This will return the original data with an additional column `.mv_group_id` that indicates the group each observation belongs to.
-
-Alternatively, you can set the grouping right when creating the forecast.
-
-
-forecast <- as_forecast_sample(
-  example_sample_continuous,
-  grouping = c("target_end_date", "target_type", "forecast_date", "model", "horizon")
-)
-
-forecast -->
 </div>
 <div class="section level2">
 <h2 id="univariate-and-multivariate-scoring-for-matrices">Univariate and multivariate scoring for matrices<a class="anchor" aria-label="anchor" href="#univariate-and-multivariate-scoring-for-matrices"></a>
