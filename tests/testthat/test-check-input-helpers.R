@@ -11,31 +11,6 @@ test_that("Check equal length works if all arguments have length 1", {
 })
 
 
-test_that("check_columns_present works", {
-  expect_identical(
-    capture.output(
-      check_columns_present(example_binary, c("loc1", "loc2", "loc3"))
-    ),
-    paste(
-      "[1] \"Columns 'loc1', 'loc2', 'loc3' not found in data\""
-    )
-  )
-  expect_identical(
-    capture.output(
-      check_columns_present(example_binary, "loc1")
-    ),
-    paste(
-      "[1] \"Column 'loc1' not found in data\""
-    )
-  )
-  expect_true(
-    check_columns_present(example_binary, "location_name")
-  )
-  expect_true(
-    check_columns_present(example_binary, columns = NULL)
-  )
-})
-
 test_that("test_columns_not_present works", {
   expect_true(
     test_columns_not_present(example_binary, "sample_id")
@@ -45,12 +20,3 @@ test_that("test_columns_not_present works", {
   )
 })
 
-test_that("check_columns_present() works", {
-  expect_identical(
-    check_columns_present(example_quantile, c("observed", "predicted", "nop")),
-    "Column 'nop' not found in data"
-  )
-  expect_true(
-    check_columns_present(example_quantile, c("observed", "predicted"))
-  )
-})

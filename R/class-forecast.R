@@ -106,14 +106,14 @@ assert_forecast.default <- function(
 #' @inheritParams assert_forecast
 #' @returns returns the input
 #' @importFrom data.table ':=' is.data.table
-#' @importFrom checkmate assert_data_table
+#' @importFrom checkmate assert_data_table assert_subset test_subset
 #' @importFrom cli cli_abort cli_inform cli_warn
 #' @keywords internal_input_check
 assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data, min.rows = 1)
-  assert(check_columns_present(data, c("observed", "predicted")))
-  problem <- test_columns_present(data, c("sample_id", "quantile_level"))
+  assert_subset(c("observed", "predicted"), colnames(data))
+  problem <- test_subset(c("sample_id", "quantile_level"), colnames(data))
   if (problem) {
     cli_abort(
       c(

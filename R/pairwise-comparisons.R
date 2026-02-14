@@ -87,7 +87,7 @@
 #' @importFrom data.table as.data.table data.table setnames copy
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
-#' @importFrom checkmate assert_subset assert_character assert_disjunct
+#' @importFrom checkmate assert_subset assert_character assert_disjunct check_subset
 #' @importFrom cli cli_abort cli_inform cli_warn
 #' @export
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -124,7 +124,7 @@ get_pairwise_comparisons <- function(
   # input checks ---------------------------------------------------------------
   scores <- ensure_data.table(scores)
   # check that column in 'compare' is present
-  assert(check_columns_present(scores, compare))
+  assert_subset(compare, colnames(scores))
   # check that column(s) in `by` ar not in `compare`
   assert_disjunct(by, compare)
 
@@ -139,7 +139,7 @@ get_pairwise_comparisons <- function(
   # check that columns in 'by' are present
   #nolint start: keyword_quote_linter object_usage_linter
   if (length(by) > 0) {
-    by_cols <- check_columns_present(scores, by)
+    by_cols <- check_subset(by, colnames(scores))
     if (!isTRUE(by_cols)) {
       cli_abort(
         c(

@@ -71,11 +71,11 @@ as_forecast_nominal.default <- function(data,
 
 #' @export
 #' @keywords check-forecasts
-#' @importFrom checkmate assert_names assert_set_equal test_set_equal
+#' @importFrom checkmate assert_names assert_set_equal test_set_equal assert_subset
 assert_forecast.forecast_nominal <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  assert(check_columns_present(forecast, "predicted_label"))
+  assert_subset("predicted_label", colnames(forecast))
   assert_names(
     colnames(forecast),
     disjunct.from = c("sample_id", "quantile_level")

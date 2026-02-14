@@ -8,7 +8,7 @@ test_that("plot_wis() throws an error if WIS components are missing", {
 
   expect_error(
     plot_wis(ex_score),
-    "Columns 'overprediction', 'underprediction', 'dispersion' not found in data."
+    "Must be a subset of"
   )
 })
 
