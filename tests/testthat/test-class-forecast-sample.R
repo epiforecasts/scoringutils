@@ -28,6 +28,15 @@ test_that("Running `as_forecast_sample()` twice returns the same object", {
   )
 })
 
+test_that("as_forecast_sample() accepts verbose argument and suppresses messages", {
+  data <- data.table::copy(example_sample_continuous)
+  expect_no_condition(
+    as_forecast_sample(data, verbose = FALSE)
+  )
+  result <- as_forecast_sample(data, verbose = FALSE)
+  expect_s3_class(result, "forecast_sample")
+})
+
 
 # ==============================================================================
 # is_forecast_sample() # nolint: commented_code_linter

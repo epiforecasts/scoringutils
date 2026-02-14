@@ -31,6 +31,7 @@ as_forecast_sample <- function(data, ...) {
 #' @rdname as_forecast_sample
 #' @param sample_id (optional) Name of the column in `data` that contains the
 #'   sample id. This column will be renamed to "sample_id".
+#' @inheritParams assert_forecast
 #' @export
 #' @importFrom cli cli_warn
 as_forecast_sample.default <- function(data,
@@ -38,6 +39,7 @@ as_forecast_sample.default <- function(data,
                                        observed = NULL,
                                        predicted = NULL,
                                        sample_id = NULL,
+                                       verbose = TRUE,
                                        ...) {
   data <- as_forecast_generic(
     data,
@@ -47,7 +49,7 @@ as_forecast_sample.default <- function(data,
     sample_id = sample_id
   )
   data <- new_forecast(data, "forecast_sample")
-  assert_forecast(data)
+  assert_forecast(data, verbose = verbose)
   return(data)
 }
 

@@ -12,6 +12,7 @@ as_forecast_binary(data, ...)
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
+  verbose = TRUE,
   ...
 )
 }
@@ -34,6 +35,9 @@ observed values. This column will be renamed to "observed".}
 
 \item{predicted}{(optional) Name of the column in \code{data} that contains the
 predicted values. This column will be renamed to "predicted".}
+
+\item{verbose}{Logical. If \code{FALSE} (default is \code{TRUE}), no messages and
+warnings will be created.}
 }
 \value{
 A \code{forecast} object of class \code{forecast_binary}

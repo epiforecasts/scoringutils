@@ -13,6 +13,7 @@ as_forecast_sample(data, ...)
   observed = NULL,
   predicted = NULL,
   sample_id = NULL,
+  verbose = TRUE,
   ...
 )
 }
@@ -38,6 +39,9 @@ predicted values. This column will be renamed to "predicted".}
 
 \item{sample_id}{(optional) Name of the column in \code{data} that contains the
 sample id. This column will be renamed to "sample_id".}
+
+\item{verbose}{Logical. If \code{FALSE} (default is \code{TRUE}), no messages and
+warnings will be created.}
 }
 \value{
 A \code{forecast} object of class \code{forecast_sample}

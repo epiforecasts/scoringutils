@@ -15,6 +15,7 @@ as_forecast_quantile(data, ...)
   observed = NULL,
   predicted = NULL,
   quantile_level = NULL,
+  verbose = TRUE,
   ...
 )
 
@@ -48,6 +49,9 @@ predicted values. This column will be renamed to "predicted".}
 \item{quantile_level}{(optional) Name of the column in \code{data} that contains
 the quantile level of the predicted values. This column will be renamed to
 "quantile_level". Only applicable to quantile-based forecasts.}
+
+\item{verbose}{Logical. If \code{FALSE} (default is \code{TRUE}), no messages and
+warnings will be created.}
 
 \item{probs}{A numeric vector of quantile levels for which
 quantiles will be computed. Corresponds to the \code{probs} argument in

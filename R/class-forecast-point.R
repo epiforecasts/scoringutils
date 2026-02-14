@@ -24,6 +24,7 @@ as_forecast_point <- function(data, ...) {
 
 
 #' @rdname as_forecast_point
+#' @inheritParams assert_forecast
 #' @export
 #' @method as_forecast_point default
 #' @importFrom cli cli_warn
@@ -31,6 +32,7 @@ as_forecast_point.default <- function(data,
                                       forecast_unit = NULL,
                                       observed = NULL,
                                       predicted = NULL,
+                                      verbose = TRUE,
                                       ...) {
   data <- as_forecast_generic(
     data,
@@ -39,7 +41,7 @@ as_forecast_point.default <- function(data,
     predicted = predicted
   )
   data <- new_forecast(data, "forecast_point")
-  assert_forecast(data)
+  assert_forecast(data, verbose = verbose)
   return(data)
 }
 

@@ -39,6 +39,7 @@ as_forecast_quantile <- function(data, ...) {
 #' @param quantile_level (optional) Name of the column in `data` that contains
 #'   the quantile level of the predicted values. This column will be renamed to
 #'   "quantile_level". Only applicable to quantile-based forecasts.
+#' @inheritParams assert_forecast
 #' @export
 #' @method as_forecast_quantile default
 #' @importFrom cli cli_warn
@@ -47,6 +48,7 @@ as_forecast_quantile.default <- function(data,
                                          observed = NULL,
                                          predicted = NULL,
                                          quantile_level = NULL,
+                                         verbose = TRUE,
                                          ...) {
   data <- as_forecast_generic(
     data,
@@ -58,19 +60,21 @@ as_forecast_quantile.default <- function(data,
   unique_q_levels <- sort(unique(data$quantile_level))
   level_diffs <- diff(unique_q_levels)
   if (any(level_diffs <= 1e-10)) {
-    cli_warn(
-      "The {.code quantile_level} column in your data
-      seems to have a rounding issue
-      (run {.code diff(sort(unique(data$quantile_level)))} to see this.
-      As {.code scoringutils} does not support arbitrarily fine quantile level
-      increments, we're going to run {.code round(x, digits = 10)} on
-      the {.code quantile_level} column."
-    )
+    if (verbose) {
+      cli_warn(
+        "The {.code quantile_level} column in your data
+        seems to have a rounding issue
+        (run {.code diff(sort(unique(data$quantile_level)))} to see this.
+        As {.code scoringutils} does not support arbitrarily fine quantile level
+        increments, we're going to run {.code round(x, digits = 10)} on
+        the {.code quantile_level} column."
+      )
+    }
     data$quantile_level <- round(data$quantile_level, digits = 9)
   }
 
   data <- new_forecast(data, "forecast_quantile")
-  assert_forecast(data)
+  assert_forecast(data, verbose = verbose)
   return(data)
 }
 

@@ -196,6 +196,48 @@ test_that("as_forecast_quantile handles rounding issues correctly", {
   )
 })
 
+test_that("as_forecast_quantile() accepts verbose argument and suppresses messages", {
+  expect_no_condition(
+    as_forecast_quantile(example_quantile, verbose = FALSE)
+  )
+  result <- as_forecast_quantile(example_quantile, verbose = FALSE)
+  expect_s3_class(result, "forecast_quantile")
+})
+
+test_that("as_forecast_quantile() with verbose = TRUE emits messages by default", {
+  expect_message(
+    as_forecast_quantile(example_quantile),
+    "Some rows containing NA"
+  )
+})
+
+test_that("as_forecast_quantile() verbose = FALSE suppresses quantile rounding warning", {
+  quantile_data <- data.table(
+    quantile_level = c(0.25, 0.75 + 1e-13, 0.25, 0.75),
+    predicted = c(1, 2, 3, 4),
+    observed = c(5, 5, 5, 5),
+    location = c(1, 1, 2, 2)
+  )
+  expect_no_condition(
+    as_forecast_quantile(quantile_data, verbose = FALSE)
+  )
+})
+
+test_that("as_forecast_quantile() verbose = FALSE does not affect error behavior", {
+  invalid_data <- data.table(observed = 1:5, predicted = 1:5)
+  expect_error(
+    as_forecast_quantile(invalid_data, verbose = FALSE),
+    "Column 'quantile_level' not found"
+  )
+})
+
+test_that("as_forecast_quantile() verbose = FALSE suppresses different-number-of-quantiles warning", {
+  data <- na.omit(as.data.table(example_quantile))[-1000, ]
+  expect_no_condition(
+    as_forecast_quantile(data, verbose = FALSE)
+  )
+})
+
 
 
 

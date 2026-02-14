@@ -30,6 +30,14 @@ test_that("as_forecast.forecast_nominal() breaks when rows with zero probability
   )
 })
 
+test_that("as_forecast_nominal() accepts verbose argument", {
+  expect_no_condition(
+    as_forecast_nominal(na.omit(example_nominal), verbose = FALSE)
+  )
+  result <- as_forecast_nominal(na.omit(example_nominal), verbose = FALSE)
+  expect_s3_class(result, "forecast_nominal")
+})
+
 
 # ==============================================================================
 # is_forecast_nominal() # nolint: commented_code_linter

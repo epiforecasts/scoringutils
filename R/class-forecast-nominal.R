@@ -47,6 +47,7 @@ as_forecast_nominal <- function(data, ...) {
 #' @param predicted_label (optional) Name of the column in `data` that denotes
 #'   the outcome to which a predicted probability corresponds to.
 #'   This column will be renamed to "predicted_label".
+#' @inheritParams assert_forecast
 #' @export
 #' @method as_forecast_nominal default
 #' @importFrom cli cli_warn
@@ -55,6 +56,7 @@ as_forecast_nominal.default <- function(data,
                                         observed = NULL,
                                         predicted = NULL,
                                         predicted_label = NULL,
+                                        verbose = TRUE,
                                         ...) {
   data <- as_forecast_generic(
     data,
@@ -64,7 +66,7 @@ as_forecast_nominal.default <- function(data,
     predicted_label = predicted_label
   )
   data <- new_forecast(data, "forecast_nominal")
-  assert_forecast(data)
+  assert_forecast(data, verbose = verbose)
   return(data)
 }
 
