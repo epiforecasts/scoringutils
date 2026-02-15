@@ -10,6 +10,8 @@ appropriate `is_forecast_<type>` function.
 ``` r
 is_forecast_binary(x)
 
+is_forecast_multivariate_sample(x)
+
 is_forecast_sample_multivariate(x)
 
 is_forecast_nominal(x)

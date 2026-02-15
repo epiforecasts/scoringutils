@@ -73,11 +73,11 @@ Overview of required input format for sample-based forecasts
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
 [`get_metrics.forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md),
+[`get_metrics.forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md),
 [`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md),
 [`get_metrics.forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.md),
 [`get_metrics.forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.md),
-[`get_metrics.forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample_multivariate.md),
 [`get_metrics.scores()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.scores.md)
 
 ## Examples
@@ -104,7 +104,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         return(res)
 #>     }
 #> }
-#> <bytecode: 0x5648f175a5a8>
+#> <bytecode: 0x55d36d2bc9d8>
 #> <environment: namespace:scoringutils>
 #> 
 #> $dss
@@ -113,7 +113,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     assert_input_sample(observed, predicted)
 #>     scoringRules::dss_sample(y = observed, dat = predicted, ...)
 #> }
-#> <bytecode: 0x5648f43f1990>
+#> <bytecode: 0x55d36dbf77a0>
 #> <environment: namespace:scoringutils>
 #> 
 #> $crps
@@ -141,7 +141,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         return(crps)
 #>     }
 #> }
-#> <bytecode: 0x5648f7196180>
+#> <bytecode: 0x55d364fdd190>
 #> <environment: namespace:scoringutils>
 #> 
 #> $overprediction
@@ -151,7 +151,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$overprediction)
 #> }
-#> <bytecode: 0x5648f52900c0>
+#> <bytecode: 0x55d367fc6f28>
 #> <environment: namespace:scoringutils>
 #> 
 #> $underprediction
@@ -161,7 +161,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$underprediction)
 #> }
-#> <bytecode: 0x5648f5290c20>
+#> <bytecode: 0x55d367ff33f8>
 #> <environment: namespace:scoringutils>
 #> 
 #> $dispersion
@@ -171,7 +171,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$dispersion)
 #> }
-#> <bytecode: 0x5648f5291780>
+#> <bytecode: 0x55d36e507160>
 #> <environment: namespace:scoringutils>
 #> 
 #> $log_score
@@ -181,7 +181,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     scoringRules::logs_sample(y = observed, dat = predicted, 
 #>         ...)
 #> }
-#> <bytecode: 0x5648f528e4b0>
+#> <bytecode: 0x55d36a3e6328>
 #> <environment: namespace:scoringutils>
 #> 
 #> $ae_median
@@ -193,7 +193,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     ae_median <- abs(observed - median_predictions)
 #>     return(ae_median)
 #> }
-#> <bytecode: 0x5648f493ce38>
+#> <bytecode: 0x55d36a4ff018>
 #> <environment: namespace:scoringutils>
 #> 
 #> $se_mean
@@ -204,7 +204,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     se_mean <- (observed - mean_predictions)^2
 #>     return(se_mean)
 #> }
-#> <bytecode: 0x5648f5284478>
+#> <bytecode: 0x55d36805f910>
 #> <environment: namespace:scoringutils>
 #> 
 ```

@@ -2,11 +2,23 @@
 
 ## scoringutils (development version)
 
+- Fixed a naming inconsistency where the class
+  `forecast_sample_multivariate` did not match the constructor
+  [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md).
+  The class has been renamed to `forecast_multivariate_sample`. The old
+  class name is retained in the class vector during the deprecation
+  period so `inherits(x, "forecast_sample_multivariate")` still works.
+  [`is_forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
+  is deprecated in favour of
+  [`is_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md).
+  This also fixes `transform_forecasts(append = TRUE)` which previously
+  failed on multivariate sample forecasts
+  ([\#1071](https://github.com/epiforecasts/scoringutils/issues/1071)).
 - Added support for scoring multivariate forecasts
   ([\#288](https://github.com/epiforecasts/scoringutils/issues/288), big
   thank you to Sam Abbott and Sebastian Funk). You can find detailed
   information in the Vignette “Scoring multivariate forecasts”. There is
-  a new forecast type, `forecast_multivariate_sample()` and a
+  a new forecast type, `forecast_multivariate_sample` and a
   corresponding
   [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md)
   function. To score a multivariate forecast, users are expected to

@@ -52,12 +52,12 @@ Overview of required input format for binary and point forecasts
 
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
+[`get_metrics.forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md),
 [`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md),
 [`get_metrics.forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.md),
 [`get_metrics.forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.md),
 [`get_metrics.forecast_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample.md),
-[`get_metrics.forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample_multivariate.md),
 [`get_metrics.scores()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.scores.md)
 
 ## Examples
@@ -72,7 +72,7 @@ get_metrics(example_binary)
 #>     brierscore <- (observed - predicted)^2
 #>     return(brierscore)
 #> }
-#> <bytecode: 0x5648f537b070>
+#> <bytecode: 0x55d36c2ee9a8>
 #> <environment: namespace:scoringutils>
 #> 
 #> $log_score
@@ -83,7 +83,7 @@ get_metrics(example_binary)
 #>     logs <- -log(1 - abs(observed - predicted))
 #>     return(logs)
 #> }
-#> <bytecode: 0x5648f5372350>
+#> <bytecode: 0x55d36c2e9b38>
 #> <environment: namespace:scoringutils>
 #> 
 get_metrics(example_binary, select = "brier_score")
@@ -95,7 +95,7 @@ get_metrics(example_binary, select = "brier_score")
 #>     brierscore <- (observed - predicted)^2
 #>     return(brierscore)
 #> }
-#> <bytecode: 0x5648f537b070>
+#> <bytecode: 0x55d36c2ee9a8>
 #> <environment: namespace:scoringutils>
 #> 
 get_metrics(example_binary, exclude = "log_score")
@@ -107,7 +107,7 @@ get_metrics(example_binary, exclude = "log_score")
 #>     brierscore <- (observed - predicted)^2
 #>     return(brierscore)
 #> }
-#> <bytecode: 0x5648f537b070>
+#> <bytecode: 0x55d36c2ee9a8>
 #> <environment: namespace:scoringutils>
 #> 
 ```

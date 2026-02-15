@@ -11,7 +11,7 @@ example_multivariate_sample
 
 ## Format
 
-An object of class `forecast_sample_multivariate` (see
+An object of class `forecast_multivariate_sample` (see
 [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md))
 with the following columns:
 

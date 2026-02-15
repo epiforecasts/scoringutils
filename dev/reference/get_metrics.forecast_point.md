@@ -68,11 +68,11 @@ of the American Statistical Association.
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
 [`get_metrics.forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md),
+[`get_metrics.forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md),
 [`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md),
 [`get_metrics.forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.md),
 [`get_metrics.forecast_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample.md),
-[`get_metrics.forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample_multivariate.md),
 [`get_metrics.scores()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.scores.md)
 
 ## Examples
@@ -84,7 +84,7 @@ get_metrics(example_point, select = "ape")
 #> {
 #>     return(ae(actual, predicted)/abs(actual))
 #> }
-#> <bytecode: 0x5648f348a578>
+#> <bytecode: 0x55d36a599588>
 #> <environment: namespace:Metrics>
 #> 
 

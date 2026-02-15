@@ -238,7 +238,7 @@ example_multiv <- as_forecast_multivariate_sample(
   c("location", "location_name")
 )
 example_multiv
-#> Forecast type: sample_multivariate
+#> Forecast type: multivariate_sample
 #> Forecast unit:
 #> location, location_name, target_end_date, target_type, forecast_date, model,
 #> and horizon

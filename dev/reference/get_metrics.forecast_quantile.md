@@ -79,11 +79,11 @@ Overview of required input format for quantile-based forecasts
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
 [`get_metrics.forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md),
+[`get_metrics.forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md),
 [`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md),
 [`get_metrics.forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.md),
 [`get_metrics.forecast_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample.md),
-[`get_metrics.forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample_multivariate.md),
 [`get_metrics.scores()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.scores.md)
 
 ## Examples
@@ -136,7 +136,7 @@ get_metrics(example_quantile, select = "wis")
 #>         return(reformatted$wis)
 #>     }
 #> }
-#> <bytecode: 0x5648eee07e68>
+#> <bytecode: 0x55d36d05d370>
 #> <environment: namespace:scoringutils>
 #> 
 ```

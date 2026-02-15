@@ -1,14 +1,17 @@
-# Get default metrics for nominal forecasts
+# Get default metrics for sample-based forecasts
 
-For nominal forecasts, the default scoring rule is:
+For sample-based multivariate forecasts, the default scoring rules are:
 
-- "log_score" =
-  [`logs_categorical()`](https://epiforecasts.io/scoringutils/dev/reference/scoring-functions-nominal.md)
+- "energy_score" =
+  [`energy_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/energy_score_multivariate.md)
 
 ## Usage
 
 ``` r
-# S3 method for class 'forecast_nominal'
+# S3 method for class 'forecast_multivariate_sample'
+get_metrics(x, select = NULL, exclude = NULL, ...)
+
+# S3 method for class 'forecast_sample_multivariate'
 get_metrics(x, select = NULL, exclude = NULL, ...)
 ```
 
@@ -35,12 +38,18 @@ get_metrics(x, select = NULL, exclude = NULL, ...)
 
   unused
 
+## Input format
+
+![](figures/metrics-sample.png)
+
+Overview of required input format for sample-based forecasts
+
 ## See also
 
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
 [`get_metrics.forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md),
-[`get_metrics.forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md),
+[`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md),
 [`get_metrics.forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.md),
 [`get_metrics.forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.md),
@@ -50,21 +59,26 @@ Other get_metrics functions:
 ## Examples
 
 ``` r
-get_metrics(example_nominal)
-#> $log_score
-#> function (observed, predicted, predicted_label) 
+example <- as_forecast_multivariate_sample(
+  example_sample_continuous, joint_across = c("location", "location_name")
+)
+#> ℹ Some rows containing NA values may be removed. This is fine if not
+#>   unexpected.
+get_metrics(example)
+#> $energy_score
+#> function (observed, predicted, mv_group_id, w = NULL) 
 #> {
-#>     assert_input_categorical(observed, predicted, predicted_label)
-#>     n <- length(observed)
-#>     if (n == 1) {
-#>         predicted <- matrix(predicted, nrow = 1)
-#>     }
-#>     observed_indices <- as.numeric(observed)
-#>     pred_for_observed <- predicted[cbind(1:n, observed_indices)]
-#>     logs <- -log(pred_for_observed)
-#>     return(logs)
+#>     assert_input_multivariate_sample(observed, predicted, mv_group_id)
+#>     unique_groups <- unique(mv_group_id)
+#>     energy_score <- vapply(unique_groups, function(group) {
+#>         idx <- which(mv_group_id == group)
+#>         es_sample(y = observed[idx], dat = predicted[idx, , drop = FALSE], 
+#>             w = w)
+#>     }, numeric(1))
+#>     names(energy_score) <- unique_groups
+#>     return(energy_score)
 #> }
-#> <bytecode: 0x55d36cf04d58>
+#> <bytecode: 0x55d36be6d948>
 #> <environment: namespace:scoringutils>
 #> 
 ```

@@ -81,12 +81,12 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_forecast_unit.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_grouping.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample_multivariate.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.scores.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.html</loc></url>

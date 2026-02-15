@@ -80,6 +80,7 @@
 - [`assert_forecast()`](https://epiforecasts.io/scoringutils/dev/reference/assert_forecast.md)
   : Assert that input is a forecast object and passes validations
 - [`is_forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
+  [`is_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
@@ -151,6 +152,9 @@
   : Get metrics
 - [`get_metrics(`*`<forecast_binary>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md)
   : Get default metrics for binary forecasts
+- [`get_metrics(`*`<forecast_multivariate_sample>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md)
+  [`get_metrics(`*`<forecast_sample_multivariate>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md)
+  : Get default metrics for sample-based forecasts
 - [`get_metrics(`*`<forecast_nominal>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md)
   : Get default metrics for nominal forecasts
 - [`get_metrics(`*`<forecast_ordinal>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md)
@@ -160,8 +164,6 @@
 - [`get_metrics(`*`<forecast_quantile>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.md)
   : Get default metrics for quantile-based forecasts
 - [`get_metrics(`*`<forecast_sample>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample.md)
-  : Get default metrics for sample-based forecasts
-- [`get_metrics(`*`<forecast_sample_multivariate>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_sample_multivariate.md)
   : Get default metrics for sample-based forecasts
 - [`get_metrics(`*`<scores>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.scores.md)
   : Get names of the metrics that were used for scoring
