@@ -3,7 +3,7 @@
     Code
       print(result)
     Message
-      Forecast type: sample_multivariate
+      Forecast type: multivariate_sample
       Forecast unit:
       location, model, target_type, target_end_date, and horizon
     Output
@@ -40,11 +40,11 @@
     Code
       cat("Class:", class(result), "\n")
     Output
-      Class: forecast_sample_multivariate forecast data.table data.frame 
+      Class: forecast_multivariate_sample forecast_sample_multivariate forecast data.table data.frame 
     Code
       cat("Forecast type:", scoringutils:::get_forecast_type(result), "\n")
     Output
-      Forecast type: sample_multivariate 
+      Forecast type: multivariate_sample 
     Code
       cat("Forecast unit:", toString(get_forecast_unit(result)), "\n")
     Output
@@ -66,7 +66,7 @@
     Output
       Number of unique groups: 224 
 
-# score.forecast_sample_multivariate() creates expected output structure
+# score.forecast_multivariate_sample() creates expected output
 
     Code
       print(scores)

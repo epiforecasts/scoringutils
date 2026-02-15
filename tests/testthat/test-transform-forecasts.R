@@ -60,6 +60,30 @@ test_that("transform_forecasts() outputs an object of class forecast_*", {
   expect_s3_class(transformed, "forecast_binary")
 })
 
+test_that("transform_forecasts() works on multivariate sample forecasts", {
+  # append = FALSE should work
+  transformed <- transform_forecasts(
+    example_multivariate_sample,
+    fun = function(x) pmax(0, x),
+    append = FALSE
+  )
+  expect_s3_class(transformed, "forecast_multivariate_sample")
+
+  # append = TRUE should also work now that class naming is fixed
+  transformed_append <- transform_forecasts(
+    example_multivariate_sample,
+    fun = function(x) pmax(0, x),
+    append = TRUE
+  )
+  expect_s3_class(
+    transformed_append, "forecast_multivariate_sample"
+  )
+  expect_true("scale" %in% colnames(transformed_append))
+  expect_equal(
+    unique(transformed_append$scale), c("natural", "log")
+  )
+})
+
 
 # ============================================================================ #
 # `log_shift()` # nolint: commented_code_linter

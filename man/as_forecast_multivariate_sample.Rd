@@ -9,7 +9,7 @@ as_forecast_multivariate_sample(data, ...)
 
 \method{as_forecast_multivariate_sample}{default}(
   data,
-  joint_across,
+  joint_across = NULL,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
