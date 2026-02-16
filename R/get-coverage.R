@@ -35,65 +35,94 @@
 #' (can be either interval or quantile coverage) and the
 #' actual coverage. For example, if the desired coverage is 90% and the actual
 #' coverage is 80%, the coverage deviation is -0.1.
-#' @return
-#' A data.table with columns as specified in `by` and additional
-#' columns for the coverage values described above
 #' @inheritParams score
 #' @param by character vector that denotes the level of grouping for which the
 #'   coverage values should be computed. By default (`"model"`), one coverage
 #'   value per model will be returned.
+#' @param type character vector indicating which types of coverage to compute.
+#'   Must be a subset of `c("quantile", "interval")`. By default, both are
+#'   computed.
 #' @return
-#' a data.table with columns "interval_coverage",
+#' a data.table with the columns specified in `by` and additional columns
+#' for the requested coverage values. When both types are requested (the
+#' default), this includes "interval_coverage",
 #' "interval_coverage_deviation", "quantile_coverage",
-#' "quantile_coverage_deviation" and the columns specified in `by`.
+#' "quantile_coverage_deviation", "quantile_level", and "interval_range".
 #' @importFrom data.table setcolorder
 #' @importFrom checkmate assert_subset
 #' @examples
 #' example_quantile |>
 #'   as_forecast_quantile() |>
 #'   get_coverage(by = "model")
+#'
+#' # only interval coverage
+#' example_quantile |>
+#'   as_forecast_quantile() |>
+#'   get_coverage(by = "model", type = "interval")
 #' @export
 #' @keywords scoring
 #' @export
-get_coverage <- function(forecast, by = "model") {
+get_coverage <- function(forecast, by = "model",
+                         type = c("quantile", "interval")) {
   # input checks ---------------------------------------------------------------
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   assert_subset(get_forecast_type(forecast), "quantile")
+  assert_subset(type, c("quantile", "interval"), empty.ok = FALSE)
 
   # remove "quantile_level" and "interval_range" from `by` if present, as these
   # are included anyway
   by <- setdiff(by, c("quantile_level", "interval_range"))
   assert_subset(by, names(forecast))
 
-  # convert to wide interval format and compute interval coverage --------------
-  interval_forecast <- quantile_to_interval(forecast, format = "wide")
-  interval_forecast[,
-    interval_coverage := (observed <= upper) & (observed >= lower)
-  ][, c("lower", "upper", "observed") := NULL]
-  interval_forecast[, interval_coverage_deviation :=
-                      interval_coverage - interval_range / 100]
+  compute_interval <- "interval" %in% type
+  compute_quantile <- "quantile" %in% type
 
-  # merge interval range data with original data -------------------------------
-  # preparations
-  forecast[, interval_range := get_range_from_quantile(quantile_level)]
-  forecast_cols <- colnames(forecast) # store so we can reset column order later
   forecast_unit <- get_forecast_unit(forecast)
 
-  forecast <- merge(forecast, interval_forecast,
-                    by = unique(c(forecast_unit, "interval_range")))
+  if (compute_interval) {
+    # convert to wide interval format and compute interval coverage ------------
+    interval_forecast <- quantile_to_interval(forecast, format = "wide")
+    interval_forecast[,
+      interval_coverage := (observed <= upper) & (observed >= lower)
+    ][, c("lower", "upper", "observed") := NULL]
+    interval_forecast[, interval_coverage_deviation :=
+                        interval_coverage - interval_range / 100]
 
-  # compute quantile coverage and deviation ------------------------------------
-  forecast[, quantile_coverage := observed <= predicted]
-  forecast[, quantile_coverage_deviation := quantile_coverage - quantile_level]
+    # merge interval range data with original data -----------------------------
+    forecast[, interval_range := get_range_from_quantile(quantile_level)]
+    forecast <- merge(forecast, interval_forecast,
+                      by = unique(c(forecast_unit, "interval_range")))
+  }
+
+  if (compute_quantile) {
+    # compute quantile coverage and deviation ----------------------------------
+    forecast[, quantile_coverage := observed <= predicted]
+    forecast[, quantile_coverage_deviation := quantile_coverage - quantile_level]
+  }
 
   # summarise coverage values according to `by` and cleanup --------------------
-  # reset column order
-  new_metrics <- c("interval_coverage", "interval_coverage_deviation",
-                   "quantile_coverage", "quantile_coverage_deviation")
-  setcolorder(forecast, unique(c(forecast_cols, "interval_range", new_metrics)))
   # remove forecast class and convert to regular data.table
   forecast <- as.data.table(forecast)
-  by <- unique(c(by, "quantile_level", "interval_range"))
+
+  new_metrics <- c()
+  by_extra <- c()
+  if (compute_interval) {
+    new_metrics <- c(new_metrics,
+                     "interval_coverage", "interval_coverage_deviation")
+    by_extra <- c(by_extra, "interval_range")
+  }
+  if (compute_quantile) {
+    new_metrics <- c(new_metrics,
+                     "quantile_coverage", "quantile_coverage_deviation")
+    by_extra <- c(by_extra, "quantile_level")
+  }
+
+  by <- unique(c(by, by_extra))
+
+  # only keep relevant columns before summarising
+  keep_cols <- unique(c(by, new_metrics))
+  forecast <- forecast[, .SD, .SDcols = intersect(names(forecast), keep_cols)]
+
   # summarise
   forecast <- forecast[, lapply(.SD, mean), by = by, .SDcols = new_metrics]
   return(forecast[])
