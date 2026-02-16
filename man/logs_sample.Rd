@@ -49,8 +49,8 @@ calculating scores for specific discrete probability distributions.
 }
 
 \examples{
-observed <- rpois(30, lambda = 1:30)
-predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+observed <- rnorm(30, mean = 1:30)
+predicted <- replicate(200, rnorm(30, mean = 1:30))
 logs_sample(observed, predicted)
 }
 \references{
