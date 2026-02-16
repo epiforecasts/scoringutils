@@ -82,6 +82,34 @@ test_that("transform_forecasts() works on multivariate sample forecasts", {
   expect_equal(
     unique(transformed_append$scale), c("natural", "log")
   )
+
+  # .mv_group_id must be distinct across scales
+  n_original <- nrow(example_multivariate_sample)
+  expect_equal(nrow(transformed_append), 2 * n_original)
+  ids_natural <- unique(
+    transformed_append[scale == "natural", .mv_group_id]
+  )
+  ids_log <- unique(
+    transformed_append[scale == "log", .mv_group_id]
+  )
+  expect_length(intersect(ids_natural, ids_log), 0)
+})
+
+test_that("score() preserves scale column for multivariate forecasts", {
+  transformed <- transform_forecasts(
+    example_multivariate_sample,
+    fun = sqrt, label = "sqrt",
+    append = TRUE
+  )
+  scored <- score(transformed)
+
+  # scale column must be present in scored output
+  expect_true("scale" %in% colnames(scored))
+  expect_equal(sort(unique(scored$scale)), c("natural", "sqrt"))
+
+  # score count should double (one set per scale)
+  scored_natural <- score(example_multivariate_sample)
+  expect_equal(nrow(scored), 2 * nrow(scored_natural))
 })
 
 
