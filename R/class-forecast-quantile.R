@@ -99,12 +99,19 @@ is_forecast_quantile <- function(x) {
 #' @rdname as_forecast_point
 #' @description
 #' When converting a `forecast_quantile` object into a `forecast_point` object,
-#' the 0.5 quantile is extracted and returned as the point forecast.
+#' the quantile specified by `quantile_level` (default `0.5`, i.e. the median)
+#' is extracted and returned as the point forecast.
+#' @param quantile_level Numeric scalar specifying which quantile level to
+#'   extract as the point forecast. Defaults to `0.5` (the median). The
+#'   requested quantile level must be present in the data.
 #' @export
 #' @keywords as_forecast
-as_forecast_point.forecast_quantile <- function(data, ...) {
+#' @importFrom checkmate assert_number
+as_forecast_point.forecast_quantile <- function(data, quantile_level = 0.5,
+                                                ...) {
+  assert_number(quantile_level)
   assert_forecast(data, verbose = FALSE)
-  assert_subset(0.5, unique(data$quantile_level))
+  assert_subset(quantile_level, unique(data$quantile_level))
 
   # At end of this function, the object will have be turned from a
   # forecast_quantile to a forecast_point and we don't want to validate it as a
@@ -112,7 +119,8 @@ as_forecast_point.forecast_quantile <- function(data, ...) {
   # at the end.
   data <- as.data.table(data)
 
-  forecast <- data[quantile_level == 0.5]
+  target_quantile <- quantile_level
+  forecast <- data[quantile_level == target_quantile]
   forecast[, "quantile_level" := NULL]
 
   point_forecast <- new_forecast(forecast, "forecast_point")
