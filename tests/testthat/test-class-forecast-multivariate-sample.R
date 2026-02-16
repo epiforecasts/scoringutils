@@ -232,6 +232,51 @@ test_that(
 )
 
 test_that(
+  "variogram_score_multivariate() matches scoringRules::vs_sample()",
+  {
+    set.seed(123)
+    d <- 4
+    m <- 20
+
+    obs1 <- rnorm(d)
+    fc1 <- replicate(m, rnorm(d))
+    obs2 <- rnorm(d)
+    fc2 <- replicate(m, rnorm(d))
+
+    vs_sr1 <- scoringRules::vs_sample(y = obs1, dat = fc1)
+    vs_sr2 <- scoringRules::vs_sample(y = obs2, dat = fc2)
+    vs_sr <- c(vs_sr1, vs_sr2)
+
+    vs_su <- variogram_score_multivariate(
+      observed = c(obs1, obs2),
+      predicted = rbind(fc1, fc2),
+      mv_group_id = c(rep(1, d), rep(2, d))
+    )
+    expect_equal(
+      unname(vs_su), vs_sr,
+      tolerance = 1e-6
+    )
+
+    vs_sr_p1_1 <- scoringRules::vs_sample(
+      y = obs1, dat = fc1, p = 1
+    )
+    vs_sr_p1_2 <- scoringRules::vs_sample(
+      y = obs2, dat = fc2, p = 1
+    )
+    vs_su_p1 <- variogram_score_multivariate(
+      observed = c(obs1, obs2),
+      predicted = rbind(fc1, fc2),
+      mv_group_id = c(rep(1, d), rep(2, d)),
+      p = 1
+    )
+    expect_equal(
+      unname(vs_su_p1), c(vs_sr_p1_1, vs_sr_p1_2),
+      tolerance = 1e-6
+    )
+  }
+)
+
+test_that(
   "variogram_score_multivariate() works with custom p",
   {
     data <- example_multivariate_sample
