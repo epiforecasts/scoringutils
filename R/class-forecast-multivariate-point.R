@@ -1,16 +1,6 @@
 #' @title Create a `forecast` object for multivariate point forecasts
 #' @inherit as_forecast_doc_template params description
-#' @param forecast_unit (optional) Name of the columns in `data` (after
-#'   any renaming of columns) that denote the unit of a
-#'   single univariate (!) forecast. See [get_forecast_unit()] for details.
-#'   If `NULL` (the default), all columns that are not required columns are
-#'   assumed to form the unit of a single forecast. If specified, all columns
-#'   that are not part of the forecast unit (or required columns) will be
-#'   removed.
-#'   Multivariate forecasts are defined by a) specifying the univariate
-#'   forecast unit (i.e. the unit of a single forecast if that forecast
-#'   were univariate) and b) specifying which variables are pooled together
-#'   to form a multivariate forecast.
+#' @inheritParams as_forecast_multivariate_sample
 #' @details
 #' # Target format
 #'
@@ -42,12 +32,7 @@ as_forecast_multivariate_point <- function(data, ...) {
 
 
 #' @rdname as_forecast_multivariate_point
-#' @param joint_across Character vector with columns names that define
-#'   the variables which are forecasted jointly. Conceptually, several
-#'   univariate forecasts are pooled together to form a single
-#'   multivariate forecast. For example, if you have a column `country`
-#'   and want to define a multivariate forecast for several countries
-#'   at once, you could set `joint_across = "country"`.
+#' @inheritParams as_forecast_multivariate_sample.default
 #' @export
 #' @importFrom cli cli_abort
 # nolint start: object_name_linter
@@ -65,14 +50,7 @@ as_forecast_multivariate_point.default <- function(
     observed = observed,
     predicted = predicted
   )
-  if (!is.null(joint_across)) {
-    data <- set_grouping(data, joint_across)
-  } else if (!(".mv_group_id" %in% colnames(data))) {
-    cli_abort(
-      "{.arg joint_across} must be provided when the data does
-      not already contain a {.code .mv_group_id} column."
-    )
-  }
+  data <- ensure_mv_grouping(data, joint_across)
 
   data <- new_forecast(data, "forecast_multivariate_point")
   assert_forecast(data)
@@ -149,19 +127,9 @@ score.forecast_multivariate_point <- function(
 
   mv_group_id <- f_transposed$.mv_group_id
 
-  grouping_cols <- get_grouping(f_transposed)
-  temp_dt <- unique(
-    f_transposed[, .SD, .SDcols = c(grouping_cols, ".mv_group_id")]
-  )
-  result <- apply_metrics(
-    temp_dt,
-    metrics = metrics,
-    observed, predicted,
-    mv_group_id
-  )
-  setcolorder(
-    result,
-    c(setdiff(colnames(result), ".mv_group_id"), ".mv_group_id")
+  result <- score_multivariate_apply(
+    f_transposed, metrics,
+    observed, predicted, mv_group_id
   )
 
   scores <- as_scores(result, metrics = names(metrics))
