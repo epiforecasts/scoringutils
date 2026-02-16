@@ -25,6 +25,7 @@ If \code{select} is not \code{NULL}, this argument is ignored.}
 For sample-based multivariate forecasts, the default scoring rules are:
 \itemize{
 \item "energy_score" = \code{\link[=energy_score_multivariate]{energy_score_multivariate()}}
+\item "variogram_score" = \code{\link[=variogram_score_multivariate]{variogram_score_multivariate()}}
 }
 }
 \section{Input format}{
