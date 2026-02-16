@@ -205,7 +205,7 @@ get_metrics.forecast_quantile <- function(x, select = NULL, exclude = NULL, ...)
     dispersion = dispersion_quantile,
     bias = bias_quantile,
     interval_coverage_50 = interval_coverage,
-    interval_coverage_90 = purrr::partial(
+    interval_coverage_90 = partial(
       interval_coverage, interval_range = 90
     ),
     ae_median = ae_median_quantile
@@ -239,7 +239,7 @@ get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
   diffs <- round(diff(quantiles), 10)
 
   if (length(setdiff(quantiles, present_quantiles)) > 0) {
-    cli::cli_warn(
+    cli_warn(
       "Some requested quantiles are missing in the forecast. ",
       "The PIT histogram will be based on the quantiles present in the forecast."
     )
