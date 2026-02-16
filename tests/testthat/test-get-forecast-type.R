@@ -15,11 +15,19 @@ test_that("get_forecast_type() works as expected", {
     fixed = TRUE
   )
 
-  test <- test <- data.table::copy(example_quantile)
+  test <- data.table::copy(example_quantile)
   class(test) <- c("forecast", "data.table", "data.frame")
   expect_error(
     get_forecast_type(test),
     "Input is not a valid forecast object"
+  )
+
+  # Object with class "forecast_" (prefix but no type suffix)
+  test2 <- data.table::copy(example_quantile)
+  class(test2) <- c("forecast_", "forecast", "data.table", "data.frame")
+  expect_error(
+    get_forecast_type(test2),
+    "prefix found but no type suffix"
   )
 
   # get_forecast_type() should still work even if a new class is added

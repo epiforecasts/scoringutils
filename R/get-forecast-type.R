@@ -6,8 +6,17 @@
 get_forecast_type <- function(forecast) {
   classname <- class(forecast)
   forecast_class <- classname[grepl("forecast_", classname, fixed = TRUE)]
-  if (length(forecast_class) == 1) {
-    return(gsub("forecast_", "", forecast_class, fixed = TRUE))
+  if (length(forecast_class) >= 1) {
+    forecast_type <- gsub(
+      "forecast_", "", forecast_class[1], fixed = TRUE
+    )
+    if (!nzchar(forecast_type)) {
+      cli_abort(
+        "Input is not a valid forecast object
+        (Column `forecast_` prefix found but no type suffix)."
+      )
+    }
+    return(forecast_type)
   }
   cli_abort(
     "Input is not a valid forecast object
