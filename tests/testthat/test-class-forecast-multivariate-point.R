@@ -184,5 +184,19 @@ test_that(
       ),
       "Must be a subset of"
     )
+
+    bad_data <- data.table::copy(data)
+    bad_data[, predicted := as.character(predicted)]
+    expect_error(
+      as_forecast_multivariate_point(
+        bad_data,
+        forecast_unit = c(
+          "location", "model", "target_type",
+          "target_end_date", "horizon"
+        ),
+        joint_across = "location"
+      ),
+      "Checking `forecast`"
+    )
   }
 )

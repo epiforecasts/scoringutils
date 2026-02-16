@@ -13,18 +13,13 @@ variogram_score_multivariate_point(
 )
 }
 \arguments{
-\item{observed}{A vector with observed values of size n}
+\item{observed}{Numeric vector of observed values.}
 
-\item{predicted}{nxN matrix of predictive samples, n (number of rows) being
-the number of data points and N (number of columns) the number of Monte
-Carlo samples. Alternatively, if n = 1, \code{predicted} can just be a vector
-of size n.}
+\item{predicted}{Numeric matrix with one column, where each row
+corresponds to a target within a multivariate group.}
 
-\item{mv_group_id}{Numeric vector of length n with ids indicating the
-grouping of predicted values. Conceptually, each row of the \code{predicted}
-matrix \emph{could} be seen as a separate (univariate) forecast.
-The grouping id then groups several of those forecasts together, treating
-them as a single multivariate forecast.}
+\item{mv_group_id}{Numeric vector of length equal to
+\code{length(observed)} with group identifiers.}
 
 \item{w_vs}{Numeric matrix of weights for the variogram score.
 See \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}} for details.}
@@ -32,9 +27,13 @@ See \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}} f
 \item{p}{Numeric, order of the variogram score.
 Defaults to 0.5. See \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}} for details.}
 }
+\value{
+A named numeric vector of scores, one per multivariate
+group. Lower values are better.
+}
 \description{
 Compute the variogram score
-(see \link[scoringRules:vs_sample]{scoringRules::vs_sample})
+(see \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}})
 for each group defined by \code{mv_group_id}, treating each point
 forecast as a single-sample ensemble.
 }

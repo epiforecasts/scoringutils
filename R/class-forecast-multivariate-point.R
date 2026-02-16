@@ -125,7 +125,9 @@ is_forecast_multivariate_point <- function(x) {
 #' @importFrom data.table setattr copy
 #' @rdname score
 #' @export
-score.forecast_multivariate_point <- function(forecast, metrics = get_metrics(forecast), ...) { # nolint: line_length_linter
+score.forecast_multivariate_point <- function(
+  forecast, metrics = get_metrics(forecast), ...
+) {
   forecast <- clean_forecast(
     forecast, copy = TRUE, na.omit = TRUE
   )
