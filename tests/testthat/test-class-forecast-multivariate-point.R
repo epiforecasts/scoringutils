@@ -126,6 +126,35 @@ test_that(
 )
 
 test_that(
+  "variogram_score_multivariate_point() matches scoringRules::vs_sample()",
+  {
+    set.seed(42)
+    d <- 4
+    obs1 <- rnorm(d)
+    pred1 <- rnorm(d)
+    obs2 <- rnorm(d)
+    pred2 <- rnorm(d)
+
+    vs_sr1 <- scoringRules::vs_sample(
+      y = obs1, dat = matrix(pred1, ncol = 1)
+    )
+    vs_sr2 <- scoringRules::vs_sample(
+      y = obs2, dat = matrix(pred2, ncol = 1)
+    )
+
+    vs_su <- variogram_score_multivariate_point(
+      observed = c(obs1, obs2),
+      predicted = matrix(c(pred1, pred2), ncol = 1),
+      mv_group_id = c(rep(1, d), rep(2, d))
+    )
+    expect_equal(
+      unname(vs_su), c(vs_sr1, vs_sr2),
+      tolerance = 1e-6
+    )
+  }
+)
+
+test_that(
   "score.forecast_multivariate_point() creates expected output",
   {
     data <- na.omit(data.table::copy(example_point))
