@@ -107,3 +107,53 @@ test_that("get_metrics.forecast_point() works as expected", {
     c("ae_point", "se_point", "ape")
   )
 })
+
+test_that("internal ae replacement produces identical results", {
+  observed <- c(1, -15, 22, 0, 5.5)
+  predicted <- c(5, 6, 7, 0, 5.5)
+  ae_fn <- get_metrics(example_point, select = "ae_point")[[1]]
+  expect_identical(ae_fn(observed, predicted), abs(observed - predicted))
+  expect_identical(ae_fn(5, 5), 0)
+  expect_identical(ae_fn(-10, 5), 15)
+})
+
+test_that("internal se replacement produces identical results", {
+  observed <- c(1, -15, 22, 0, 5.5)
+  predicted <- c(5, 6, 7, 0, 5.5)
+  se_fn <- get_metrics(example_point, select = "se_point")[[1]]
+  expect_identical(se_fn(observed, predicted), (observed - predicted)^2)
+  expect_identical(se_fn(5, 5), 0)
+  expect_identical(se_fn(-10, 5), 225)
+})
+
+test_that("internal ape replacement produces identical results", {
+  observed <- c(1, -15, 22, 5.5, 100)
+  predicted <- c(5, 6, 7, 0, 100)
+  ape_fn <- get_metrics(example_point, select = "ape")[[1]]
+  expect_equal(ape_fn(observed, predicted), abs(observed - predicted) / abs(observed))
+  expect_identical(ape_fn(5, 5), 0)
+  expect_identical(ape_fn(0, 5), Inf)
+})
+
+test_that("Metrics package is not in DESCRIPTION Imports", {
+  desc_text <- readLines(system.file("DESCRIPTION", package = "scoringutils"))
+  imports_lines <- desc_text[grepl("^Imports:|^\\s+Metrics", desc_text)]
+  expect_false(any(grepl("\\bMetrics\\b", imports_lines)))
+})
+
+test_that("score() with point forecasts produces correct results after Metrics removal", {
+  scores <- score(example_point)
+  input <- na.omit(as.data.table(example_point))
+  expect_equal(scores$ae_point, abs(input$observed - input$predicted))
+  expect_equal(scores$se_point, (input$observed - input$predicted)^2)
+  expect_equal(scores$ape, abs(input$observed - input$predicted) / abs(input$observed))
+  expect_true(all(c("ae_point", "se_point", "ape") %in% colnames(scores)))
+})
+
+test_that("get_metrics.forecast_point() returns expected functions", {
+  metrics <- get_metrics(example_point)
+  expect_type(metrics, "list")
+  expect_named(metrics, c("ae_point", "se_point", "ape"))
+  expect_true(all(vapply(metrics, is.function, logical(1))))
+  expect_true(all(vapply(metrics, function(f) length(formals(f)) == 2, logical(1))))
+})
