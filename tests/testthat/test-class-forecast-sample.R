@@ -74,3 +74,14 @@ test_that("get_pit_histogram.forecast_sample() works as expected", {
   expect_s3_class(pit_continuous, c("data.table", "data.frame"), exact = TRUE)
   expect_s3_class(pit_integer, c("data.table", "data.frame"), exact = TRUE)
 })
+
+test_that("get_pit_histogram.forecast_sample() accepts integers and n_replicates args", {
+  result <- get_pit_histogram(
+    example_sample_discrete,
+    by = "model",
+    integers = "random",
+    n_replicates = 50
+  )
+  expect_named(result, c("model", "density", "bin", "mid"))
+  expect_true(all(result$density >= 0))
+})

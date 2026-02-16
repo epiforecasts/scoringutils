@@ -72,18 +72,26 @@ is_forecast_sample <- function(x) {
 }
 
 
-#' @rdname as_forecast_quantile
-#' @details # Converting from `forecast_sample` to `forecast_quantile`
+#' @title Convert a `forecast_sample` to a `forecast_quantile`
+#'
+#' @description
 #' When creating a `forecast_quantile` object from a `forecast_sample` object,
-#' the quantiles are estimated by computing empircal quantiles from the samples
+#' the quantiles are estimated by computing empirical quantiles from the samples
 #' via [quantile()]. Note that empirical quantiles are a biased estimator for
 #' the true quantiles in particular in the tails of the distribution and
 #' when the number of available samples is low.
+#'
+#' @param data A `forecast_sample` object (as created by
+#'   [as_forecast_sample()]).
 #' @param probs A numeric vector of quantile levels for which
 #'   quantiles will be computed. Corresponds to the `probs` argument in
 #'   [quantile()].
 #' @param type Type argument passed down to the quantile function. For more
 #'   information, see [quantile()].
+#' @param ... Unused.
+#' @returns A `forecast` object of class `forecast_quantile`.
+#' @family functions to create forecast objects
+#' @seealso [as_forecast_quantile()]
 #' @importFrom stats quantile
 #' @importFrom methods hasArg
 #' @importFrom checkmate assert_numeric
@@ -192,11 +200,20 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
 }
 
 
-#' @rdname get_pit_histogram
+#' @title PIT histogram for sample-based forecasts
+#'
+#' @description
+#' Generate a Probability Integral Transformation (PIT) histogram for
+#' sample-based forecast objects. Unlike the quantile-based method
+#' ([get_pit_histogram.forecast_quantile()]), this method supports additional
+#' arguments for handling integer-valued forecasts (`integers` and
+#' `n_replicates`).
+#'
+#' @inherit get_pit_histogram params return
+#' @inheritParams pit_histogram_sample
+#' @seealso [get_pit_histogram()], [pit_histogram_sample()]
 #' @importFrom data.table `:=` as.data.table dcast
 #' @importFrom checkmate assert_int assert_numeric
-#' @inheritParams pit_histogram_sample
-#' @seealso [pit_histogram_sample()]
 #' @export
 get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
                                               breaks = NULL, by, integers = c(
