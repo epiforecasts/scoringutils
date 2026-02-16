@@ -98,7 +98,7 @@ check_input_sample <- function(observed, predicted) {
 bias_sample <- function(observed, predicted) {
 
   assert_input_sample(observed, predicted)
-  prediction_type <- get_type(predicted)
+  prediction_type <- get_vector_type(predicted)
 
   # empirical cdf
   n_pred <- ncol(predicted)
@@ -571,7 +571,7 @@ pit_histogram_sample <- function(observed,
   p_x <- rowSums(predicted <= observed) / n_pred
 
   # PIT calculation is different for integer and continuous predictions
-  if (get_type(predicted) == "integer" && integers != "ignore") {
+  if (get_vector_type(predicted) == "integer" && integers != "ignore") {
     p_xm1 <- rowSums(predicted <= (observed - 1)) / n_pred
     if (integers == "random") {
       pit_values <- as.vector(
@@ -593,7 +593,7 @@ pit_histogram_sample <- function(observed,
     pit_values <- p_x
   }
 
-  if (get_type(predicted) != "integer" || integers != "nonrandom") {
+  if (get_vector_type(predicted) != "integer" || integers != "nonrandom") {
     pit_histogram <- hist(pit_values, breaks = quantiles, plot = FALSE)$density
   }
 
