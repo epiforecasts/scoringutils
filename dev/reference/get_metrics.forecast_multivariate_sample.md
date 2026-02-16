@@ -78,7 +78,7 @@ get_metrics(example)
 #>     names(energy_score) <- unique_groups
 #>     return(energy_score)
 #> }
-#> <bytecode: 0x556db393abb8>
+#> <bytecode: 0x555fcd49c6b0>
 #> <environment: namespace:scoringutils>
 #> 
 ```

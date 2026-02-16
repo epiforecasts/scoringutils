@@ -2,6 +2,13 @@
 
 ## scoringutils (development version)
 
+- Fixed
+  [`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md)
+  dropping the `scale` column for multivariate forecasts when using
+  `transform_forecasts(append = TRUE)`. The issue was caused by stale
+  `.mv_group_id` values not being recomputed after appending transformed
+  data
+  ([\#1108](https://github.com/epiforecasts/scoringutils/issues/1108)).
 - Fixed a naming inconsistency where the class
   `forecast_sample_multivariate` did not match the constructor
   [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md).
