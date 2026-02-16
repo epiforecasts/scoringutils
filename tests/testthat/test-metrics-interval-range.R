@@ -27,13 +27,18 @@ test_that("assert_input_interval() works as expected", {
 })
 
 
-test_that("check_input_interval() works as expected", {
-  expect_no_condition(
+test_that("check_input_interval is no longer defined", {
+  expect_error(
     check_input_interval(observed, lower, upper, interval_range)
   )
-  # expect message return if upper < lower
-  expect_match(
-    check_input_interval(observed, upper, lower, interval_range),
-    regexp = "All values in `upper` need to be greater than or equal"
+})
+
+test_that("assert_input_interval still works after check_input_interval removal", {
+  expect_no_condition(
+    assert_input_interval(observed, lower, upper, interval_range)
+  )
+  expect_error(
+    assert_input_interval(observed, upper, lower, interval_range),
+    "All values in `upper` need to be greater than or equal"
   )
 })

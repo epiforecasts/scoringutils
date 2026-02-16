@@ -17,24 +17,27 @@ forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 
 
 # ==============================================================================
-# check_input_quantile() # nolint: commented_code_linter
+# check_input_quantile() removed (issue #684) # nolint: commented_code_linter
 # ==============================================================================
-test_that("check_input_quantile() works as expected", {
-  # expect no error if dimensions are ok
-  expect_true(
+test_that("check_input_quantile is no longer defined", {
+  expect_error(
     check_input_quantile(
       1:10, matrix(1:20, nrow = 10),
       quantile_level = c(0.1, 0.9)
     )
   )
+})
 
-  # expect error if dimensions are not ok
-  expect_match(
-    check_input_quantile(
+test_that("assert_input_quantile still works after check_input_quantile removal", {
+  observed <- 1:10
+  predicted <- matrix(1:20, nrow = 10)
+  quantile_level <- c(0.1, 0.9)
+  expect_no_condition(assert_input_quantile(observed, predicted, quantile_level))
+  expect_error(
+    assert_input_quantile(
       1:10, matrix(1:20, nrow = 10),
       quantile_level = seq(0.1, 0.9, length.out = 8)
-    ),
-    "Assertion on 'predicted' failed: Must have exactly 8 cols, but has 2 cols."
+    )
   )
 })
 
