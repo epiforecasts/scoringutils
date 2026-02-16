@@ -219,3 +219,76 @@ test_that("quantile_to_interval works - data.frame case", {
     "Input must be either a data.frame or a numeric vector."
   )
 })
+
+
+# ==============================================================================
+# get_interval_range() # nolint: commented_code_linter
+# ==============================================================================
+
+test_that("get_interval_range() returns correct interval ranges for standard quantiles", {
+  result <- get_interval_range(c(0.05, 0.25, 0.5, 0.75, 0.95))
+  expect_identical(result, c(90, 50, 0, 50, 90))
+})
+
+test_that("get_interval_range() handles edge cases correctly", {
+  expect_identical(get_interval_range(c(0, 1)), c(100, 100))
+  expect_identical(get_interval_range(0.5), 0)
+  expect_identical(get_interval_range(c(0.1, 0.9)), c(80, 80))
+})
+
+test_that("get_interval_range() is exported and accessible without :::", {
+  expect_no_error(get_interval_range(0.25))
+  expect_identical(get_interval_range(0.25), 50)
+})
+
+
+# ==============================================================================
+# add_interval_range() # nolint: commented_code_linter
+# ==============================================================================
+
+test_that("add_interval_range() adds interval_range column to quantile forecast", {
+  dt <- data.table::data.table(
+    observed = 5,
+    predicted = c(1, 3, 5, 7, 9),
+    quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95)
+  )
+  ncol_before <- ncol(dt)
+  result <- add_interval_range(dt)
+  expect_true("interval_range" %in% colnames(result))
+  expect_identical(result$interval_range, c(90, 50, 0, 50, 90))
+  expect_identical(ncol(result), ncol_before + 1L)
+})
+
+test_that("add_interval_range() works with example_quantile dataset", {
+  ex <- na.omit(example_quantile)
+  result <- add_interval_range(ex)
+  expect_true("interval_range" %in% colnames(result))
+  expect_identical(nrow(result), nrow(ex))
+  expect_identical(result$interval_range, get_interval_range(result$quantile_level))
+})
+
+test_that("add_interval_range() returns a copy (does not modify input in place)", {
+  dt <- data.table::data.table(
+    observed = 5,
+    predicted = c(1, 3, 5, 7, 9),
+    quantile_level = c(0.05, 0.25, 0.5, 0.75, 0.95)
+  )
+  result <- add_interval_range(dt)
+  # ensure_data.table() copies, so original dt should be unchanged
+  expect_false("interval_range" %in% colnames(dt))
+  expect_true("interval_range" %in% colnames(result))
+})
+
+test_that("add_interval_range() errors gracefully on non-quantile input", {
+  dt <- data.table::data.table(
+    observed = 1:5,
+    predicted = 2:6,
+    sample_id = 1:5
+  )
+  expect_error(add_interval_range(dt))
+})
+
+test_that("internal call sites work correctly after rename", {
+  expect_no_error(get_coverage(as_forecast_quantile(example_quantile)))
+  expect_no_error(score(as_forecast_quantile(example_quantile)))
+})
