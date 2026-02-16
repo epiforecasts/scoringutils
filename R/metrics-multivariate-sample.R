@@ -49,3 +49,56 @@ energy_score_multivariate <- function(observed, predicted, mv_group_id, w = NULL
   names(energy_score) <- unique_groups
   return(energy_score)
 }
+
+
+#' Variogram score for multivariate forecasts
+#'
+#' @description
+#' Compute the variogram score for multivariate forecasts.
+#' The variogram score (Scheuerer and Hamill, 2015) evaluates the
+#' dependence structure of multivariate forecasts by comparing
+#' predicted pairwise differences against observed pairwise
+#' differences.
+#'
+#' The score is computed using
+#' [scoringRules::vs_sample()].
+#'
+#' @inheritParams energy_score_multivariate
+#' @param w_vs Optional non-negative weight matrix. If not `NULL`,
+#'   must be a square matrix with dimensions equal to the number
+#'   of targets within each multivariate group.
+#' @param p Numeric, order of the variogram score.
+#'   Typical choices are 0.5 (default, more robust) and 1.
+#' @return A named numeric vector of scores, one per multivariate
+#'   group. Lower values are better.
+#' @references
+#' Scheuerer, M. and Hamill, T.M. (2015). Variogram-Based
+#' Proper Scoring Rules for Probabilistic Forecasts of
+#' Multivariate Quantities. *Monthly Weather Review*, 143,
+#' 1321-1334.
+#' @importFrom scoringRules vs_sample
+#' @export
+#' @keywords metric
+variogram_score_multivariate <- function(
+  observed, predicted, mv_group_id,
+  w = NULL, w_vs = NULL, p = 0.5
+) {
+  assert_input_multivariate_sample(
+    observed, predicted, mv_group_id
+  )
+  unique_groups <- unique(mv_group_id)
+
+  variogram_score <- vapply(
+    unique_groups, function(group) {
+      idx <- which(mv_group_id == group)
+      vs_sample(
+        y = observed[idx],
+        dat = predicted[idx, , drop = FALSE],
+        w = w, w_vs = w_vs, p = p
+      )
+    }, numeric(1)
+  )
+
+  names(variogram_score) <- unique_groups
+  return(variogram_score)
+}
