@@ -225,6 +225,98 @@ test_that("function throws an error when missing 'predicted'", {
 })
 
 
+# `sd_sample()` ================================================================
+test_that("sd_sample() returns correct standard deviations", {
+  predicted <- rbind(
+    c(1, 1, 1, 1, 1),
+    c(1, 2, 3, 4, 5),
+    c(10, 10, 10, 10, 20)
+  )
+  result <- sd_sample(predicted = predicted)
+  expect_length(result, 3)
+  expect_equal(result[1], 0)
+  expect_equal(result[2], sd(1:5))
+  expect_equal(result[3], sd(c(10, 10, 10, 10, 20)))
+})
+
+test_that("sd_sample() works with observed = NULL", {
+  predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
+  result1 <- sd_sample(observed = NULL, predicted = predicted)
+  result2 <- sd_sample(predicted = predicted)
+  expect_length(result1, 10)
+  expect_equal(result1, result2) # nolint: expect_identical_linter
+})
+
+test_that("sd_sample() throws an error when missing 'predicted'", {
+  expect_error(sd_sample())
+})
+
+test_that("sd_sample() works with a single observation row", {
+  predicted <- matrix(c(1, 2, 3, 4, 5), nrow = 1)
+  result <- sd_sample(predicted = predicted)
+  expect_length(result, 1)
+  expect_equal(result, sd(1:5))
+})
+
+# `iqr_sample()` ===============================================================
+test_that("iqr_sample() returns correct interquartile ranges", {
+  predicted <- rbind(
+    c(1, 1, 1, 1, 1),
+    c(1, 2, 3, 4, 5),
+    c(10, 10, 10, 10, 20)
+  )
+  result <- iqr_sample(predicted = predicted)
+  expect_length(result, 3)
+  expect_equal(result[1], 0)
+  expect_equal(result[2], IQR(1:5))
+  expect_equal(result[3], IQR(c(10, 10, 10, 10, 20)))
+})
+
+test_that("iqr_sample() works with observed = NULL", {
+  predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
+  result1 <- iqr_sample(observed = NULL, predicted = predicted)
+  result2 <- iqr_sample(predicted = predicted)
+  expect_length(result1, 10)
+  expect_equal(result1, result2) # nolint: expect_identical_linter
+})
+
+test_that("iqr_sample() throws an error when missing 'predicted'", {
+  expect_error(iqr_sample())
+})
+
+test_that("iqr_sample() works with a single observation row", {
+  predicted <- matrix(c(1, 2, 3, 4, 5), nrow = 1)
+  result <- iqr_sample(predicted = predicted)
+  expect_length(result, 1)
+  expect_equal(result, IQR(1:5))
+})
+
+# sd_sample and iqr_sample default metrics and integration tests ===============
+test_that("sd_sample and iqr_sample are included in default metrics for forecast_sample", {
+  result <- get_metrics(example_sample_continuous)
+  expect_true("sd" %in% names(result))
+  expect_true("iqr" %in% names(result))
+})
+
+test_that("score() output includes sd and iqr columns for sample forecasts", {
+  result <- score(example_sample_continuous)
+  expect_true("sd" %in% colnames(result))
+  expect_true("iqr" %in% colnames(result))
+  expect_true(all(is.finite(result$sd)))
+  expect_true(all(is.finite(result$iqr)))
+  expect_true(all(result$sd >= 0))
+  expect_true(all(result$iqr >= 0))
+})
+
+test_that("sd_sample and iqr_sample agree with apply-based computation", {
+  set.seed(42)
+  predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+  sd_result <- sd_sample(predicted = predicted)
+  iqr_result <- iqr_sample(predicted = predicted)
+  expect_equal(sd_result, apply(predicted, 1, sd))
+  expect_equal(iqr_result, apply(predicted, 1, IQR))
+})
+
 # ============================================================================ #
 # pit_histogram_sample() # nolint: commented_code_linter
 # ============================================================================ #

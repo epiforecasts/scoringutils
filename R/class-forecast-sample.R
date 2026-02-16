@@ -165,6 +165,8 @@ score.forecast_sample <- function(forecast, metrics = get_metrics(forecast), ...
 #' - "log_score" = [logs_sample()]
 #' - "dss" = [dss_sample()]
 #' - "mad" = [mad_sample()]
+#' - "sd" = [sd_sample()]
+#' - "iqr" = [iqr_sample()]
 #' - "bias" = [bias_sample()]
 #' - "ae_median" = [ae_median_sample()]
 #' - "se_mean" = [se_mean_sample()]
@@ -185,6 +187,8 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
     dispersion = dispersion_sample,
     log_score = logs_sample,
     mad = mad_sample,
+    sd = sd_sample,
+    iqr = iqr_sample,
     ae_median = ae_median_sample,
     se_mean = se_mean_sample
   )

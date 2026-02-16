@@ -429,6 +429,66 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 }
 
 
+#' @title Standard Deviation of Predictive Samples
+#'
+#' @description
+#' Compute the standard deviation of the predictive samples. The standard
+#' deviation is a measure of the spread (sharpness) of the predictive
+#' distribution and does not depend on the observed values.
+#'
+#' @inheritParams ae_median_sample
+#' @param observed Place holder, argument will be ignored and exists only for
+#' consistency with other scoring functions. The output does not depend on
+#' any observed values.
+#' @param ... Additional arguments passed to [sd()][stats::sd()].
+#' @importFrom stats sd
+#' @inheritSection illustration-input-metric-sample Input format
+#' @returns Vector with standard deviation values.
+#'
+#' @export
+#' @examples
+#' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' sd_sample(predicted = predicted)
+#' @keywords metric
+sd_sample <- function(observed = NULL, predicted, ...) {
+
+  assert_input_sample(rep(NA_real_, nrow(predicted)), predicted)
+
+  sharpness <- apply(predicted, MARGIN = 1, sd, ...)
+  return(sharpness)
+}
+
+
+#' @title Interquartile Range of Predictive Samples
+#'
+#' @description
+#' Compute the interquartile range (IQR) of the predictive samples. The IQR
+#' is a robust measure of the spread (sharpness) of the predictive
+#' distribution and does not depend on the observed values.
+#'
+#' @inheritParams ae_median_sample
+#' @param observed Place holder, argument will be ignored and exists only for
+#' consistency with other scoring functions. The output does not depend on
+#' any observed values.
+#' @param ... Additional arguments passed to [IQR()][stats::IQR()].
+#' @importFrom stats IQR
+#' @inheritSection illustration-input-metric-sample Input format
+#' @returns Vector with interquartile range values.
+#'
+#' @export
+#' @examples
+#' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' iqr_sample(predicted = predicted)
+#' @keywords metric
+iqr_sample <- function(observed = NULL, predicted, ...) {
+
+  assert_input_sample(rep(NA_real_, nrow(predicted)), predicted)
+
+  sharpness <- apply(predicted, MARGIN = 1, IQR, ...)
+  return(sharpness)
+}
+
+
 #' @title Probability integral transformation for counts
 #'
 #' @description Uses a Probability integral transformation (PIT) (or a
