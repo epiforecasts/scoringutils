@@ -150,6 +150,19 @@ score.default <- function(forecast, metrics, ...) {
 #' @returns A data table with the forecasts and the calculated metrics.
 #' @keywords internal
 apply_metrics <- function(forecast, metrics, ...) {
+  clashing <- intersect(names(metrics), colnames(forecast))
+  if (length(clashing) > 0) {
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "!" = "Column names {.val {clashing}} are already present in the
+        forecast data and will be overwritten by metric output.",
+        "i" = "Consider renaming these metrics to avoid clashing with
+        existing column names."
+      )
+    )
+    #nolint end
+  }
   lapply(names(metrics), function(metric_name) {
     result <- do.call(
       run_safely,
