@@ -158,12 +158,12 @@ get_pairwise_comparisons <- function(
   assert_subset(baseline, comparators)
 
   # check there are enough comparators
-  if (length(setdiff(comparators, baseline)) < 2) {
+  if (!is.null(baseline) && length(setdiff(comparators, baseline)) < 2) {
     #nolint start: keyword_quote_linter
-    cli_abort(
+    cli_warn(
       c(
-        "!" = "More than one non-baseline model is needed to compute
-        pairwise compairisons."
+        "!" = "There is only one non-baseline model. Pairwise comparisons
+        will be based on a single ratio and may not be meaningful."
       )
     )
     #nolint end

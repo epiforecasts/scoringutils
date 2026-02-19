@@ -327,13 +327,13 @@ test_that("Basic input checks for `add_relative_skill() work", {
       compare = "model", metric = "crps"
     )
   )
-  expect_error(
+  expect_warning(
     add_relative_skill(
       eval_few,
       compare = "model", baseline = "EuroCOVIDhub-baseline",
       metric = "crps"
     ),
-    "More than one non-baseline model is needed to compute pairwise compairisons."
+    "only one non-baseline model"
   )
 
   # error if no relative skill metric is found
@@ -542,6 +542,139 @@ test_that("permutation_tests work as expected", {
       one_sided = TRUE,
       n_permutations = 50
     )
+  )
+})
+
+# ==============================================================================
+# Two-model pairwise comparison tests (issue #1022)
+# ==============================================================================
+
+test_that("get_pairwise_comparisons() warns but works with two models and a baseline", {
+  eval_few <- scores_sample_continuous[
+    model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")
+  ]
+  expect_warning(
+    get_pairwise_comparisons(
+      eval_few,
+      compare = "model",
+      baseline = "EuroCOVIDhub-baseline",
+      metric = "crps"
+    ),
+    "only one non-baseline model"
+  )
+  result <- suppressWarnings(
+    get_pairwise_comparisons(
+      eval_few,
+      compare = "model",
+      baseline = "EuroCOVIDhub-baseline",
+      metric = "crps"
+    )
+  )
+  expect_s3_class(result, "data.table")
+  expect_true(all(c(
+    "model", "compare_against", "mean_scores_ratio",
+    "crps_relative_skill", "crps_scaled_relative_skill"
+  ) %in% colnames(result)))
+  non_baseline <- result[
+    model == "EuroCOVIDhub-ensemble" & compare_against == "EuroCOVIDhub-baseline"
+  ]
+  expect_true(is.finite(non_baseline$mean_scores_ratio))
+  baseline_rows <- result[model == "EuroCOVIDhub-baseline"]
+  expect_equal(unique(baseline_rows$crps_scaled_relative_skill), 1.0)
+})
+
+test_that("add_relative_skill() warns but works with two models and a baseline", {
+  eval_few <- scores_sample_continuous[
+    model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")
+  ]
+  expect_warning(
+    add_relative_skill(
+      eval_few,
+      compare = "model",
+      baseline = "EuroCOVIDhub-baseline",
+      metric = "crps"
+    ),
+    "only one non-baseline model"
+  )
+  result <- suppressWarnings(
+    add_relative_skill(
+      eval_few,
+      compare = "model",
+      baseline = "EuroCOVIDhub-baseline",
+      metric = "crps"
+    )
+  )
+  expect_s3_class(result, c("scores", "data.table", "data.frame"), exact = TRUE)
+  expect_true(all(c(
+    "crps_relative_skill", "crps_scaled_relative_skill"
+  ) %in% colnames(result)))
+  expect_true(all(is.finite(result$crps_scaled_relative_skill)))
+  baseline_skill <- unique(
+    result[model == "EuroCOVIDhub-baseline"]$crps_scaled_relative_skill
+  )
+  expect_equal(baseline_skill, 1.0)
+})
+
+test_that("get_pairwise_comparisons() two-model ratio is mathematically correct", {
+  df <- data.frame(
+    model = rep(c("model_a", "model_b"), each = 5),
+    date = rep(as.Date("2020-01-01") + 1:5, 2),
+    wis = c(2, 4, 6, 8, 10, 1, 2, 3, 4, 5)
+  )
+  attr(df, "metrics") <- "wis"
+
+  expect_warning(
+    get_pairwise_comparisons(
+      df,
+      compare = "model",
+      baseline = "model_b",
+      metric = "wis"
+    ),
+    "only one non-baseline model"
+  )
+  result <- suppressWarnings(
+    get_pairwise_comparisons(
+      df,
+      compare = "model",
+      baseline = "model_b",
+      metric = "wis"
+    )
+  )
+  ratio_a_vs_b <- result[
+    model == "model_a" & compare_against == "model_b"
+  ]$mean_scores_ratio
+  expect_equal(ratio_a_vs_b, 2.0)
+
+  ratio_b_vs_a <- result[
+    model == "model_b" & compare_against == "model_a"
+  ]$mean_scores_ratio
+  expect_equal(ratio_b_vs_a, 0.5)
+
+  baseline_skill <- unique(
+    result[model == "model_b"]$wis_scaled_relative_skill
+  )
+  expect_equal(baseline_skill, 1.0)
+
+  model_a_skill <- unique(
+    result[model == "model_a"]$wis_scaled_relative_skill
+  )
+  expect_equal(model_a_skill, 2.0)
+})
+
+test_that("get_pairwise_comparisons() still errors with only one model", {
+  eval_one <- scores_sample_continuous[model == "EuroCOVIDhub-ensemble"]
+  expect_error(
+    get_pairwise_comparisons(eval_one, compare = "model", metric = "crps"),
+    "not enough comparators"
+  )
+})
+
+test_that("two models without baseline still works without warning", {
+  eval_few <- scores_sample_continuous[
+    model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")
+  ]
+  expect_no_condition(
+    add_relative_skill(eval_few, compare = "model", metric = "crps")
   )
 })
 
