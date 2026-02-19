@@ -57,6 +57,42 @@ assert_scores <- function(scores) {
   return(invisible(NULL))
 }
 
+#' @title Print a scores object
+#' @description Prints a summary of the scoring metrics used and a link to the
+#'   scoring rules vignette, followed by the underlying data.
+#' @param x A `scores` object as produced by [score()].
+#' @param ... Additional arguments passed to the `print` method of the
+#'   underlying data.table.
+#' @importFrom cli cli_text col_blue
+#' @returns Returns `x` invisibly.
+#' @export
+#' @keywords gain-insights
+#' @examples
+#' \dontrun{
+#' scores <- score(example_quantile)
+#' print(scores)
+#' }
+print.scores <- function(x, ...) {
+  metrics <- get_metrics.scores(x)
+  if (!is.null(metrics)) {
+    cli_text(
+      col_blue("Metrics: "),
+      "{paste(metrics, collapse = ', ')}"
+    )
+  }
+
+  #nolint start: keyword_quote_linter
+  cli_text(
+    col_blue("Score definitions: "),
+    "{.url https://epiforecasts.io/scoringutils/articles/scoring-rules.html}"
+  )
+  #nolint end
+
+  cat("\n")
+  NextMethod()
+  return(invisible(x))
+}
+
 #' @method `[` scores
 #' @importFrom data.table setattr
 #' @export

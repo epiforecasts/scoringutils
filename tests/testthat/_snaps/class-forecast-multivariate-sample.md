@@ -70,7 +70,12 @@
 
     Code
       print(scores)
+    Message
+      Metrics: energy_score
+      Score definitions:
+      <https://epiforecasts.io/scoringutils/articles/scoring-rules.html>
     Output
+      
            target_end_date target_type forecast_date                 model horizon
                     <Date>      <char>        <Date>                <char>   <num>
         1:      2021-05-08       Cases    2021-05-03 EuroCOVIDhub-ensemble       1
