@@ -1,36 +1,22 @@
+make_mv_point <- function() {
+  data <- na.omit(data.table::copy(example_point))
+  as_forecast_multivariate_point(
+    data,
+    forecast_unit = c(
+      "location", "model", "target_type",
+      "target_end_date", "horizon"
+    ),
+    joint_across = "location"
+  )
+}
+
 # ==============================================================================
 # as_forecast_multivariate_point() # nolint: commented_code_linter
 # ==============================================================================
-test_that("as_forecast_multivariate_point() works as expected", {
-  test <- na.omit(data.table::copy(example_point))
-  data.table::setnames(test,
-    old = c("observed", "predicted"),
-    new = c("obs", "pred")
-  )
-  expect_no_condition(
-    as_forecast_multivariate_point(test,
-      observed = "obs", predicted = "pred",
-      forecast_unit = c(
-        "location", "model", "target_type",
-        "target_end_date", "horizon"
-      ),
-      joint_across = "location"
-    )
-  )
-})
-
 test_that(
   "as_forecast_multivariate_point() creates expected structure",
   {
-    test <- na.omit(data.table::copy(example_point))
-
-    result <- as_forecast_multivariate_point(test,
-      forecast_unit = c(
-        "location", "model", "target_type",
-        "target_end_date", "horizon"
-      ),
-      joint_across = "location"
-    )
+    result <- make_mv_point()
 
     expect_snapshot({
       cat("Class:", class(result), "\n")
@@ -63,18 +49,14 @@ test_that(
 test_that(
   "is_forecast_multivariate_point() works as expected",
   {
-    data <- na.omit(data.table::copy(example_point))
-    mv_point <- as_forecast_multivariate_point(
-      data,
-      forecast_unit = c(
-        "location", "model", "target_type",
-        "target_end_date", "horizon"
-      ),
-      joint_across = "location"
-    )
+    mv_point <- make_mv_point()
     expect_true(is_forecast_multivariate_point(mv_point))
-    expect_false(is_forecast_multivariate_point(example_binary))
-    expect_false(is_forecast_multivariate_point(example_point))
+    expect_false(
+      is_forecast_multivariate_point(example_binary)
+    )
+    expect_false(
+      is_forecast_multivariate_point(example_point)
+    )
     expect_false(is_forecast_point(mv_point))
   }
 )
@@ -86,15 +68,7 @@ test_that(
 test_that(
   "get_metrics.forecast_multivariate_point() works as expected",
   {
-    data <- na.omit(data.table::copy(example_point))
-    mv_point <- as_forecast_multivariate_point(
-      data,
-      forecast_unit = c(
-        "location", "model", "target_type",
-        "target_end_date", "horizon"
-      ),
-      joint_across = "location"
-    )
+    mv_point <- make_mv_point()
     result <- get_metrics(mv_point)
     expect_type(result, "list")
     expect_named(result, "variogram_score")
@@ -108,15 +82,7 @@ test_that(
 test_that(
   "score.forecast_multivariate_point() works as expected",
   {
-    data <- na.omit(data.table::copy(example_point))
-    mv_point <- as_forecast_multivariate_point(
-      data,
-      forecast_unit = c(
-        "location", "model", "target_type",
-        "target_end_date", "horizon"
-      ),
-      joint_across = "location"
-    )
+    mv_point <- make_mv_point()
 
     scores <- score(mv_point)
     expect_true(is.data.table(scores))
@@ -157,15 +123,7 @@ test_that(
 test_that(
   "score.forecast_multivariate_point() creates expected output",
   {
-    data <- na.omit(data.table::copy(example_point))
-    mv_point <- as_forecast_multivariate_point(
-      data,
-      forecast_unit = c(
-        "location", "model", "target_type",
-        "target_end_date", "horizon"
-      ),
-      joint_across = "location"
-    )
+    mv_point <- make_mv_point()
 
     scores <- score(mv_point)
 

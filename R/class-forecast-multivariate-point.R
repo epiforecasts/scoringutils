@@ -109,26 +109,16 @@ score.forecast_multivariate_point <- function(
   forecast <- clean_forecast(
     forecast, copy = TRUE, na.omit = TRUE
   )
-  forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
   forecast <- as.data.table(forecast)
 
-  f_transposed <- forecast[, .(
-    predicted = list(predicted),
-    observed = unique(observed)
-  ),
-  by = c(forecast_unit, ".mv_group_id")
-  ]
-
-  observed <- f_transposed$observed
-  predicted <- do.call(rbind, f_transposed$predicted)
-  predicted <- matrix(predicted, ncol = 1)
-  f_transposed[, c("observed", "predicted") := NULL]
-
-  mv_group_id <- f_transposed$.mv_group_id
+  observed <- forecast$observed
+  predicted <- matrix(forecast$predicted, ncol = 1)
+  mv_group_id <- forecast$.mv_group_id
+  forecast[, c("observed", "predicted") := NULL]
 
   result <- score_multivariate_apply(
-    f_transposed, metrics,
+    forecast, metrics,
     observed, predicted, mv_group_id
   )
 
