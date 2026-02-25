@@ -207,6 +207,114 @@ test_that("set_grouping() preserves existing keys correctly", {
 })
 
 # ==============================================================================
+# variogram_score_multivariate()
+# ==============================================================================
+test_that(
+  "variogram_score_multivariate() works as expected",
+  {
+    data <- example_multivariate_sample
+
+    # Test that variogram score is included in default metrics
+    metrics <- get_metrics(data)
+    expect_true("variogram_score" %in% names(metrics))
+
+    # Test basic scoring includes variogram_score
+    scores <- score(data)
+    expect_true(is.data.table(scores))
+    expect_true("variogram_score" %in% names(scores))
+
+    # Test that scores are numeric and non-negative
+    expect_type(scores$variogram_score, "double")
+    expect_true(
+      all(scores$variogram_score >= 0, na.rm = TRUE)
+    )
+  }
+)
+
+test_that(
+  "variogram_score_multivariate() matches scoringRules::vs_sample()",
+  {
+    set.seed(123)
+    d <- 4
+    m <- 20
+
+    obs1 <- rnorm(d)
+    fc1 <- replicate(m, rnorm(d))
+    obs2 <- rnorm(d)
+    fc2 <- replicate(m, rnorm(d))
+
+    vs_sr1 <- scoringRules::vs_sample(y = obs1, dat = fc1)
+    vs_sr2 <- scoringRules::vs_sample(y = obs2, dat = fc2)
+    vs_sr <- c(vs_sr1, vs_sr2)
+
+    vs_su <- variogram_score_multivariate(
+      observed = c(obs1, obs2),
+      predicted = rbind(fc1, fc2),
+      mv_group_id = c(rep(1, d), rep(2, d))
+    )
+    expect_equal(
+      unname(vs_su), vs_sr,
+      tolerance = 1e-6
+    )
+
+    vs_sr_p1_1 <- scoringRules::vs_sample(
+      y = obs1, dat = fc1, p = 1
+    )
+    vs_sr_p1_2 <- scoringRules::vs_sample(
+      y = obs2, dat = fc2, p = 1
+    )
+    vs_su_p1 <- variogram_score_multivariate(
+      observed = c(obs1, obs2),
+      predicted = rbind(fc1, fc2),
+      mv_group_id = c(rep(1, d), rep(2, d)),
+      p = 1
+    )
+    expect_equal(
+      unname(vs_su_p1), c(vs_sr_p1_1, vs_sr_p1_2),
+      tolerance = 1e-6
+    )
+  }
+)
+
+test_that(
+  "variogram_score_multivariate() works with custom p",
+  {
+    data <- example_multivariate_sample
+
+    # Test with p = 1
+    scores_p1 <- score(
+      data,
+      metrics = list(
+        variogram_score = purrr::partial(
+          variogram_score_multivariate, p = 1
+        )
+      )
+    )
+    expect_true(is.data.table(scores_p1))
+    expect_type(scores_p1$variogram_score, "double")
+    expect_true(
+      all(scores_p1$variogram_score >= 0, na.rm = TRUE)
+    )
+
+    # Test with p = 0.5 (default)
+    scores_p05 <- score(
+      data,
+      metrics = list(
+        variogram_score = variogram_score_multivariate
+      )
+    )
+    expect_type(scores_p05$variogram_score, "double")
+
+    # Scores with different p values should differ
+    expect_false(
+      all(scores_p1$variogram_score ==
+            scores_p05$variogram_score)
+    )
+  }
+)
+
+
+# ==============================================================================
 # score.forecast_multivariate_sample()
 # ==============================================================================
 test_that(
@@ -218,6 +326,7 @@ test_that(
     scores <- score(data)
     expect_true(is.data.table(scores))
     expect_true("energy_score" %in% names(scores))
+    expect_true("variogram_score" %in% names(scores))
 
     # Test with specific metrics
     scores <- score(
