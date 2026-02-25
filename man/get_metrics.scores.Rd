@@ -49,6 +49,7 @@ order does not matter).
 Other get_metrics functions: 
 \code{\link{get_metrics}()},
 \code{\link{get_metrics.forecast_binary}()},
+\code{\link{get_metrics.forecast_multivariate_point}()},
 \code{\link{get_metrics.forecast_multivariate_sample}()},
 \code{\link{get_metrics.forecast_nominal}()},
 \code{\link{get_metrics.forecast_ordinal}()},

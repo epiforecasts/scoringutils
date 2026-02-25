@@ -69,14 +69,7 @@ as_forecast_multivariate_sample.default <- function(data,
     predicted = predicted,
     sample_id = sample_id
   )
-  if (!is.null(joint_across)) {
-    data <- set_grouping(data, joint_across)
-  } else if (!(".mv_group_id" %in% colnames(data))) {
-    cli_abort(
-      "{.arg joint_across} must be provided when the data does
-      not already contain a {.code .mv_group_id} column."
-    )
-  }
+  data <- ensure_mv_grouping(data, joint_across)
 
   data <- new_forecast(data, "forecast_multivariate_sample")
   # Keep deprecated class name for backwards compatibility
@@ -185,20 +178,10 @@ score.forecast_multivariate_sample <- function(forecast, metrics = get_metrics(f
 
     mv_group_id <- forecast_same_length$.mv_group_id
 
-    # for multivariate scores, multiple rows collapse to a single score.
-    # we therefore have to create a new data.table with the correct dimensions
-    # and groups
-    grouping_cols <- get_grouping(forecast_same_length)
-    temp_dt <- unique(forecast_same_length[, .SD, .SDcols = c(grouping_cols, ".mv_group_id")])
-    result <- apply_metrics(
-      temp_dt,
-      metrics = metrics,
-      observed, predicted,
-      mv_group_id
+    result <- score_multivariate_apply(
+      forecast_same_length, metrics,
+      observed, predicted, mv_group_id
     )
-
-    setcolorder(result, c(setdiff(colnames(result), ".mv_group_id"), ".mv_group_id"))
-
     return(result)
   })
   scores <- rbindlist(split_result, fill = TRUE)
@@ -241,6 +224,69 @@ get_metrics.forecast_multivariate_sample <- function(x, select = NULL, exclude =
 #' @rdname get_metrics.forecast_multivariate_sample
 get_metrics.forecast_sample_multivariate <-
   get_metrics.forecast_multivariate_sample
+
+#' Ensure multivariate grouping is set
+#'
+#' Shared helper for multivariate forecast constructors. Applies
+#' [set_grouping()] when `joint_across` is provided, or checks that
+#' `.mv_group_id` already exists.
+#'
+#' @inheritParams as_forecast_doc_template
+#' @inheritParams as_forecast_multivariate_sample.default
+#' @importFrom cli cli_abort
+#' @return A data.table with a `.mv_group_id` column.
+#' @keywords internal
+ensure_mv_grouping <- function(data, joint_across) {
+  if (!is.null(joint_across)) {
+    data <- set_grouping(data, joint_across)
+  } else if (!(".mv_group_id" %in% colnames(data))) {
+    cli_abort(
+      "{.arg joint_across} must be provided when the data does
+      not already contain a {.code .mv_group_id} column."
+    )
+  }
+  return(data)
+}
+
+
+#' Apply multivariate metrics to grouped forecast data
+#'
+#' Shared helper used by score methods for multivariate forecast
+#' classes. Identifies the grouping columns, builds a unique
+#' metadata table, calls [apply_metrics()], and reorders columns.
+#'
+#' @param dt A data.table containing at least `.mv_group_id` and
+#'   the grouping columns.
+#' @param metrics Named list of metric functions.
+#' @param observed Numeric vector of observed values.
+#' @param predicted Matrix of predicted values.
+#' @param mv_group_id Integer vector of group identifiers.
+#' @importFrom data.table setcolorder
+#' @return A data.table of scores.
+#' @keywords internal
+score_multivariate_apply <- function(
+  dt, metrics, observed, predicted, mv_group_id
+) {
+  grouping_cols <- get_grouping(dt)
+  temp_dt <- unique(
+    dt[, .SD, .SDcols = c(grouping_cols, ".mv_group_id")]
+  )
+  result <- apply_metrics(
+    temp_dt,
+    metrics = metrics,
+    observed, predicted,
+    mv_group_id
+  )
+  setcolorder(
+    result,
+    c(
+      setdiff(colnames(result), ".mv_group_id"),
+      ".mv_group_id"
+    )
+  )
+  return(result)
+}
+
 
 #' @title Set grouping
 #' @description

@@ -1,5 +1,8 @@
 # scoringutils (development version)
 
+- Added `forecast_multivariate_point` class for scoring multivariate point forecasts with the variogram score.
+The new `as_forecast_multivariate_point()` constructor takes a `joint_across` argument, matching the pattern of `as_forecast_multivariate_sample()`.
+The `transform_forecasts()` function now works with both multivariate forecast types (#1112).
 - Added the variogram score (`variogram_score_multivariate()`) as a default metric for multivariate sample forecasts.
 The variogram score (Scheuerer and Hamill, 2015) evaluates the dependence structure of multivariate forecasts and is more sensitive to correlation misspecification than the energy score (#1111).
 - Fixed `score()` dropping the `scale` column for multivariate forecasts when using `transform_forecasts(append = TRUE)`. The issue was caused by stale `.mv_group_id` values not being recomputed after appending transformed data (#1108).

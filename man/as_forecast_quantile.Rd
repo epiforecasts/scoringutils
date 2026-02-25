@@ -138,6 +138,7 @@ as_forecast_quantile(
 \seealso{
 Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_multivariate_point}()},
 \code{\link{as_forecast_multivariate_sample}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_ordinal}()},
