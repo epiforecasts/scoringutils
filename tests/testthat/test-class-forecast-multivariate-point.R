@@ -1,18 +1,3 @@
-make_mv_point <- function() {
-  data <- na.omit(data.table::copy(example_point))
-  as_forecast_multivariate_point(
-    data,
-    forecast_unit = c(
-      "location", "model", "target_type",
-      "target_end_date", "horizon"
-    ),
-    joint_across = "location"
-  )
-}
-
-# ==============================================================================
-# as_forecast_multivariate_point() # nolint: commented_code_linter
-# ==============================================================================
 test_that(
   "as_forecast_multivariate_point() creates expected structure",
   {
@@ -42,10 +27,6 @@ test_that(
   }
 )
 
-
-# ==============================================================================
-# is_forecast_multivariate_point()
-# ==============================================================================
 test_that(
   "is_forecast_multivariate_point() works as expected",
   {
@@ -61,10 +42,6 @@ test_that(
   }
 )
 
-
-# ==============================================================================
-# get_metrics.forecast_multivariate_point()
-# ==============================================================================
 test_that(
   "get_metrics.forecast_multivariate_point() works as expected",
   {
@@ -75,10 +52,6 @@ test_that(
   }
 )
 
-
-# ==============================================================================
-# score.forecast_multivariate_point()
-# ==============================================================================
 test_that(
   "score.forecast_multivariate_point() works as expected",
   {
@@ -150,10 +123,6 @@ test_that(
   }
 )
 
-
-# ==============================================================================
-# Error cases for as_forecast_multivariate_point()
-# ==============================================================================
 test_that(
   "as_forecast_multivariate_point() handles errors appropriately",
   {
