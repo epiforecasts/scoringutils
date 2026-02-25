@@ -86,6 +86,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
     <div class="dont-index"><p>Other get_metrics functions:
 <code><a href="get_metrics.html">get_metrics()</a></code>,
 <code><a href="get_metrics.forecast_binary.html">get_metrics.forecast_binary()</a></code>,
+<code><a href="get_metrics.forecast_multivariate_point.html">get_metrics.forecast_multivariate_point()</a></code>,
 <code><a href="get_metrics.forecast_multivariate_sample.html">get_metrics.forecast_multivariate_sample()</a></code>,
 <code><a href="get_metrics.forecast_nominal.html">get_metrics.forecast_nominal()</a></code>,
 <code><a href="get_metrics.forecast_point.html">get_metrics.forecast_point()</a></code>,
@@ -110,7 +111,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     logs &lt;- -log(pred_for_observed)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(logs)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559d61190a00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56291f8c69c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $rps</span>
@@ -126,7 +127,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     rps &lt;- scoringRules::rps_probs(as.numeric(observed), ordered_predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(rps)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559d621d7230&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56291741b7c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

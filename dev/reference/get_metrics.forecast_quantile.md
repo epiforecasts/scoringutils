@@ -79,6 +79,7 @@ Overview of required input format for quantile-based forecasts
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
 [`get_metrics.forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md),
+[`get_metrics.forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_point.md),
 [`get_metrics.forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md),
 [`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md),
@@ -136,7 +137,7 @@ get_metrics(example_quantile, select = "wis")
 #>         return(reformatted$wis)
 #>     }
 #> }
-#> <bytecode: 0x559d5efc5370>
+#> <bytecode: 0x56291c7be480>
 #> <environment: namespace:scoringutils>
 #> 
 ```

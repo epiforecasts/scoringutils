@@ -1,4 +1,4 @@
-# Create a `forecast` object for sample-based forecasts
+# Create a `forecast` object for multivariate point forecasts
 
 Process and validate a data.frame (or similar) or similar with forecasts
 and observations. If the input passes all input checks, those functions
@@ -15,15 +15,15 @@ other, unneeded columns. See section "Forecast Unit" below for details).
 ## Usage
 
 ``` r
-as_forecast_sample(data, ...)
+as_forecast_multivariate_point(data, ...)
 
 # Default S3 method
-as_forecast_sample(
+as_forecast_multivariate_point(
   data,
+  joint_across = NULL,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
-  sample_id = NULL,
   ...
 )
 ```
@@ -40,15 +40,27 @@ as_forecast_sample(
 
   Unused
 
+- joint_across:
+
+  Character vector with columns names that define the variables which
+  are forecasted jointly. Conceptually, several univariate forecasts are
+  pooled together to form a single multivariate forecast. For example,
+  if you have a column `country` and want to define a multivariate
+  forecast for several countries at once, you could set
+  `joint_across = "country"`.
+
 - forecast_unit:
 
   (optional) Name of the columns in `data` (after any renaming of
-  columns) that denote the unit of a single forecast. See
+  columns) that denote the unit of a single univariate (!) forecast. See
   [`get_forecast_unit()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_unit.md)
   for details. If `NULL` (the default), all columns that are not
   required columns are assumed to form the unit of a single forecast. If
   specified, all columns that are not part of the forecast unit (or
-  required columns) will be removed.
+  required columns) will be removed. Multivariate forecasts are defined
+  by a) specifying the univariate forecast unit (i.e. the unit of a
+  single forecast if that forecast were univariate) and b) specifying
+  which variables are pooled together to form a multivariate forecast.
 
 - observed:
 
@@ -60,14 +72,9 @@ as_forecast_sample(
   (optional) Name of the column in `data` that contains the predicted
   values. This column will be renamed to "predicted".
 
-- sample_id:
-
-  (optional) Name of the column in `data` that contains the sample id.
-  This column will be renamed to "sample_id".
-
 ## Value
 
-A `forecast` object of class `forecast_sample`
+A `forecast` object of class `forecast_multivariate_point`
 
 ## Target format
 
@@ -76,21 +83,20 @@ with the following columns:
 
 - `observed`: Column of type `numeric` with observed values.
 
-- `predicted`: Column of type `numeric` with predicted values. Predicted
-  values represent random samples from the predictive distribution.
+- `predicted`: Column of type `numeric` with predicted values.
 
-- `sample_id`: Column of any type with unique identifiers (unique within
-  a single forecast) for each sample.
+- `mv_group_id`: Column of any type with unique identifiers (unique
+  within a single forecast) for each multivariate group. This column is
+  created automatically using the `forecast_unit` and the `joint_across`
+  arguments.
 
 For convenience, we recommend an additional column `model` holding the
 name of the forecaster or model that produced a prediction, but this is
 not strictly necessary.
 
 See the
-[example_sample_continuous](https://epiforecasts.io/scoringutils/dev/reference/example_sample_continuous.md)
-and
-[example_sample_discrete](https://epiforecasts.io/scoringutils/dev/reference/example_sample_discrete.md)
-data set for an example
+[example_point](https://epiforecasts.io/scoringutils/dev/reference/example_point.md)
+data set for an example of point forecast data.
 
 ## Forecast unit
 
@@ -127,9 +133,9 @@ columns' like "predicted" or "observed" are retained.
 
 Other functions to create forecast objects:
 [`as_forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_binary.md),
-[`as_forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_point.md),
 [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md),
 [`as_forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_nominal.md),
 [`as_forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_ordinal.md),
 [`as_forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_point.md),
-[`as_forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_quantile.md)
+[`as_forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_quantile.md),
+[`as_forecast_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_sample.md)

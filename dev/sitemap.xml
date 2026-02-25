@@ -19,6 +19,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_binary.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_doc_template.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_generic.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_nominal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/as_forecast_ordinal.html</loc></url>
@@ -81,6 +82,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_forecast_unit.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_grouping.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.html</loc></url>
@@ -140,6 +142,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/transform_forecasts.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/validate_metrics.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate_point.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/wis.html</loc></url>
 </urlset>
 

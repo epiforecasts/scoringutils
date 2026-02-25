@@ -42,6 +42,11 @@
 
   Common functionality for `as_forecast_<type>` functions
 
+- [`as_forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_point.md)
+  :
+
+  Create a `forecast` object for multivariate point forecasts
+
 - [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md)
   :
 
@@ -80,6 +85,7 @@
 - [`assert_forecast()`](https://epiforecasts.io/scoringutils/dev/reference/assert_forecast.md)
   : Assert that input is a forecast object and passes validations
 - [`is_forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
+  [`is_forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
@@ -109,6 +115,11 @@
   :
 
   Create a `forecast` object for binary forecasts
+
+- [`as_forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_point.md)
+  :
+
+  Create a `forecast` object for multivariate point forecasts
 
 - [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md)
   :
@@ -152,6 +163,8 @@
   : Get metrics
 - [`get_metrics(`*`<forecast_binary>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md)
   : Get default metrics for binary forecasts
+- [`get_metrics(`*`<forecast_multivariate_point>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_point.md)
+  : Get default metrics for multivariate point forecasts
 - [`get_metrics(`*`<forecast_multivariate_sample>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md)
   [`get_metrics(`*`<forecast_sample_multivariate>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md)
   : Get default metrics for sample-based forecasts
@@ -238,6 +251,8 @@
   : Squared error of the mean (sample-based version)
 - [`variogram_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate.md)
   : Variogram score for multivariate forecasts
+- [`variogram_score_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate_point.md)
+  : Variogram score for multivariate point forecasts
 - [`wis()`](https://epiforecasts.io/scoringutils/dev/reference/wis.md)
   [`dispersion_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/wis.md)
   [`overprediction_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/wis.md)

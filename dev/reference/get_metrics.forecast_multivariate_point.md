@@ -1,14 +1,14 @@
-# Get default metrics for nominal forecasts
+# Get default metrics for multivariate point forecasts
 
-For nominal forecasts, the default scoring rule is:
+For multivariate point forecasts, the default scoring rule is:
 
-- "log_score" =
-  [`logs_categorical()`](https://epiforecasts.io/scoringutils/dev/reference/scoring-functions-nominal.md)
+- "variogram_score" =
+  [`variogram_score_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate_point.md)
 
 ## Usage
 
 ``` r
-# S3 method for class 'forecast_nominal'
+# S3 method for class 'forecast_multivariate_point'
 get_metrics(x, select = NULL, exclude = NULL, ...)
 ```
 
@@ -35,13 +35,19 @@ get_metrics(x, select = NULL, exclude = NULL, ...)
 
   unused
 
+## Input format
+
+![](figures/metrics-binary-point.png)
+
+Overview of required input format for binary and point forecasts
+
 ## See also
 
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
 [`get_metrics.forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md),
-[`get_metrics.forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_point.md),
 [`get_metrics.forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md),
+[`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md),
 [`get_metrics.forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.md),
 [`get_metrics.forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_quantile.md),
@@ -51,21 +57,35 @@ Other get_metrics functions:
 ## Examples
 
 ``` r
-get_metrics(example_nominal)
-#> $log_score
-#> function (observed, predicted, predicted_label) 
+data <- data.frame(
+  observed = c(1, 2, 3),
+  predicted = c(1.1, 2.2, 3.3),
+  target = c("a", "b", "c"),
+  model = "m1",
+  date = "2020-01-01"
+)
+ex <- as_forecast_multivariate_point(
+  data,
+  forecast_unit = c("model", "date", "target"),
+  joint_across = "target"
+)
+get_metrics(ex)
+#> $variogram_score
+#> function (observed, predicted, mv_group_id, w_vs = NULL, p = 0.5) 
 #> {
-#>     assert_input_categorical(observed, predicted, predicted_label)
-#>     n <- length(observed)
-#>     if (n == 1) {
-#>         predicted <- matrix(predicted, nrow = 1)
-#>     }
-#>     observed_indices <- as.numeric(observed)
-#>     pred_for_observed <- predicted[cbind(1:n, observed_indices)]
-#>     logs <- -log(pred_for_observed)
-#>     return(logs)
+#>     assert_numeric(observed, min.len = 1)
+#>     assert_numeric(as.vector(predicted), min.len = 1)
+#>     assert_numeric(mv_group_id, len = length(observed))
+#>     unique_groups <- unique(mv_group_id)
+#>     vs <- vapply(unique_groups, function(group) {
+#>         idx <- which(mv_group_id == group)
+#>         scoringRules::vs_sample(y = observed[idx], dat = predicted[idx, 
+#>             , drop = FALSE], w_vs = w_vs, p = p)
+#>     }, numeric(1))
+#>     names(vs) <- unique_groups
+#>     return(vs)
 #> }
-#> <bytecode: 0x56291f8c69c0>
+#> <bytecode: 0x56291d316ad0>
 #> <environment: namespace:scoringutils>
 #> 
 ```

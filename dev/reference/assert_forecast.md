@@ -13,6 +13,9 @@ details on the required input formats.
 # S3 method for class 'forecast_binary'
 assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
+# S3 method for class 'forecast_multivariate_point'
+assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
+
 # S3 method for class 'forecast_multivariate_sample'
 assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
 

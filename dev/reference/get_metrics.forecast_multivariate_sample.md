@@ -52,6 +52,7 @@ Overview of required input format for sample-based forecasts
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
 [`get_metrics.forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md),
+[`get_metrics.forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_point.md),
 [`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_ordinal.md),
 [`get_metrics.forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.md),
@@ -81,7 +82,7 @@ get_metrics(example)
 #>     names(energy_score) <- unique_groups
 #>     return(energy_score)
 #> }
-#> <bytecode: 0x559d609952a0>
+#> <bytecode: 0x56291c173438>
 #> <environment: namespace:scoringutils>
 #> 
 #> $variogram_score
@@ -98,7 +99,7 @@ get_metrics(example)
 #>     names(variogram_score) <- unique_groups
 #>     return(variogram_score)
 #> }
-#> <bytecode: 0x559d609935e8>
+#> <bytecode: 0x56291c1714f0>
 #> <environment: namespace:scoringutils>
 #> 
 ```

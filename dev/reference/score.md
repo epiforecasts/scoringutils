@@ -22,6 +22,9 @@ Forecasts with scoringutils in R](https://arxiv.org/abs/2205.07090).
 # S3 method for class 'forecast_binary'
 score(forecast, metrics = get_metrics(forecast), ...)
 
+# S3 method for class 'forecast_multivariate_point'
+score(forecast, metrics = get_metrics(forecast), ...)
+
 # S3 method for class 'forecast_multivariate_sample'
 score(forecast, metrics = get_metrics(forecast), ...)
 

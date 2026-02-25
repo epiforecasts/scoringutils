@@ -43,6 +43,7 @@ get_metrics(x, select = NULL, exclude = NULL, ...)
 Other get_metrics functions:
 [`get_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.md),
 [`get_metrics.forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_binary.md),
+[`get_metrics.forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_point.md),
 [`get_metrics.forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md),
 [`get_metrics.forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md),
 [`get_metrics.forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_point.md),
@@ -67,7 +68,7 @@ get_metrics(example_ordinal)
 #>     logs <- -log(pred_for_observed)
 #>     return(logs)
 #> }
-#> <bytecode: 0x559d61190a00>
+#> <bytecode: 0x56291f8c69c0>
 #> <environment: namespace:scoringutils>
 #> 
 #> $rps
@@ -83,7 +84,7 @@ get_metrics(example_ordinal)
 #>     rps <- scoringRules::rps_probs(as.numeric(observed), ordered_predicted)
 #>     return(rps)
 #> }
-#> <bytecode: 0x559d621d7230>
+#> <bytecode: 0x56291741b7c0>
 #> <environment: namespace:scoringutils>
 #> 
 ```

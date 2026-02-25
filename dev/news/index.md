@@ -2,6 +2,15 @@
 
 ## scoringutils (development version)
 
+- Added `forecast_multivariate_point` class for scoring multivariate
+  point forecasts with the variogram score. The new
+  [`as_forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_point.md)
+  constructor takes a `joint_across` argument, matching the pattern of
+  [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md).
+  The
+  [`transform_forecasts()`](https://epiforecasts.io/scoringutils/dev/reference/transform_forecasts.md)
+  function now works with both multivariate forecast types
+  ([\#1112](https://github.com/epiforecasts/scoringutils/issues/1112)).
 - Added the variogram score
   ([`variogram_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate.md))
   as a default metric for multivariate sample forecasts. The variogram
