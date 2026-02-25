@@ -2,6 +2,13 @@
 
 ## scoringutils (development version)
 
+- Added the variogram score
+  ([`variogram_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate.md))
+  as a default metric for multivariate sample forecasts. The variogram
+  score (Scheuerer and Hamill, 2015) evaluates the dependence structure
+  of multivariate forecasts and is more sensitive to correlation
+  misspecification than the energy score
+  ([\#1111](https://github.com/epiforecasts/scoringutils/issues/1111)).
 - Fixed
   [`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md)
   dropping the `scale` column for multivariate forecasts when using

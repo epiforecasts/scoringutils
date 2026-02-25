@@ -5,6 +5,9 @@ For sample-based multivariate forecasts, the default scoring rules are:
 - "energy_score" =
   [`energy_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/energy_score_multivariate.md)
 
+- "variogram_score" =
+  [`variogram_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate.md)
+
 ## Usage
 
 ``` r
@@ -78,7 +81,24 @@ get_metrics(example)
 #>     names(energy_score) <- unique_groups
 #>     return(energy_score)
 #> }
-#> <bytecode: 0x555f34fe1b78>
+#> <bytecode: 0x559d609952a0>
+#> <environment: namespace:scoringutils>
+#> 
+#> $variogram_score
+#> function (observed, predicted, mv_group_id, w = NULL, w_vs = NULL, 
+#>     p = 0.5) 
+#> {
+#>     assert_input_multivariate_sample(observed, predicted, mv_group_id)
+#>     unique_groups <- unique(mv_group_id)
+#>     variogram_score <- vapply(unique_groups, function(group) {
+#>         idx <- which(mv_group_id == group)
+#>         vs_sample(y = observed[idx], dat = predicted[idx, , drop = FALSE], 
+#>             w = w, w_vs = w_vs, p = p)
+#>     }, numeric(1))
+#>     names(variogram_score) <- unique_groups
+#>     return(variogram_score)
+#> }
+#> <bytecode: 0x559d609935e8>
 #> <environment: namespace:scoringutils>
 #> 
 ```

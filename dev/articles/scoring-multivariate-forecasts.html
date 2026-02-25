@@ -339,9 +339,9 @@ this appropriately.)</p>
 <span><span class="co">#&gt;    target_end_date target_type forecast_date                 model horizon</span></span>
 <span><span class="co">#&gt;             &lt;Date&gt;      &lt;char&gt;        &lt;Date&gt;                &lt;char&gt;   &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:      2021-05-15       Cases    2021-05-03 EuroCOVIDhub-ensemble       2</span></span>
-<span><span class="co">#&gt;    energy_score .mv_group_id</span></span>
-<span><span class="co">#&gt;           &lt;num&gt;        &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1:     54795.73            1</span></span></code></pre></div>
+<span><span class="co">#&gt;    energy_score variogram_score .mv_group_id</span></span>
+<span><span class="co">#&gt;           &lt;num&gt;           &lt;num&gt;        &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1:     54795.73        68523.93            1</span></span></code></pre></div>
 <p>If, at any point, you want to score the same forecast using different
 groupings, you’d have create a new separate forecast object with a
 different grouping and score that new forecast object.</p>

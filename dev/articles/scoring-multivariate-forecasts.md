@@ -285,9 +285,9 @@ score(example_multiv)
 #>    target_end_date target_type forecast_date                 model horizon
 #>             <Date>      <char>        <Date>                <char>   <num>
 #> 1:      2021-05-15       Cases    2021-05-03 EuroCOVIDhub-ensemble       2
-#>    energy_score .mv_group_id
-#>           <num>        <int>
-#> 1:     54795.73            1
+#>    energy_score variogram_score .mv_group_id
+#>           <num>           <num>        <int>
+#> 1:     54795.73        68523.93            1
 ```
 
 If, at any point, you want to score the same forecast using different

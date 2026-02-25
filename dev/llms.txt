@@ -538,6 +538,8 @@ specification. Contributions of any kind are welcome!
   : Log score for categorical outcomes
 - [`se_mean_sample()`](https://epiforecasts.io/scoringutils/dev/reference/se_mean_sample.md)
   : Squared error of the mean (sample-based version)
+- [`variogram_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate.md)
+  : Variogram score for multivariate forecasts
 - [`wis()`](https://epiforecasts.io/scoringutils/dev/reference/wis.md)
   [`dispersion_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/wis.md)
   [`overprediction_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/wis.md)
