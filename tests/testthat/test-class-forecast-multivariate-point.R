@@ -1,3 +1,17 @@
+# nolint start: object_usage_linter
+make_mv_point <- function() {
+  data <- na.omit(data.table::copy(example_point))
+  as_forecast_multivariate_point(
+    data,
+    forecast_unit = c(
+      "location", "model", "target_type",
+      "target_end_date", "horizon"
+    ),
+    joint_across = "location"
+  )
+}
+# nolint end
+
 test_that(
   "as_forecast_multivariate_point() creates expected structure",
   {
