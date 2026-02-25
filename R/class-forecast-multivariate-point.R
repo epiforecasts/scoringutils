@@ -82,7 +82,7 @@ assert_forecast.forecast_multivariate_point <- function(
 
   assert_forecast_type(
     forecast,
-    actual = "forecast_multivariate_point",
+    actual = "multivariate_point",
     desired = forecast_type
   )
   return(invisible(NULL))
