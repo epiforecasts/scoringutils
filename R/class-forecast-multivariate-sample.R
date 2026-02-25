@@ -201,6 +201,7 @@ score.forecast_sample_multivariate <-
 #' @description
 #' For sample-based multivariate forecasts, the default scoring rules are:
 #' - "energy_score" = [energy_score_multivariate()]
+#' - "variogram_score" = [variogram_score_multivariate()]
 #' @inheritSection illustration-input-metric-sample Input format
 #' @inheritParams get_metrics.forecast_binary
 #' @export
@@ -213,7 +214,8 @@ score.forecast_sample_multivariate <-
 #' get_metrics(example)
 get_metrics.forecast_multivariate_sample <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
-    energy_score = energy_score_multivariate
+    energy_score = energy_score_multivariate,
+    variogram_score = variogram_score_multivariate
   )
   select_metrics(all, select, exclude)
 }
