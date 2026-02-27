@@ -107,6 +107,64 @@ test_that("function throws an error for wrong input formats", {
 
 
 # ==============================================================================
+# Test factor level order warning
+# ==============================================================================
+test_that("assert_input_binary() warns when 0/1 factor levels are in counterintuitive order", {
+  observed_rev <- factor(c(0, 1, 1, 0, 1), levels = c("1", "0"))
+  predicted_rev <- c(0.1, 0.9, 0.8, 0.2, 0.7)
+  expect_warning(
+    assert_input_binary(observed_rev, predicted_rev),
+    "counterintuitive"
+  )
+})
+
+test_that("assert_input_binary() does not warn for standard 0/1 level order", {
+  observed_std <- factor(c(0, 1, 1, 0, 1), levels = c("0", "1"))
+  predicted_std <- c(0.1, 0.9, 0.8, 0.2, 0.7)
+  expect_no_warning(assert_input_binary(observed_std, predicted_std))
+})
+
+test_that("assert_input_binary() does not warn for non-numeric factor levels", {
+  observed_ab <- factor(c("a", "b", "b", "a"), levels = c("a", "b"))
+  predicted_ab <- c(0.3, 0.7, 0.6, 0.4)
+  expect_no_warning(assert_input_binary(observed_ab, predicted_ab))
+})
+
+test_that("brier_score() produces different results with reversed factor levels", {
+  observed_correct <- factor(c(0, 1, 1, 0), levels = c("0", "1"))
+  observed_reversed <- factor(c(0, 1, 1, 0), levels = c("1", "0"))
+  predicted_bs <- c(0.1, 0.9, 0.8, 0.2)
+
+  scores_correct <- brier_score(observed_correct, predicted_bs)
+  expect_equal(scores_correct, c(0.01, 0.01, 0.04, 0.04)) # nolint: expect_identical_linter
+
+  expect_warning(
+    scores_reversed <- brier_score(observed_reversed, predicted_bs),
+    "counterintuitive"
+  )
+  expect_false(all(scores_correct == scores_reversed))
+})
+
+test_that("logs_binary() warns with reversed 0/1 factor levels", {
+  observed_reversed <- factor(c(0, 1, 1, 0), levels = c("1", "0"))
+  predicted_lb <- c(0.1, 0.9, 0.8, 0.2)
+  expect_warning(
+    logs_binary(observed_reversed, predicted_lb),
+    "counterintuitive"
+  )
+})
+
+test_that("assert_input_binary() warns for TRUE/FALSE levels in counterintuitive order", {
+  observed_tf <- factor(c(TRUE, FALSE, TRUE), levels = c("TRUE", "FALSE"))
+  predicted_tf <- c(0.8, 0.2, 0.9)
+  expect_warning(
+    assert_input_binary(observed_tf, predicted_tf),
+    "counterintuitive"
+  )
+})
+
+
+# ==============================================================================
 # Test Binary Metrics
 # ==============================================================================
 
