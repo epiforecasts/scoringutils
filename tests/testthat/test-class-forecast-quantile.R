@@ -93,6 +93,28 @@ test_that("as_forecast_quantile() works with a data.frame", {
   expect_no_condition(as_forecast_quantile(example_quantile_df))
 })
 
+test_that("as_forecast_quantile.forecast_sample() accepts probs and type args", {
+  result <- as_forecast_quantile(
+    example_sample_continuous,
+    probs = c(0.1, 0.5, 0.9),
+    type = 7
+  )
+  expect_true(is_forecast_quantile(result))
+  expect_equal(sort(unique(result$quantile_level)), c(0.1, 0.5, 0.9))
+  expect_no_condition(
+    as_forecast_quantile(na.omit(example_sample_continuous), probs = c(0.1, 0.5, 0.9))
+  )
+})
+
+test_that("formals differ between as_forecast_quantile methods", {
+  sample_formals <- names(formals(scoringutils:::as_forecast_quantile.forecast_sample))
+  default_formals <- names(formals(scoringutils:::as_forecast_quantile.default))
+  expect_true("probs" %in% sample_formals)
+  expect_false("probs" %in% default_formals)
+  expect_true("quantile_level" %in% default_formals)
+  expect_false("quantile_level" %in% sample_formals)
+})
+
 test_that("as_forecast_quantiles works", {
   samples <- data.frame(
     date = as.Date("2020-01-01") + 1:10,
@@ -426,4 +448,10 @@ test_that("get_pit_histogram.forecast_quantile() works as expected", {
 
   # check printing works
   expect_output(print(pit_quantile))
+})
+
+test_that("get_pit_histogram.forecast_quantile() does not accept integers arg", {
+  expect_false(
+    "integers" %in% names(formals(scoringutils:::get_pit_histogram.forecast_quantile))
+  )
 })

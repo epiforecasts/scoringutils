@@ -142,6 +142,7 @@ quantile_to_interval_numeric <- function(observed,
 #' based on interval ranges.
 #'
 #' @inheritParams as_forecast_quantile
+#' @inheritParams as_forecast_quantile.forecast_sample
 #' @param keep_quantile_col keep quantile_level column, default is TRUE
 #' @returns A data.table in a long interval interval range format
 #' @importFrom data.table as.data.table
