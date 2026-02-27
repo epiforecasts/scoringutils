@@ -191,3 +191,19 @@ get_range_from_quantile <- function(quantile_level) {
   )
   return(interval_range)
 }
+
+
+#' Check whether observed values fall inside a prediction interval
+#' @description
+#' Internal helper that computes whether each observed value falls within the
+#' bounds defined by `lower` and `upper`. Used by both [get_coverage()] and
+#' [interval_coverage()] to avoid duplicating the bounds-check logic.
+#' @param observed Numeric vector of observed values.
+#' @param lower Numeric vector of lower interval bounds.
+#' @param upper Numeric vector of upper interval bounds.
+#' @returns A logical vector indicating whether each observed value falls
+#'   within the corresponding interval (inclusive on both bounds).
+#' @keywords internal
+check_interval_coverage <- function(observed, lower, upper) {
+  (observed >= lower) & (observed <= upper)
+}
