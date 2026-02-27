@@ -438,7 +438,7 @@ The functionality currently relies on a hack. In previous versions of `scoringut
 ```{r}
 range_example <- copy(example_quantile) |>
   na.omit()
-range_example[, range := scoringutils:::get_range_from_quantile(quantile_level)] # nolint: undesirable_operator_linter
+range_example[, range := scoringutils::get_interval_range(quantile_level)]
 
 sum_scores <- range_example |>
   as_forecast_quantile() |>
