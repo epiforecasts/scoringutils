@@ -85,6 +85,13 @@ assert_forecast.forecast_quantile <- function(
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
   assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
+
+  # check for non-monotonic predictions
+  monotonicity_check <- check_monotonicity(forecast)
+  if (!isTRUE(monotonicity_check) && verbose) {
+    cli_warn(monotonicity_check)
+  }
+
   return(invisible(NULL))
 }
 
