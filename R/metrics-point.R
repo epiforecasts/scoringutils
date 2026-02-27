@@ -49,12 +49,12 @@ assert_dims_ok_point <- function(observed, predicted) {
   n_pred <- length(as.vector(predicted))
   # check that both are either of length 1 or of equal length
   if ((n_obs != 1) && (n_pred != 1) && (n_obs != n_pred)) {
-    #nolint start: keyword_quote_linter object_usage_linter
+    #nolint start: object_usage_linter
     cli_abort(
       c(
-        "!" = "`observed` and `predicted` must either be of length 1 or
+        `!` = "`observed` and `predicted` must either be of length 1 or
          of equal length.",
-        "i" = "Found {n_obs} and {n_pred}."
+        `i` = "Found {n_obs} and {n_pred}."
       )
     )
     #nolint end

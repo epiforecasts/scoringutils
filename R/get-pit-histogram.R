@@ -58,6 +58,6 @@ get_pit_histogram <- function(forecast, num_bins, breaks, by,
 #' @export
 get_pit_histogram.default <- function(forecast, num_bins, breaks, by, ...) {
   cli_abort(c(
-    "!" = "The input needs to be a valid forecast object represented as quantiles or samples." # nolint
+    `!` = "The input needs to be a valid forecast object represented as quantiles or samples."
   ))
 }
