@@ -150,15 +150,31 @@ score.default <- function(forecast, metrics, ...) {
 #' @returns A data table with the forecasts and the calculated metrics.
 #' @keywords internal
 apply_metrics <- function(forecast, metrics, ...) {
+  failures <- list()
   lapply(names(metrics), function(metric_name) {
     result <- do.call(
       run_safely,
       list(..., fun = metrics[[metric_name]], metric_name = metric_name)
     )
-    if (!is.null(result)) {
+    if (is.list(result) && !is.null(result$error)) {
+      failures[[metric_name]] <<- result$error
+    } else if (!is.null(result)) {
       forecast[, (metric_name) := result]
     }
   })
+  if (length(failures) > 0) {
+    n_fail <- length(failures)
+    detail <- vapply(
+      names(failures),
+      function(nm) paste0("`", nm, "`: ", failures[[nm]]),
+      character(1)
+    )
+    names(detail) <- rep("*", length(detail))
+    cli_warn(c(
+      "!" = "Computation failed for {n_fail} metric{?s}:",
+      detail
+    ))
+  }
   return(forecast)
 }
 
@@ -171,7 +187,8 @@ apply_metrics <- function(forecast, metrics, ...) {
 #'
 #' All named arguments in `...` that are not accepted by `fun` are removed.
 #' All unnamed arguments are passed on to the function. In case `fun` errors,
-#' the error will be converted to a warning and `run_safely` returns `NULL`.
+#' `run_safely` returns a list with `result = NULL` and `error` containing the
+#' error message, allowing the caller to batch warnings.
 #'
 #' `run_safely` can be useful when constructing functions to be used as
 #' metrics in [score()].
@@ -182,7 +199,8 @@ apply_metrics <- function(forecast, metrics, ...) {
 #'   provide a more informative warning message in case `fun` errors.
 #' @importFrom cli cli_warn
 #' @importFrom checkmate assert_function
-#' @returns The result of `fun` or `NULL` if `fun` errors
+#' @returns The result of `fun`, or a list with `result = NULL` and `error`
+#'   (a character string) if `fun` errors.
 #' @keywords internal
 #' @examples
 #' f <- function(x) {x}
@@ -209,16 +227,8 @@ run_safely <- function(..., fun, metric_name) {
   result <- try(do.call(fun, valid_args), silent = TRUE)
 
   if (inherits(result, "try-error")) {
-    #nolint start: object_usage_linter
     msg <- conditionMessage(attr(result, "condition"))
-    cli_warn(
-      c(
-        "!" = "Computation for {.var {metric_name}} failed.
-        Error: {msg}."
-      )
-    )
-    #nolint end
-    return(NULL)
+    return(list(result = NULL, error = msg))
   }
   return(result)
 }
