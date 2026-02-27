@@ -595,3 +595,109 @@ test_that("add_relative_skill() works without warnings when not computing p-valu
   expect_type(scores_w_rel_skill$ae_median_relative_skill, "double")
   expect_false(anyNA(scores_w_rel_skill$ae_median_relative_skill))
 })
+
+
+# ==============================================================================
+# Tests for explicit argument promotion (issue #769)
+# ==============================================================================
+
+test_that("get_pairwise_comparisons() accepts test_type as explicit argument", {
+  result_np <- get_pairwise_comparisons(scores_quantile, test_type = "non_parametric")
+  expect_s3_class(result_np, "data.table")
+  expect_true(all(is.finite(result_np[model != compare_against]$pval)))
+
+  result_perm <- get_pairwise_comparisons(
+    scores_quantile, test_type = "permutation", n_permutations = 50
+  )
+  expect_s3_class(result_perm, "data.table")
+  expect_true(all(is.finite(result_perm[model != compare_against]$pval)))
+
+  result_null <- get_pairwise_comparisons(scores_quantile, test_type = NULL)
+  expect_s3_class(result_null, "data.table")
+  expect_true(all(is.na(result_null[model != compare_against]$pval)))
+
+  expect_true("test_type" %in% names(formals(get_pairwise_comparisons)))
+})
+
+test_that("get_pairwise_comparisons() accepts one_sided as explicit argument", {
+  result_one <- get_pairwise_comparisons(
+    scores_quantile, one_sided = TRUE, test_type = "permutation", n_permutations = 50
+  )
+  result_two <- get_pairwise_comparisons(
+    scores_quantile, one_sided = FALSE, test_type = "permutation", n_permutations = 50
+  )
+  expect_s3_class(result_one, "data.table")
+  expect_s3_class(result_two, "data.table")
+  expect_true(all(is.finite(result_one[model != compare_against]$pval)))
+  expect_true(all(is.finite(result_two[model != compare_against]$pval)))
+  expect_true("one_sided" %in% names(formals(get_pairwise_comparisons)))
+})
+
+test_that("get_pairwise_comparisons() accepts n_permutations as explicit argument", {
+  result <- get_pairwise_comparisons(
+    scores_quantile, test_type = "permutation", n_permutations = 10
+  )
+  expect_s3_class(result, "data.table")
+  expect_true(all(is.finite(result[model != compare_against]$pval)))
+  expect_true("n_permutations" %in% names(formals(get_pairwise_comparisons)))
+})
+
+test_that("add_relative_skill() accepts test_type, one_sided, n_permutations as explicit arguments", {
+  result_null <- expect_no_warning(
+    add_relative_skill(scores_quantile, test_type = NULL)
+  )
+  expect_s3_class(result_null, "data.table")
+
+  result_perm <- add_relative_skill(
+    scores_quantile, test_type = "permutation", one_sided = TRUE, n_permutations = 50
+  )
+  expect_s3_class(result_perm, "data.table")
+
+  expect_true("test_type" %in% names(formals(add_relative_skill)))
+  expect_true("one_sided" %in% names(formals(add_relative_skill)))
+  expect_true("n_permutations" %in% names(formals(add_relative_skill)))
+})
+
+test_that("get_pairwise_comparisons() has correct default values for promoted arguments", {
+  fmls <- formals(get_pairwise_comparisons)
+  expect_identical(eval(fmls$one_sided), FALSE)
+  expect_identical(eval(fmls$n_permutations), 999)
+  # test_type default should have "non_parametric" as first element
+  test_type_default <- eval(fmls$test_type)
+  expect_true("non_parametric" %in% test_type_default)
+  expect_identical(test_type_default[[1]], "non_parametric")
+})
+
+test_that("get_pairwise_comparisons() results are unchanged after argument promotion", {
+  result_default <- get_pairwise_comparisons(scores_quantile)
+  expect_true("mean_scores_ratio" %in% names(result_default))
+  expect_true("pval" %in% names(result_default))
+  expect_true("adj_pval" %in% names(result_default))
+  expect_true("wis_relative_skill" %in% names(result_default))
+
+  result_null <- get_pairwise_comparisons(scores_quantile, test_type = NULL)
+  expect_true(all(is.na(result_null[model != compare_against]$pval)))
+  expect_true(all(is.na(result_null[model != compare_against]$adj_pval)))
+
+  set.seed(42)
+  result_perm <- get_pairwise_comparisons(
+    scores_quantile, test_type = "permutation", n_permutations = 50
+  )
+  expect_true(all(is.finite(result_perm[model != compare_against]$pval)))
+})
+
+test_that("pairwise_comparison_one_group() passes test args through to compare_forecasts()", {
+  result_null <- pairwise_comparison_one_group(
+    data.table::copy(scores_quantile), metric = "wis", baseline = NULL,
+    compare = "model", by = character(0), test_type = NULL
+  )
+  expect_true(all(is.na(result_null[model != compare_against]$pval)))
+
+  result_np <- pairwise_comparison_one_group(
+    data.table::copy(scores_quantile), metric = "wis", baseline = NULL,
+    compare = "model", by = character(0), test_type = "non_parametric"
+  )
+  expect_true(all(is.finite(result_np[model != compare_against]$pval)))
+
+  expect_true("test_type" %in% names(formals(pairwise_comparison_one_group)))
+})
