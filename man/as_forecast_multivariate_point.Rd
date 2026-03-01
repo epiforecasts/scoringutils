@@ -23,24 +23,19 @@ on the required input format.}
 
 \item{...}{Unused}
 
-\item{joint_across}{Character vector with columns names that define
-the variables which are forecasted jointly. Conceptually, several
-univariate forecasts are pooled together to form a single
-multivariate forecast. For example, if you have a column \code{country}
-and want to define a multivariate forecast for several countries
-at once, you could set \code{joint_across = "country"}.}
+\item{joint_across}{Character vector with columns names that define the
+variables which are forecasted jointly. Conceptually, several univariate
+forecasts are pooled together to form a single multivariate forecasts.
+For example, if you have a column \code{country} and want to define
+a multivariate forecast for several countries at once, you could set
+\code{joint_across = "country"}.}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a
-single univariate (!) forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
+single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for details.
 If \code{NULL} (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
-that are not part of the forecast unit (or required columns) will be
-removed.
-Multivariate forecasts are defined by a) specifying the univariate
-forecast unit (i.e. the unit of a single forecast if that forecast
-were univariate) and b) specifying which variables are pooled together
-to form a multivariate forecast.}
+that are not part of the forecast unit (or required columns) will be removed.}
 
 \item{observed}{(optional) Name of the column in \code{data} that contains the
 observed values. This column will be renamed to "observed".}
