@@ -57,8 +57,8 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
 # is_forecast_sample()
 # ==============================================================================
 test_that("is_forecast_sample() works as expected", {
-  expect_true(is_forecast_sample_multivariate(example_multivariate_sample))
-  expect_false(is_forecast_sample_multivariate(example_binary))
+  expect_true(is_forecast_multivariate_sample(example_multivariate_sample))
+  expect_false(is_forecast_multivariate_sample(example_binary))
   expect_false(is_forecast_sample(example_multivariate_sample))
 })
 
@@ -67,7 +67,7 @@ test_that("is_forecast_sample() works as expected", {
 # get_metrics.forecast_sample()
 # ==============================================================================
 
-test_that("get_metrics.forecast_sample_multivariate() works as expected", {
+test_that("get_metrics.forecast_multivariate_sample() works as expected", {
   expect_true(
       is.list(get_metrics(example_multivariate_sample))
   )
@@ -149,9 +149,9 @@ expect_true(all(group_counts$N > 0))
 })
 
 # ==============================================================================
-# score.forecast_sample_multivariate()
+# score.forecast_multivariate_sample()
 # ==============================================================================
-test_that("score.forecast_sample_multivariate() works as expected", {
+test_that("score.forecast_multivariate_sample() works as expected", {
 data <- example_multivariate_sample
 
 # Test basic scoring
@@ -168,7 +168,7 @@ expect_true("energy_score" %in% names(scores))
 expect_true(is.numeric(scores$energy_score))
 })
 
-test_that("score.forecast_sample_multivariate() creates expected output structure", {
+test_that("score.forecast_multivariate_sample() creates expected output structure", {
 data <- example_multivariate_sample
 
 # Test basic scoring and capture snapshot

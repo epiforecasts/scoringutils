@@ -5,7 +5,7 @@
 %   R/class-forecast-quantile.R, R/class-forecast-sample.R, R/class-forecast.R
 \name{is_forecast_binary}
 \alias{is_forecast_binary}
-\alias{is_forecast_sample_multivariate}
+\alias{is_forecast_multivariate_sample}
 \alias{is_forecast_nominal}
 \alias{is_forecast_ordinal}
 \alias{is_forecast_point}
@@ -16,7 +16,7 @@
 \usage{
 is_forecast_binary(x)
 
-is_forecast_sample_multivariate(x)
+is_forecast_multivariate_sample(x)
 
 is_forecast_nominal(x)
 

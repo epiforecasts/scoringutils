@@ -71,7 +71,7 @@ as_forecast_multivariate_sample.default <- function(data,
   )
   data <- set_grouping(data, joint_across)
 
-  data <- new_forecast(data, "forecast_sample_multivariate")
+  data <- new_forecast(data, "forecast_multivariate_sample")
   assert_forecast(data)
   return(data)
 }
@@ -81,7 +81,7 @@ as_forecast_multivariate_sample.default <- function(data,
 #' @rdname assert_forecast
 #' @importFrom cli cli_abort qty
 #' @keywords validate-forecast-object
-assert_forecast.forecast_sample_multivariate <- function(
+assert_forecast.forecast_multivariate_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   assert(check_columns_present(forecast, c("sample_id", ".mv_group_id")))
@@ -110,7 +110,7 @@ assert_forecast.forecast_sample_multivariate <- function(
     # nolint end
   }
 
-  assert_forecast_type(forecast, actual = "forecast_sample_multivariate", desired = forecast_type)
+  assert_forecast_type(forecast, actual = "multivariate_sample", desired = forecast_type)
   return(invisible(NULL))
 }
 
@@ -118,8 +118,8 @@ assert_forecast.forecast_sample_multivariate <- function(
 #' @export
 #' @rdname is_forecast
 # nolint start: object_name_linter
-is_forecast_sample_multivariate <- function(x) {
-  inherits(x, "forecast_sample_multivariate") && inherits(x, "forecast")
+is_forecast_multivariate_sample <- function(x) {
+  inherits(x, "forecast_multivariate_sample") && inherits(x, "forecast")
 }
 # nolint end
 
@@ -129,7 +129,7 @@ is_forecast_sample_multivariate <- function(x) {
 #' @importFrom methods formalArgs
 #' @rdname score
 #' @export
-score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(forecast), ...) {
+score.forecast_multivariate_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast_unit <- get_forecast_unit(forecast)
   metrics <- validate_metrics(metrics)
@@ -193,7 +193,7 @@ score.forecast_sample_multivariate <- function(forecast, metrics = get_metrics(f
 #'   example_sample_continuous, joint_across = c("location", "location_name")
 #' )
 #' get_metrics(example)
-get_metrics.forecast_sample_multivariate <- function(x, select = NULL, exclude = NULL, ...) {
+get_metrics.forecast_multivariate_sample <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
     energy_score = energy_score_multivariate
   )
@@ -274,7 +274,7 @@ get_grouping <- function(forecast) {
 #' The data was created using the script create-example-data.R in the inst/
 #' folder (or the top level folder in a compiled package).
 #'
-#' @format An object of class `forecast_sample_multivariate`
+#' @format An object of class `forecast_multivariate_sample`
 #' (see [as_forecast_multivariate_sample()]) with the following columns:
 #' \describe{
 #'   \item{location}{the country for which a prediction was made}

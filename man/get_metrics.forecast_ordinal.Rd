@@ -32,11 +32,11 @@ get_metrics(example_ordinal)
 Other get_metrics functions: 
 \code{\link{get_metrics}()},
 \code{\link{get_metrics.forecast_binary}()},
+\code{\link{get_metrics.forecast_multivariate_sample}()},
 \code{\link{get_metrics.forecast_nominal}()},
 \code{\link{get_metrics.forecast_point}()},
 \code{\link{get_metrics.forecast_quantile}()},
 \code{\link{get_metrics.forecast_sample}()},
-\code{\link{get_metrics.forecast_sample_multivariate}()},
 \code{\link{get_metrics.scores}()}
 }
 \concept{get_metrics functions}
