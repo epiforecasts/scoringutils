@@ -7,7 +7,6 @@
 \alias{assert_forecast.forecast_binary}
 \alias{assert_forecast.forecast_multivariate_point}
 \alias{assert_forecast.forecast_multivariate_sample}
-\alias{assert_forecast.forecast_sample_multivariate}
 \alias{assert_forecast.forecast_point}
 \alias{assert_forecast.forecast_quantile}
 \alias{assert_forecast.forecast_sample}
@@ -20,8 +19,6 @@
 \method{assert_forecast}{forecast_multivariate_point}(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
 \method{assert_forecast}{forecast_multivariate_sample}(forecast, forecast_type = NULL, verbose = TRUE, ...)
-
-\method{assert_forecast}{forecast_sample_multivariate}(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
 \method{assert_forecast}{forecast_point}(forecast, forecast_type = NULL, verbose = TRUE, ...)
 

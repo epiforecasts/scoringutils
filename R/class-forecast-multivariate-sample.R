@@ -72,12 +72,6 @@ as_forecast_multivariate_sample.default <- function(data,
   data <- ensure_mv_grouping(data, joint_across)
 
   data <- new_forecast(data, "forecast_multivariate_sample")
-  # Keep deprecated class name for backwards compatibility
-  cls <- class(data)
-  pos <- match("forecast", cls)
-  class(data) <- append(
-    cls, "forecast_sample_multivariate", after = pos - 1
-  )
   assert_forecast(data)
   return(data)
 }
@@ -124,25 +118,12 @@ assert_forecast.forecast_multivariate_sample <- function(
   return(invisible(NULL))
 }
 
-#' @export
-#' @rdname assert_forecast
-#' @keywords validate-forecast-object
-assert_forecast.forecast_sample_multivariate <-
-  assert_forecast.forecast_multivariate_sample
-
 
 #' @export
 #' @rdname is_forecast
 # nolint start: object_name_linter
 is_forecast_multivariate_sample <- function(x) {
   inherits(x, "forecast_multivariate_sample") && inherits(x, "forecast")
-}
-
-#' @export
-#' @rdname is_forecast
-is_forecast_sample_multivariate <- function(x) {
-  .Deprecated("is_forecast_multivariate_sample")
-  is_forecast_multivariate_sample(x)
 }
 # nolint end
 
@@ -190,11 +171,6 @@ score.forecast_multivariate_sample <- function(forecast, metrics = get_metrics(f
   return(scores[])
 }
 
-#' @export
-#' @rdname score
-score.forecast_sample_multivariate <-
-  score.forecast_multivariate_sample
-
 
 #' Get default metrics for sample-based forecasts
 #'
@@ -219,11 +195,6 @@ get_metrics.forecast_multivariate_sample <- function(x, select = NULL, exclude =
   )
   select_metrics(all, select, exclude)
 }
-
-#' @export
-#' @rdname get_metrics.forecast_multivariate_sample
-get_metrics.forecast_sample_multivariate <-
-  get_metrics.forecast_multivariate_sample
 
 #' Ensure multivariate grouping is set
 #'

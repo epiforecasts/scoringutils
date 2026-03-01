@@ -64,20 +64,14 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
   })
 })
 
-test_that("class includes both new and deprecated class names", {
+test_that("class has expected structure", {
   result <- as_forecast_multivariate_sample(
     na.omit(data.table::copy(example_sample_continuous)),
     joint_across = "location"
   )
   expect_s3_class(result, "forecast_multivariate_sample")
-  expect_s3_class(result, "forecast_sample_multivariate")
   expect_s3_class(result, "forecast")
-  # New class should come before deprecated class
-  cls <- class(result)
-  expect_lt(
-    which(cls == "forecast_multivariate_sample"),
-    which(cls == "forecast_sample_multivariate")
-  )
+  expect_false(inherits(result, "forecast_sample_multivariate"))
 })
 
 
@@ -96,15 +90,6 @@ test_that("is_forecast_multivariate_sample() works as expected", {
   )
 })
 
-test_that("is_forecast_sample_multivariate() is deprecated", {
-  expect_warning(
-    result <- is_forecast_sample_multivariate(
-      example_multivariate_sample
-    ),
-    "deprecated"
-  )
-  expect_true(result)
-})
 
 
 # ==============================================================================
