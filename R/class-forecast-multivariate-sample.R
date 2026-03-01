@@ -118,7 +118,7 @@ assert_forecast.forecast_multivariate_sample <- function(
 
   assert_forecast_type(
     forecast,
-    actual = "forecast_multivariate_sample",
+    actual = "multivariate_sample",
     desired = forecast_type
   )
   return(invisible(NULL))
