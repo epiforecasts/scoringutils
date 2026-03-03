@@ -2,12 +2,9 @@
 % Please edit documentation in R/class-forecast-multivariate-sample.R
 \name{get_metrics.forecast_multivariate_sample}
 \alias{get_metrics.forecast_multivariate_sample}
-\alias{get_metrics.forecast_sample_multivariate}
 \title{Get default metrics for sample-based forecasts}
 \usage{
 \method{get_metrics}{forecast_multivariate_sample}(x, select = NULL, exclude = NULL, ...)
-
-\method{get_metrics}{forecast_sample_multivariate}(x, select = NULL, exclude = NULL, ...)
 }
 \arguments{
 \item{x}{A forecast object (a validated data.table with predicted and
