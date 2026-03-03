@@ -85,7 +85,7 @@ get_metrics(ex)
 #>     names(vs) <- unique_groups
 #>     return(vs)
 #> }
-#> <bytecode: 0x55c25cf20150>
+#> <bytecode: 0x56366bd5b698>
 #> <environment: namespace:scoringutils>
 #> 
 ```

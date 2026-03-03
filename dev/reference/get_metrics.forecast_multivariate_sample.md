@@ -13,9 +13,6 @@ For sample-based multivariate forecasts, the default scoring rules are:
 ``` r
 # S3 method for class 'forecast_multivariate_sample'
 get_metrics(x, select = NULL, exclude = NULL, ...)
-
-# S3 method for class 'forecast_sample_multivariate'
-get_metrics(x, select = NULL, exclude = NULL, ...)
 ```
 
 ## Arguments
@@ -82,7 +79,7 @@ get_metrics(example)
 #>     names(energy_score) <- unique_groups
 #>     return(energy_score)
 #> }
-#> <bytecode: 0x55c259964418>
+#> <bytecode: 0x563669a37978>
 #> <environment: namespace:scoringutils>
 #> 
 #> $variogram_score
@@ -99,7 +96,7 @@ get_metrics(example)
 #>     names(variogram_score) <- unique_groups
 #>     return(variogram_score)
 #> }
-#> <bytecode: 0x55c259962648>
+#> <bytecode: 0x563669a2cdd8>
 #> <environment: namespace:scoringutils>
 #> 
 ```

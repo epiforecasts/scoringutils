@@ -87,7 +87,6 @@
 - [`is_forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
-  [`is_forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_nominal()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
   [`is_forecast_point()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
@@ -166,7 +165,6 @@
 - [`get_metrics(`*`<forecast_multivariate_point>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_point.md)
   : Get default metrics for multivariate point forecasts
 - [`get_metrics(`*`<forecast_multivariate_sample>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md)
-  [`get_metrics(`*`<forecast_sample_multivariate>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_multivariate_sample.md)
   : Get default metrics for sample-based forecasts
 - [`get_metrics(`*`<forecast_nominal>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/get_metrics.forecast_nominal.md)
   : Get default metrics for nominal forecasts
@@ -379,6 +377,9 @@
 
   Ensure that an object is a `data.table`
 
+- [`ensure_mv_grouping()`](https://epiforecasts.io/scoringutils/dev/reference/ensure_mv_grouping.md)
+  : Ensure multivariate grouping is set
+
 - [`forecast_types`](https://epiforecasts.io/scoringutils/dev/reference/forecast_types.md)
   : Documentation template for forecast types
 
@@ -437,6 +438,9 @@
 - [`sample_to_interval_long()`](https://epiforecasts.io/scoringutils/dev/reference/sample_to_interval_long.md)
   : Change data from a sample-based format to a long interval range
   format
+
+- [`score_multivariate_apply()`](https://epiforecasts.io/scoringutils/dev/reference/score_multivariate_apply.md)
+  : Apply multivariate metrics to grouped forecast data
 
 - [`scoringutils`](https://epiforecasts.io/scoringutils/dev/reference/scoringutils-package.md)
   [`scoringutils-package`](https://epiforecasts.io/scoringutils/dev/reference/scoringutils-package.md)

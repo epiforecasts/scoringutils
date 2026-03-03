@@ -97,26 +97,21 @@ on the required input format.</p></dd>
 
 
 <dt id="arg-joint-across">joint_across<a class="anchor" aria-label="anchor" href="#arg-joint-across"></a></dt>
-<dd><p>Character vector with columns names that define
-the variables which are forecasted jointly. Conceptually, several
-univariate forecasts are pooled together to form a single
-multivariate forecast. For example, if you have a column <code>country</code>
-and want to define a multivariate forecast for several countries
-at once, you could set <code>joint_across = "country"</code>.</p></dd>
+<dd><p>Character vector with columns names that define the
+variables which are forecasted jointly. Conceptually, several univariate
+forecasts are pooled together to form a single multivariate forecasts.
+For example, if you have a column <code>country</code> and want to define
+a multivariate forecast for several countries at once, you could set
+<code>joint_across = "country"</code>.</p></dd>
 
 
 <dt id="arg-forecast-unit">forecast_unit<a class="anchor" aria-label="anchor" href="#arg-forecast-unit"></a></dt>
 <dd><p>(optional) Name of the columns in <code>data</code> (after
 any renaming of columns) that denote the unit of a
-single univariate (!) forecast. See <code><a href="get_forecast_unit.html">get_forecast_unit()</a></code> for details.
+single forecast. See <code><a href="get_forecast_unit.html">get_forecast_unit()</a></code> for details.
 If <code>NULL</code> (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
-that are not part of the forecast unit (or required columns) will be
-removed.
-Multivariate forecasts are defined by a) specifying the univariate
-forecast unit (i.e. the unit of a single forecast if that forecast
-were univariate) and b) specifying which variables are pooled together
-to form a multivariate forecast.</p></dd>
+that are not part of the forecast unit (or required columns) will be removed.</p></dd>
 
 
 <dt id="arg-observed">observed<a class="anchor" aria-label="anchor" href="#arg-observed"></a></dt>

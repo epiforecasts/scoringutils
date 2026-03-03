@@ -44,7 +44,7 @@ as_forecast_multivariate_point(
 
   Character vector with columns names that define the variables which
   are forecasted jointly. Conceptually, several univariate forecasts are
-  pooled together to form a single multivariate forecast. For example,
+  pooled together to form a single multivariate forecasts. For example,
   if you have a column `country` and want to define a multivariate
   forecast for several countries at once, you could set
   `joint_across = "country"`.
@@ -52,15 +52,12 @@ as_forecast_multivariate_point(
 - forecast_unit:
 
   (optional) Name of the columns in `data` (after any renaming of
-  columns) that denote the unit of a single univariate (!) forecast. See
+  columns) that denote the unit of a single forecast. See
   [`get_forecast_unit()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_unit.md)
   for details. If `NULL` (the default), all columns that are not
   required columns are assumed to form the unit of a single forecast. If
   specified, all columns that are not part of the forecast unit (or
-  required columns) will be removed. Multivariate forecasts are defined
-  by a) specifying the univariate forecast unit (i.e. the unit of a
-  single forecast if that forecast were univariate) and b) specifying
-  which variables are pooled together to form a multivariate forecast.
+  required columns) will be removed.
 
 - observed:
 

@@ -14,8 +14,6 @@ is_forecast_multivariate_point(x)
 
 is_forecast_multivariate_sample(x)
 
-is_forecast_sample_multivariate(x)
-
 is_forecast_nominal(x)
 
 is_forecast_ordinal(x)

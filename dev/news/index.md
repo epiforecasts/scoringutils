@@ -31,8 +31,7 @@
   The class has been renamed to `forecast_multivariate_sample`. The old
   class name is retained in the class vector during the deprecation
   period so `inherits(x, "forecast_sample_multivariate")` still works.
-  [`is_forecast_sample_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md)
-  is deprecated in favour of
+  `is_forecast_sample_multivariate()` is deprecated in favour of
   [`is_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/is_forecast.md).
   This also fixes `transform_forecasts(append = TRUE)` which previously
   failed on multivariate sample forecasts

@@ -19,9 +19,6 @@ assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
 # S3 method for class 'forecast_multivariate_sample'
 assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
 
-# S3 method for class 'forecast_sample_multivariate'
-assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
-
 # S3 method for class 'forecast_point'
 assert_forecast(forecast, forecast_type = NULL, verbose = TRUE, ...)
 

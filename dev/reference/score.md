@@ -28,9 +28,6 @@ score(forecast, metrics = get_metrics(forecast), ...)
 # S3 method for class 'forecast_multivariate_sample'
 score(forecast, metrics = get_metrics(forecast), ...)
 
-# S3 method for class 'forecast_sample_multivariate'
-score(forecast, metrics = get_metrics(forecast), ...)
-
 # S3 method for class 'forecast_nominal'
 score(forecast, metrics = get_metrics(forecast), ...)
 
