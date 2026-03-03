@@ -464,3 +464,17 @@ test_that(
     )
   }
 )
+
+test_that("assert_forecast() accepts correct forecast_type for multivariate sample", {
+  # The type string used in assert_forecast_type(actual=...) must match
+  # what get_forecast_type() returns (i.e. the class name with the
+  # "forecast_" prefix stripped). Passing the correct type should not error.
+  expect_no_error(
+    suppressMessages(
+      assert_forecast(
+        example_multivariate_sample,
+        forecast_type = "multivariate_sample"
+      )
+    )
+  )
+})
