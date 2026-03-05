@@ -185,7 +185,7 @@ wis <- function(observed,
   reformatted <- quantile_to_interval(observed, predicted, quantile_level)
 
   # check that all quantile levels form valid prediction intervals
-  interval_ranges <- get_range_from_quantile(
+  interval_ranges <- get_interval_range(
     quantile_level[quantile_level != 0.5]
   )
   complete_intervals <-

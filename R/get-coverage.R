@@ -75,7 +75,7 @@ get_coverage <- function(forecast, by = "model") {
 
   # merge interval range data with original data -------------------------------
   # preparations
-  forecast[, interval_range := get_range_from_quantile(quantile_level)]
+  forecast[, interval_range := get_interval_range(quantile_level)]
   forecast_cols <- colnames(forecast) # store so we can reset column order later
   forecast_unit <- get_forecast_unit(forecast)
 
