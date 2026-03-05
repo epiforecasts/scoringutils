@@ -29,13 +29,27 @@ assert_input_multivariate_sample <- function(observed, predicted, mv_group_id) {
 
 #' @title Energy score for multivariate forecasts
 #' @description
-#' Compute the multivariate energy score
-#' (see \link[scoringRules:es_sample]{scoringRules::es_sample})
-#' for each group defined by `mv_group_id`.
+#' Compute the energy score (Gneiting and Raftery, 2007) for
+#' multivariate forecasts. The energy score is a multivariate
+#' generalisation of the CRPS that measures both calibration and
+#' sharpness of the forecast distribution.
+#'
+#' The score is computed using
+#' [scoringRules::es_sample()].
 #' @inheritParams ae_median_sample
 #' @inheritParams assert_input_multivariate_sample
-#' @inherit scoringRules::es_sample params
-#' @keywords internal_input_check
+#' @param w Optional numeric vector of weights for forecast samples
+#'   (length equal to the number of columns of `predicted`).
+#'   If `NULL` (the default), equal weights are used.
+#' @return A named numeric vector of scores, one per multivariate
+#'   group. Lower values are better.
+#' @references
+#' Gneiting, T., Stanberry, L.I., Grimit, E.P., Held, L. and
+#' Johnson, N.A. (2008). Assessing probabilistic forecasts of
+#' multivariate quantities, with an application to ensemble
+#' predictions of surface winds.
+#' *TEST*, 17, 211-235.
+#' @keywords metric
 #' @export
 energy_score_multivariate <- function(observed, predicted, mv_group_id, w = NULL) {
   assert_input_multivariate_sample(observed, predicted, mv_group_id)
@@ -64,9 +78,12 @@ energy_score_multivariate <- function(observed, predicted, mv_group_id, w = NULL
 #' [scoringRules::vs_sample()].
 #'
 #' @inheritParams energy_score_multivariate
-#' @param w_vs Optional non-negative weight matrix. If not `NULL`,
-#'   must be a square matrix with dimensions equal to the number
-#'   of targets within each multivariate group.
+#' @param w_vs Optional non-negative weight matrix for the
+#'   pairwise comparisons between dimensions. Entry `w_vs[i, j]`
+#'   controls the importance of the pair (i, j) in the score.
+#'   Must be a symmetric square matrix with dimensions equal to
+#'   the number of targets within each multivariate group.
+#'   If `NULL` (the default), all pairs are weighted equally.
 #' @param p Numeric, order of the variogram score.
 #'   Typical choices are 0.5 (default, more robust) and 1.
 #' @return A named numeric vector of scores, one per multivariate

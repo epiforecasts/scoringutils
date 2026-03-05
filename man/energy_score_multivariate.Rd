@@ -20,11 +20,28 @@ matrix \emph{could} be seen as a separate (univariate) forecast.
 The grouping id then groups several of those forecasts together, treating
 them as a single multivariate forecast.}
 
-\item{w}{numeric vector of weights for forecast draws (length equal to number of columns of \code{dat})}
+\item{w}{Optional numeric vector of weights for forecast samples
+(length equal to the number of columns of \code{predicted}).
+If \code{NULL} (the default), equal weights are used.}
+}
+\value{
+A named numeric vector of scores, one per multivariate
+group. Lower values are better.
 }
 \description{
-Compute the multivariate energy score
-(see \link[scoringRules:es_sample]{scoringRules::es_sample})
-for each group defined by \code{mv_group_id}.
+Compute the energy score (Gneiting and Raftery, 2007) for
+multivariate forecasts. The energy score is a multivariate
+generalisation of the CRPS that measures both calibration and
+sharpness of the forecast distribution.
+
+The score is computed using
+\code{\link[scoringRules:scores_sample_multiv]{scoringRules::es_sample()}}.
 }
-\keyword{internal_input_check}
+\references{
+Gneiting, T., Stanberry, L.I., Grimit, E.P., Held, L. and
+Johnson, N.A. (2008). Assessing probabilistic forecasts of
+multivariate quantities, with an application to ensemble
+predictions of surface winds.
+\emph{TEST}, 17, 211-235.
+}
+\keyword{metric}

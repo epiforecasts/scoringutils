@@ -27,11 +27,16 @@ matrix \emph{could} be seen as a separate (univariate) forecast.
 The grouping id then groups several of those forecasts together, treating
 them as a single multivariate forecast.}
 
-\item{w}{numeric vector of weights for forecast draws (length equal to number of columns of \code{dat})}
+\item{w}{Optional numeric vector of weights for forecast samples
+(length equal to the number of columns of \code{predicted}).
+If \code{NULL} (the default), equal weights are used.}
 
-\item{w_vs}{Optional non-negative weight matrix. If not \code{NULL},
-must be a square matrix with dimensions equal to the number
-of targets within each multivariate group.}
+\item{w_vs}{Optional non-negative weight matrix for the
+pairwise comparisons between dimensions. Entry \code{w_vs[i, j]}
+controls the importance of the pair (i, j) in the score.
+Must be a symmetric square matrix with dimensions equal to
+the number of targets within each multivariate group.
+If \code{NULL} (the default), all pairs are weighted equally.}
 
 \item{p}{Numeric, order of the variogram score.
 Typical choices are 0.5 (default, more robust) and 1.}
