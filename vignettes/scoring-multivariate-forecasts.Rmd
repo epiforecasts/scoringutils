@@ -83,6 +83,46 @@ The column `.mv_group_id` is created automatically and represents an identifier 
 score(example_multiv)
 ```
 
+By default, `score()` computes both the energy score and the variogram score for multivariate sample forecasts.
+The energy score is a multivariate generalisation of the CRPS.
+The variogram score (Scheuerer and Hamill, 2015) focuses on the dependence structure by comparing predicted and observed pairwise differences.
+
+You can customise the variogram score parameters using `purrr::partial()`.
+For example, to use `p = 1` instead of the default `p = 0.5`:
+
+```{r}
+score(
+  example_multiv,
+  metrics = list(
+    energy_score = energy_score_multivariate,
+    variogram_score = purrr::partial(
+      variogram_score_multivariate, p = 1
+    )
+  )
+)
+```
+
+## Multivariate point forecasts
+
+If you have point forecasts rather than samples, you can score them using the variogram score via `as_forecast_multivariate_point()`.
+This treats each point forecast as a single-sample ensemble.
+
+```{r}
+example_point_multi <- example_point[
+  target_type == "Cases" &
+    forecast_date == "2021-05-03" &
+    target_end_date == "2021-05-15" &
+    horizon == 2 &
+    model == "EuroCOVIDhub-ensemble"
+]
+
+example_mv_point <- as_forecast_multivariate_point(
+  data = na.omit(example_point_multi),
+  joint_across = c("location", "location_name")
+)
+score(example_mv_point)
+```
+
 If, at any point, you want to score the same forecast using different groupings, you'd have create a new separate forecast object with a different grouping and score that new forecast object.
 
 
@@ -150,4 +190,35 @@ es_su <- energy_score_multivariate(
 )
 
 all.equal(es_sr, es_su, tolerance = 1e-6, check.attributes = FALSE)
+```
+
+Similarly, we can compute the Variogram Score using the same matrix format.
+
+```{r}
+vs_sr1 <- scoringRules::vs_sample(y = obs, dat = fc_sample)
+vs_sr2 <- scoringRules::vs_sample(y = obs2, dat = fc_sample2)
+vs_sr <- c(vs_sr1, vs_sr2)
+
+vs_su <- variogram_score_multivariate(
+  observed = c(obs, obs2),
+  predicted = rbind(fc_sample, fc_sample2),
+  mv_group_id = c(rep(1, d), rep(2, d))
+)
+
+all.equal(vs_sr, vs_su, tolerance = 1e-6, check.attributes = FALSE)
+```
+
+You can customise the variogram score with a weight matrix `w_vs` that controls the importance of each pair of dimensions, and the order parameter `p`.
+
+```{r}
+# weight matrix: downweight distant pairs
+w_vs <- outer(1:d, 1:d, function(x, y) 0.5^abs(x - y))
+
+vs_su_weighted <- variogram_score_multivariate(
+  observed = c(obs, obs2),
+  predicted = rbind(fc_sample, fc_sample2),
+  mv_group_id = c(rep(1, d), rep(2, d)),
+  w_vs = w_vs, p = 1
+)
+vs_su_weighted
 ```
