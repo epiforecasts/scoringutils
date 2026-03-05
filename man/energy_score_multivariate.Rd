@@ -29,10 +29,11 @@ A named numeric vector of scores, one per multivariate
 group. Lower values are better.
 }
 \description{
-Compute the energy score (Gneiting and Raftery, 2007) for
-multivariate forecasts. The energy score is a multivariate
-generalisation of the CRPS that measures both calibration and
-sharpness of the forecast distribution.
+Compute the energy score (Gneiting et al., 2008) for each
+multivariate group defined by \code{mv_group_id}. The energy
+score is a multivariate generalisation of the CRPS that
+measures both calibration and sharpness of the forecast
+distribution.
 
 The score is computed using
 \code{\link[scoringRules:scores_sample_multiv]{scoringRules::es_sample()}}.
