@@ -90,9 +90,9 @@ For each pair of targets (e.g. two countries), it compares the observed absolute
 A forecast that gets the correlations between targets wrong will predict pairwise differences that do not match the observations, producing a higher score.
 This makes the variogram score more sensitive to misspecified correlations than the energy score.
 
+You can customise parameters using `purrr::partial()`.
 The order parameter `p` controls how differences are scaled: `p = 0.5` (the default) is more robust to outliers, while `p = 1` gives a standard absolute difference.
 See `?variogram_score_multivariate` for full parameter documentation.
-You can customise parameters using `purrr::partial()`.
 For example, to use `p = 1`:
 
 ```{r}
