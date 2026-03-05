@@ -25,14 +25,19 @@ The grouping id then groups several of those forecasts together, treating
 them as a single multivariate forecast.}
 
 \item{w_vs}{Optional non-negative weight matrix for the
-pairwise comparisons between dimensions. Entry \code{w_vs[i, j]}
+pairwise comparisons between targets. Entry \code{w_vs[i, j]}
 controls the importance of the pair (i, j) in the score.
-Must be a symmetric square matrix with dimensions equal to
-the number of targets within each multivariate group.
+Must be a symmetric square matrix with rows and columns
+equal to the number of targets within each multivariate
+group.
 If \code{NULL} (the default), all pairs are weighted equally.}
 
-\item{p}{Numeric, order of the variogram score.
-Typical choices are 0.5 (default, more robust) and 1.}
+\item{p}{Numeric, order of the variogram score. This controls
+how pairwise differences are scaled: the score compares
+|y_i - y_j|^p across targets. Lower values of \code{p} give
+less weight to large differences, making the score more
+robust to outliers. Typical choices are 0.5 (the default)
+and 1.}
 }
 \value{
 A named numeric vector of scores, one per multivariate

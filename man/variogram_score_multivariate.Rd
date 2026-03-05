@@ -32,14 +32,19 @@ them as a single multivariate forecast.}
 If \code{NULL} (the default), equal weights are used.}
 
 \item{w_vs}{Optional non-negative weight matrix for the
-pairwise comparisons between dimensions. Entry \code{w_vs[i, j]}
+pairwise comparisons between targets. Entry \code{w_vs[i, j]}
 controls the importance of the pair (i, j) in the score.
-Must be a symmetric square matrix with dimensions equal to
-the number of targets within each multivariate group.
+Must be a symmetric square matrix with rows and columns
+equal to the number of targets within each multivariate
+group.
 If \code{NULL} (the default), all pairs are weighted equally.}
 
-\item{p}{Numeric, order of the variogram score.
-Typical choices are 0.5 (default, more robust) and 1.}
+\item{p}{Numeric, order of the variogram score. This controls
+how pairwise differences are scaled: the score compares
+|y_i - y_j|^p across targets. Lower values of \code{p} give
+less weight to large differences, making the score more
+robust to outliers. Typical choices are 0.5 (the default)
+and 1.}
 }
 \value{
 A named numeric vector of scores, one per multivariate
@@ -47,10 +52,15 @@ group. Lower values are better.
 }
 \description{
 Compute the variogram score for multivariate forecasts.
-The variogram score (Scheuerer and Hamill, 2015) evaluates the
-dependence structure of multivariate forecasts by comparing
-predicted pairwise differences against observed pairwise
-differences.
+The variogram score (Scheuerer and Hamill, 2015) assesses
+whether a forecast captures the correlation structure across
+the targets being forecast jointly (e.g. locations, age
+groups). For each pair of targets (i, j), it compares the
+observed absolute difference |y_i - y_j|^p against the
+expected absolute difference under the forecast distribution.
+A forecast that misspecifies correlations between targets
+will predict pairwise differences that do not match the
+observations, resulting in a higher score.
 
 The score is computed using
 \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}}.

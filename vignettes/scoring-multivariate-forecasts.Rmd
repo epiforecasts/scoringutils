@@ -84,11 +84,16 @@ score(example_multiv)
 ```
 
 By default, `score()` computes both the energy score and the variogram score for multivariate sample forecasts.
-The energy score is a multivariate generalisation of the CRPS.
-The variogram score (Scheuerer and Hamill, 2015) focuses on the dependence structure by comparing predicted and observed pairwise differences.
+The energy score is a multivariate generalisation of the CRPS that measures overall forecast accuracy.
+The variogram score (Scheuerer and Hamill, 2015) specifically targets the correlation structure between the targets being forecast jointly.
+For each pair of targets (e.g. two countries), it compares the observed absolute difference |y_i - y_j|^p against what the forecast distribution predicts for that difference.
+A forecast that gets the correlations between targets wrong will predict pairwise differences that do not match the observations, producing a higher score.
+This makes the variogram score more sensitive to misspecified correlations than the energy score.
 
-You can customise the variogram score parameters using `purrr::partial()`.
-For example, to use `p = 1` instead of the default `p = 0.5`:
+The order parameter `p` controls how differences are scaled: `p = 0.5` (the default) is more robust to outliers, while `p = 1` gives a standard absolute difference.
+See `?variogram_score_multivariate` for full parameter documentation.
+You can customise parameters using `purrr::partial()`.
+For example, to use `p = 1`:
 
 ```{r}
 score(
