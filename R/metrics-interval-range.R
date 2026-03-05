@@ -56,17 +56,6 @@ assert_input_interval <- function(observed, lower, upper, interval_range) {
 }
 
 
-#' @title Check that inputs are correct for interval-based forecast
-#' @inherit assert_input_interval params description
-#' @inherit check_input_sample return description
-#' @keywords internal_input_check
-check_input_interval <- function(observed, lower, upper, interval_range) {
-  result <- check_try(
-    assert_input_interval(observed, lower, upper, interval_range)
-  )
-  return(result)
-}
-
 
 #' @title Interval score
 #'
