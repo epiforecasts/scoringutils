@@ -4,7 +4,7 @@
 \alias{get_coverage}
 \title{Get quantile and interval coverage values for quantile-based forecasts}
 \usage{
-get_coverage(forecast, by = "model")
+get_coverage(forecast, by = "model", type = c("quantile", "interval"))
 }
 \arguments{
 \item{forecast}{A forecast object (a validated data.table with predicted and
@@ -13,14 +13,17 @@ observed values).}
 \item{by}{character vector that denotes the level of grouping for which the
 coverage values should be computed. By default (\code{"model"}), one coverage
 value per model will be returned.}
+
+\item{type}{character vector indicating which types of coverage to compute.
+Must be a subset of \code{c("quantile", "interval")}. By default, both are
+computed.}
 }
 \value{
-A data.table with columns as specified in \code{by} and additional
-columns for the coverage values described above
-
-a data.table with columns "interval_coverage",
+a data.table with the columns specified in \code{by} and additional columns
+for the requested coverage values. When both types are requested (the
+default), this includes "interval_coverage",
 "interval_coverage_deviation", "quantile_coverage",
-"quantile_coverage_deviation" and the columns specified in \code{by}.
+"quantile_coverage_deviation", "quantile_level", and "interval_range".
 }
 \description{
 For a validated forecast object in a quantile-based format
@@ -64,5 +67,10 @@ coverage is 80\%, the coverage deviation is -0.1.
 example_quantile |>
   as_forecast_quantile() |>
   get_coverage(by = "model")
+
+# only interval coverage
+example_quantile |>
+  as_forecast_quantile() |>
+  get_coverage(by = "model", type = "interval")
 }
 \keyword{scoring}
