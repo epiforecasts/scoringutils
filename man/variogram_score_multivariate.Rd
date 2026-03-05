@@ -51,7 +51,8 @@ A named numeric vector of scores, one per multivariate
 group. Lower values are better.
 }
 \description{
-Compute the variogram score for multivariate forecasts.
+Compute the variogram score for each multivariate group
+defined by \code{mv_group_id}.
 The variogram score (Scheuerer and Hamill, 2015) assesses
 whether a forecast captures the correlation structure across
 the targets being forecast jointly (e.g. locations, age

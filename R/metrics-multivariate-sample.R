@@ -29,10 +29,11 @@ assert_input_multivariate_sample <- function(observed, predicted, mv_group_id) {
 
 #' @title Energy score for multivariate forecasts
 #' @description
-#' Compute the energy score (Gneiting and Raftery, 2007) for
-#' multivariate forecasts. The energy score is a multivariate
-#' generalisation of the CRPS that measures both calibration and
-#' sharpness of the forecast distribution.
+#' Compute the energy score (Gneiting et al., 2008) for each
+#' multivariate group defined by `mv_group_id`. The energy
+#' score is a multivariate generalisation of the CRPS that
+#' measures both calibration and sharpness of the forecast
+#' distribution.
 #'
 #' The score is computed using
 #' [scoringRules::es_sample()].
@@ -68,7 +69,8 @@ energy_score_multivariate <- function(observed, predicted, mv_group_id, w = NULL
 #' Variogram score for multivariate forecasts
 #'
 #' @description
-#' Compute the variogram score for multivariate forecasts.
+#' Compute the variogram score for each multivariate group
+#' defined by `mv_group_id`.
 #' The variogram score (Scheuerer and Hamill, 2015) assesses
 #' whether a forecast captures the correlation structure across
 #' the targets being forecast jointly (e.g. locations, age
