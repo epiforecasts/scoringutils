@@ -342,80 +342,71 @@ this appropriately.)</p>
 <span><span class="co">#&gt;    energy_score variogram_score .mv_group_id</span></span>
 <span><span class="co">#&gt;           &lt;num&gt;           &lt;num&gt;        &lt;int&gt;</span></span>
 <span><span class="co">#&gt; 1:     54795.73        68523.93            1</span></span></code></pre></div>
+<p>By default, <code><a href="../reference/score.html">score()</a></code> computes both the energy score and
+the variogram score for multivariate sample forecasts. The energy score
+is a multivariate generalisation of the CRPS that measures overall
+forecast accuracy. The variogram score (Scheuerer and Hamill, 2015)
+specifically targets the correlation structure between the targets being
+forecast jointly. For each pair of targets (e.g. two countries), it
+compares the observed absolute difference |y_i - y_j|^p against what the
+forecast distribution predicts for that difference. A forecast that gets
+the correlations between targets wrong will predict pairwise differences
+that do not match the observations, producing a higher score. This makes
+the variogram score more sensitive to misspecified correlations than the
+energy score.</p>
+<p>You can customise parameters using <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code>. The
+order parameter <code>p</code> controls how differences are scaled:
+<code>p = 0.5</code> (the default) is more robust to outliers, while
+<code>p = 1</code> gives a standard absolute difference. See
+<code><a href="../reference/variogram_score_multivariate.html">?variogram_score_multivariate</a></code> for full parameter
+documentation. For example, to use <code>p = 1</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span></span>
+<span>  <span class="va">example_multiv</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    energy_score <span class="op">=</span> <span class="va">energy_score_multivariate</span>,</span>
+<span>    variogram_score <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">partial</a></span><span class="op">(</span></span>
+<span>      <span class="va">variogram_score_multivariate</span>, p <span class="op">=</span> <span class="fl">1</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt;    target_end_date target_type forecast_date                 model horizon</span></span>
+<span><span class="co">#&gt;             &lt;Date&gt;      &lt;char&gt;        &lt;Date&gt;                &lt;char&gt;   &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:      2021-05-15       Cases    2021-05-03 EuroCOVIDhub-ensemble       2</span></span>
+<span><span class="co">#&gt;    energy_score variogram_score .mv_group_id</span></span>
+<span><span class="co">#&gt;           &lt;num&gt;           &lt;num&gt;        &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1:     54795.73     20111809605            1</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="multivariate-point-forecasts">Multivariate point forecasts<a class="anchor" aria-label="anchor" href="#multivariate-point-forecasts"></a>
+</h2>
+<p>If you have point forecasts rather than samples, you can score them
+using the variogram score via
+<code><a href="../reference/as_forecast_multivariate_point.html">as_forecast_multivariate_point()</a></code>. This treats each point
+forecast as a single-sample ensemble.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">example_point_multi</span> <span class="op">&lt;-</span> <span class="va">example_point</span><span class="op">[</span></span>
+<span>  <span class="va">target_type</span> <span class="op">==</span> <span class="st">"Cases"</span> <span class="op">&amp;</span></span>
+<span>    <span class="va">forecast_date</span> <span class="op">==</span> <span class="st">"2021-05-03"</span> <span class="op">&amp;</span></span>
+<span>    <span class="va">target_end_date</span> <span class="op">==</span> <span class="st">"2021-05-15"</span> <span class="op">&amp;</span></span>
+<span>    <span class="va">horizon</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">&amp;</span></span>
+<span>    <span class="va">model</span> <span class="op">==</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
+<span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">example_mv_point</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_forecast_multivariate_point.html">as_forecast_multivariate_point</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">example_point_multi</span><span class="op">)</span>,</span>
+<span>  joint_across <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"location"</span>, <span class="st">"location_name"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_mv_point</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    target_end_date target_type forecast_date                 model horizon</span></span>
+<span><span class="co">#&gt;             &lt;Date&gt;      &lt;char&gt;        &lt;Date&gt;                &lt;char&gt;   &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:      2021-05-15       Cases    2021-05-03 EuroCOVIDhub-ensemble       2</span></span>
+<span><span class="co">#&gt;    variogram_score .mv_group_id</span></span>
+<span><span class="co">#&gt;              &lt;num&gt;        &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1:        51406.03            1</span></span></code></pre></div>
 <p>If, at any point, you want to score the same forecast using different
 groupings, you’d have create a new separate forecast object with a
 different grouping and score that new forecast object.</p>
-</div>
-<div class="section level2">
-<h2 id="univariate-and-multivariate-scoring-for-matrices">Univariate and multivariate scoring for matrices<a class="anchor" aria-label="anchor" href="#univariate-and-multivariate-scoring-for-matrices"></a>
-</h2>
-<p>Note: this section may only be relevant to you if you’re planning to
-score forecasts in matrix format.</p>
-<p>Let’s construct a simple multivariate forecast:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># parameters for multivariate normal example</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">10</span> <span class="co"># number of dimensions</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">50</span> <span class="co"># number of samples from multivariate forecast distribution</span></span>
-<span></span>
-<span><span class="va">mu0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">d</span><span class="op">)</span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">d</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">S0</span> <span class="op">&lt;-</span> <span class="va">S</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span><span class="va">S0</span><span class="op">[</span><span class="va">S0</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.2</span></span>
-<span><span class="va">S</span><span class="op">[</span><span class="va">S</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
-<span></span>
-<span><span class="co"># generate samples from multivariate normal distributions</span></span>
-<span><span class="va">obs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="va">mu0</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">S0</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">fc_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="va">mu</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">S</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">obs2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="va">mu0</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">S0</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">fc_sample2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/drop.html" class="external-link">drop</a></span><span class="op">(</span><span class="va">mu</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol</a></span><span class="op">(</span><span class="va">S</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Now, we can compute the Energy Score. Let’s compare the
-<code>scoringutils</code> implementation with that of the
-<code>scoringRules</code> package, on which the
-<code>scoringutils</code> implementation is based. The only difference
-is that <code>scoringRules</code> always expects a single multivariate
-<code>forecast</code>, while the <code>scoringutils</code>
-implementation can handle multiple multivariate forecasts together,
-identified via a grouping vector (assuming they all have the same
-dimension).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">scoringRules</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scoringRules/man/scores_sample_multiv.html" class="external-link">es_sample</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">obs</span>, dat <span class="op">=</span> <span class="va">fc_sample</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 2.684649</span></span>
-<span><span class="co"># in the univariate case, Energy Score and CRPS are the same</span></span>
-<span><span class="co"># illustration: Evaluate forecast sample for the first variable</span></span>
-<span><span class="va">es_sr1</span> <span class="op">&lt;-</span> <span class="fu">scoringRules</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scoringRules/man/scores_sample_multiv.html" class="external-link">es_sample</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">obs</span>, dat <span class="op">=</span> <span class="va">fc_sample</span><span class="op">)</span></span>
-<span><span class="va">es_sr2</span> <span class="op">&lt;-</span> <span class="fu">scoringRules</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scoringRules/man/scores_sample_multiv.html" class="external-link">es_sample</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">obs2</span>, dat <span class="op">=</span> <span class="va">fc_sample2</span><span class="op">)</span></span>
-<span><span class="va">es_sr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">es_sr1</span>, <span class="va">es_sr2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">es_su</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/energy_score_multivariate.html">energy_score_multivariate</a></span><span class="op">(</span></span>
-<span>  observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">obs</span>, <span class="va">obs2</span><span class="op">)</span>,</span>
-<span>  predicted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">fc_sample</span>, <span class="va">fc_sample2</span><span class="op">)</span>,</span>
-<span>  mv_group_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">d</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">d</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">es_sr</span>, <span class="va">es_su</span>, tolerance <span class="op">=</span> <span class="fl">1e-6</span>, check.attributes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
-<p>You can provide observation weights when computing the Energy
-Score.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># illustration of observation weights for Energy Score</span></span>
-<span><span class="co"># example: equal weights for first half of draws; zero weights for other draws</span></span>
-<span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="va">m</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">0.5</span> <span class="op">*</span> <span class="va">m</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">es_sr1</span> <span class="op">&lt;-</span> <span class="fu">scoringRules</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scoringRules/man/scores_sample_multiv.html" class="external-link">es_sample</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">obs</span>, dat <span class="op">=</span> <span class="va">fc_sample</span>, w <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
-<span><span class="va">es_sr2</span> <span class="op">&lt;-</span> <span class="fu">scoringRules</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scoringRules/man/scores_sample_multiv.html" class="external-link">es_sample</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">obs2</span>, dat <span class="op">=</span> <span class="va">fc_sample2</span>, w <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
-<span><span class="va">es_sr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">es_sr1</span>, <span class="va">es_sr2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">es_su</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/energy_score_multivariate.html">energy_score_multivariate</a></span><span class="op">(</span></span>
-<span>  observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">obs</span>, <span class="va">obs2</span><span class="op">)</span>,</span>
-<span>  predicted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">fc_sample</span>, <span class="va">fc_sample2</span><span class="op">)</span>,</span>
-<span>  mv_group_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">d</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">d</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  w <span class="op">=</span> <span class="va">w</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">es_sr</span>, <span class="va">es_su</span>, tolerance <span class="op">=</span> <span class="fl">1e-6</span>, check.attributes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

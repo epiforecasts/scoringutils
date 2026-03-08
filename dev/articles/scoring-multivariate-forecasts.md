@@ -290,82 +290,76 @@ score(example_multiv)
 #> 1:     54795.73        68523.93            1
 ```
 
+By default,
+[`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md)
+computes both the energy score and the variogram score for multivariate
+sample forecasts. The energy score is a multivariate generalisation of
+the CRPS that measures overall forecast accuracy. The variogram score
+(Scheuerer and Hamill, 2015) specifically targets the correlation
+structure between the targets being forecast jointly. For each pair of
+targets (e.g. two countries), it compares the observed absolute
+difference \|y_i - y_j\|^p against what the forecast distribution
+predicts for that difference. A forecast that gets the correlations
+between targets wrong will predict pairwise differences that do not
+match the observations, producing a higher score. This makes the
+variogram score more sensitive to misspecified correlations than the
+energy score.
+
+You can customise parameters using
+[`purrr::partial()`](https://purrr.tidyverse.org/reference/partial.html).
+The order parameter `p` controls how differences are scaled: `p = 0.5`
+(the default) is more robust to outliers, while `p = 1` gives a standard
+absolute difference. See
+[`?variogram_score_multivariate`](https://epiforecasts.io/scoringutils/dev/reference/variogram_score_multivariate.md)
+for full parameter documentation. For example, to use `p = 1`:
+
+``` r
+score(
+  example_multiv,
+  metrics = list(
+    energy_score = energy_score_multivariate,
+    variogram_score = purrr::partial(
+      variogram_score_multivariate, p = 1
+    )
+  )
+)
+#>    target_end_date target_type forecast_date                 model horizon
+#>             <Date>      <char>        <Date>                <char>   <num>
+#> 1:      2021-05-15       Cases    2021-05-03 EuroCOVIDhub-ensemble       2
+#>    energy_score variogram_score .mv_group_id
+#>           <num>           <num>        <int>
+#> 1:     54795.73     20111809605            1
+```
+
+## Multivariate point forecasts
+
+If you have point forecasts rather than samples, you can score them
+using the variogram score via
+[`as_forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_point.md).
+This treats each point forecast as a single-sample ensemble.
+
+``` r
+example_point_multi <- example_point[
+  target_type == "Cases" &
+    forecast_date == "2021-05-03" &
+    target_end_date == "2021-05-15" &
+    horizon == 2 &
+    model == "EuroCOVIDhub-ensemble"
+]
+
+example_mv_point <- as_forecast_multivariate_point(
+  data = na.omit(example_point_multi),
+  joint_across = c("location", "location_name")
+)
+score(example_mv_point)
+#>    target_end_date target_type forecast_date                 model horizon
+#>             <Date>      <char>        <Date>                <char>   <num>
+#> 1:      2021-05-15       Cases    2021-05-03 EuroCOVIDhub-ensemble       2
+#>    variogram_score .mv_group_id
+#>              <num>        <int>
+#> 1:        51406.03            1
+```
+
 If, at any point, you want to score the same forecast using different
 groupings, you’d have create a new separate forecast object with a
 different grouping and score that new forecast object.
-
-## Univariate and multivariate scoring for matrices
-
-Note: this section may only be relevant to you if you’re planning to
-score forecasts in matrix format.
-
-Let’s construct a simple multivariate forecast:
-
-``` r
-# parameters for multivariate normal example
-set.seed(123)
-d <- 10 # number of dimensions
-m <- 50 # number of samples from multivariate forecast distribution
-
-mu0 <- rep(0, d)
-mu <- rep(1, d)
-
-S0 <- S <- diag(d)
-S0[S0 == 0] <- 0.2
-S[S == 0] <- 0.1
-
-# generate samples from multivariate normal distributions
-obs <- drop(mu0 + rnorm(d) %*% chol(S0))
-fc_sample <- replicate(m, drop(mu + rnorm(d) %*% chol(S)))
-
-obs2 <- drop(mu0 + rnorm(d) %*% chol(S0))
-fc_sample2 <- replicate(m, drop(mu + rnorm(d) %*% chol(S)))
-```
-
-Now, we can compute the Energy Score. Let’s compare the `scoringutils`
-implementation with that of the `scoringRules` package, on which the
-`scoringutils` implementation is based. The only difference is that
-`scoringRules` always expects a single multivariate `forecast`, while
-the `scoringutils` implementation can handle multiple multivariate
-forecasts together, identified via a grouping vector (assuming they all
-have the same dimension).
-
-``` r
-scoringRules::es_sample(y = obs, dat = fc_sample)
-#> [1] 2.684649
-# in the univariate case, Energy Score and CRPS are the same
-# illustration: Evaluate forecast sample for the first variable
-es_sr1 <- scoringRules::es_sample(y = obs, dat = fc_sample)
-es_sr2 <- scoringRules::es_sample(y = obs2, dat = fc_sample2)
-es_sr <- c(es_sr1, es_sr2)
-
-es_su <- energy_score_multivariate(
-  observed = c(obs, obs2),
-  predicted = rbind(fc_sample, fc_sample2),
-  mv_group_id = c(rep(1, d), rep(2, d))
-)
-all.equal(es_sr, es_su, tolerance = 1e-6, check.attributes = FALSE)
-#> [1] TRUE
-```
-
-You can provide observation weights when computing the Energy Score.
-
-``` r
-# illustration of observation weights for Energy Score
-# example: equal weights for first half of draws; zero weights for other draws
-w <- rep(c(1, 0), each = 0.5 * m) / (0.5 * m)
-
-es_sr1 <- scoringRules::es_sample(y = obs, dat = fc_sample, w = w)
-es_sr2 <- scoringRules::es_sample(y = obs2, dat = fc_sample2, w = w)
-es_sr <- c(es_sr1, es_sr2)
-
-es_su <- energy_score_multivariate(
-  observed = c(obs, obs2),
-  predicted = rbind(fc_sample, fc_sample2),
-  mv_group_id = c(rep(1, d), rep(2, d)),
-  w = w
-)
-
-all.equal(es_sr, es_su, tolerance = 1e-6, check.attributes = FALSE)
-#> [1] TRUE
-```

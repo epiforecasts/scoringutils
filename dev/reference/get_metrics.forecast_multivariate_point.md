@@ -76,16 +76,10 @@ get_metrics(ex)
 #>     assert_numeric(observed, min.len = 1)
 #>     assert_numeric(as.vector(predicted), min.len = 1)
 #>     assert_numeric(mv_group_id, len = length(observed))
-#>     unique_groups <- unique(mv_group_id)
-#>     vs <- vapply(unique_groups, function(group) {
-#>         idx <- which(mv_group_id == group)
-#>         scoringRules::vs_sample(y = observed[idx], dat = predicted[idx, 
-#>             , drop = FALSE], w_vs = w_vs, p = p)
-#>     }, numeric(1))
-#>     names(vs) <- unique_groups
-#>     return(vs)
+#>     variogram_score_multivariate(observed = observed, predicted = predicted, 
+#>         mv_group_id = mv_group_id, w = NULL, w_vs = w_vs, p = p)
 #> }
-#> <bytecode: 0x56366bd5b698>
+#> <bytecode: 0x563e4dbd5d88>
 #> <environment: namespace:scoringutils>
 #> 
 ```

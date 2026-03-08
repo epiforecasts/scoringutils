@@ -528,6 +528,8 @@ specification. Contributions of any kind are welcome!
   : (Continuous) ranked probability score
 - [`dss_sample()`](https://epiforecasts.io/scoringutils/dev/reference/dss_sample.md)
   : Dawid-Sebastiani score
+- [`energy_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/energy_score_multivariate.md)
+  : Energy score for multivariate forecasts
 - [`interval_coverage()`](https://epiforecasts.io/scoringutils/dev/reference/interval_coverage.md)
   : Interval coverage (for quantile-based forecasts)
 - [`interval_score()`](https://epiforecasts.io/scoringutils/dev/reference/interval_score.md)
@@ -628,8 +630,6 @@ specification. Contributions of any kind are welcome!
   : Check whether an input is an atomic vector of mode 'numeric'
 - [`check_try()`](https://epiforecasts.io/scoringutils/dev/reference/check_try.md)
   : Helper function to convert assert statements into checks
-- [`energy_score_multivariate()`](https://epiforecasts.io/scoringutils/dev/reference/energy_score_multivariate.md)
-  : Energy score for multivariate forecasts
 - [`get_forecast_type()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_type.md)
   : Get forecast type from forecast object
 - [`get_type()`](https://epiforecasts.io/scoringutils/dev/reference/get_type.md)

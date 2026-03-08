@@ -1,8 +1,12 @@
 # Energy score for multivariate forecasts
 
-Compute the multivariate energy score (see
-[scoringRules::es_sample](https://rdrr.io/pkg/scoringRules/man/scores_sample_multiv.html))
-for each group defined by `mv_group_id`.
+Compute the energy score (Gneiting et al., 2008) for each multivariate
+group defined by `mv_group_id`. The energy score is a multivariate
+generalisation of the CRPS that measures both calibration and sharpness
+of the forecast distribution.
+
+The score is computed using
+[`scoringRules::es_sample()`](https://rdrr.io/pkg/scoringRules/man/scores_sample_multiv.html).
 
 ## Usage
 
@@ -33,5 +37,18 @@ energy_score_multivariate(observed, predicted, mv_group_id, w = NULL)
 
 - w:
 
-  numeric vector of weights for forecast draws (length equal to number
-  of columns of `dat`)
+  Optional numeric vector of weights for forecast samples (length equal
+  to the number of columns of `predicted`). If `NULL` (the default),
+  equal weights are used.
+
+## Value
+
+A named numeric vector of scores, one per multivariate group. Lower
+values are better.
+
+## References
+
+Gneiting, T., Stanberry, L.I., Grimit, E.P., Held, L. and Johnson, N.A.
+(2008). Assessing probabilistic forecasts of multivariate quantities,
+with an application to ensemble predictions of surface winds. *TEST*,
+17, 211-235.

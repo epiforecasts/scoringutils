@@ -122,16 +122,10 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_numeric(observed, min.len = 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_numeric(as.vector(predicted), min.len = 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_numeric(mv_group_id, len = length(observed))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     unique_groups &lt;- unique(mv_group_id)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     vs &lt;- vapply(unique_groups, function(group) {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         idx &lt;- which(mv_group_id == group)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         scoringRules::vs_sample(y = observed[idx], dat = predicted[idx, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             , drop = FALSE], w_vs = w_vs, p = p)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     }, numeric(1))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     names(vs) &lt;- unique_groups</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     return(vs)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     variogram_score_multivariate(observed = observed, predicted = predicted, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         mv_group_id = mv_group_id, w = NULL, w_vs = w_vs, p = p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56366bd5b698&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x563e4dbd5d88&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

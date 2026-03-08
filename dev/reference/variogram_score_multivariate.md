@@ -1,9 +1,14 @@
 # Variogram score for multivariate forecasts
 
-Compute the variogram score for multivariate forecasts. The variogram
-score (Scheuerer and Hamill, 2015) evaluates the dependence structure of
-multivariate forecasts by comparing predicted pairwise differences
-against observed pairwise differences.
+Compute the variogram score for each multivariate group defined by
+`mv_group_id`. The variogram score (Scheuerer and Hamill, 2015) assesses
+whether a forecast captures the correlation structure across the targets
+being forecast jointly (e.g. locations, age groups). For each pair of
+targets (i, j), it compares the observed absolute difference \|y_i -
+y_j\|^p against the expected absolute difference under the forecast
+distribution. A forecast that misspecifies correlations between targets
+will predict pairwise differences that do not match the observations,
+resulting in a higher score.
 
 The score is computed using
 [`scoringRules::vs_sample()`](https://rdrr.io/pkg/scoringRules/man/scores_sample_multiv.html).
@@ -44,19 +49,25 @@ variogram_score_multivariate(
 
 - w:
 
-  numeric vector of weights for forecast draws (length equal to number
-  of columns of `dat`)
+  Optional numeric vector of weights for forecast samples (length equal
+  to the number of columns of `predicted`). If `NULL` (the default),
+  equal weights are used.
 
 - w_vs:
 
-  Optional non-negative weight matrix. If not `NULL`, must be a square
-  matrix with dimensions equal to the number of targets within each
-  multivariate group.
+  Optional non-negative weight matrix for the pairwise comparisons
+  between targets. Entry `w_vs[i, j]` controls the importance of the
+  pair (i, j) in the score. Must be a symmetric square matrix with rows
+  and columns equal to the number of targets within each multivariate
+  group. If `NULL` (the default), all pairs are weighted equally.
 
 - p:
 
-  Numeric, order of the variogram score. Typical choices are 0.5
-  (default, more robust) and 1.
+  Numeric, order of the variogram score. This controls how pairwise
+  differences are scaled: the score compares \|y_i - y_j\|^p across
+  targets. Lower values of `p` give less weight to large differences,
+  making the score more robust to outliers. Typical choices are 0.5 (the
+  default) and 1.
 
 ## Value
 
