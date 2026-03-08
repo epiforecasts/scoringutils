@@ -13,28 +13,49 @@ variogram_score_multivariate_point(
 )
 }
 \arguments{
-\item{observed}{Numeric vector of observed values.}
+\item{observed}{A vector with observed values of size n}
 
 \item{predicted}{Numeric matrix with one column, where each row
 corresponds to a target within a multivariate group.}
 
-\item{mv_group_id}{Numeric vector of length equal to
-\code{length(observed)} with group identifiers.}
+\item{mv_group_id}{Numeric vector of length n with ids indicating the
+grouping of predicted values. Conceptually, each row of the \code{predicted}
+matrix \emph{could} be seen as a separate (univariate) forecast.
+The grouping id then groups several of those forecasts together, treating
+them as a single multivariate forecast.}
 
-\item{w_vs}{Numeric matrix of weights for the variogram score.
-See \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}} for details.}
+\item{w_vs}{Optional non-negative weight matrix for the
+pairwise comparisons between targets. Entry \code{w_vs[i, j]}
+controls the importance of the pair (i, j) in the score.
+Must be a symmetric square matrix with rows and columns
+equal to the number of targets within each multivariate
+group.
+If \code{NULL} (the default), all pairs are weighted equally.}
 
-\item{p}{Numeric, order of the variogram score.
-Defaults to 0.5. See \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}} for details.}
+\item{p}{Numeric, order of the variogram score. This controls
+how pairwise differences are scaled: the score compares
+|y_i - y_j|^p across targets. Lower values of \code{p} give
+less weight to large differences, making the score more
+robust to outliers. Typical choices are 0.5 (the default)
+and 1.}
 }
 \value{
 A named numeric vector of scores, one per multivariate
 group. Lower values are better.
 }
 \description{
-Compute the variogram score
-(see \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}})
-for each group defined by \code{mv_group_id}, treating each point
-forecast as a single-sample ensemble.
+Compute the variogram score for multivariate point forecasts,
+treating each point forecast as a single-sample ensemble.
+This is a thin wrapper around
+\code{\link[=variogram_score_multivariate]{variogram_score_multivariate()}} with \code{w = NULL}.
+
+See \code{\link[=variogram_score_multivariate]{variogram_score_multivariate()}} for details on the
+variogram score and its parameters.
+}
+\references{
+Scheuerer, M. and Hamill, T.M. (2015). Variogram-Based
+Proper Scoring Rules for Probabilistic Forecasts of
+Multivariate Quantities. \emph{Monthly Weather Review}, 143,
+1321-1334.
 }
 \keyword{metric}

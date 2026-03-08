@@ -27,25 +27,41 @@ matrix \emph{could} be seen as a separate (univariate) forecast.
 The grouping id then groups several of those forecasts together, treating
 them as a single multivariate forecast.}
 
-\item{w}{numeric vector of weights for forecast draws (length equal to number of columns of \code{dat})}
+\item{w}{Optional numeric vector of weights for forecast samples
+(length equal to the number of columns of \code{predicted}).
+If \code{NULL} (the default), equal weights are used.}
 
-\item{w_vs}{Optional non-negative weight matrix. If not \code{NULL},
-must be a square matrix with dimensions equal to the number
-of targets within each multivariate group.}
+\item{w_vs}{Optional non-negative weight matrix for the
+pairwise comparisons between targets. Entry \code{w_vs[i, j]}
+controls the importance of the pair (i, j) in the score.
+Must be a symmetric square matrix with rows and columns
+equal to the number of targets within each multivariate
+group.
+If \code{NULL} (the default), all pairs are weighted equally.}
 
-\item{p}{Numeric, order of the variogram score.
-Typical choices are 0.5 (default, more robust) and 1.}
+\item{p}{Numeric, order of the variogram score. This controls
+how pairwise differences are scaled: the score compares
+|y_i - y_j|^p across targets. Lower values of \code{p} give
+less weight to large differences, making the score more
+robust to outliers. Typical choices are 0.5 (the default)
+and 1.}
 }
 \value{
 A named numeric vector of scores, one per multivariate
 group. Lower values are better.
 }
 \description{
-Compute the variogram score for multivariate forecasts.
-The variogram score (Scheuerer and Hamill, 2015) evaluates the
-dependence structure of multivariate forecasts by comparing
-predicted pairwise differences against observed pairwise
-differences.
+Compute the variogram score for each multivariate group
+defined by \code{mv_group_id}.
+The variogram score (Scheuerer and Hamill, 2015) assesses
+whether a forecast captures the correlation structure across
+the targets being forecast jointly (e.g. locations, age
+groups). For each pair of targets (i, j), it compares the
+observed absolute difference |y_i - y_j|^p against the
+expected absolute difference under the forecast distribution.
+A forecast that misspecifies correlations between targets
+will predict pairwise differences that do not match the
+observations, resulting in a higher score.
 
 The score is computed using
 \code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}}.
