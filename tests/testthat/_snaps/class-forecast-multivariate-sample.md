@@ -40,7 +40,7 @@
     Code
       cat("Class:", class(result), "\n")
     Output
-      Class: forecast_multivariate_sample forecast_sample_multivariate forecast data.table data.frame 
+      Class: forecast_multivariate_sample forecast data.table data.frame 
     Code
       cat("Forecast type:", scoringutils:::get_forecast_type(result), "\n")
     Output
