@@ -1,6 +1,5 @@
 ---
 title: "Scoring rules in `scoringutils`"
-author: "Nikos Bosse"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -23,19 +22,21 @@ library(data.table)
 
 # Introduction
 
-This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the package works, have a look at the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link) of our `scoringutils` paper.
+This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. For more detailed information about the package, see the [package documentation](https://epiforecasts.io/scoringutils/) and @bosseEvaluatingForecastsEpidemiological2022.
 
 We can distinguish two types of forecasts: point forecasts and probabilistic forecasts. A point forecast is a single number representing a single outcome. A probabilistic forecast is a full predictive probability distribution over multiple possible outcomes. In contrast to point forecasts, probabilistic forecasts incorporate uncertainty about different possible outcomes.
 
 Scoring rules are functions that take a forecast and an observation as input and return a single numeric value. For point forecasts, they take the form $S(\hat{y}, y)$, where $\hat{y}$ is the forecast and $y$ is the observation. For probabilistic forecasts, they usually take the form $S(F, y)$, where $F$ is the cumulative density function (CDF) of the predictive distribution and $y$ is the observation. By convention, scoring rules are usually negatively oriented, meaning that smaller values are better (the best possible score is usually zero). In that sense, the score can be understood as a penalty.
 
-Many scoring rules for probabilistic forecasts are so-called (strictly) proper scoring rules. Essentially, this means that they cannot be "cheated": A forecaster evaluated by a strictly proper scoring rule is always incentivised to report her honest best belief about the future and cannot, in expectation, improve her score by reporting something else. A more formal definition is the following: Let $G$ be the true, unobserved data-generating distribution. A scoring rule is said to be proper, if under $G$ and for an ideal forecast $F = G$, there is no forecast $F' \neq F$ that in expectation receives a better score than $F$. A scoring rule is considered strictly proper if, under $G$, no other forecast $F'$ in expectation receives a score that is better than or the same as that of $F$.
+Many scoring rules for probabilistic forecasts are so-called (strictly) proper scoring rules [@gneitingStrictlyProperScoring2007]. Essentially, this means that they cannot be "cheated": A forecaster evaluated by a strictly proper scoring rule is always incentivised to report her honest best belief about the future and cannot, in expectation, improve her score by reporting something else. A more formal definition is the following: Let $G$ be the true, unobserved data-generating distribution. A scoring rule is said to be proper, if under $G$ and for an ideal forecast $F = G$, there is no forecast $F' \neq F$ that in expectation receives a better score than $F$. A scoring rule is considered strictly proper if, under $G$, no other forecast $F'$ in expectation receives a score that is better than or the same as that of $F$.
+
+Probabilistic forecasts can be represented in different formats. **Binary forecasts** assign a probability to a binary (yes/no) outcome. **Sample-based forecasts** represent the predictive distribution through a set of random draws (samples). **Quantile-based forecasts** characterise the predictive distribution by reporting a set of quantiles at specified probability levels. The choice of format determines which scoring rules are applicable. `scoringutils` provides appropriate default metrics for each format, as described in the sections below.
 
 ---
 
 # Metrics for point forecasts
 
-See a list of the default metrics for point forecasts by calling `get_metrics(example_point)`.
+For a list of the default metrics for point forecasts, see `?get_metrics.forecast_point` or call `get_metrics(example_point)` in R.
 
 This is an overview of the input and output formats for point forecasts:
 
@@ -64,8 +65,6 @@ mean(Metrics::ae(observed, predicted_not_mu))
 mean(Metrics::se(observed, predicted_mu))
 mean(Metrics::se(observed, predicted_not_mu))
 ```
-
-
 
 ## Absolute error
 
@@ -106,9 +105,9 @@ The absolute percentage error is only an appropriate rule if $\hat{y}$ correspon
 
 # Binary forecasts
 
-See a list of the default metrics for point forecasts by calling `?get_metrics(example_binary)`.
+For a list of the default metrics for binary forecasts, see `?get_metrics.forecast_binary` or call `get_metrics(example_binary)` in R.
 
-This is an overview of the input and output formats for point forecasts:
+This is an overview of the input and output formats for binary forecasts:
 
 ```{r, echo=FALSE, out.width="100%", fig.cap="Input and output formats: metrics for binary forecasts."}
 knitr::include_graphics(file.path("scoring-rules", "input-binary.png"))
@@ -178,7 +177,7 @@ See `?logs_binary()` for more information.
 
 # Sample-based forecasts
 
-See a list of the default metrics for sample-based forecasts by calling `get_metrics(example_sample_continuous)`.
+For a list of the default metrics for sample-based forecasts, see `?get_metrics.forecast_sample` or call `get_metrics(example_sample_continuous)` in R.
 
 This is an overview of the input and output formats for quantile forecasts:
 
@@ -246,7 +245,7 @@ For discrete forecasts, the log score can be computed as
 $$ \text{log score}(F, y) = -\log p_y, $$
 where $p_y$ is the probability assigned to the observed outcome $y$ by the forecast $F$.
 
-The logarithmic scoring rule can produce large penalties when the observed value takes on values for which $f(y)$ (or $p_y$) is close to zero. It is therefore considered to be sensitive to outlier forecasts. This may be desirable in some applications, but it also means that scores can easily be dominated by a few extreme values. The logarithmic scoring rule is a local scoring rule, meaning that the score only depends on the probability that was assigned to the actual outcome. This is often regarded as a desirable property for example in the context of Bayesian inference \citep{winklerScoringRulesEvaluation1996}. It implies for example, that the ranking between forecasters would be invariant under monotone transformations of the predictive distribution and the target.
+The logarithmic scoring rule can produce large penalties when the observed value takes on values for which $f(y)$ (or $p_y$) is close to zero. It is therefore considered to be sensitive to outlier forecasts. This may be desirable in some applications, but it also means that scores can easily be dominated by a few extreme values. The logarithmic scoring rule is a local scoring rule, meaning that the score only depends on the probability that was assigned to the actual outcome. This is often regarded as a desirable property for example in the context of Bayesian inference [@winklerScoringRulesEvaluation1996]. It implies for example, that the ranking between forecasters would be invariant under monotone transformations of the predictive distribution and the target.
 
 `scoringutils` re-exports the `logs_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. One implications of this is that it is currently not advisable to use the log score for discrete forecasts. The reason for this is that `scoringRules::logs_sample()` estimates a predictive density from the samples, which can be problematic for discrete forecasts.
 
@@ -317,7 +316,7 @@ See section [A note of caution] or @gneitingMakingEvaluatingPoint2011 for a disc
 
 # Quantile-based forecasts
 
-See a list of the default metrics for quantile-based forecasts by calling `get_metrics(example_quantile)`.
+For a list of the default metrics for quantile-based forecasts, see `?get_metrics.forecast_quantile` or call `get_metrics(example_quantile)` in R.
 
 This is an overview of the input and output formats for quantile forecasts:
 
