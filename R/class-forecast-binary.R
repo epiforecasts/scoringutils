@@ -69,12 +69,11 @@ assert_forecast.forecast_binary <- function(
     forecast, c("sample_id", "quantile_level")
   )
   if (!columns_correct) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Checking `forecast`: Input looks like a binary forecast, but an
+        `!` = "Checking `forecast`: Input looks like a binary forecast, but an
          additional column called `sample_id` or `quantile` was found.",
-        "i" = "Please remove the column."
+        `i` = "Please remove the column."
       )
     )
   }
@@ -82,11 +81,10 @@ assert_forecast.forecast_binary <- function(
   if (!isTRUE(input_check)) {
     cli_abort(
       c(
-        "!" = "Checking `forecast`: Input looks like a binary forecast, but
+        `!` = "Checking `forecast`: Input looks like a binary forecast, but
              found the following issue: {input_check}"
       )
     )
-    #nolint end
   }
   return(invisible(NULL))
 }
