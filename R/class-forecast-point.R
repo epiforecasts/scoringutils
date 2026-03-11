@@ -75,7 +75,6 @@ is_forecast_point <- function(x) {
 }
 
 
-#' @importFrom Metrics se ae ape
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr copy
 #' @rdname score
@@ -100,9 +99,9 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
 #'
 #' @description
 #' For point forecasts, the default scoring rules are:
-#' - "ae_point" = [ae()][Metrics::ae()]
-#' - "se_point" = [se()][Metrics::se()]
-#' - "ape" = [ape()][Metrics::ape()]
+#' - "ae_point" = absolute error
+#' - "se_point" = squared error
+#' - "ape" = absolute percentage error
 #'
 #' A note of caution: Every scoring rule for a point forecast
 #' is implicitly minimised by a specific aspect of the predictive distribution
@@ -145,9 +144,9 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
 #' Journal of the American Statistical Association.
 get_metrics.forecast_point <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
-    ae_point = Metrics::ae,
-    se_point = Metrics::se,
-    ape = Metrics::ape
+    ae_point = function(actual, predicted) abs(actual - predicted),
+    se_point = function(actual, predicted) (actual - predicted)^2,
+    ape = function(actual, predicted) abs(actual - predicted) / abs(actual)
   )
   select_metrics(all, select, exclude)
 }
