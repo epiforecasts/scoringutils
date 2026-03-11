@@ -19,6 +19,32 @@ assert_input_binary <- function(observed, predicted) {
   assert_factor(observed, n.levels = 2, min.len = 1)
   assert_numeric(predicted, lower = 0, upper = 1)
   assert_dims_ok_point(observed, predicted)
+
+  # Warn if factor levels appear to be in counterintuitive order.
+  # Predictions represent P(outcome = highest factor level). If the levels
+  # are e.g. c("1", "0"), the highest level is "0", meaning predictions are
+  # interpreted as P(outcome = "0"), which is almost certainly unintended.
+  lvls <- levels(observed)
+  counterintuitive <- FALSE
+  if (setequal(lvls, c("0", "1")) && lvls[1] == "1") {
+    counterintuitive <- TRUE
+  } else if (setequal(lvls, c("TRUE", "FALSE")) && lvls[1] == "TRUE") {
+    counterintuitive <- TRUE
+  }
+  if (counterintuitive) {
+    #nolint start: keyword_quote_linter
+    cli_warn(c(
+      "!" = "Factor levels of {.var observed} appear to be in
+             counterintuitive order: {.val {lvls}}.",
+      "i" = "Predictions will be interpreted as the probability of
+             observing {.val {lvls[2]}} (the highest factor level).",
+      "i" = "If this is not intended, consider reordering the factor levels,
+             e.g. {.code factor(observed, levels = c({.val {lvls[2]}},
+             {.val {lvls[1]}}))}"
+    ))
+    #nolint end
+  }
+
   return(invisible(NULL))
 }
 
