@@ -15,7 +15,8 @@ run_safely(..., fun, metric_name)
 provide a more informative warning message in case \code{fun} errors.}
 }
 \value{
-The result of \code{fun} or \code{NULL} if \code{fun} errors
+The result of \code{fun}, or a list with \code{result = NULL} and \code{error}
+(a character string) if \code{fun} errors.
 }
 \description{
 This is a wrapper/helper function designed to run a function safely
@@ -24,7 +25,8 @@ function.
 
 All named arguments in \code{...} that are not accepted by \code{fun} are removed.
 All unnamed arguments are passed on to the function. In case \code{fun} errors,
-the error will be converted to a warning and \code{run_safely} returns \code{NULL}.
+\code{run_safely} returns a list with \code{result = NULL} and \code{error} containing the
+error message, allowing the caller to batch warnings.
 
 \code{run_safely} can be useful when constructing functions to be used as
 metrics in \code{\link[=score]{score()}}.
