@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r 'if (.tool_input.command | test(\"git push|gh pr create\")) then \"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PostToolUse\\\",\\\"additionalContext\\\":\\\"POST-PUSH/PR: You just pushed or created a PR. Do an immediate check of the PR for CI failures (gh pr checks). Then start a background monitoring loop with /loop 2m: check every 2 minutes for 15 minutes for new CI failures. Fix straightforward issues and respond with a CLAUDE:-prefixed comment. For complex or ambiguous issues, consider asking the user for guidance instead.\\\"}}\" else empty end'"
+          }
+        ]
+      }
+    ]
+  }
+}
