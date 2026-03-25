@@ -1,4 +1,10 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr view:*)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
