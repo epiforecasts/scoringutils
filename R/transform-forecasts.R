@@ -130,7 +130,7 @@ transform_forecasts.default <- function(forecast,
   cli_abort(
     c(
       `!` = "The input needs to be a valid forecast object.",
-      `i` = "Please convert to a `forecast` object first by calling the
+      i = "Please convert to a `forecast` object first by calling the
       appropriate {.fn as_forecast_<type>} function)."
     )
   )
@@ -164,7 +164,7 @@ transform_forecasts.forecast <- function(forecast,
     if (append && (label %in% original_forecast$scale)) {
       cli_warn(
         c(
-          `i` = "Appending new transformations with label
+          i = "Appending new transformations with label
           '{label}' even though that entry is already present
           in column 'scale'."
         )
@@ -221,17 +221,20 @@ transform_forecasts.forecast_multivariate_sample <- function(
     append = TRUE,
     label = "log",
     ...) {
-  if (!append) return(NextMethod())
+  out <- transform_forecasts.forecast(
+    forecast, fun, append, label, ...
+  )
+  if (!append) return(out)
   joint_across <- setdiff(
     get_forecast_unit(forecast),
     get_grouping(forecast)
   )
-  out <- as.data.table(NextMethod())
+  out <- as.data.table(out)
   out[, .mv_group_id := NULL]
+  forecast_type <- get_forecast_type(forecast)
+  fn <- get(paste0("as_forecast_", forecast_type))
   suppressWarnings(suppressMessages(
-    as_forecast_multivariate_sample(
-      data = out, joint_across = joint_across
-    )
+    fn(data = out, joint_across = joint_across)
   ))
 }
 # nolint end
@@ -246,18 +249,9 @@ transform_forecasts.forecast_multivariate_point <- function(
     append = TRUE,
     label = "log",
     ...) {
-  if (!append) return(NextMethod())
-  joint_across <- setdiff(
-    get_forecast_unit(forecast),
-    get_grouping(forecast)
+  transform_forecasts.forecast_multivariate_sample(
+    forecast, fun, append, label, ...
   )
-  out <- as.data.table(NextMethod())
-  out[, .mv_group_id := NULL]
-  suppressWarnings(suppressMessages(
-    as_forecast_multivariate_point(
-      data = out, joint_across = joint_across
-    )
-  ))
 }
 # nolint end
 
@@ -312,7 +306,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
     cli_warn(
       c(
         `!` = "Detected zeros in input values.",
-        `i` = "Try specifying offset = 1 (or any other offset)."
+        i = "Try specifying offset = 1 (or any other offset)."
       )
     )
   }
