@@ -102,6 +102,49 @@ test_that("transform_forecasts() works on multivariate sample forecasts", {
   expect_length(intersect(ids_natural, ids_log), 0)
 })
 
+test_that("transform_forecasts() works on multivariate point forecasts", {
+  mv_point <- as_forecast_multivariate_point(
+    data.frame(
+      observed = c(1, 2, 3, 4, 5, 6),
+      predicted = c(1.1, 2.2, 3.3, 4.4, 5.5, 6.6),
+      target = rep(c("a", "b", "c"), 2),
+      model = "m1",
+      date = rep(c("2020-01-01", "2020-01-02"), each = 3)
+    ),
+    forecast_unit = c("model", "date", "target"),
+    joint_across = "target"
+  )
+
+  # append = FALSE should work
+  transformed <- transform_forecasts(
+    mv_point, fun = function(x) pmax(0, x), append = FALSE
+  )
+  expect_s3_class(transformed, "forecast_multivariate_point")
+
+  # append = TRUE should work
+  transformed_append <- transform_forecasts(
+    mv_point, fun = function(x) pmax(0, x), append = TRUE
+  )
+  expect_s3_class(
+    transformed_append, "forecast_multivariate_point"
+  )
+  expect_true("scale" %in% colnames(transformed_append))
+  expect_equal(
+    unique(transformed_append$scale), c("natural", "log")
+  )
+
+  # .mv_group_id must be distinct across scales
+  n_original <- nrow(mv_point)
+  expect_equal(nrow(transformed_append), 2 * n_original)
+  ids_natural <- unique(
+    transformed_append[scale == "natural", .mv_group_id]
+  )
+  ids_log <- unique(
+    transformed_append[scale == "log", .mv_group_id]
+  )
+  expect_length(intersect(ids_natural, ids_log), 0)
+})
+
 test_that("score() preserves scale column for multivariate forecasts", {
   transformed <- transform_forecasts(
     example_multivariate_sample,
