@@ -107,4 +107,3 @@ test_columns_present <- function(data, columns) {
   check <- check_columns_present(data, columns)
   return(isTRUE(check))
 }
-
