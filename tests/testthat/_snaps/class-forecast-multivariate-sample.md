@@ -6,6 +6,8 @@
       Forecast type: multivariate_sample
       Forecast unit:
       location, model, target_type, target_end_date, and horizon
+      Joint across:
+      location
     Output
       
                 predicted sample_id observed location                 model
