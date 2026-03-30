@@ -154,15 +154,11 @@ score.default <- function(forecast, metrics, ...) {
 apply_metrics <- function(forecast, metrics, ...) {
   clashing <- intersect(names(metrics), colnames(forecast))
   if (length(clashing) > 0) {
-    #nolint start: object_usage_linter
-    cli_warn(
-      c(
-        "!" = "Column{?s} {.val {clashing}} already present
-        in the data will be overwritten with metric
-        results."
-      )
-    )
-    #nolint end
+    cli_warn(c(
+      `!` = "Column{?s} {.val {clashing}} already
+      present in the data will be overwritten with
+      metric results."
+    ))
   }
   lapply(names(metrics), function(metric_name) {
     result <- do.call(

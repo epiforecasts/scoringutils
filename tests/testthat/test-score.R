@@ -140,7 +140,7 @@ test_that("apply_metrics() works", {
 test_that("apply_metrics() warns about column name clashes", {
   dt <- data.table::data.table(x = 1:10, test = 0)
   expect_warning(
-    scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+    apply_metrics(
       forecast = dt,
       metrics = list(test = function(x) x + 1),
       dt$x
