@@ -291,7 +291,7 @@ test_that(
       compare = "forecaster"
     )
     expect_true(".imputed" %in% names(result))
-    imputed <- result[result$.imputed == TRUE]
+    imputed <- result[result$.imputed]
     expect_equal(nrow(imputed), 1)
     expect_equal(imputed$forecaster, "B")
     expect_equal(imputed$location, "US")
