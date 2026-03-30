@@ -85,7 +85,7 @@ scores_imputed <- impute_missing_scores(
 Imputed rows are marked with `.imputed = TRUE`, so you can inspect what was added.
 
 ```{r imputed-rows}
-scores_imputed[scores_imputed$.imputed == TRUE, 1:5]
+scores_imputed[scores_imputed$.imputed, 1:5]
 ```
 
 ## Recommended workflow
