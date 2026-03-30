@@ -212,8 +212,8 @@ se_mean_sample <- function(observed, predicted) {
 #' @importFrom scoringRules logs_sample
 #' @family log score functions
 #' @examples
-#' observed <- rpois(30, lambda = 1:30)
-#' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' observed <- rnorm(30, mean = 1:30)
+#' predicted <- replicate(200, rnorm(30, mean = 1:30))
 #' logs_sample(observed, predicted)
 #' @export
 #' @references
@@ -223,6 +223,19 @@ se_mean_sample <- function(observed, predicted) {
 
 logs_sample <- function(observed, predicted, ...) {
   assert_input_sample(observed, predicted)
+  if (get_type(predicted) == "integer") {
+    #nolint start: keyword_quote_linter
+    cli_warn(
+      c(
+        "Predictions appear to be integer-valued." ,
+        "!" = "The log score uses kernel density estimation, which may not be
+        appropriate for integer-valued forecasts.",
+        "i" = "See the {.pkg scoringRules} package for alternatives for
+        discrete probability distributions."
+      )
+    )
+    #nolint end
+  }
   scoringRules::logs_sample(
     y = observed,
     dat = predicted,
