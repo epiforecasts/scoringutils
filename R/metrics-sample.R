@@ -226,7 +226,7 @@ logs_sample <- function(observed, predicted, ...) {
   if (get_type(predicted) == "integer") {
     cli_warn(
       c(
-        "Predictions appear to be integer-valued." ,
+        "Predictions appear to be integer-valued.",
         `!` = "The log score uses kernel density estimation, which may not be
         appropriate for integer-valued forecasts.",
         i = "See the {.pkg scoringRules} package for alternatives for
