@@ -79,13 +79,11 @@ assert_forecast.default <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   cli_abort(
-    #nolint start: keyword_quote_linter
     c(
       `!` = "The input needs to be a valid forecast object.",
       `i` = "Please convert to `forecast` object first by calling the
       appropriate {.fn as_forecast_<type>} function)."
     )
-    #nolint end
   )
 }
 
@@ -136,7 +134,6 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
   # check whether there are any NA values
   if (anyNA(data)) {
     if (nrow(na.omit(data)) == 0) {
-      #nolint start: keyword_quote_linter
       cli_abort(
         c(
           `!` = "After removing rows with NA values in the data, no forecasts
@@ -152,7 +149,6 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
         )
       )
     }
-    #nolint end
   }
 
   return(data[])
@@ -292,7 +288,6 @@ is_forecast <- function(x) {
     )
     if (inherits(validation, "try-error")) {
       cli_warn(
-        #nolint start: keyword_quote_linter
         c(
           `!` = "Error in validating forecast object: {validation}.",
           `i` = "Note this error is sometimes related to `data.table`s `print`.
@@ -300,7 +295,6 @@ is_forecast <- function(x) {
           to confirm. To get rid of this warning entirely,
           call `as.data.table()` on the forecast object."
         )
-        #nolint end
       )
     }
   }

@@ -38,7 +38,7 @@ assert_forecast_type <- function(data,
                                  desired = NULL) {
   assert_character(desired, null.ok = TRUE)
   if (!is.null(desired) && desired != actual) {
-    #nolint start: object_usage_linter keyword_quote_linter
+    #nolint start: object_usage_linter
     cli_abort(
       c(
         `!` = "Forecast type determined by scoringutils based on input:

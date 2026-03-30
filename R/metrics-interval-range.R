@@ -38,7 +38,6 @@ assert_input_interval <- function(observed, lower, upper, interval_range) {
     )
   }
   if (any(interval_range > 0 & interval_range < 1, na.rm = TRUE)) {
-    #nolint start: keyword_quote_linter
     cli_warn(
       c(
         `!` = "Found interval ranges between 0 and 1. Are you sure that's
@@ -50,7 +49,6 @@ assert_input_interval <- function(observed, lower, upper, interval_range) {
       .frequency = "once",
       .frequency_id = "small_interval_range"
     )
-    #nolint end
   }
   return(invisible(NULL))
 }

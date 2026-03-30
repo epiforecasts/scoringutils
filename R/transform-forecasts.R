@@ -124,7 +124,6 @@ transform_forecasts <- function(forecast,
   # Error handling
   if (scale_col_present) {
     if (!("natural" %in% original_forecast$scale)) {
-      #nolint start: keyword_quote_linter
       cli_abort(
         c(
           `!` = "If a column 'scale' is present, entries with scale =='natural'
@@ -139,7 +138,6 @@ transform_forecasts <- function(forecast,
           even though that entry is already present in column 'scale'."
         )
       )
-      #nolint end
     }
   }
 
@@ -228,7 +226,6 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
   assert_number(base, lower = 0)
 
   if (any(x < 0, na.rm = TRUE)) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
         `!` = "Detected input values < 0."
@@ -242,7 +239,6 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
         `i` = "Try specifying offset = 1 (or any other offset)."
       )
     )
-    #nolint end
   }
   log(x + offset, base = base)
 }

@@ -114,7 +114,6 @@ get_metrics.scores <- function(x, error = FALSE, ...) {
   assert_data_frame(x)
   metrics <- attr(x, "metrics")
   if (error && is.null(metrics)) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
         `!` = "Input needs an attribute `metrics` with the names of the
@@ -122,11 +121,10 @@ get_metrics.scores <- function(x, error = FALSE, ...) {
         `i` = "See `?get_metrics` for further information."
       )
     )
-    #nolint end
   }
 
   if (!all(metrics %in% names(x))) {
-    #nolint start: keyword_quote_linter object_usage_linter
+    #nolint start: object_usage_linter
     missing <- setdiff(metrics, names(x))
     cli_warn(
       c(

@@ -69,7 +69,6 @@ assert_forecast.forecast_binary <- function(
     forecast, c("sample_id", "quantile_level")
   )
   if (!columns_correct) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
         `!` = "Checking `forecast`: Input looks like a binary forecast, but an
@@ -86,7 +85,6 @@ assert_forecast.forecast_binary <- function(
              found the following issue: {input_check}"
       )
     )
-    #nolint end
   }
   return(invisible(NULL))
 }
