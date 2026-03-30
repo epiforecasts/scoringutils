@@ -23,10 +23,12 @@ If \code{NULL} (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.}
 
-\item{type}{Character. Forecast type, e.g. \code{"quantile"},
-\code{"sample"}, \code{"binary"}. Used to determine type-specific ID
-columns when \code{data} is not a \code{forecast} object. Ignored when
-\code{data} is already a \code{forecast} object.}
+\item{type}{Character string naming the forecast type, corresponding
+to the class suffix after \code{forecast_} (e.g. \code{"quantile"} for
+class \code{forecast_quantile}, \code{"sample"} for \code{forecast_sample}).
+Used to determine type-specific ID columns when \code{data} is not
+already a \code{forecast} object. Ignored when \code{data} already
+inherits from \code{forecast}.}
 
 \item{counts}{Should the output show the number of duplicates per
 forecast unit instead of the individual duplicated rows?
@@ -45,7 +47,8 @@ Uses \code{\link[=get_forecast_type_ids]{get_forecast_type_ids()}} to determine 
 objects the type is detected automatically. For plain \code{data.frame}s
 you should pass \code{type} (e.g. \code{"quantile"}, \code{"sample"}) so that the
 correct columns are used. Calling on a plain \code{data.frame} without
-\code{type} is deprecated and will only check forecast-unit columns.
+\code{type} is deprecated; it falls back to column-name detection but
+this behaviour will be removed in a future version.
 }
 \examples{
 example <- rbind(example_quantile, example_quantile[1000:1010])

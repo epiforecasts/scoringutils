@@ -58,6 +58,15 @@ test_that("get_duplicate_forecasts() warns without type on raw data", {
   )
 })
 
+test_that("deprecated fallback preserves old behaviour", {
+  bad <- rbind(example_quantile, example_quantile[1000:1010])
+  raw <- as.data.frame(bad)
+  suppressWarnings(
+    result <- get_duplicate_forecasts(raw)
+  )
+  expect_identical(nrow(result), 22L)
+})
+
 test_that("get_duplicate_forecasts() ignores type on forecast objects", {
   fc <- as_forecast_quantile(example_quantile)
   expect_identical(

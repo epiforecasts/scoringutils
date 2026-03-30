@@ -9,13 +9,16 @@
 #' objects the type is detected automatically. For plain `data.frame`s
 #' you should pass `type` (e.g. `"quantile"`, `"sample"`) so that the
 #' correct columns are used. Calling on a plain `data.frame` without
-#' `type` is deprecated and will only check forecast-unit columns.
+#' `type` is deprecated; it falls back to column-name detection but
+#' this behaviour will be removed in a future version.
 #'
 #' @inheritParams as_forecast_doc_template
-#' @param type Character. Forecast type, e.g. `"quantile"`,
-#'   `"sample"`, `"binary"`. Used to determine type-specific ID
-#'   columns when `data` is not a `forecast` object. Ignored when
-#'   `data` is already a `forecast` object.
+#' @param type Character string naming the forecast type, corresponding
+#'   to the class suffix after `forecast_` (e.g. `"quantile"` for
+#'   class `forecast_quantile`, `"sample"` for `forecast_sample`).
+#'   Used to determine type-specific ID columns when `data` is not
+#'   already a `forecast` object. Ignored when `data` already
+#'   inherits from `forecast`.
 #' @param counts Should the output show the number of duplicates per
 #'   forecast unit instead of the individual duplicated rows?
 #'   Default is `FALSE`.
@@ -42,22 +45,28 @@ get_duplicate_forecasts <- function(
   if (!is.null(forecast_unit)) {
     data <- set_forecast_unit(data, forecast_unit)
   }
+  forecast_unit <- get_forecast_unit(data)
 
-  if (!inherits(data, "forecast") && !is.null(type)) {
-    data <- new_forecast(data, paste0("forecast_", type))
-  } else if (!inherits(data, "forecast") && is.null(type)) {
+  if (inherits(data, "forecast")) {
+    type_cols <- get_forecast_type_ids(data)
+  } else if (!is.null(type)) {
+    tmp <- new_forecast(data, paste0("forecast_", type))
+    type_cols <- get_forecast_type_ids(tmp)
+  } else {
+    #nolint start: keyword_quote_linter
     cli_warn(
       c(
-        "!" = "Calling {.fn get_duplicate_forecasts} on a plain
+        `!` = "Calling {.fn get_duplicate_forecasts} on a plain
         data.frame without {.arg type} is deprecated.",
-        "i" = "Pass {.arg type} (e.g. {.val quantile}, {.val sample})
+        i = "Pass {.arg type} (e.g. {.val quantile}, {.val sample})
         to detect type-specific duplicates."
       )
     )
+    #nolint end
+    # deprecated fallback: detect type columns by name
+    known <- c("sample_id", "quantile_level", "predicted_label")
+    type_cols <- intersect(known, colnames(data))
   }
-
-  forecast_unit <- get_forecast_unit(data)
-  type_cols <- get_forecast_type_ids(data)
   data <- as.data.table(data)
   data[,
     scoringutils_InternalDuplicateCheck := .N,
