@@ -21,9 +21,12 @@ If \code{select} is not \code{NULL}, this argument is ignored.}
 \description{
 For point forecasts, the default scoring rules are:
 \itemize{
-\item "ae_point" = \link[Metrics:ae]{ae()}
-\item "se_point" = \link[Metrics:se]{se()}
-\item "ape" = \link[Metrics:ape]{ape()}
+\item "ae_point" = absolute error, calculated as
+\eqn{\text{ae} = |y - \hat{y}|}{ae = |y - y_hat|}
+\item "se_point" = squared error, calculated as
+\eqn{\text{se} = (y - \hat{y})^2}{se = (y - y_hat)^2}
+\item "ape" = absolute percentage error, calculated as
+\eqn{\text{ape} = |y - \hat{y}| / |y|}{ape = |y - y_hat| / |y|}
 }
 
 A note of caution: Every scoring rule for a point forecast
