@@ -79,14 +79,14 @@ observed <- rnorm(n, 5, 4)^2
 predicted_mu <- mean(observed)
 predicted_not_mu <- predicted_mu - rnorm(n, 10, 2)
 
-mean(Metrics::ae(observed, predicted_mu))
+mean(abs(observed - predicted_mu))
 #> [1] 34.45981
-mean(Metrics::ae(observed, predicted_not_mu))
+mean(abs(observed - predicted_not_mu))
 #> [1] 32.54821
 
-mean(Metrics::se(observed, predicted_mu))
+mean((observed - predicted_mu)^2)
 #> [1] 2171.089
-mean(Metrics::se(observed, predicted_not_mu))
+mean((observed - predicted_not_mu)^2)
 #> [1] 2290.155
 ```
 
@@ -98,8 +98,7 @@ mean(Metrics::se(observed, predicted_not_mu))
 forecaster’s predictive distribution.
 
 The absolute error is the absolute difference between the predicted and
-the observed values. See
-[`?Metrics::ae`](https://rdrr.io/pkg/Metrics/man/ae.html).
+the observed values.
 
 $$\text{ae} = \left| y - \widehat{y} \right|$$
 
@@ -115,8 +114,7 @@ Otherwise, results will be misleading (see Gneiting (2011)).
 predictive distribution.
 
 The squared error is the squared difference between the predicted and
-the observed values. See
-[`?Metrics::se`](https://rdrr.io/pkg/Metrics/man/se.html).
+the observed values.
 
 $$\text{se} = \left( y - \widehat{y} \right)^{2}$$ The squared error is
 only an appropriate rule if $\widehat{y}$ corresponds to the mean of the
@@ -130,8 +128,7 @@ misleading (see Gneiting (2011)).
 **Forecast**: $\widehat{y}$, a real number
 
 The absolute percentage error is the absolute percent difference between
-the predicted and the observed values. See
-[`?Metrics::ape`](https://rdrr.io/pkg/Metrics/man/ape.html).
+the predicted and the observed values.
 
 $$\text{ape} = \frac{\left| y - \widehat{y} \right|}{|y|}$$
 

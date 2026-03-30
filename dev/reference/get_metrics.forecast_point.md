@@ -2,11 +2,14 @@
 
 For point forecasts, the default scoring rules are:
 
-- "ae_point" = [ae()](https://rdrr.io/pkg/Metrics/man/ae.html)
+- "ae_point" = absolute error, calculated as \\\text{ae} = \|y -
+  \hat{y}\|\\
 
-- "se_point" = [se()](https://rdrr.io/pkg/Metrics/man/se.html)
+- "se_point" = squared error, calculated as \\\text{se} = (y -
+  \hat{y})^2\\
 
-- "ape" = [ape()](https://rdrr.io/pkg/Metrics/man/ape.html)
+- "ape" = absolute percentage error, calculated as \\\text{ape} = \|y -
+  \hat{y}\| / \|y\|\\
 
 A note of caution: Every scoring rule for a point forecast is implicitly
 minimised by a specific aspect of the predictive distribution (see
@@ -82,11 +85,9 @@ Other get_metrics functions:
 get_metrics(example_point, select = "ape")
 #> $ape
 #> function (actual, predicted) 
-#> {
-#>     return(ae(actual, predicted)/abs(actual))
-#> }
-#> <bytecode: 0x55d0f487afb8>
-#> <environment: namespace:Metrics>
+#> abs(actual - predicted)/abs(actual)
+#> <bytecode: 0x56011742e270>
+#> <environment: 0x56011742db70>
 #> 
 
 set.seed(123)
