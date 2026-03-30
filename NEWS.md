@@ -1,5 +1,6 @@
 # scoringutils (development version)
 
+- The print method for multivariate forecasts now displays the `joint_across` columns, making it easier to see which variables are forecast jointly (#1043).
 - Added `forecast_multivariate_point` class for scoring multivariate point forecasts with the variogram score.
 The new `as_forecast_multivariate_point()` constructor takes a `joint_across` argument, matching the pattern of `as_forecast_multivariate_sample()`.
 The `transform_forecasts()` function now works with both multivariate forecast types (#1112).
