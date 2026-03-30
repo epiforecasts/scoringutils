@@ -145,9 +145,9 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
 #' Journal of the American Statistical Association.
 get_metrics.forecast_point <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
-    ae_point = Metrics::ae,
-    se_point = Metrics::se,
-    ape = Metrics::ape
+    ae_point = ae,
+    se_point = se,
+    ape = ape
   )
   select_metrics(all, select, exclude)
 }

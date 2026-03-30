@@ -100,8 +100,8 @@ plot_correlations <- function(correlations, digits = NULL) {
   rownames(lower_triangle) <- colnames(lower_triangle)
 
   # get plot data.frame
-  plot_df <- data.table::as.data.table(lower_triangle)[, metric := metrics]
-  plot_df <- na.omit(data.table::melt(plot_df, id.vars = "metric"))
+  plot_df <- as.data.table(lower_triangle)[, metric := metrics]
+  plot_df <- na.omit(melt(plot_df, id.vars = "metric"))
 
   # refactor levels according to the metrics
   plot_df[, metric := factor(metric, levels = metrics)]
