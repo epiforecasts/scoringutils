@@ -34,6 +34,7 @@
 #'   `.imputed` column. Rows that were imputed have
 #'   `.imputed = TRUE`.
 #'
+#' @seealso \code{vignette("handling-missing-forecasts")}
 #' @importFrom data.table copy set rbindlist setattr
 #' @importFrom checkmate assert_class assert_function
 #'   assert_character assert_subset

@@ -1,0 +1,111 @@
+---
+title: "Handling missing forecasts"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Handling missing forecasts}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>"
+)
+data.table::setDTthreads(2)
+```
+
+When models forecast different subsets of targets, score summaries become misleading.
+A model that only forecasts easy targets will appear to perform better than one that attempts harder targets too.
+To get fair comparisons, you need to either restrict to a common set of targets or impute the missing scores.
+
+## Diagnosing missingness
+
+`get_forecast_counts()` shows which models cover which targets.
+
+```{r counts}
+library(scoringutils)
+fc <- as_forecast_quantile(example_quantile)
+get_forecast_counts(fc, by = c("model", "target_type"))
+```
+
+Here `UMass-MechBayes` has no case forecasts and `epiforecasts-EpiNow2` has fewer death forecasts than the other models.
+
+## Filtering to a common set of targets
+
+`filter_scores()` removes scores for target combinations not shared across models.
+The default strategy, `filter_to_intersection()`, keeps only targets covered by all models.
+
+```{r score}
+scores <- score(fc)
+```
+
+```{r filter}
+scores_filtered <- filter_scores(scores)
+```
+
+You can relax the requirement with `min_coverage` to keep targets covered by at least a given proportion of models.
+
+```{r filter-relaxed}
+scores_relaxed <- filter_scores(
+  scores,
+  strategy = filter_to_intersection(
+    min_coverage = 0.75
+  )
+)
+```
+
+The `include` argument restricts to targets covered by specific models.
+
+```{r filter-include}
+scores_baseline <- filter_scores(
+  scores,
+  strategy = filter_to_intersection(
+    include = "EuroCOVIDhub-baseline"
+  )
+)
+```
+
+## Imputing missing scores
+
+Instead of dropping data, `impute_missing_scores()` fills in scores for missing target combinations.
+Four built-in strategies are available.
+
+- `impute_worst_score()` fills with the worst (maximum) observed score for each target.
+- `impute_mean_score()` fills with the mean observed score.
+- `impute_na_score()` fills with `NA`.
+- `impute_model_score(model)` fills with the scores from a named reference model.
+
+```{r impute}
+scores_imputed <- impute_missing_scores(
+  scores,
+  strategy = impute_worst_score()
+)
+```
+
+Imputed rows are marked with `.imputed = TRUE`, so you can inspect what was added.
+
+```{r imputed-rows}
+scores_imputed[scores_imputed$.imputed == TRUE, 1:5]
+```
+
+## Recommended workflow
+
+Filter first to remove targets with very low coverage, then impute the remainder.
+
+```{r pipeline}
+result <- scores |>
+  filter_scores(
+    strategy = filter_to_intersection(
+      min_coverage = 0.5
+    )
+  ) |>
+  impute_missing_scores(
+    strategy = impute_worst_score()
+  )
+```
+
+You can then summarise as usual with `summarise_scores()`.
+
+```{r summarise}
+summarise_scores(result, by = "model")
+```

@@ -29,4 +29,7 @@ argument, which defaults to \code{\link[=filter_to_intersection]{filter_to_inter
 This is a general-purpose filtering function that delegates
 all logic to the strategy.
 }
+\seealso{
+\code{vignette("handling-missing-forecasts")}
+}
 \keyword{handle-metrics}

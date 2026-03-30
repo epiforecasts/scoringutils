@@ -19,6 +19,7 @@
 #' @return A filtered `scores` object with the same class and
 #'   `metrics` attribute as the input.
 #'
+#' @seealso \code{vignette("handling-missing-forecasts")}
 #' @importFrom cli cli_inform
 #' @importFrom checkmate assert_class assert_character
 #'   assert_function assert_subset

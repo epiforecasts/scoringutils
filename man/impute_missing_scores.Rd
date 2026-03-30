@@ -55,4 +55,7 @@ scores <- example_quantile |>
 # Impute with NA values
 impute_missing_scores(scores, strategy = impute_na_score())
 }
+\seealso{
+\code{vignette("handling-missing-forecasts")}
+}
 \keyword{handle-metrics}
