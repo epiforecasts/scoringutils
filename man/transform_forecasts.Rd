@@ -2,9 +2,45 @@
 % Please edit documentation in R/transform-forecasts.R
 \name{transform_forecasts}
 \alias{transform_forecasts}
+\alias{transform_forecasts.default}
+\alias{transform_forecasts.forecast}
+\alias{transform_forecasts.forecast_multivariate_sample}
+\alias{transform_forecasts.forecast_multivariate_point}
 \title{Transform forecasts and observed values}
 \usage{
 transform_forecasts(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
+
+\method{transform_forecasts}{default}(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
+
+\method{transform_forecasts}{forecast}(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
+
+\method{transform_forecasts}{forecast_multivariate_sample}(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
+
+\method{transform_forecasts}{forecast_multivariate_point}(
   forecast,
   fun = log_shift,
   append = TRUE,
@@ -47,7 +83,11 @@ be one additional column, `scale', present which will be set to "natural"
 for the untransformed forecasts.
 }
 \description{
-Function to transform forecasts and observed values before scoring.
+\code{transform_forecasts()} is a generic that applies a transformation to
+forecasts and observed values before scoring. It dispatches on the class of
+the forecast object, so custom forecast types can define their own methods.
+The default method (for the \code{forecast} class) handles all standard forecast
+types.
 }
 \details{
 There are a few reasons, depending on the circumstances, for

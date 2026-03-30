@@ -1,7 +1,11 @@
 #' @title Transform forecasts and observed values
 #'
 #' @description
-#' Function to transform forecasts and observed values before scoring.
+#' `transform_forecasts()` is a generic that applies a transformation to
+#' forecasts and observed values before scoring. It dispatches on the class of
+#' the forecast object, so custom forecast types can define their own methods.
+#' The default method (for the `forecast` class) handles all standard forecast
+#' types.
 #'
 #' @details
 #' There are a few reasons, depending on the circumstances, for
@@ -111,31 +115,58 @@ transform_forecasts <- function(forecast,
                                 append = TRUE,
                                 label = "log",
                                 ...) {
+  UseMethod("transform_forecasts")
+}
+
+
+#' @importFrom cli cli_abort
+#' @export
+#' @rdname transform_forecasts
+transform_forecasts.default <- function(forecast,
+                                        fun = log_shift,
+                                        append = TRUE,
+                                        label = "log",
+                                        ...) {
+  cli_abort(
+    c(
+      `!` = "The input needs to be a valid forecast object.",
+      `i` = "Please convert to a `forecast` object first by calling the
+      appropriate {.fn as_forecast_<type>} function)."
+    )
+  )
+}
+
+
+#' @export
+#' @rdname transform_forecasts
+transform_forecasts.forecast <- function(forecast,
+                                         fun = log_shift,
+                                         append = TRUE,
+                                         label = "log",
+                                         ...) {
   original_forecast <- clean_forecast(forecast, copy = TRUE)
   assert_function(fun)
   assert_logical(append, len = 1)
   assert_character(label, len = 1)
 
-  # store forecast type to construct a valid forecast object later
   forecast_type <- get_forecast_type(original_forecast)
-
   scale_col_present <- ("scale" %in% colnames(original_forecast))
 
-  # Error handling
   if (scale_col_present) {
     if (!("natural" %in% original_forecast$scale)) {
       cli_abort(
         c(
-          `!` = "If a column 'scale' is present, entries with scale =='natural'
-          are required for the transformation."
+          `!` = "If a column 'scale' is present, entries with
+          scale =='natural' are required for the transformation."
         )
       )
     }
     if (append && (label %in% original_forecast$scale)) {
       cli_warn(
         c(
-          i = "Appending new transformations with label '{label}'
-          even though that entry is already present in column 'scale'."
+          `i` = "Appending new transformations with label
+          '{label}' even though that entry is already present
+          in column 'scale'."
         )
       )
     }
@@ -143,7 +174,9 @@ transform_forecasts <- function(forecast,
 
   if (append) {
     if (scale_col_present) {
-      transformed_forecast <- copy(original_forecast)[scale == "natural"]
+      transformed_forecast <- copy(
+        original_forecast
+      )[scale == "natural"]
     } else {
       transformed_forecast <- copy(original_forecast)
       original_forecast[, scale := "natural"]
@@ -153,30 +186,23 @@ transform_forecasts <- function(forecast,
     transformed_forecast[, scale := label]
     out <- rbind(original_forecast, transformed_forecast)
 
-    # construct a new valid forecast object after binding rows together
     fn_name <- paste0("as_forecast_", forecast_type)
     fn <- get(fn_name)
-    args <- list(data = out)
-    if (".mv_group_id" %in% colnames(out)) {
-      args$joint_across <- setdiff(
-        get_forecast_unit(original_forecast),
-        get_grouping(original_forecast)
-      )
-      out[, .mv_group_id := NULL]
-      args$data <- out
-    }
     out <- suppressWarnings(suppressMessages(
-      do.call(fn, args)
+      fn(data = out)
     ))
-
     return(out[])
   }
 
-  # check if a column called "scale" is already present and if so, only
-  # restrict to transformations of the original forecast
   if (scale_col_present) {
-    original_forecast[scale == "natural", predicted := fun(predicted, ...)]
-    original_forecast[scale == "natural", observed := fun(observed, ...)]
+    original_forecast[
+      scale == "natural",
+      predicted := fun(predicted, ...)
+    ]
+    original_forecast[
+      scale == "natural",
+      observed := fun(observed, ...)
+    ]
     original_forecast[scale == "natural", scale := label]
   } else {
     original_forecast[, predicted := fun(predicted, ...)]
@@ -184,6 +210,56 @@ transform_forecasts <- function(forecast,
   }
   return(original_forecast[])
 }
+
+
+# nolint start: object_name_linter
+#' @export
+#' @rdname transform_forecasts
+transform_forecasts.forecast_multivariate_sample <- function(
+    forecast,
+    fun = log_shift,
+    append = TRUE,
+    label = "log",
+    ...) {
+  if (!append) return(NextMethod())
+  joint_across <- setdiff(
+    get_forecast_unit(forecast),
+    get_grouping(forecast)
+  )
+  out <- as.data.table(NextMethod())
+  out[, .mv_group_id := NULL]
+  suppressWarnings(suppressMessages(
+    as_forecast_multivariate_sample(
+      data = out, joint_across = joint_across
+    )
+  ))
+}
+# nolint end
+
+
+# nolint start: object_name_linter
+#' @export
+#' @rdname transform_forecasts
+transform_forecasts.forecast_multivariate_point <- function(
+    forecast,
+    fun = log_shift,
+    append = TRUE,
+    label = "log",
+    ...) {
+  if (!append) return(NextMethod())
+  joint_across <- setdiff(
+    get_forecast_unit(forecast),
+    get_grouping(forecast)
+  )
+  out <- as.data.table(NextMethod())
+  out[, .mv_group_id := NULL]
+  suppressWarnings(suppressMessages(
+    as_forecast_multivariate_point(
+      data = out, joint_across = joint_across
+    )
+  ))
+}
+# nolint end
 
 
 #' @title Log transformation with an additive shift
@@ -236,7 +312,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
     cli_warn(
       c(
         `!` = "Detected zeros in input values.",
-        i = "Try specifying offset = 1 (or any other offset)."
+        `i` = "Try specifying offset = 1 (or any other offset)."
       )
     )
   }

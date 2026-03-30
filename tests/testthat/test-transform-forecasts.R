@@ -60,6 +60,13 @@ test_that("transform_forecasts() outputs an object of class forecast_*", {
   expect_s3_class(transformed, "forecast_binary")
 })
 
+test_that("transform_forecasts() errors on non-forecast objects", {
+  expect_error(
+    transform_forecasts(data.frame(x = 1)),
+    "The input needs to be a valid forecast object."
+  )
+})
+
 test_that("transform_forecasts() works on multivariate sample forecasts", {
   # append = FALSE should work
   transformed <- transform_forecasts(
