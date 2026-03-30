@@ -224,17 +224,15 @@ se_mean_sample <- function(observed, predicted) {
 logs_sample <- function(observed, predicted, ...) {
   assert_input_sample(observed, predicted)
   if (get_type(predicted) == "integer") {
-    #nolint start: keyword_quote_linter
     cli_warn(
       c(
-        "Predictions appear to be integer-valued." ,
-        "!" = "The log score uses kernel density estimation, which may not be
+        "Predictions appear to be integer-valued.",
+        `!` = "The log score uses kernel density estimation, which may not be
         appropriate for integer-valued forecasts.",
-        "i" = "See the {.pkg scoringRules} package for alternatives for
+        i = "See the {.pkg scoringRules} package for alternatives for
         discrete probability distributions."
       )
     )
-    #nolint end
   }
   scoringRules::logs_sample(
     y = observed,
@@ -560,7 +558,7 @@ pit_histogram_sample <- function(observed,
   }
 
   if (integers != "random" && !is.null(n_replicates)) {
-    cli::cli_warn("`n_replicates` is ignored when `integers` is not `random`")
+    cli_warn("`n_replicates` is ignored when `integers` is not `random`")
   }
 
   # calculate PIT-values -------------------------------------------------------
