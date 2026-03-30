@@ -38,6 +38,34 @@ test_that("get_duplicate_forecasts() works for point forecasts", {
   expect_identical(nrow(get_duplicate_forecasts(fc_dup)), 22L)
 })
 
+test_that("get_duplicate_forecasts() works with type on raw data", {
+  bad <- rbind(example_quantile, example_quantile[1000:1010])
+  expect_identical(
+    nrow(get_duplicate_forecasts(bad, type = "quantile")),
+    22L
+  )
+  expect_identical(
+    nrow(get_duplicate_forecasts(example_quantile, type = "quantile")),
+    0L
+  )
+})
+
+test_that("get_duplicate_forecasts() warns without type on raw data", {
+  raw <- as.data.frame(example_quantile)
+  expect_warning(
+    get_duplicate_forecasts(raw),
+    "deprecated"
+  )
+})
+
+test_that("get_duplicate_forecasts() ignores type on forecast objects", {
+  fc <- as_forecast_quantile(example_quantile)
+  expect_identical(
+    nrow(get_duplicate_forecasts(fc, type = "sample")),
+    nrow(get_duplicate_forecasts(fc))
+  )
+})
+
 test_that("get_duplicate_forecasts() respects forecast_unit argument", {
   fc <- as_forecast_quantile(
     example_quantile,
@@ -54,14 +82,6 @@ test_that("get_duplicate_forecasts() returns the expected class", {
   expect_s3_class(
     get_duplicate_forecasts(fc),
     c("data.table", "data.frame")
-  )
-})
-
-test_that("get_duplicate_forecasts() works on plain data.frames", {
-  expect_s3_class(
-    get_duplicate_forecasts(as.data.frame(example_point)),
-    c("data.table", "data.frame"),
-    exact = TRUE
   )
 })
 
@@ -117,27 +137,29 @@ test_that("get_forecast_type_ids() default returns no IDs", {
 # ==============================================================================
 # check_duplicates() # nolint: commented_code_linter
 # ==============================================================================
-test_that("check_duplicates works", {
+test_that("check_duplicates includes type hint in message", {
+  fc <- as_forecast_quantile(example_quantile)
+  fc_dup <- rbind(fc[1000:1010], fc[1000:1010])
+  class(fc_dup) <- class(fc)
+
+  msg <- check_duplicates(fc_dup)
+  expect_match(msg, 'type = "quantile"')
+  expect_match(msg, "get_duplicate_forecasts")
+})
+
+
+test_that("check_duplicates returns TRUE when no duplicates", {
+  fc <- as_forecast_binary(example_binary)
+  expect_true(check_duplicates(fc))
+})
+
+
+test_that("check_duplicates detects binary duplicates", {
   fc <- as_forecast_binary(example_binary)
   fc_dup <- rbind(fc[1000:1002], fc[1000:1002])
   class(fc_dup) <- class(fc)
   expect_match(
     check_duplicates(fc_dup),
     "There are instances with more than one forecast"
-  )
-  expect_true(
-    check_duplicates(fc)
-  )
-})
-
-
-test_that("check_duplicates() detects quantile duplicates", {
-  fc <- as_forecast_quantile(example_quantile)
-  fc_dup <- rbind(fc[1000:1010], fc[1000:1010])
-  class(fc_dup) <- class(fc)
-
-  expect_match(
-    check_duplicates(fc_dup),
-    "There are instances with more than one forecast.*get_duplicate_forecasts"
   )
 })

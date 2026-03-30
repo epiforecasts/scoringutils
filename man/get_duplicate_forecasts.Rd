@@ -4,7 +4,12 @@
 \alias{get_duplicate_forecasts}
 \title{Find duplicate forecasts}
 \usage{
-get_duplicate_forecasts(data, forecast_unit = NULL, counts = FALSE)
+get_duplicate_forecasts(
+  data,
+  forecast_unit = NULL,
+  type = NULL,
+  counts = FALSE
+)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
@@ -17,6 +22,11 @@ single forecast. See \code{\link[=get_forecast_unit]{get_forecast_unit()}} for d
 If \code{NULL} (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.}
+
+\item{type}{Character. Forecast type, e.g. \code{"quantile"},
+\code{"sample"}, \code{"binary"}. Used to determine type-specific ID
+columns when \code{data} is not a \code{forecast} object. Ignored when
+\code{data} is already a \code{forecast} object.}
 
 \item{counts}{Should the output show the number of duplicates per
 forecast unit instead of the individual duplicated rows?
@@ -31,12 +41,14 @@ Identify duplicate forecasts, i.e. instances where there is more than
 one forecast for the same prediction target.
 
 Uses \code{\link[=get_forecast_type_ids]{get_forecast_type_ids()}} to determine the type-specific columns
-(beyond the forecast unit) that identify a unique row. For validated
-\code{forecast} objects this dispatches to the appropriate method; for
-plain \code{data.frame}s the default returns no type-specific columns.
+(beyond the forecast unit) that identify a unique row. For \code{forecast}
+objects the type is detected automatically. For plain \code{data.frame}s
+you should pass \code{type} (e.g. \code{"quantile"}, \code{"sample"}) so that the
+correct columns are used. Calling on a plain \code{data.frame} without
+\code{type} is deprecated and will only check forecast-unit columns.
 }
 \examples{
 example <- rbind(example_quantile, example_quantile[1000:1010])
-get_duplicate_forecasts(example)
+get_duplicate_forecasts(example, type = "quantile")
 }
 \keyword{diagnose-inputs}
