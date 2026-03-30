@@ -65,8 +65,8 @@ assert_forecast.forecast_sample <- function(
 }
 
 
+#' @rdname get_forecast_type_ids
 #' @export
-#' @keywords internal
 get_forecast_type_ids.forecast_sample <- function(data) {
   "sample_id"
 }

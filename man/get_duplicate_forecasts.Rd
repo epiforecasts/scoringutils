@@ -33,7 +33,7 @@ one forecast for the same prediction target.
 Uses \code{\link[=get_forecast_type_ids]{get_forecast_type_ids()}} to determine the type-specific columns
 (beyond the forecast unit) that identify a unique row. For validated
 \code{forecast} objects this dispatches to the appropriate method; for
-plain \code{data.frame}s the default method detects columns by name.
+plain \code{data.frame}s the default returns no type-specific columns.
 }
 \examples{
 example <- rbind(example_quantile, example_quantile[1000:1010])

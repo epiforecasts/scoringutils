@@ -89,8 +89,8 @@ assert_forecast.forecast_quantile <- function(
 }
 
 
+#' @rdname get_forecast_type_ids
 #' @export
-#' @keywords internal
 get_forecast_type_ids.forecast_quantile <- function(data) {
   "quantile_level"
 }

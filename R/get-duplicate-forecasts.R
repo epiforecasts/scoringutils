@@ -7,7 +7,7 @@
 #' Uses [get_forecast_type_ids()] to determine the type-specific columns
 #' (beyond the forecast unit) that identify a unique row. For validated
 #' `forecast` objects this dispatches to the appropriate method; for
-#' plain `data.frame`s the default method detects columns by name.
+#' plain `data.frame`s the default returns no type-specific columns.
 #'
 #' @inheritParams as_forecast_doc_template
 #' @param counts Should the output show the number of duplicates per
@@ -59,14 +59,17 @@ get_duplicate_forecasts <- function(
 #' @title Get type-specific ID columns for a forecast
 #'
 #' @description
-#' Internal S3 generic that returns the column names (beyond the forecast
-#' unit) that identify a unique row for a given forecast type. Each
-#' forecast type method returns the columns specific to that type.
-#' The default method falls back to detecting columns by name.
+#' S3 generic that returns the column names (beyond the forecast unit)
+#' that identify a unique row for a given forecast type. Each forecast
+#' type method returns the columns specific to that type. The default
+#' returns `character(0)` (no type-specific columns).
+#'
+#' Custom forecast types should define a method returning the relevant
+#' column names.
 #'
 #' @inheritParams as_forecast_doc_template
 #' @returns A character vector of column names.
-#' @keywords internal
+#' @export
 get_forecast_type_ids <- function(data) {
   UseMethod("get_forecast_type_ids")
 }

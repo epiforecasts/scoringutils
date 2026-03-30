@@ -121,8 +121,8 @@ assert_forecast.forecast_ordinal <- function(
 }
 
 
+#' @rdname get_forecast_type_ids
 #' @export
-#' @keywords internal
 get_forecast_type_ids.forecast_ordinal <- function(data) {
   "predicted_label"
 }
