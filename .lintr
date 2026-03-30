@@ -9,7 +9,6 @@ linters: linters_with_tags(
     return_linter = NULL,
     object_overwrite_linter = NULL,
     # Exclusions for project-specific patterns
-    undesirable_operator_linter = NULL, # ::: needed for testing internal functions
     expect_identical_linter = NULL, # project uses expect_equal() for flexibility
     commented_code_linter = NULL, # test comments serve as documentation
     implicit_assignment_linter = NULL, # false positives with data.table :=
