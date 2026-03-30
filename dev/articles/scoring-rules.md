@@ -19,26 +19,26 @@ uncertainty about different possible outcomes.
 
 Scoring rules are functions that take a forecast and an observation as
 input and return a single numeric value. For point forecasts, they take
-the form S(\hat{y}, y), where \hat{y} is the forecast and y is the
-observation. For probabilistic forecasts, they usually take the form
-S(F, y), where F is the cumulative density function (CDF) of the
-predictive distribution and y is the observation. By convention, scoring
-rules are usually negatively oriented, meaning that smaller values are
-better (the best possible score is usually zero). In that sense, the
-score can be understood as a penalty.
+the form \\S(\hat{y}, y)\\, where \\\hat{y}\\ is the forecast and \\y\\
+is the observation. For probabilistic forecasts, they usually take the
+form \\S(F, y)\\, where \\F\\ is the cumulative density function (CDF)
+of the predictive distribution and \\y\\ is the observation. By
+convention, scoring rules are usually negatively oriented, meaning that
+smaller values are better (the best possible score is usually zero). In
+that sense, the score can be understood as a penalty.
 
 Many scoring rules for probabilistic forecasts are so-called (strictly)
 proper scoring rules. Essentially, this means that they cannot be
 “cheated”: A forecaster evaluated by a strictly proper scoring rule is
 always incentivised to report her honest best belief about the future
 and cannot, in expectation, improve her score by reporting something
-else. A more formal definition is the following: Let G be the true,
+else. A more formal definition is the following: Let \\G\\ be the true,
 unobserved data-generating distribution. A scoring rule is said to be
-proper, if under G and for an ideal forecast F = G, there is no forecast
-F' \neq F that in expectation receives a better score than F. A scoring
-rule is considered strictly proper if, under G, no other forecast F' in
-expectation receives a score that is better than or the same as that of
-F.
+proper, if under \\G\\ and for an ideal forecast \\F = G\\, there is no
+forecast \\F' \neq F\\ that in expectation receives a better score than
+\\F\\. A scoring rule is considered strictly proper if, under \\G\\, no
+other forecast \\F'\\ in expectation receives a score that is better
+than or the same as that of \\F\\.
 
 ------------------------------------------------------------------------
 
@@ -91,53 +91,54 @@ mean((observed - predicted_not_mu)^2)
 
 ### Absolute error
 
-**Observation**: y, a real number
+**Observation**: \\y\\, a real number
 
-**Forecast**: \hat{y}, a real number, the median of the forecaster’s
+**Forecast**: \\\hat{y}\\, a real number, the median of the forecaster’s
 predictive distribution.
 
 The absolute error is the absolute difference between the predicted and
 the observed values.
 
-\text{ae} = \|y - \hat{y}\|
+\\\text{ae} = \|y - \hat{y}\|\\
 
-The absolute error is only an appropriate rule if \hat{y} corresponds to
-the median of the forecaster’s predictive distribution. Otherwise,
-results will be misleading (see Gneiting (2011)).
+The absolute error is only an appropriate rule if \\\hat{y}\\
+corresponds to the median of the forecaster’s predictive distribution.
+Otherwise, results will be misleading (see Gneiting (2011)).
 
 ### Squared error
 
-**Observation**: y, a real number
+**Observation**: \\y\\, a real number
 
-**Forecast**: \hat{y}, a real number, the mean of the forecaster’s
+**Forecast**: \\\hat{y}\\, a real number, the mean of the forecaster’s
 predictive distribution.
 
 The squared error is the squared difference between the predicted and
 the observed values.
 
-\text{se} = (y - \hat{y})^2 The squared error is only an appropriate
-rule if \hat{y} corresponds to the mean of the forecaster’s predictive
-distribution. Otherwise, results will be misleading (see Gneiting
-(2011)).
+\\\text{se} = (y - \hat{y})^2\\ The squared error is only an appropriate
+rule if \\\hat{y}\\ corresponds to the mean of the forecaster’s
+predictive distribution. Otherwise, results will be misleading (see
+Gneiting (2011)).
 
 ### Absolute percentage error
 
-**Observation**: y, a real number
+**Observation**: \\y\\, a real number
 
-**Forecast**: \hat{y}, a real number
+**Forecast**: \\\hat{y}\\, a real number
 
 The absolute percentage error is the absolute percent difference between
 the predicted and the observed values.
 
-\text{ape} = \frac{\|y - \hat{y}\|}{\|y\|}
+\\\text{ape} = \frac{\|y - \hat{y}\|}{\|y\|}\\
 
-The absolute percentage error is only an appropriate rule if \hat{y}
-corresponds to the \beta-median of the forecaster’s predictive
-distribution with \beta = -1. The \beta-median, \text{med}^{(\beta)}(F),
-is the median of a random variable whose density is proportional to
-y^\beta f(y). The specific \beta-median that corresponds to the absolute
-percentage error is \text{med}^{(-1)}(F). Otherwise, results will be
-misleading (see Gneiting (2011)).
+The absolute percentage error is only an appropriate rule if \\\hat{y}\\
+corresponds to the \\\beta\\-median of the forecaster’s predictive
+distribution with \\\beta = -1\\. The \\\beta\\-median,
+\\\text{med}^{(\beta)}(F)\\, is the median of a random variable whose
+density is proportional to \\y^\beta f(y)\\. The specific
+\\\beta\\-median that corresponds to the absolute percentage error is
+\\\text{med}^{(-1)}(F)\\. Otherwise, results will be misleading (see
+Gneiting (2011)).
 
 ------------------------------------------------------------------------
 
@@ -155,17 +156,17 @@ Input and output formats: metrics for binary forecasts.
 
 ### Brier score
 
-**Observation**: y, either 0 or 1
+**Observation**: \\y\\, either 0 or 1
 
-**Forecast**: p, a probability that the observed outcome will be 1.
+**Forecast**: \\p\\, a probability that the observed outcome will be 1.
 
 The Brier score is a strictly proper scoring rule. It is computed as the
 mean squared error between the probabilistic prediction and the observed
 outcome.
 
-\begin{equation} \text{BS}(p, y) = (p - y)^2 = \begin{cases} p^2, &
+\\\begin{equation} \text{BS}(p, y) = (p - y)^2 = \begin{cases} p^2, &
 \text{if } y = 1\\ (1 - p)^2, & \text{if } y = 0 \end{cases}
-\end{equation}
+\end{equation}\\
 
 The Brier score and the logarithmic score (see below) differ in how they
 penalise over- and underconfidence (see Machete (2012)). The Brier score
@@ -190,17 +191,17 @@ See `?brier_score()` for more information.
 
 ### Logarithmic score
 
-**Observation**: y, either 0 or 1
+**Observation**: \\y\\, either 0 or 1
 
-**Forecast**: p, a probability that the observed outcome will be 1.
+**Forecast**: \\p\\, a probability that the observed outcome will be 1.
 
 The logarithmic score (or log score) is a strictly proper scoring rule.
 It is computed as the negative logarithm of the probability assigned to
 the observed outcome.
 
-\begin{equation} \text{Log score}(p, y) = - \log(1 - \|y - p\|) =
+\\\begin{equation} \text{Log score}(p, y) = - \log(1 - \|y - p\|) =
 \begin{cases} -\log (p), & \text{if } y = 1\\ -\log (1 - p), & \text{if
-} y = 0 \end{cases} \end{equation}
+} y = 0 \end{cases} \end{equation}\\
 
 The log score penalises overconfidence more strongly than
 underconfidence (in probability space). Consider the following example:
@@ -231,20 +232,21 @@ Input and output formats: metrics for sample-based forecasts.
 
 ### CRPS
 
-**Observation**: y, a real number (or a discrete number).
+**Observation**: \\y\\, a real number (or a discrete number).
 
-**Forecast**: A continuous (F) or discrete (P) forecast.
+**Forecast**: A continuous (\\F\\) or discrete (\\P\\) forecast.
 
 The continuous ranked probability score (CRPS) is popular in fields such
-as meteorology and epidemiology. The CRPS is defined as \text{CRPS}(F,
-y) = \int\_{-\infty}^\infty \left( F(x) - 1(x \geq y) \right)^2 dx,
-where y is the observed value and F the CDF of predictive distribution.
+as meteorology and epidemiology. The CRPS is defined as \\\text{CRPS}(F,
+y) = \int\_{-\infty}^\infty \left( F(x) - 1(x \geq y) \right)^2 dx,\\
+where \\y\\ is the observed value and \\F\\ the CDF of predictive
+distribution.
 
 For discrete forecasts, for example count data, the ranked probability
-score (RPS) can be used instead and is commonly defined as:
-\text{RPS}(P, y) = \sum\_{x = 0}^\infty (P(x) - 1(x \geq y))^2, where P
-is the cumulative probability mass function (PMF) of the predictive
-distribution.
+score (RPS) can be used instead and is commonly defined as: \\
+\text{RPS}(P, y) = \sum\_{x = 0}^\infty (P(x) - 1(x \geq y))^2, \\ where
+\\P\\ is the cumulative probability mass function (PMF) of the
+predictive distribution.
 
 The CRPS can be understood as a generalisation of the absolute error to
 predictive distributions (Gneiting and Raftery 2007). It can also be
@@ -265,11 +267,12 @@ distribution. See `?crps_sample()` for more information.
 #### Overprediction, underprediction and dispersion
 
 The CRPS can be interpreted as a sum of a dispersion, an overprediction
-and an underprediction component. If m is the median forecast then the
-dispersion component is \text{CRPS}(F, m), the overprediction component
-is \begin{cases} m \> y & CRPS(F, y) - CRPS(F, m)\\ m \leq y & 0\\
-\end{cases} and the underprediction component is \begin{cases} m \< y &
-CRPS(F, y) - CRPS(F, m)\\ m \geq y & 0\\ \end{cases}
+and an underprediction component. If \\m\\ is the median forecast then
+the dispersion component is \\\text{CRPS}(F, m),\\ the overprediction
+component is \\ \begin{cases} m \> y & CRPS(F, y) - CRPS(F, m)\\ m \leq
+y & 0\\ \end{cases} \\ and the underprediction component is \\
+\begin{cases} m \< y & CRPS(F, y) - CRPS(F, m)\\ m \geq y & 0\\
+\end{cases} \\
 
 These can be accessed via the
 [`dispersion_sample()`](https://epiforecasts.io/scoringutils/dev/reference/crps_sample.md),
@@ -280,35 +283,36 @@ functions, respectively.
 
 ### Log score
 
-**Observation**: y, a real number (or a discrete number).
+**Observation**: \\y\\, a real number (or a discrete number).
 
-**Forecast**: A continuous (F) or discrete (P) forecast.
+**Forecast**: A continuous (\\F\\) or discrete (\\P\\) forecast.
 
 The logarithmic scoring rule is simply the negative logarithm of the
 density of the the predictive distribution evaluated at the observed
 value:
 
-\text{log score}(F, y) = -\log f(y),
+\\ \text{log score}(F, y) = -\log f(y), \\
 
-where f is the predictive probability density function (PDF)
-corresponding to the Forecast F and y is the observed value.
+where \\f\\ is the predictive probability density function (PDF)
+corresponding to the Forecast \\F\\ and \\y\\ is the observed value.
 
 For discrete forecasts, the log score can be computed as
 
-\text{log score}(F, y) = -\log p_y, where p_y is the probability
-assigned to the observed outcome y by the forecast F.
+\\ \text{log score}(F, y) = -\log p_y, \\ where \\p_y\\ is the
+probability assigned to the observed outcome \\y\\ by the forecast
+\\F\\.
 
 The logarithmic scoring rule can produce large penalties when the
-observed value takes on values for which f(y) (or p_y) is close to zero.
-It is therefore considered to be sensitive to outlier forecasts. This
-may be desirable in some applications, but it also means that scores can
-easily be dominated by a few extreme values. The logarithmic scoring
-rule is a local scoring rule, meaning that the score only depends on the
-probability that was assigned to the actual outcome. This is often
-regarded as a desirable property for example in the context of Bayesian
-inference . It implies for example, that the ranking between forecasters
-would be invariant under monotone transformations of the predictive
-distribution and the target.
+observed value takes on values for which \\f(y)\\ (or \\p_y\\) is close
+to zero. It is therefore considered to be sensitive to outlier
+forecasts. This may be desirable in some applications, but it also means
+that scores can easily be dominated by a few extreme values. The
+logarithmic scoring rule is a local scoring rule, meaning that the score
+only depends on the probability that was assigned to the actual outcome.
+This is often regarded as a desirable property for example in the
+context of Bayesian inference . It implies for example, that the ranking
+between forecasters would be invariant under monotone transformations of
+the predictive distribution and the target.
 
 `scoringutils` re-exports the
 [`logs_sample()`](https://epiforecasts.io/scoringutils/dev/reference/logs_sample.md)
@@ -325,17 +329,17 @@ See `?logs_sample()` for more information.
 
 ### Dawid-Sebastiani score
 
-**Observation**: y, a real number (or a discrete number).
+**Observation**: \\y\\, a real number (or a discrete number).
 
-**Forecast**: F. The predictive distribution with mean \mu and standard
-deviation \sigma.
+**Forecast**: \\F\\. The predictive distribution with mean \\\mu\\ and
+standard deviation \\\sigma\\.
 
 The Dawid-Sebastiani score is a proper scoring rule that only relies on
 the first moments of the predictive distribution and is therefore easy
 to compute. It is given as
 
-\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot
-\log \sigma.
+\\\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot
+\log \sigma.\\
 
 `scoringutils` re-exports the implementation of the DSS from the
 `scoringRules` package. It assumes that the forecast is represented by a
@@ -346,7 +350,7 @@ set of samples drawn from the predictive distribution. See
 
 **Observation**: Not required.
 
-**Forecast**: F, the predictive distribution.
+**Forecast**: \\F\\, the predictive distribution.
 
 Dispersion (also called sharpness) is the ability to produce narrow
 forecasts. It is a feature of the forecasts only and does not depend on
@@ -356,31 +360,31 @@ wrong.
 
 One way to measure sharpness (as suggested by Funk et al. (2019)) is the
 normalised median absolute deviation about the median (MADN) ). It is
-computed as S(F) = \frac{1}{0.675} \cdot \text{median}(\|F -
-\text{median(F)}\|). If the forecast F follows a normal distribution,
-then sharpness will equal the standard deviation of F.For more details,
-see `?mad_sample()`.
+computed as \\ S(F) = \frac{1}{0.675} \cdot \text{median}(\|F -
+\text{median(F)}\|). \\ If the forecast \\F\\ follows a normal
+distribution, then sharpness will equal the standard deviation of
+\\F\\.For more details, see `?mad_sample()`.
 
 ### Bias
 
-**Observation**: y, a real number (or a discrete number).
+**Observation**: \\y\\, a real number (or a discrete number).
 
-**Forecast**: A continuous (F) or discrete (P) forecast.
+**Forecast**: A continuous (\\F\\) or discrete (\\P\\) forecast.
 
 Bias is a measure of the tendency of a forecaster to over- or
 underpredict. For *continuous* forecasts, the `scoringutils`
-implementation calculates bias as B(F, y) = 1 - 2 \cdot F (y), where
-F(y) is the empirical cumulative distribution function of the forecast
-evaluated at the observed value y. To handle ties appropriately (which
-can occur when predictions equal observations for example due to
-rounding), the implementation uses mid-ranks: F(y) is computed as the
-proportion of predictions strictly less than y plus half the proportion
-of predictions equal to y.
+implementation calculates bias as \\B(F, y) = 1 - 2 \cdot F (y), \\
+where \\F(y)\\ is the empirical cumulative distribution function of the
+forecast evaluated at the observed value \\y\\. To handle ties
+appropriately (which can occur when predictions equal observations for
+example due to rounding), the implementation uses mid-ranks: \\F(y)\\ is
+computed as the proportion of predictions strictly less than \\y\\ plus
+half the proportion of predictions equal to \\y\\.
 
-For *discrete* forecasts, we calculate bias as B(P, y) = 1 - (P(y) +
-P(y + 1)). where P(y) is the cumulative probability assigned to all
-outcomes smaller or equal to y, i.e. the cumulative probability mass
-function.
+For *discrete* forecasts, we calculate bias as \\B(P, y) = 1 - (P(y) +
+P(y + 1)). \\ where \\P(y)\\ is the cumulative probability assigned to
+all outcomes smaller or equal to \\y\\, i.e. the cumulative probability
+mass function.
 
 Bias is bound between -1 and 1 and represents the tendency of forecasts
 to be biased rather than the absolute amount of over- and
@@ -389,24 +393,24 @@ underprediction (which is e.g. the case for the weighted interval score
 
 ### Absolute error of the median
 
-**Observation**: y, a real number (or a discrete number).
+**Observation**: \\y\\, a real number (or a discrete number).
 
-**Forecast**: A forecast F
+**Forecast**: A forecast \\F\\
 
-\text{ae}\_{\text{median}}(F, y) = \|\text{median} (F) - y\|. See
+\\\text{ae}\_{\text{median}}(F, y) = \|\text{median} (F) - y\|.\\ See
 section [A note of caution](#a-note-of-caution) or Gneiting (2011) for a
 discussion on the correspondence between the absolute error and the
 median.
 
 ### Squared error of the mean
 
-**Observation**: y, a real number (or a discrete number).
+**Observation**: \\y\\, a real number (or a discrete number).
 
-**Forecast**: A forecast F
+**Forecast**: A forecast \\F\\
 
-\text{se}\_{\text{medn}}(F, y) = (\text{mean} (F) - y)^2. See section [A
-note of caution](#a-note-of-caution) or Gneiting (2011) for a discussion
-on the correspondence between the squared error and the mean.
+\\\text{se}\_{\text{medn}}(F, y) = (\text{mean} (F) - y)^2.\\ See
+section [A note of caution](#a-note-of-caution) or Gneiting (2011) for a
+discussion on the correspondence between the squared error and the mean.
 
 ------------------------------------------------------------------------
 
@@ -425,11 +429,11 @@ Input and output formats: metrics for quantile-based forecasts.
 
 ### Weighted interval score (WIS)
 
-**Observation**: y, a real number
+**Observation**: \\y\\, a real number
 
-**Forecast**: F. The CDF of the predictive distribution is represented
-by a set of quantiles. These quantiles form the lower (l) and upper (u)
-bounds of central prediction intervals.
+**Forecast**: \\F\\. The CDF of the predictive distribution is
+represented by a set of quantiles. These quantiles form the lower
+(\\l\\) and upper (\\u\\) bounds of central prediction intervals.
 
 The weighted interval score (WIS) is a strictly proper scoring rule and
 can be understood as an approximation of the CRPS for forecasts in a
@@ -438,26 +442,26 @@ absolute error). Quantiles are assumed to be the lower and upper bounds
 of prediction intervals symmetric around the median. For a single
 interval, the interval score is
 
-IS\_\alpha(F,y) = \underbrace{(u-l)}\_\text{dispersion} +
+\\IS\_\alpha(F,y) = \underbrace{(u-l)}\_\text{dispersion} +
 \underbrace{\frac{2}{\alpha} \cdot (l-y) \cdot \mathbf{1}(y \leq
 l)}\_{\text{overprediction}} + \underbrace{\frac{2}{\alpha} \cdot (y-u)
-\cdot \mathbf{1}(y \geq u)}\_{\text{underprediction}},
+\cdot \mathbf{1}(y \geq u)}\_{\text{underprediction}}, \\
 
-where \mathbf{1}() is the indicator function, and l and u are the
-\frac{\alpha}{2} and 1 - \frac{\alpha}{2} quantiles of the predictive
-distribution F. l and u together form the prediction interval. The
-interval score can be understood as the sum of three components:
-dispersion, overprediction and underprediction.
+where \\\mathbf{1}()\\ is the indicator function, and \\l\\ and \\u\\
+are the \\\frac{\alpha}{2}\\ and \\1 - \frac{\alpha}{2}\\ quantiles of
+the predictive distribution \\F\\. \\l\\ and \\u\\ together form the
+prediction interval. The interval score can be understood as the sum of
+three components: dispersion, overprediction and underprediction.
 
-For a set of K prediction intervals and the median m, the score is given
-as a weighted sum of individual interval scores, i.e.
+For a set of \\K\\ prediction intervals and the median \\m\\, the score
+is given as a weighted sum of individual interval scores, i.e.
 
-WIS = \frac{1}{K + 0.5} \cdot \left(w_0 \cdot \|y - m\| + \sum\_{k =
-1}^{K} w_k \cdot IS\_{\alpha\_{k}}(F, y)\right), where m is the median
-forecast and w_k is a weight assigned to every interval. When the
-weights are set to w_k = \frac{\alpha_k}{2} and w_0 = 0.5, then the WIS
-converges to the CRPS for an increasing number of equally spaced
-quantiles.
+\\WIS = \frac{1}{K + 0.5} \cdot \left(w_0 \cdot \|y - m\| + \sum\_{k =
+1}^{K} w_k \cdot IS\_{\alpha\_{k}}(F, y)\right),\\ where \\m\\ is the
+median forecast and \\w_k\\ is a weight assigned to every interval. When
+the weights are set to \\w_k = \frac{\alpha_k}{2}\\ and \\w_0 = 0.5\\,
+then the WIS converges to the CRPS for an increasing number of equally
+spaced quantiles.
 
 See `?wis()` for more information.
 
@@ -469,32 +473,35 @@ These are the individual components of the WIS. See
 
 ### Bias
 
-**Observation**: y, a real number
+**Observation**: \\y\\, a real number
 
-**Forecast**: F. The CDF of the predictive distribution is represented
-by a set of quantiles, Q.
+**Forecast**: \\F\\. The CDF of the predictive distribution is
+represented by a set of quantiles, \\Q\\.
 
 Bias can be measured as
 
-\begin{equation} \text{B}(F, y) = \begin{cases} (1 - 2 \cdot \max
+\\\begin{equation} \text{B}(F, y) = \begin{cases} (1 - 2 \cdot \max
 \\\alpha \| q\_\alpha \in Q \land q\_\alpha \leq y\\), & \text{if } y \<
 q\_{0.5} \quad \text{(overprediction)}\\ (1 - 2 \cdot \min \\\alpha \|
 q\_\alpha \in Q_t \land q\_\alpha \geq y\\, & \text{if } y \> q\_{0.5}
 \quad \text{(underprediction)}\\ 0, & \text{if } y = q\_{0.5}, \\
-\end{cases} \end{equation}
+\end{cases} \end{equation}\\
 
-where q\_\alpha is the \alpha-quantile of the predictive distribution.
-For consistency, we define Q (the set of quantiles that form the
-predictive distribution F) such that it always includes the element q_0
-= -\infty and q_1 = \infty. In clearer terms, bias is:
+where \\q\_\alpha\\ is the \\\alpha\\-quantile of the predictive
+distribution. For consistency, we define \\Q\\ (the set of quantiles
+that form the predictive distribution \\F\\) such that it always
+includes the element \\q_0 = -\infty\\ and \\q_1 = \infty\\. In clearer
+terms, bias is:
 
-- 1 - (2 \times the maximum percentile rank for which the corresponding
-  quantile is still below the observed value), *if the observed value is
-  smaller than the median of the predictive distribution.*
-- 1 - (2 \times the minimum percentile rank for which the corresponding
-  quantile is still larger than the observed value) *if the observed
-  value is larger than the median of the predictive distribution.*.
-- 0 *if the observed value is exactly the median*.
+- \\1 - (2 \times\\ the maximum percentile rank for which the
+  corresponding quantile is still below the observed value), *if the
+  observed value is smaller than the median of the predictive
+  distribution.*
+- \\1 - (2 \times\\ the minimum percentile rank for which the
+  corresponding quantile is still larger than the observed value) *if
+  the observed value is larger than the median of the predictive
+  distribution.*.
+- \\0\\ *if the observed value is exactly the median*.
 
 Bias can assume values between -1 (underprediction) and 1
 (overprediction) and is 0 ideally (i.e. unbiased).
@@ -507,11 +514,11 @@ See `?bias_quantile()` for more information.
 
 ### Interval coverage
 
-**Observation**: y, a real number
+**Observation**: \\y\\, a real number
 
-**Forecast**: F. The CDF of the predictive distribution is represented
-by a set of quantiles. These quantiles form central prediction
-intervals.
+**Forecast**: \\F\\. The CDF of the predictive distribution is
+represented by a set of quantiles. These quantiles form central
+prediction intervals.
 
 Interval coverage for a given interval range is defined as the
 proportion of observations that fall within the corresponding central
@@ -525,55 +532,55 @@ between the 0.25 and 0.75 quantiles of the predictive distribution.
 The interval coverage deviation is the difference between the observed
 interval coverage and the nominal interval coverage. For example, if the
 observed interval coverage for the 50% central prediction interval is
-0.6, then the interval coverage deviation is 0.6 - 0.5 = 0.1.
+0.6, then the interval coverage deviation is \\0.6 - 0.5 = 0.1.\\
 
-\text{interval coverage deviation} = \text{observed interval coverage} -
-\text{nominal interval coverage}
+\\\text{interval coverage deviation} = \text{observed interval
+coverage} - \text{nominal interval coverage}\\
 
 ### Absolute error of the median
 
-**Observation**: y, a real number
+**Observation**: \\y\\, a real number
 
-**Forecast**: F. The CDF of the predictive distribution is represented
-by a set of quantiles.
+**Forecast**: \\F\\. The CDF of the predictive distribution is
+represented by a set of quantiles.
 
 The absolute error of the median is the absolute difference between the
 median of the predictive distribution and the observed value.
 
-\text{ae}\_\text{median} = \|\text{median}(F) - y\| See section [A note
-of caution](#a-note-of-caution) or Gneiting (2011) for a discussion on
-the correspondence between the absolute error and the median.
+\\\text{ae}\_\text{median} = \|\text{median}(F) - y\|\\ See section [A
+note of caution](#a-note-of-caution) or Gneiting (2011) for a discussion
+on the correspondence between the absolute error and the median.
 
 ### Quantile score
 
-**Observation**: y, a real number
+**Observation**: \\y\\, a real number
 
-**Forecast**: F. The CDF of the predictive distribution is represented
-by a set of quantiles.
+**Forecast**: \\F\\. The CDF of the predictive distribution is
+represented by a set of quantiles.
 
 The quantile score, also called pinball loss, for a single quantile
-level \tau is defined as
+level \\\tau\\ is defined as
 
-\begin{equation} \text{QS}\_\tau(F, y) = 2 \cdot \\ \mathbf{1}(y \leq
+\\\begin{equation} \text{QS}\_\tau(F, y) = 2 \cdot \\ \mathbf{1}(y \leq
 q\_\tau) - \tau\\ \cdot (q\_\tau - y) = \begin{cases} 2 \cdot (1 - \tau)
 \* q\_\tau - y, & \text{if } y \leq q\_\tau\\ 2 \cdot \tau \*
-\|q\_\tau - y\|, & \text{if } y \> q\_\tau, \end{cases} \end{equation}
+\|q\_\tau - y\|, & \text{if } y \> q\_\tau, \end{cases} \end{equation}\\
 
-with q\_\tau being the \tau-quantile of the predictive distribution F,
-and \mathbf{1}(\cdot) the indicator function.
+with \\q\_\tau\\ being the \\\tau\\-quantile of the predictive
+distribution \\F\\, and \\\mathbf{1}(\cdot)\\ the indicator function.
 
-The (unweighted) interval score (see above) for a 1 - \alpha prediction
-interval can be computed from the quantile scores at levels \alpha/2 and
-1 - \alpha/2 as
+The (unweighted) interval score (see above) for a \\1 - \alpha\\
+prediction interval can be computed from the quantile scores at levels
+\\\alpha/2\\ and \\1 - \alpha/2\\ as
 
-\text{IS}\_\alpha(F, y) = \frac{\text{QS}\_{\alpha/2}(F, y) +
-\text{QS}\_{1 - \alpha/2}(F, y)}{\alpha}.
+\\\text{IS}\_\alpha(F, y) = \frac{\text{QS}\_{\alpha/2}(F, y) +
+\text{QS}\_{1 - \alpha/2}(F, y)}{\alpha}\\.
 
 The weighted interval score can be obtained as a simple average of the
 quantile scores:
 
-\text{WIS}\_\alpha(F, y) = \frac{\text{QS}\_{\alpha/2}(F, y) +
-\text{QS}\_{1 - \alpha/2}(F, y)}{2}.
+\\\text{WIS}\_\alpha(F, y) = \frac{\text{QS}\_{\alpha/2}(F, y) +
+\text{QS}\_{1 - \alpha/2}(F, y)}{2}\\.
 
 See
 [`?quantile_score`](https://epiforecasts.io/scoringutils/dev/reference/quantile_score.md)

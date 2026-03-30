@@ -68,7 +68,7 @@ get_metrics(example_ordinal)
 #>     logs <- -log(pred_for_observed)
 #>     return(logs)
 #> }
-#> <bytecode: 0x5653c2cf2f80>
+#> <bytecode: 0x555ee99cd988>
 #> <environment: namespace:scoringutils>
 #> 
 #> $rps
@@ -84,7 +84,7 @@ get_metrics(example_ordinal)
 #>     rps <- rps_probs(as.numeric(observed), ordered_predicted)
 #>     return(rps)
 #> }
-#> <bytecode: 0x5653bfab0078>
+#> <bytecode: 0x555ee4265228>
 #> <environment: namespace:scoringutils>
 #> 
 ```
