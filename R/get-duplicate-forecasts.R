@@ -25,9 +25,9 @@
 #' @returns A data.frame with all rows for which a duplicate forecast
 #'   was found
 #' @export
-#' @importFrom checkmate assert_data_frame assert_subset assert_string
+#' @importFrom checkmate assert_data_frame assert_subset
 #' @importFrom data.table setorderv
-#' @importFrom cli cli_warn
+#' @importFrom lifecycle deprecated deprecate_warn
 #' @keywords diagnose-inputs
 #' @examples
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
@@ -53,16 +53,14 @@ get_duplicate_forecasts <- function(
     tmp <- new_forecast(data, paste0("forecast_", type))
     type_cols <- get_forecast_type_ids(tmp)
   } else {
-    #nolint start: keyword_quote_linter
-    cli_warn(
-      c(
-        `!` = "Calling {.fn get_duplicate_forecasts} on a plain
-        data.frame without {.arg type} is deprecated.",
-        i = "Pass {.arg type} (e.g. {.val quantile}, {.val sample})
-        to detect type-specific duplicates."
+    lifecycle::deprecate_warn(
+      "2.2.0",
+      "get_duplicate_forecasts(type = )",
+      details = paste(
+        "Pass `type` (e.g. \"quantile\", \"sample\") to detect",
+        "type-specific duplicates on plain data.frames."
       )
     )
-    #nolint end
     # deprecated fallback: detect type columns by name
     known <- c("sample_id", "quantile_level", "predicted_label")
     type_cols <- intersect(known, colnames(data))
