@@ -41,3 +41,4 @@ returns \code{character(0)} (no type-specific columns).
 Custom forecast types should define a method returning the relevant
 column names.
 }
+\keyword{as_forecast}

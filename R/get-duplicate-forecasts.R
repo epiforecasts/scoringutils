@@ -102,6 +102,7 @@ get_duplicate_forecasts <- function(
 #' @inheritParams as_forecast_doc_template
 #' @returns A character vector of column names.
 #' @export
+#' @keywords as_forecast
 get_forecast_type_ids <- function(data) {
   UseMethod("get_forecast_type_ids")
 }
