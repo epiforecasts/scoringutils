@@ -1,10 +1,11 @@
-#' @title Filter scores with missing model-target combinations
+#' @title Filter scores
 #'
 #' @description
-#' Filters a `scores` object to remove target combinations where
-#' one or more models have missing scores.
+#' Filters a `scores` object according to a given strategy.
 #' The filtering behaviour is controlled by the `strategy`
 #' argument, which defaults to [filter_to_intersection()].
+#' This is a general-purpose filtering function that delegates
+#' all logic to the strategy.
 #'
 #' @param scores An object of class `scores` (a data.table with
 #'   scores and an additional attribute `metrics` as produced
@@ -13,41 +14,28 @@
 #'   [filter_to_intersection()]. Default is
 #'   `filter_to_intersection()`.
 #' @param compare Character string (default `"model"`) naming the
-#'   column whose values are compared for missingness.
+#'   column whose values are compared for filtering.
 #'
 #' @return A filtered `scores` object with the same class and
 #'   `metrics` attribute as the input.
 #'
 #' @importFrom cli cli_inform
 #' @importFrom checkmate assert_class assert_character
-#'   assert_function
+#'   assert_function assert_subset
 #' @export
 #' @keywords handle-metrics
-filter_missing_scores <- function(
+filter_scores <- function(
   scores,
   strategy = filter_to_intersection(),
   compare = "model"
 ) {
   assert_class(scores, "scores")
   assert_character(compare, len = 1)
+  assert_subset(compare, names(scores))
   assert_function(strategy)
 
   original_class <- class(scores)
   original_metrics <- attr(scores, "metrics")
-
-  #nolint start: object_usage_linter
-  missing <- build_missing_grid(scores, compare = compare)
-  #nolint end
-
-  if (nrow(missing) == 0) {
-    #nolint start: keyword_quote_linter
-    cli_inform(c(
-      "i" = "No missing score combinations found. Returning
-       scores unchanged."
-    ))
-    #nolint end
-    return(scores)
-  }
 
   result <- strategy(scores, compare = compare)
 
@@ -57,10 +45,18 @@ filter_missing_scores <- function(
   n_dropped <- n_before - n_after
   #nolint end
 
+  if (n_dropped == 0) {
+    #nolint start: keyword_quote_linter
+    cli_inform(c(
+      "i" = "No rows filtered. Returning scores unchanged."
+    ))
+    #nolint end
+    return(scores)
+  }
+
   #nolint start: keyword_quote_linter
   cli_inform(c(
-    "i" = "Filtered out {n_dropped} rows with missing
-     {compare} combinations.",
+    "i" = "Filtered out {n_dropped} rows.",
     "i" = "{n_after} of {n_before} rows remaining."
   ))
   #nolint end
@@ -76,7 +72,7 @@ filter_missing_scores <- function(
 #' @title Filter to intersection of model-target combinations
 #'
 #' @description
-#' Strategy factory for [filter_missing_scores()].
+#' Strategy factory for [filter_scores()].
 #' Returns a function that keeps only target combinations
 #' covered by a minimum proportion of models.
 #'
@@ -90,7 +86,7 @@ filter_missing_scores <- function(
 #'
 #' @return A function with signature `function(scores, compare)`
 #'   suitable for use as a strategy in
-#'   [filter_missing_scores()].
+#'   [filter_scores()].
 #'
 #' @importFrom data.table as.data.table setkeyv
 #' @importFrom checkmate assert_number assert_character

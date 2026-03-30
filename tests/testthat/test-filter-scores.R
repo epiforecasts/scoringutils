@@ -57,34 +57,34 @@ test_that("build_missing_grid() uses observed target combos", {
 
 
 # ==============================================================================
-# filter_missing_scores()
+# filter_scores()
 # ==============================================================================
-test_that("filter_missing_scores() drops incomplete targets", {
+test_that("filter_scores() drops incomplete targets", {
   scores <- data.table::data.table(
     model = c("A", "A", "B"),
     location = c("DE", "US", "DE"),
     wis = c(1, 2, 3)
   )
   scores <- new_scores(scores, "wis")
-  result <- filter_missing_scores(scores)
+  result <- filter_scores(scores)
   # Only DE should remain (both models have it)
   expect_equal(nrow(result), 2)
   expect_true(all(result$location == "DE"))
 })
 
-test_that("filter_missing_scores() preserves class and metrics", {
+test_that("filter_scores() preserves class and metrics", {
   scores <- data.table::data.table(
     model = c("A", "A", "B"),
     location = c("DE", "US", "DE"),
     wis = c(1, 2, 3)
   )
   scores <- new_scores(scores, "wis")
-  result <- filter_missing_scores(scores)
+  result <- filter_scores(scores)
   expect_s3_class(result, "scores")
   expect_equal(attr(result, "metrics"), "wis")
 })
 
-test_that("filter_missing_scores() unchanged when nothing missing", {
+test_that("filter_scores() unchanged when nothing missing", {
   scores <- data.table::data.table(
     model = c("A", "A", "B", "B"),
     location = c("DE", "US", "DE", "US"),
@@ -92,10 +92,23 @@ test_that("filter_missing_scores() unchanged when nothing missing", {
   )
   scores <- new_scores(scores, "wis")
   expect_message(
-    result <- filter_missing_scores(scores),
-    "No missing"
+    result <- filter_scores(scores),
+    "No rows filtered"
   )
   expect_equal(nrow(result), 4)
+})
+
+test_that("filter_scores() errors on invalid compare column", {
+  scores <- data.table::data.table(
+    model = c("A", "A", "B"),
+    location = c("DE", "US", "DE"),
+    wis = c(1, 2, 3)
+  )
+  scores <- new_scores(scores, "wis")
+  expect_error(
+    filter_scores(scores, compare = "nonexistent"),
+    "nonexistent"
+  )
 })
 
 
