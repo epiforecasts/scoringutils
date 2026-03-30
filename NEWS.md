@@ -1,6 +1,6 @@
 # scoringutils (development version)
 
-- Reworked `get_duplicate_forecasts()` to an S3 generic that dispatches on forecast type, replacing hard-coded column detection with per-type `get_duplicate_columns()` methods. Plain data.frames retain the previous column-detection behaviour via the default method (#888).
+- Added internal S3 generic `get_forecast_type_ids()` so each forecast type declares the columns (beyond the forecast unit) that identify a unique row. `get_duplicate_forecasts()` now uses this instead of hard-coded column names (#888).
 - Added `forecast_multivariate_point` class for scoring multivariate point forecasts with the variogram score.
 The new `as_forecast_multivariate_point()` constructor takes a `joint_across` argument, matching the pattern of `as_forecast_multivariate_sample()`.
 The `transform_forecasts()` function now works with both multivariate forecast types (#1112).

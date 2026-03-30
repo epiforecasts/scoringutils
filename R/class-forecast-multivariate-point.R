@@ -90,15 +90,6 @@ assert_forecast.forecast_multivariate_point <- function(
 
 
 #' @export
-#' @keywords internal
-# nolint start: object_name_linter
-get_duplicate_columns.forecast_multivariate_point <- function(data) {
-  character(0)
-}
-# nolint end
-
-
-#' @export
 #' @rdname is_forecast
 # nolint start: object_name_linter
 is_forecast_multivariate_point <- function(x) {

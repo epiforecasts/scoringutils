@@ -117,7 +117,7 @@ assert_forecast.forecast_nominal <- function(
 
 #' @export
 #' @keywords internal
-get_duplicate_columns.forecast_nominal <- function(data) {
+get_forecast_type_ids.forecast_nominal <- function(data) {
   "predicted_label"
 }
 

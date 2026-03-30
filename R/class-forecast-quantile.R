@@ -91,7 +91,7 @@ assert_forecast.forecast_quantile <- function(
 
 #' @export
 #' @keywords internal
-get_duplicate_columns.forecast_quantile <- function(data) {
+get_forecast_type_ids.forecast_quantile <- function(data) {
   "quantile_level"
 }
 

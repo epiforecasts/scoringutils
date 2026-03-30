@@ -122,7 +122,7 @@ assert_forecast.forecast_multivariate_sample <- function(
 #' @export
 #' @keywords internal
 # nolint start: object_name_linter
-get_duplicate_columns.forecast_multivariate_sample <- function(data) {
+get_forecast_type_ids.forecast_multivariate_sample <- function(data) {
   "sample_id"
 }
 # nolint end

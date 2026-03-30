@@ -2,22 +2,14 @@
 % Please edit documentation in R/get-duplicate-forecasts.R
 \name{get_duplicate_forecasts}
 \alias{get_duplicate_forecasts}
-\alias{get_duplicate_forecasts.default}
-\alias{get_duplicate_forecasts.forecast}
 \title{Find duplicate forecasts}
 \usage{
-get_duplicate_forecasts(data, ...)
-
-\method{get_duplicate_forecasts}{default}(data, forecast_unit = NULL, counts = FALSE, ...)
-
-\method{get_duplicate_forecasts}{forecast}(data, forecast_unit = NULL, counts = FALSE, ...)
+get_duplicate_forecasts(data, forecast_unit = NULL, counts = FALSE)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
 See the details section of for additional information
 on the required input format.}
-
-\item{...}{Additional arguments passed to methods.}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a
@@ -38,10 +30,10 @@ was found
 Identify duplicate forecasts, i.e. instances where there is more than
 one forecast for the same prediction target.
 
-\code{get_duplicate_forecasts()} is an S3 generic. When called on a validated
-\code{forecast} object it uses the type-specific columns returned by
-\code{\link[=get_duplicate_columns]{get_duplicate_columns()}}. When called on a plain \code{data.frame} the
-default method falls back to detecting columns by name.
+Uses \code{\link[=get_forecast_type_ids]{get_forecast_type_ids()}} to determine the type-specific columns
+(beyond the forecast unit) that identify a unique row. For validated
+\code{forecast} objects this dispatches to the appropriate method; for
+plain \code{data.frame}s the default method detects columns by name.
 }
 \examples{
 example <- rbind(example_quantile, example_quantile[1000:1010])

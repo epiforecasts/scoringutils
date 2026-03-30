@@ -123,7 +123,7 @@ assert_forecast.forecast_ordinal <- function(
 
 #' @export
 #' @keywords internal
-get_duplicate_columns.forecast_ordinal <- function(data) {
+get_forecast_type_ids.forecast_ordinal <- function(data) {
   "predicted_label"
 }
 

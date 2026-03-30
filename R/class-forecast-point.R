@@ -69,13 +69,6 @@ assert_forecast.forecast_point <- function(
 
 
 #' @export
-#' @keywords internal
-get_duplicate_columns.forecast_point <- function(data) {
-  character(0)
-}
-
-
-#' @export
 #' @rdname is_forecast
 is_forecast_point <- function(x) {
   inherits(x, "forecast_point") && inherits(x, "forecast")

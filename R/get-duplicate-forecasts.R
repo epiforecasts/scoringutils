@@ -4,16 +4,15 @@
 #' Identify duplicate forecasts, i.e. instances where there is more than
 #' one forecast for the same prediction target.
 #'
-#' `get_duplicate_forecasts()` is an S3 generic. When called on a validated
-#' `forecast` object it uses the type-specific columns returned by
-#' [get_duplicate_columns()]. When called on a plain `data.frame` the
-#' default method falls back to detecting columns by name.
+#' Uses [get_forecast_type_ids()] to determine the type-specific columns
+#' (beyond the forecast unit) that identify a unique row. For validated
+#' `forecast` objects this dispatches to the appropriate method; for
+#' plain `data.frame`s the default method detects columns by name.
 #'
 #' @inheritParams as_forecast_doc_template
 #' @param counts Should the output show the number of duplicates per
 #'   forecast unit instead of the individual duplicated rows?
 #'   Default is `FALSE`.
-#' @param ... Additional arguments passed to methods.
 #' @returns A data.frame with all rows for which a duplicate forecast
 #'   was found
 #' @export
@@ -23,55 +22,19 @@
 #' @examples
 #' example <- rbind(example_quantile, example_quantile[1000:1010])
 #' get_duplicate_forecasts(example)
-get_duplicate_forecasts <- function(data, ...) {
-  UseMethod("get_duplicate_forecasts")
-}
-
-
-#' @rdname get_duplicate_forecasts
-#' @export
-get_duplicate_forecasts.default <- function(
+get_duplicate_forecasts <- function(
   data,
   forecast_unit = NULL,
-  counts = FALSE,
-  ...
+  counts = FALSE
 ) {
   assert_data_frame(data)
-  find_duplicates(
-    ensure_data.table(data),
-    forecast_unit = forecast_unit,
-    counts = counts
-  )
-}
+  data <- ensure_data.table(data)
 
-
-#' @rdname get_duplicate_forecasts
-#' @export
-get_duplicate_forecasts.forecast <- function(
-  data,
-  forecast_unit = NULL,
-  counts = FALSE,
-  ...
-) {
-  find_duplicates(
-    ensure_data.table(data),
-    forecast_unit = forecast_unit,
-    counts = counts
-  )
-}
-
-
-#' Find duplicate rows in forecast data
-#'
-#' @inheritParams get_duplicate_forecasts
-#' @returns A `data.table` of duplicate rows (or counts).
-#' @keywords internal
-find_duplicates <- function(data, forecast_unit = NULL, counts = FALSE) {
   if (!is.null(forecast_unit)) {
     data <- set_forecast_unit(data, forecast_unit)
   }
   forecast_unit <- get_forecast_unit(data)
-  type <- get_duplicate_columns(data)
+  type <- get_forecast_type_ids(data)
   data <- as.data.table(data)
   data[,
     scoringutils_InternalDuplicateCheck := .N,
@@ -93,27 +56,25 @@ find_duplicates <- function(data, forecast_unit = NULL, counts = FALSE) {
 }
 
 
-#' @title Get type-specific columns for duplicate detection
+#' @title Get type-specific ID columns for a forecast
 #'
 #' @description
 #' Internal S3 generic that returns the column names (beyond the forecast
-#' unit) needed to identify a unique row for duplicate detection. Each
+#' unit) that identify a unique row for a given forecast type. Each
 #' forecast type method returns the columns specific to that type.
+#' The default method falls back to detecting columns by name.
 #'
 #' @inheritParams as_forecast_doc_template
 #' @returns A character vector of column names.
 #' @keywords internal
-get_duplicate_columns <- function(data) {
-  UseMethod("get_duplicate_columns")
+get_forecast_type_ids <- function(data) {
+  UseMethod("get_forecast_type_ids")
 }
 
 
 #' @export
-get_duplicate_columns.default <- function(data) {
-  available <- c(
-    "sample_id", "quantile_level", "predicted_label"
-  ) %in% colnames(data)
-  c("sample_id", "quantile_level", "predicted_label")[available]
+get_forecast_type_ids.default <- function(data) {
+  character(0)
 }
 
 

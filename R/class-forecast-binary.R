@@ -93,13 +93,6 @@ assert_forecast.forecast_binary <- function(
 
 
 #' @export
-#' @keywords internal
-get_duplicate_columns.forecast_binary <- function(data) {
-  character(0)
-}
-
-
-#' @export
 #' @rdname is_forecast
 is_forecast_binary <- function(x) {
   inherits(x, "forecast_binary") && inherits(x, "forecast")

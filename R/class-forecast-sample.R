@@ -67,7 +67,7 @@ assert_forecast.forecast_sample <- function(
 
 #' @export
 #' @keywords internal
-get_duplicate_columns.forecast_sample <- function(data) {
+get_forecast_type_ids.forecast_sample <- function(data) {
   "sample_id"
 }
 
