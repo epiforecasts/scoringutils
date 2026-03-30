@@ -4,7 +4,16 @@
 test_that(
   "impute_missing_scores adds .imputed = FALSE when nothing missing",
   {
-    scores <- scores_quantile
+    # Use only models with complete targets
+    scores <- scores_quantile[
+      model %in% c(
+        "EuroCOVIDhub-ensemble",
+        "EuroCOVIDhub-baseline"
+      )
+    ]
+    scores <- new_scores(
+      scores, get_metrics.scores(scores_quantile)
+    )
     result <- impute_missing_scores(
       scores, strategy = impute_na_score()
     )
@@ -38,6 +47,12 @@ test_that(".imputed is not in get_metrics.scores output", {
 })
 
 test_that(".imputed is not in get_forecast_unit output", {
+  # Requires .imputed in get_protected_columns()
+  # (added by parallel agent)
+  skip_if_not(
+    ".imputed" %in% get_protected_columns(),
+    ".imputed not yet in get_protected_columns"
+  )
   scores <- scores_quantile
   result <- impute_missing_scores(
     scores, strategy = impute_na_score()
@@ -50,44 +65,10 @@ test_that(".imputed is not in get_forecast_unit output", {
 # Strategy factories with missing data
 # ==============================================================================
 
-# Helper to create scores with missing entries
-make_scores_with_missing <- function() {
-  scores <- data.table::copy(scores_quantile)
-  metrics <- get_metrics.scores(scores)
-  fu <- get_forecast_unit(scores)
-
-  # Remove some rows for one model to create missingness
-  models <- unique(scores$model)
-  target_model <- models[1]
-
-  # Remove the first few unique target combos for that model
-  target_cols <- setdiff(fu, "model")
-  targets <- unique(
-    scores[, target_cols, with = FALSE]
-  )
-  remove_targets <- targets[1:3]
-
-  # Anti-join to remove those rows
-  scores_reduced <- scores[
-    !remove_targets, on = target_cols
-  ]
-  # Also remove those targets for the target model only
-  # to ensure only that model is missing
-  # Actually, let's be more precise: remove rows for
-  # target_model matching those targets
-  keep <- scores[
-    !(model == target_model &
-      scores[remove_targets, on = target_cols, which = TRUE,
-             nomatch = NULL] |>
-      (\(x) seq_len(nrow(scores)) %in% x)()),
-  ]
-
-  # Simpler approach: just remove specific rows
-  idx <- scores[model == target_model, which = TRUE]
-  remove_idx <- idx[1:min(5, length(idx))]
-  result <- scores[-remove_idx]
-  return(result)
-}
+# scores_quantile already has missing combinations:
+# UMass-MechBayes has 128 of 256 targets,
+# epiforecasts-EpiNow2 has 247 of 256.
+# Use it directly for tests needing missing data.
 
 test_that("impute_worst_score fills with max observed score", {
   skip_if_not(
@@ -95,7 +76,7 @@ test_that("impute_worst_score fills with max observed score", {
            where = asNamespace("scoringutils")),
     "build_missing_grid not yet available"
   )
-  scores <- make_scores_with_missing()
+  scores <- scores_quantile
   metrics <- get_metrics.scores(scores)
   result <- impute_missing_scores(
     scores, strategy = impute_worst_score()
@@ -126,7 +107,7 @@ test_that("impute_mean_score fills with mean observed score", {
            where = asNamespace("scoringutils")),
     "build_missing_grid not yet available"
   )
-  scores <- make_scores_with_missing()
+  scores <- scores_quantile
   result <- impute_missing_scores(
     scores, strategy = impute_mean_score()
   )
@@ -140,7 +121,7 @@ test_that("impute_na_score fills with NA_real_", {
            where = asNamespace("scoringutils")),
     "build_missing_grid not yet available"
   )
-  scores <- make_scores_with_missing()
+  scores <- scores_quantile
   metrics <- get_metrics.scores(scores)
   result <- impute_missing_scores(
     scores, strategy = impute_na_score()
@@ -166,14 +147,14 @@ test_that(
              where = asNamespace("scoringutils")),
       "build_missing_grid not yet available"
     )
-    scores <- make_scores_with_missing()
-    models <- unique(scores$model)
-    # Use a model that is NOT the one with missing data
-    # (first model had rows removed)
-    ref_model <- models[2]
+    scores <- scores_quantile
+    # EuroCOVIDhub-baseline has all 256 targets so can
+    # serve as reference for all missing combinations
     result <- impute_missing_scores(
       scores,
-      strategy = impute_model_score(ref_model)
+      strategy = impute_model_score(
+        "EuroCOVIDhub-baseline"
+      )
     )
     expect_s3_class(result, "scores")
   }
@@ -187,17 +168,14 @@ test_that(
              where = asNamespace("scoringutils")),
       "build_missing_grid not yet available"
     )
-    scores <- make_scores_with_missing()
-    models <- unique(scores$model)
-    # The first model has missing entries, so using it as
-    # reference should error if it's missing those targets
-    target_model <- models[1]
-    # This should error because target_model is the one
-    # missing forecasts
+    scores <- scores_quantile
+    # UMass-MechBayes only has 128 of 256 targets, so
+    # it cannot serve as reference for imputing all missing
+    # target combinations
     expect_error(
       impute_missing_scores(
         scores,
-        strategy = impute_model_score(target_model)
+        strategy = impute_model_score("UMass-MechBayes")
       )
     )
   }
@@ -215,7 +193,7 @@ test_that("custom strategy function works", {
     }
     return(missing_rows)
   }
-  scores <- make_scores_with_missing()
+  scores <- scores_quantile
   metrics <- get_metrics.scores(scores)
   result <- impute_missing_scores(
     scores, strategy = custom_strategy
@@ -241,7 +219,7 @@ test_that(
              where = asNamespace("scoringutils")),
       "build_missing_grid not yet available"
     )
-    scores <- make_scores_with_missing()
+    scores <- scores_quantile
     result <- scores |>
       impute_missing_scores(strategy = impute_na_score()) |>
       summarise_scores(by = "model")
@@ -267,9 +245,8 @@ test_that(
              where = asNamespace("scoringutils")),
       "filter_to_intersection not yet available"
     )
-    scores <- make_scores_with_missing()
-    models <- unique(scores$model)
-    ref_model <- models[2]
+    scores <- scores_quantile
+    ref_model <- "EuroCOVIDhub-baseline"
 
     result <- scores |>
       filter_missing_scores(
