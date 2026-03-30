@@ -74,15 +74,16 @@ filter_scores <- function(
 #' @description
 #' Strategy factory for [filter_scores()].
 #' Returns a function that keeps only target combinations
-#' covered by a minimum proportion of models.
+#' covered by a minimum proportion of comparators.
 #'
 #' @param min_coverage Numeric between 0 and 1 (default `1`).
-#'   Minimum proportion of models that must cover a target
-#'   combination for it to be kept.
-#' @param models Character vector or `NULL` (default). If
-#'   provided, the target grid is restricted to targets covered
-#'   by these models. When multiple models are specified, only
-#'   the intersection of their targets is used.
+#'   Minimum proportion of comparators that must cover a
+#'   target combination for it to be kept.
+#' @param include Character vector or `NULL` (default). If
+#'   provided, the target grid is restricted to targets
+#'   covered by these values of the `compare` column. When
+#'   multiple values are given, only the intersection of
+#'   their targets is used.
 #'
 #' @return A function with signature `function(scores, compare)`
 #'   suitable for use as a strategy in
@@ -94,11 +95,11 @@ filter_scores <- function(
 #' @keywords handle-metrics
 filter_to_intersection <- function(
   min_coverage = 1,
-  models = NULL
+  include = NULL
 ) {
   assert_number(min_coverage, lower = 0, upper = 1)
-  if (!is.null(models)) {
-    assert_character(models, min.len = 1)
+  if (!is.null(include)) {
+    assert_character(include, min.len = 1)
   }
 
   function(scores, compare = "model") {
@@ -106,9 +107,18 @@ filter_to_intersection <- function(
     forecast_unit <- get_forecast_unit(scores)
     target_cols <- setdiff(forecast_unit, compare)
 
-    if (!is.null(models)) {
-      # Restrict to targets covered by specified models
-      model_targets <- lapply(models, function(m) {
+    if (!is.null(include)) {
+      unknown <- setdiff(include, unique(scores[[compare]]))
+      if (length(unknown) > 0) {
+        cli::cli_abort(c(
+          "!" = paste0(
+            "{.val {unknown}} not found in ",
+            "{.arg {compare}} column."
+          )
+        ))
+      }
+      # Restrict to targets covered by specified values
+      model_targets <- lapply(include, function(m) {
         unique(
           scores[
             scores[[compare]] == m,
@@ -117,7 +127,7 @@ filter_to_intersection <- function(
           ]
         )
       })
-      # Intersection of all specified models' targets
+      # Intersection of all specified values' targets
       qualifying <- model_targets[[1]]
       if (length(model_targets) > 1) {
         for (i in seq(2, length(model_targets))) {
@@ -132,17 +142,17 @@ filter_to_intersection <- function(
         }
       }
     } else {
-      # Count models per target combination
-      all_models <- unique(scores[[compare]])
-      n_total <- length(all_models)
+      # Count include per target combination
+      all_include <- unique(scores[[compare]])
+      n_total <- length(all_include)
 
       target_coverage <- scores[
-        , .(n_models = data.table::uniqueN(get(compare))),
+        , .(n_include = data.table::uniqueN(get(compare))),
         by = target_cols
       ]
       #nolint start: object_usage_linter
       qualifying <- target_coverage[
-        n_models / n_total >= min_coverage,
+        n_include / n_total >= min_coverage,
         #nolint end
         target_cols,
         with = FALSE

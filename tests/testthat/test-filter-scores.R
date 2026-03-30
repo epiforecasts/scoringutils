@@ -67,7 +67,7 @@ test_that("filter_scores() drops incomplete targets", {
   )
   scores <- new_scores(scores, "wis")
   result <- filter_scores(scores)
-  # Only DE should remain (both models have it)
+  # Only DE should remain (both include have it)
   expect_equal(nrow(result), 2)
   expect_true(all(result$location == "DE"))
 })
@@ -134,14 +134,14 @@ test_that("filter_to_intersection(min_coverage=0.5) works", {
   expect_equal(nrow(result2), 5)
 })
 
-test_that("filter_to_intersection(models) keeps targets", {
+test_that("filter_to_intersection(include) keeps targets", {
   scores <- data.table::data.table(
     model = c("m1", "m1", "m2", "m2", "m3"),
     location = c("DE", "US", "DE", "FR", "DE"),
     wis = c(1, 2, 3, 4, 5)
   )
   scores <- new_scores(scores, "wis")
-  strategy <- filter_to_intersection(models = "m1")
+  strategy <- filter_to_intersection(include = "m1")
   result <- strategy(scores, compare = "model")
   # m1 covers DE and US, so keep all rows with DE or US
   expect_true(all(result$location %in% c("DE", "US")))
@@ -149,7 +149,7 @@ test_that("filter_to_intersection(models) keeps targets", {
   expect_false("FR" %in% result$location)
 })
 
-test_that("filter_to_intersection(models=c()) intersects", {
+test_that("filter_to_intersection(include=c()) intersects", {
   scores <- data.table::data.table(
     model = c("m1", "m1", "m2", "m2", "m3"),
     location = c("DE", "US", "DE", "FR", "DE"),
@@ -157,9 +157,39 @@ test_that("filter_to_intersection(models=c()) intersects", {
   )
   scores <- new_scores(scores, "wis")
   strategy <- filter_to_intersection(
-    models = c("m1", "m2")
+    include = c("m1", "m2")
   )
   result <- strategy(scores, compare = "model")
   # m1 covers DE, US; m2 covers DE, FR; intersection = DE
   expect_true(all(result$location == "DE"))
+})
+
+test_that("filter_to_intersection(include) errors on unknown", {
+  scores <- data.table::data.table(
+    model = c("A", "B"),
+    location = c("DE", "DE"),
+    wis = c(1, 2)
+  )
+  scores <- new_scores(scores, "wis")
+  expect_error(
+    filter_scores(
+      scores,
+      strategy = filter_to_intersection(include = "Z")
+    ),
+    "not found"
+  )
+})
+
+test_that("filter_scores() works with non-default compare", {
+  scores <- data.table::data.table(
+    forecaster = c("A", "A", "B"),
+    location = c("DE", "US", "DE"),
+    wis = c(1, 2, 3)
+  )
+  scores <- new_scores(scores, "wis")
+  result <- filter_scores(
+    scores, compare = "forecaster"
+  )
+  expect_true(all(result$location == "DE"))
+  expect_equal(nrow(result), 2)
 })

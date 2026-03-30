@@ -256,12 +256,12 @@ impute_model_score <- function(model) {
     ]
 
     if (nrow(ref) == 0) {
-      cli_abort(
-        c(
-          "!" = "Reference model {.val {ref_model_name}}
-             not found in scores."
+      cli_abort(c(
+        "!" = paste0(
+          "Reference model {.val {ref_model_name}} ",
+          "not found in scores."
         )
-      )
+      ))
     }
 
     # Check that the reference model has scores for all
@@ -276,14 +276,14 @@ impute_model_score <- function(model) {
       on = target_cols
     ]
     if (nrow(missing_targets) > 0) {
-      cli_abort(
-        c(
-          "!" = "Reference model {.val {ref_model_name}}
-             is missing scores for
-             {nrow(missing_targets)} target
-             combination{?s} that need imputing."
+      cli_abort(c(
+        "!" = paste0(
+          "Reference model {.val {ref_model_name}} ",
+          "is missing scores for ",
+          "{nrow(missing_targets)} target ",
+          "combination{?s} that need imputing."
         )
-      )
+      ))
     }
 
     # Merge reference model scores onto missing rows

@@ -266,12 +266,34 @@ test_that(
     result <- scores |>
       filter_scores(
         strategy = filter_to_intersection(
-          models = ref_model
+          include = ref_model
         )
       ) |>
       impute_missing_scores(
         strategy = impute_model_score(ref_model)
       )
     expect_s3_class(result, "scores")
+  }
+)
+
+test_that(
+  "impute_missing_scores works with non-default compare",
+  {
+    scores <- data.table::data.table(
+      forecaster = c("A", "A", "B"),
+      location = c("DE", "US", "DE"),
+      wis = c(1, 2, 3)
+    )
+    scores <- new_scores(scores, "wis")
+    result <- impute_missing_scores(
+      scores,
+      strategy = impute_worst_score(),
+      compare = "forecaster"
+    )
+    expect_true(".imputed" %in% names(result))
+    imputed <- result[result$.imputed == TRUE]
+    expect_equal(nrow(imputed), 1)
+    expect_equal(imputed$forecaster, "B")
+    expect_equal(imputed$location, "US")
   }
 )

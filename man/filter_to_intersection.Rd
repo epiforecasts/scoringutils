@@ -4,17 +4,18 @@
 \alias{filter_to_intersection}
 \title{Filter to intersection of model-target combinations}
 \usage{
-filter_to_intersection(min_coverage = 1, models = NULL)
+filter_to_intersection(min_coverage = 1, include = NULL)
 }
 \arguments{
 \item{min_coverage}{Numeric between 0 and 1 (default \code{1}).
-Minimum proportion of models that must cover a target
-combination for it to be kept.}
+Minimum proportion of comparators that must cover a
+target combination for it to be kept.}
 
-\item{models}{Character vector or \code{NULL} (default). If
-provided, the target grid is restricted to targets covered
-by these models. When multiple models are specified, only
-the intersection of their targets is used.}
+\item{include}{Character vector or \code{NULL} (default). If
+provided, the target grid is restricted to targets
+covered by these values of the \code{compare} column. When
+multiple values are given, only the intersection of
+their targets is used.}
 }
 \value{
 A function with signature \verb{function(scores, compare)}
@@ -24,6 +25,6 @@ suitable for use as a strategy in
 \description{
 Strategy factory for \code{\link[=filter_scores]{filter_scores()}}.
 Returns a function that keeps only target combinations
-covered by a minimum proportion of models.
+covered by a minimum proportion of comparators.
 }
 \keyword{handle-metrics}
