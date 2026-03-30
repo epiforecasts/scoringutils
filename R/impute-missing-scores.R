@@ -23,8 +23,8 @@
 #'   fills missing metric values. Built-in options are
 #'   [impute_worst_score()], [impute_mean_score()],
 #'   [impute_na_score()], and [impute_model_score()].
-#'   The function must accept three arguments:
-#'   `(scores, missing_rows, metrics)` and return
+#'   The function must accept four arguments:
+#'   `(scores, missing_rows, metrics, compare)` and return
 #'   `missing_rows` with metric columns filled.
 #' @param compare Character vector of length one with the
 #'   column name that defines the unit of comparison.
@@ -36,10 +36,10 @@
 #'
 #' @importFrom data.table copy set rbindlist setattr
 #' @importFrom checkmate assert_class assert_function
-#'   assert_character
+#'   assert_character assert_subset
 #' @importFrom cli cli_abort
 #' @export
-#' @keywords scoring
+#' @keywords handle-metrics
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -58,6 +58,7 @@ impute_missing_scores <- function(
   assert_class(scores, "scores")
   metrics <- get_metrics.scores(scores, error = TRUE)
   assert_character(compare, len = 1)
+  assert_subset(compare, names(scores))
   assert_function(strategy)
 
   scores <- copy(scores)
@@ -69,7 +70,7 @@ impute_missing_scores <- function(
     return(scores[])
   }
 
-  filled <- strategy(scores, missing_rows, metrics)
+  filled <- strategy(scores, missing_rows, metrics, compare)
 
   data.table::set(filled, j = ".imputed", value = TRUE)
   data.table::set(scores, j = ".imputed", value = FALSE)
@@ -93,7 +94,7 @@ impute_missing_scores <- function(
 #' @return A function suitable for use as the `strategy`
 #'   argument in [impute_missing_scores()].
 #' @export
-#' @keywords scoring
+#' @keywords handle-metrics
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -104,9 +105,9 @@ impute_missing_scores <- function(
 #'
 #' impute_missing_scores(scores, strategy = impute_worst_score())
 impute_worst_score <- function() {
-  function(scores, missing_rows, metrics) {
+  function(scores, missing_rows, metrics, compare) {
     fu <- get_forecast_unit(scores)
-    target_cols <- setdiff(fu, "model")
+    target_cols <- setdiff(fu, compare)
 
     for (m in metrics) {
       if (!(m %in% names(scores))) next
@@ -144,7 +145,7 @@ impute_worst_score <- function() {
 #' @return A function suitable for use as the `strategy`
 #'   argument in [impute_missing_scores()].
 #' @export
-#' @keywords scoring
+#' @keywords handle-metrics
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -155,9 +156,9 @@ impute_worst_score <- function() {
 #'
 #' impute_missing_scores(scores, strategy = impute_mean_score())
 impute_mean_score <- function() {
-  function(scores, missing_rows, metrics) {
+  function(scores, missing_rows, metrics, compare) {
     fu <- get_forecast_unit(scores)
-    target_cols <- setdiff(fu, "model")
+    target_cols <- setdiff(fu, compare)
 
     for (m in metrics) {
       if (!(m %in% names(scores))) next
@@ -191,7 +192,7 @@ impute_mean_score <- function() {
 #' @return A function suitable for use as the `strategy`
 #'   argument in [impute_missing_scores()].
 #' @export
-#' @keywords scoring
+#' @keywords handle-metrics
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -202,7 +203,7 @@ impute_mean_score <- function() {
 #'
 #' impute_missing_scores(scores, strategy = impute_na_score())
 impute_na_score <- function() {
-  function(scores, missing_rows, metrics) {
+  function(scores, missing_rows, metrics, compare) {
     for (m in metrics) {
       data.table::set(missing_rows, j = m, value = NA_real_)
     }
@@ -228,7 +229,7 @@ impute_na_score <- function() {
 #'
 #' @importFrom cli cli_abort
 #' @export
-#' @keywords scoring
+#' @keywords handle-metrics
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -246,12 +247,12 @@ impute_model_score <- function(model) {
   # Store in a different name to avoid collision with
   # the "model" column in data.table expressions
   ref_model_name <- model
-  function(scores, missing_rows, metrics) {
+  function(scores, missing_rows, metrics, compare) {
     fu <- get_forecast_unit(scores)
-    target_cols <- setdiff(fu, "model")
+    target_cols <- setdiff(fu, compare)
 
     ref <- scores[
-      get("model") == ref_model_name
+      get(compare) == ref_model_name
     ]
 
     if (nrow(ref) == 0) {

@@ -85,18 +85,32 @@ test_that("impute_worst_score fills with max observed score", {
 
   imputed <- result[(.imputed)]
   if (nrow(imputed) > 0) {
-    # Each imputed metric value should be <= max of that
-    # metric across all original data
+    fu <- get_forecast_unit(scores)
+    target_cols <- setdiff(fu, "model")
+
+    # Each imputed metric value should equal the max of
+    # that metric within the same target combination
     for (m in metrics) {
-      if (m %in% names(imputed) && m %in% names(scores)) {
-        max_val <- max(scores[[m]], na.rm = TRUE)
-        expect_true(
-          all(
-            imputed[[m]] <= max_val | is.na(imputed[[m]])
-          ),
-          info = paste("metric", m, "exceeds max")
+      if (!(m %in% names(imputed)) ||
+          !(m %in% names(scores))) next
+      max_per_target <- scores[,
+        .(..max = max(get(m), na.rm = TRUE)),
+        by = target_cols
+      ]
+      merged <- merge(
+        imputed, max_per_target,
+        by = target_cols, all.x = TRUE
+      )
+      expect_true(
+        all(
+          merged[[m]] == merged[["..max"]] |
+            is.na(merged[[m]])
+        ),
+        info = paste(
+          "metric", m,
+          "does not match per-target max"
         )
-      }
+      )
     }
   }
 })
@@ -187,7 +201,8 @@ test_that("custom strategy function works", {
            where = asNamespace("scoringutils")),
     "build_missing_grid not yet available"
   )
-  custom_strategy <- function(scores, missing_rows, metrics) {
+  custom_strategy <- function(scores, missing_rows, metrics,
+                              compare) {
     for (m in metrics) {
       data.table::set(missing_rows, j = m, value = 999)
     }
