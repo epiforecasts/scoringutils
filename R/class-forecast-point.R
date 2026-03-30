@@ -99,9 +99,12 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
 #'
 #' @description
 #' For point forecasts, the default scoring rules are:
-#' - "ae_point" = absolute error
-#' - "se_point" = squared error
-#' - "ape" = absolute percentage error
+#' - "ae_point" = absolute error, calculated as
+#'   \eqn{\text{ae} = |y - \hat{y}|}{ae = |y - y_hat|}
+#' - "se_point" = squared error, calculated as
+#'   \eqn{\text{se} = (y - \hat{y})^2}{se = (y - y_hat)^2}
+#' - "ape" = absolute percentage error, calculated as
+#'   \eqn{\text{ape} = |y - \hat{y}| / |y|}{ape = |y - y_hat| / |y|}
 #'
 #' A note of caution: Every scoring rule for a point forecast
 #' is implicitly minimised by a specific aspect of the predictive distribution
