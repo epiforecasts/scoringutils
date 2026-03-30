@@ -92,7 +92,7 @@ test_that("impute_worst_score fills with max observed score", {
     # that metric within the same target combination
     for (m in metrics) {
       if (!(m %in% names(imputed)) ||
-          !(m %in% names(scores))) next
+            !(m %in% names(scores))) next
       max_per_target <- scores[,
         .(..max = max(get(m), na.rm = TRUE)),
         by = target_cols
