@@ -6,9 +6,11 @@ test_that("get_protected_columns() works as expected", {
     get_protected_columns(),
     c(
       ".mv_group_id",
+      ".imputed",
       "predicted", "observed", "sample_id",
       "quantile_level", "upper", "lower", "pit_value",
-      "interval_range", "boundary", "predicted_label", "interval_coverage",
+      "interval_range", "boundary", "predicted_label",
+      "interval_coverage",
       "interval_coverage_deviation", "quantile_coverage",
       "quantile_coverage_deviation"
     )
