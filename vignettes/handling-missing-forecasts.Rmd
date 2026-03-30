@@ -15,8 +15,8 @@ data.table::setDTthreads(2)
 ```
 
 When models forecast different subsets of targets, score summaries become misleading.
-A model that only forecasts easy targets will appear to perform better than one that attempts harder targets too.
-To get fair comparisons, you need to either restrict to a common set of targets or impute the missing scores.
+Filter when a model legitimately does not cover certain targets.
+Impute when a missing forecast should be treated as a performance failure.
 
 ## Diagnosing missingness
 
@@ -34,6 +34,7 @@ Here `UMass-MechBayes` has no case forecasts and `epiforecasts-EpiNow2` has fewe
 
 `filter_scores()` removes scores for target combinations not shared across models.
 The default strategy, `filter_to_intersection()`, keeps only targets covered by all models.
+Both functions accept a `compare` argument (default `"model"`) that specifies which column identifies the unit being compared.
 
 ```{r score}
 scores <- score(fc)
@@ -54,7 +55,7 @@ scores_relaxed <- filter_scores(
 )
 ```
 
-The `include` argument restricts to targets covered by specific models.
+The `include` argument restricts to targets covered by specific values of the `compare` column.
 
 ```{r filter-include}
 scores_baseline <- filter_scores(
@@ -68,12 +69,11 @@ scores_baseline <- filter_scores(
 ## Imputing missing scores
 
 Instead of dropping data, `impute_missing_scores()` fills in scores for missing target combinations.
-Four built-in strategies are available.
 
 - `impute_worst_score()` fills with the worst (maximum) observed score for each target.
 - `impute_mean_score()` fills with the mean observed score.
 - `impute_na_score()` fills with `NA`.
-- `impute_model_score(model)` fills with the scores from a named reference model.
+- `impute_model_score("my-baseline")` fills with scores from a named reference model.
 
 ```{r impute}
 scores_imputed <- impute_missing_scores(
@@ -82,15 +82,16 @@ scores_imputed <- impute_missing_scores(
 )
 ```
 
-Imputed rows are marked with `.imputed = TRUE`, so you can inspect what was added.
+Imputed rows are marked with `.imputed = TRUE`.
 
 ```{r imputed-rows}
-scores_imputed[scores_imputed$.imputed, 1:5]
+scores_imputed[(.imputed)]
 ```
 
 ## Recommended workflow
 
-Filter first to remove targets with very low coverage, then impute the remainder.
+When some models have sparse coverage, filtering alone may drop too many targets.
+Filtering to a minimum coverage threshold first, then imputing the remainder, balances data retention against fairness.
 
 ```{r pipeline}
 result <- scores |>
