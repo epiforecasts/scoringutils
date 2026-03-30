@@ -17,7 +17,7 @@ test_that("new_scores() works", {
 
 test_that("as_scores() works", {
   expect_s3_class(
-    scoringutils:::as_scores(data.frame(wis = 1), metrics = "wis"), # nolint: undesirable_operator_linter
+    as_scores(data.frame(wis = 1), metrics = "wis"),
     c("scores", "data.table", "data.frame")
   )
 })
@@ -114,7 +114,7 @@ test_that("function produces output for a nominal format case", {
 
 test_that("apply_metrics() works", {
   dt <- data.table::data.table(x = 1:10)
-  scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+  apply_metrics(
     forecast = dt, metrics = list(test = function(x) x + 1),
     dt$x
   )
@@ -122,7 +122,7 @@ test_that("apply_metrics() works", {
 
   # additional named argument works
   expect_no_condition(
-    scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+    apply_metrics(
       forecast = dt, metrics = list(test = function(x) x + 1),
       dt$x, y = dt$test
     )
@@ -130,7 +130,7 @@ test_that("apply_metrics() works", {
 
   # additional unnamed argument does not work
   expect_warning(
-    scoringutils:::apply_metrics( # nolint: undesirable_operator_linter
+    apply_metrics(
       forecast = dt, metrics = list(test = function(x) x + 1),
       dt$x, dt$test
     )

@@ -1,6 +1,6 @@
 url: https://epiforecasts.io/scoringutils/
 template:
-  math-rendering: katex
+  math-rendering: mathjax
   bootstrap: 5
   bslib:
     font_weight_base : 300
