@@ -251,9 +251,9 @@ test_that(
       "build_missing_grid not yet available"
     )
     skip_if_not(
-      exists("filter_missing_scores",
+      exists("filter_scores",
              where = asNamespace("scoringutils")),
-      "filter_missing_scores not yet available"
+      "filter_scores not yet available"
     )
     skip_if_not(
       exists("filter_to_intersection",
@@ -264,7 +264,7 @@ test_that(
     ref_model <- "EuroCOVIDhub-baseline"
 
     result <- scores |>
-      filter_missing_scores(
+      filter_scores(
         strategy = filter_to_intersection(
           models = ref_model
         )
