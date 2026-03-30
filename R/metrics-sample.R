@@ -224,17 +224,15 @@ se_mean_sample <- function(observed, predicted) {
 logs_sample <- function(observed, predicted, ...) {
   assert_input_sample(observed, predicted)
   if (get_type(predicted) == "integer") {
-    #nolint start: keyword_quote_linter
     cli_warn(
       c(
-        "Predictions appear to be integer-valued." ,
-        "!" = "The log score uses kernel density estimation, which may not be
+        "Predictions appear to be integer-valued.",
+        `!` = "The log score uses kernel density estimation, which may not be
         appropriate for integer-valued forecasts.",
-        "i" = "See the {.pkg scoringRules} package for alternatives for
+        i = "See the {.pkg scoringRules} package for alternatives for
         discrete probability distributions."
       )
     )
-    #nolint end
   }
   scoringRules::logs_sample(
     y = observed,
