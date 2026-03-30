@@ -158,7 +158,18 @@ transform_forecasts <- function(forecast,
     # construct a new valid forecast object after binding rows together
     fn_name <- paste0("as_forecast_", forecast_type)
     fn <- get(fn_name)
-    out <- suppressWarnings(suppressMessages(do.call(fn, list(out))))
+    args <- list(data = out)
+    if (".mv_group_id" %in% colnames(out)) {
+      args$joint_across <- setdiff(
+        get_forecast_unit(original_forecast),
+        get_grouping(original_forecast)
+      )
+      out[, .mv_group_id := NULL]
+      args$data <- out
+    }
+    out <- suppressWarnings(suppressMessages(
+      do.call(fn, args)
+    ))
 
     return(out[])
   }
