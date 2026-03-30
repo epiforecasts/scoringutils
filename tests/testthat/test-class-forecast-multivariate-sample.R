@@ -45,7 +45,7 @@ test_that("as_forecast_multivariate_sample() creates expected structure", {
     cat("Class:", class(result), "\n")
     cat(
       "Forecast type:",
-      scoringutils:::get_forecast_type(result), "\n"
+      get_forecast_type(result), "\n"
     )
     cat(
       "Forecast unit:",
@@ -129,7 +129,7 @@ test_that("get_grouping() works as expected", {
     "model", "target_type", "target_end_date", "horizon"
   )
   joint_across <- setdiff(get_forecast_unit(data), grouping)
-  data <- scoringutils:::set_grouping(data, joint_across)
+  data <- set_grouping(data, joint_across)
 
   # Test that get_grouping returns the correct columns
   result <- get_grouping(data)
@@ -175,7 +175,7 @@ test_that("set_grouping() preserves existing keys correctly", {
   original_keys <- key(data_with_keys)
   expect_equal(original_keys, c("location", "model"))
 
-  result_with_keys <- scoringutils:::set_grouping(
+  result_with_keys <- set_grouping(
     data_with_keys, grouping
   )
   expect_equal(key(result_with_keys), original_keys)
