@@ -58,7 +58,7 @@ assert_forecast.forecast_point <- function(
   if (!isTRUE(input_check)) {
     cli_abort(
       c(
-        "!" = "Checking `forecast`: Input looks like a point forecast, but found
+        `!` = "Checking `forecast`: Input looks like a point forecast, but found
         the following issue: {input_check}"
       )
     )

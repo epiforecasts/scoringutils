@@ -125,8 +125,8 @@ score.default <- function(forecast, metrics, ...) {
   cli_abort(
     #nolint start: keyword_quote_linter
     c(
-      "!" = "The input needs to be a valid forecast object.",
-      "i" = "Please convert to a `forecast` object first by calling the
+      `!` = "The input needs to be a valid forecast object.",
+      `i` = "Please convert to a `forecast` object first by calling the
       appropriate {.fn as_forecast_<type>} function)."
     )
     #nolint end
@@ -213,7 +213,7 @@ run_safely <- function(..., fun, metric_name) {
     msg <- conditionMessage(attr(result, "condition"))
     cli_warn(
       c(
-        "!" = "Computation for {.var {metric_name}} failed.
+        `!` = "Computation for {.var {metric_name}} failed.
         Error: {msg}."
       )
     )
@@ -252,7 +252,7 @@ validate_metrics <- function(metrics) {
       #nolint start: keyword_quote_linter
       cli_warn(
         c(
-          "!" = "`Metrics` element number {i} is not a valid function."
+          `!` = "`Metrics` element number {i} is not a valid function."
         )
       )
       #nolint end

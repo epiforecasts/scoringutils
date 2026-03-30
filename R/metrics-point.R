@@ -52,9 +52,9 @@ assert_dims_ok_point <- function(observed, predicted) {
     #nolint start: keyword_quote_linter object_usage_linter
     cli_abort(
       c(
-        "!" = "`observed` and `predicted` must either be of length 1 or
+        `!` = "`observed` and `predicted` must either be of length 1 or
          of equal length.",
-        "i" = "Found {n_obs} and {n_pred}."
+        `i` = "Found {n_obs} and {n_pred}."
       )
     )
     #nolint end

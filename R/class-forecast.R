@@ -81,8 +81,8 @@ assert_forecast.default <- function(
   cli_abort(
     #nolint start: keyword_quote_linter
     c(
-      "!" = "The input needs to be a valid forecast object.",
-      "i" = "Please convert to `forecast` object first by calling the
+      `!` = "The input needs to be a valid forecast object.",
+      `i` = "Please convert to `forecast` object first by calling the
       appropriate {.fn as_forecast_<type>} function)."
     )
     #nolint end
@@ -117,7 +117,7 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
   if (problem) {
     cli_abort(
       c(
-        "!" = "Found columns `quantile_level` and `sample_id`.
+        `!` = "Found columns `quantile_level` and `sample_id`.
       Only one of these is allowed"
       )
     )
@@ -139,7 +139,7 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
       #nolint start: keyword_quote_linter
       cli_abort(
         c(
-          "!" = "After removing rows with NA values in the data, no forecasts
+          `!` = "After removing rows with NA values in the data, no forecasts
           are left."
         )
       )
@@ -147,7 +147,7 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
     if (verbose) {
       cli_inform(
         c(
-          "i" = "Some rows containing NA values may be removed.
+          `i` = "Some rows containing NA values may be removed.
         This is fine if not unexpected."
         )
       )
@@ -294,8 +294,8 @@ is_forecast <- function(x) {
       cli_warn(
         #nolint start: keyword_quote_linter
         c(
-          "!" = "Error in validating forecast object: {validation}.",
-          "i" = "Note this error is sometimes related to `data.table`s `print`.
+          `!` = "Error in validating forecast object: {validation}.",
+          `i` = "Note this error is sometimes related to `data.table`s `print`.
           Run {.help [{.fun assert_forecast}](scoringutils::assert_forecast)}
           to confirm. To get rid of this warning entirely,
           call `as.data.table()` on the forecast object."
@@ -323,7 +323,7 @@ is_forecast <- function(x) {
   if (inherits(validation, "try-error")) {
     cli_warn(
       c(
-        "!" = "Error in validating forecast object: {validation}"
+        `!` = "Error in validating forecast object: {validation}"
       )
     )
   }
@@ -346,7 +346,7 @@ is_forecast <- function(x) {
   if (inherits(validation, "try-error")) {
     cli_warn(
       c(
-        "!" = "Error in validating forecast object: {validation}"
+        `!` = "Error in validating forecast object: {validation}"
       )
     )
   }
@@ -369,7 +369,7 @@ is_forecast <- function(x) {
   if (inherits(validation, "try-error")) {
     cli_warn(
       c(
-        "!" = "Error in validating forecast object: {validation}"
+        `!` = "Error in validating forecast object: {validation}"
       )
     )
   }
@@ -428,7 +428,7 @@ print.forecast <- function(x, ...) {
   if (inherits(forecast_type, "try-error")) {
     cli_inform(
       c(
-        "!" = "Could not determine forecast type due to error in validation." #nolint
+        `!` = "Could not determine forecast type due to error in validation."
       )
     )
   } else {
@@ -443,7 +443,7 @@ print.forecast <- function(x, ...) {
   if (inherits(forecast_unit, "try-error")) {
     cli_inform(
       c(
-        "!" = "Could not determine forecast unit." #nolint
+        `!` = "Could not determine forecast unit."
       )
     )
   } else {

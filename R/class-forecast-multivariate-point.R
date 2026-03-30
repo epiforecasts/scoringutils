@@ -75,7 +75,7 @@ assert_forecast.forecast_multivariate_point <- function(
   if (!isTRUE(input_check)) {
     cli_abort(
       c(
-        "!" = "Checking `forecast`: {input_check}"
+        `!` = "Checking `forecast`: {input_check}"
       )
     )
   }

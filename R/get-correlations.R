@@ -91,7 +91,7 @@ plot_correlations <- function(correlations, digits = NULL) {
     cli_abort(
       c(
         "Found correlations > 1 or missing `metric` column.",
-        "i" = "Did you forget to call {.fn scoringutils::get_correlations}?"
+        `i` = "Did you forget to call {.fn scoringutils::get_correlations}?"
       )
     )
     #nolint end

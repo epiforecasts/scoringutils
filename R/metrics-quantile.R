@@ -195,7 +195,7 @@ wis <- function(observed,
     incomplete <- quantile_level[quantile_level != 0.5][!complete_intervals]
     cli_abort(
       c(
-        "!" = "Not all quantile levels specified form symmetric prediction
+        `!` = "Not all quantile levels specified form symmetric prediction
         intervals.
         The following quantile levels miss a corresponding lower/upper bound:
         {.val {incomplete}}.
@@ -350,7 +350,7 @@ interval_coverage <- function(observed, predicted,
     #nolint start: keyword_quote_linter object_usage_linter
     cli_abort(
       c(
-        "!" = "To compute the interval coverage for an interval range of
+        `!` = "To compute the interval coverage for an interval range of
         {.val {interval_range}%}, the {.val {necessary_quantiles}} quantiles
         are required"
       )
@@ -445,7 +445,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
     #nolint start: keyword_quote_linter
     cli_inform(
       c(
-        "i" = "Median not available, interpolating median from the two
+        `i` = "Median not available, interpolating median from the two
         innermost quantiles in order to compute bias."
       )
     )
@@ -496,7 +496,7 @@ bias_quantile_single_vector <- function(observed, predicted,
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Predictions must not be decreasing with increasing
+        `!` = "Predictions must not be decreasing with increasing
         quantile level."
       )
     )
@@ -584,7 +584,7 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "In order to compute the absolute error of the median,
+        `!` = "In order to compute the absolute error of the median,
         {.val 0.5} must be among the quantiles given"
       )
     )

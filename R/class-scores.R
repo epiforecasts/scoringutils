@@ -117,9 +117,9 @@ get_metrics.scores <- function(x, error = FALSE, ...) {
     #nolint start: keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Input needs an attribute `metrics` with the names of the
+        `!` = "Input needs an attribute `metrics` with the names of the
          scoring rules that were used for scoring.",
-        "i" = "See `?get_metrics` for further information."
+        `i` = "See `?get_metrics` for further information."
       )
     )
     #nolint end
@@ -130,9 +130,9 @@ get_metrics.scores <- function(x, error = FALSE, ...) {
     missing <- setdiff(metrics, names(x))
     cli_warn(
       c(
-        "!" = "The following scores have been previously computed, but are no
+        `!` = "The following scores have been previously computed, but are no
             longer column names of the data: {.val {missing}}",
-        "i" = "See {.code ?get_metrics} for further information."
+        `i` = "See {.code ?get_metrics} for further information."
       )
     )
     #nolint end

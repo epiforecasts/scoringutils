@@ -32,7 +32,7 @@ assert_input_interval <- function(observed, lower, upper, interval_range) {
   if (any(diff < 0)) {
     cli_abort(
       c(
-        "!" = "All values in `upper` need to be greater than or equal to
+        `!` = "All values in `upper` need to be greater than or equal to
         the corresponding values in `lower`"
       )
     )
@@ -41,10 +41,10 @@ assert_input_interval <- function(observed, lower, upper, interval_range) {
     #nolint start: keyword_quote_linter
     cli_warn(
       c(
-        "!" = "Found interval ranges between 0 and 1. Are you sure that's
+        `!` = "Found interval ranges between 0 and 1. Are you sure that's
         right? An interval range of 0.5 e.g. implies a (49.75%, 50.25%)
         prediction interval.",
-        "i" = "If you want to score a (25%, 75%) prediction interval, set
+        `i` = "If you want to score a (25%, 75%) prediction interval, set
         `interval_range = 50`."
       ),
       .frequency = "once",

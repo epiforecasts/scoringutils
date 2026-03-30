@@ -41,9 +41,9 @@ assert_forecast_type <- function(data,
     #nolint start: object_usage_linter keyword_quote_linter
     cli_abort(
       c(
-        "!" = "Forecast type determined by scoringutils based on input:
+        `!` = "Forecast type determined by scoringutils based on input:
         {.val {actual}}.",
-        "i" = "Desired forecast type: {.val {desired}}."
+        `i` = "Desired forecast type: {.val {desired}}."
       )
     )
     #nolint end
