@@ -146,13 +146,14 @@ test_that("get_forecast_type_ids() default returns no IDs", {
 # ==============================================================================
 # check_duplicates() # nolint: commented_code_linter
 # ==============================================================================
-test_that("check_duplicates includes type hint in message", {
+test_that("check_duplicates includes type and forecast_unit in message", {
   fc <- as_forecast_quantile(example_quantile)
   fc_dup <- rbind(fc[1000:1010], fc[1000:1010])
   class(fc_dup) <- class(fc)
 
   msg <- check_duplicates(fc_dup)
   expect_match(msg, 'type = "quantile"')
+  expect_match(msg, "forecast_unit")
   expect_match(msg, "get_duplicate_forecasts")
 })
 

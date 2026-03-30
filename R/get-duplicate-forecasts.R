@@ -124,17 +124,24 @@ check_duplicates <- function(data) {
   duplicates <- get_duplicate_forecasts(data)
 
   if (nrow(duplicates) > 0) {
-    type_hint <- ""
+    hint_args <- ""
     if (inherits(data, "forecast")) {
       forecast_type <- get_forecast_type(data)
-      type_hint <- paste0(', type = "', forecast_type, '"')
+      fu <- get_forecast_unit(data)
+      fu_str <- paste0(
+        'c("', paste(fu, collapse = '", "'), '")'
+      )
+      hint_args <- paste0(
+        ', forecast_unit = ', fu_str,
+        ', type = "', forecast_type, '"'
+      )
     }
     msg <- paste0(
       "There are instances with more than one forecast for the ",
       "same target. This can't be right and needs to be resolved. ",
       "Maybe you need to check the unit of a single forecast and ",
       "add missing columns? Use ",
-      "`get_duplicate_forecasts(data", type_hint, ")` ",
+      "`get_duplicate_forecasts(data", hint_args, ")` ",
       "to identify duplicate rows"
     )
     return(msg)
