@@ -18,7 +18,7 @@ test_that(
       scores, strategy = impute_na_score()
     )
     expect_true(".imputed" %in% names(result))
-    expect_true(all(result$.imputed == FALSE))
+    expect_false(any(result$.imputed))
   }
 )
 
@@ -83,7 +83,7 @@ test_that("impute_worst_score fills with max observed score", {
   )
   # Imputed rows should exist
 
-  imputed <- result[.imputed == TRUE]
+  imputed <- result[(.imputed)]
   if (nrow(imputed) > 0) {
     # Each imputed metric value should be <= max of that
     # metric across all original data
@@ -111,8 +111,8 @@ test_that("impute_mean_score fills with mean observed score", {
   result <- impute_missing_scores(
     scores, strategy = impute_mean_score()
   )
-  imputed <- result[.imputed == TRUE]
-  expect_true(nrow(imputed) >= 0)
+  imputed <- result[(.imputed)]
+  expect_gte(nrow(imputed), 0)
 })
 
 test_that("impute_na_score fills with NA_real_", {
@@ -126,7 +126,7 @@ test_that("impute_na_score fills with NA_real_", {
   result <- impute_missing_scores(
     scores, strategy = impute_na_score()
   )
-  imputed <- result[.imputed == TRUE]
+  imputed <- result[(.imputed)]
   if (nrow(imputed) > 0) {
     for (m in metrics) {
       if (m %in% names(imputed)) {
@@ -198,7 +198,7 @@ test_that("custom strategy function works", {
   result <- impute_missing_scores(
     scores, strategy = custom_strategy
   )
-  imputed <- result[.imputed == TRUE]
+  imputed <- result[(.imputed)]
   if (nrow(imputed) > 0) {
     for (m in metrics) {
       if (m %in% names(imputed)) {
