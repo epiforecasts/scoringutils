@@ -141,15 +141,29 @@ score.default <- function(forecast, metrics, ...) {
 #' `score()` to apply all scoring rules to the data.
 #' Scoring rules are wrapped in [run_safely()] to catch errors and to make
 #' sure that only arguments are passed to the scoring rule that are actually
-#' accepted by it.
+#' accepted by it. A warning is issued if any column names in the input
+#' data match names in the metrics list, as these will be overwritten.
 #' @param ... Additional arguments to be passed to the scoring rules. Note that
 #'   this is currently not used, as all calls to `apply_scores` currently
 #'   avoid passing arguments via `...` and instead expect that the metrics
 #'   directly be modified using [purrr::partial()].
 #' @inheritParams score
 #' @returns A data table with the forecasts and the calculated metrics.
+#' @importFrom cli cli_warn
 #' @keywords internal
 apply_metrics <- function(forecast, metrics, ...) {
+  clashing <- intersect(names(metrics), colnames(forecast))
+  if (length(clashing) > 0) {
+    #nolint start: object_usage_linter
+    cli_warn(
+      c(
+        "!" = "Column{?s} {.val {clashing}} already present
+        in the data will be overwritten with metric
+        results."
+      )
+    )
+    #nolint end
+  }
   lapply(names(metrics), function(metric_name) {
     result <- do.call(
       run_safely,
