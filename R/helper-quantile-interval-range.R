@@ -74,7 +74,7 @@ quantile_to_interval_dataframe <- function(forecast,
   median <- forecast[quantile_level == 0.5, ]
   median[, boundary := "upper"]
 
-  forecast <- data.table::rbindlist(list(forecast, median))
+  forecast <- rbindlist(list(forecast, median))
   if (!keep_quantile_col) {
     forecast[, quantile_level := NULL]
   }
