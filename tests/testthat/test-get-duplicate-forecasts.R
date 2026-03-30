@@ -82,6 +82,81 @@ test_that("get_duplicate_forecasts() shows counts correctly", {
 
 
 # ==============================================================================
+# get_duplicate_columns() # nolint: commented_code_linter
+# ==============================================================================
+test_that("get_duplicate_columns() returns correct columns per type", {
+  expect_identical(
+    get_duplicate_columns(as_forecast_quantile(example_quantile)),
+    "quantile_level"
+  )
+  expect_identical(
+    get_duplicate_columns(as_forecast_sample(example_sample_continuous)),
+    "sample_id"
+  )
+  expect_identical(
+    get_duplicate_columns(as_forecast_binary(example_binary)),
+    character(0)
+  )
+  expect_identical(
+    get_duplicate_columns(as_forecast_point(example_point)),
+    character(0)
+  )
+  expect_identical(
+    get_duplicate_columns(as_forecast_nominal(example_nominal)),
+    "predicted_label"
+  )
+  expect_identical(
+    get_duplicate_columns(as_forecast_ordinal(example_ordinal)),
+    "predicted_label"
+  )
+})
+
+
+test_that("get_duplicate_columns() default detects columns by name", {
+  df <- data.frame(x = 1, quantile_level = 0.5)
+  expect_identical(get_duplicate_columns(df), "quantile_level")
+
+  df2 <- data.frame(x = 1, sample_id = 1)
+  expect_identical(get_duplicate_columns(df2), "sample_id")
+
+  df3 <- data.frame(x = 1)
+  expect_identical(get_duplicate_columns(df3), character(0))
+})
+
+
+# ==============================================================================
+# get_duplicate_forecasts() on forecast objects
+# ==============================================================================
+test_that("get_duplicate_forecasts() works on forecast_quantile objects", {
+  fc <- as_forecast_quantile(example_quantile)
+  expect_identical(nrow(get_duplicate_forecasts(fc)), 0L)
+
+  # manually add duplicates to an already-validated forecast object
+  fc_dup <- rbind(fc, fc[1000:1010])
+  class(fc_dup) <- class(fc)
+  expect_identical(nrow(get_duplicate_forecasts(fc_dup)), 22L)
+})
+
+
+test_that("get_duplicate_forecasts() works on forecast_sample objects", {
+  fc <- as_forecast_sample(example_sample_continuous)
+  expect_identical(nrow(get_duplicate_forecasts(fc)), 0L)
+})
+
+
+test_that("get_duplicate_forecasts() works on forecast_binary objects", {
+  fc <- as_forecast_binary(example_binary)
+  expect_identical(nrow(get_duplicate_forecasts(fc)), 0L)
+})
+
+
+test_that("get_duplicate_forecasts() works on forecast_point objects", {
+  fc <- as_forecast_point(example_point)
+  expect_identical(nrow(get_duplicate_forecasts(fc)), 0L)
+})
+
+
+# ==============================================================================
 # check_duplicates() # nolint: commented_code_linter
 # ==============================================================================
 test_that("check_duplicates works", {

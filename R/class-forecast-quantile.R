@@ -90,6 +90,13 @@ assert_forecast.forecast_quantile <- function(
 
 
 #' @export
+#' @keywords internal
+get_duplicate_columns.forecast_quantile <- function(data) {
+  "quantile_level"
+}
+
+
+#' @export
 #' @rdname is_forecast
 is_forecast_quantile <- function(x) {
   inherits(x, "forecast_quantile") && inherits(x, "forecast")

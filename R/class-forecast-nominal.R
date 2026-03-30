@@ -116,6 +116,13 @@ assert_forecast.forecast_nominal <- function(
 
 
 #' @export
+#' @keywords internal
+get_duplicate_columns.forecast_nominal <- function(data) {
+  "predicted_label"
+}
+
+
+#' @export
 #' @rdname is_forecast
 is_forecast_nominal <- function(x) {
   inherits(x, "forecast_nominal") && inherits(x, "forecast")

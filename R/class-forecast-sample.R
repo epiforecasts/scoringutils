@@ -66,6 +66,13 @@ assert_forecast.forecast_sample <- function(
 
 
 #' @export
+#' @keywords internal
+get_duplicate_columns.forecast_sample <- function(data) {
+  "sample_id"
+}
+
+
+#' @export
 #' @rdname is_forecast
 is_forecast_sample <- function(x) {
   inherits(x, "forecast_sample") && inherits(x, "forecast")

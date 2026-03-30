@@ -122,6 +122,13 @@ assert_forecast.forecast_ordinal <- function(
 
 
 #' @export
+#' @keywords internal
+get_duplicate_columns.forecast_ordinal <- function(data) {
+  "predicted_label"
+}
+
+
+#' @export
 #' @rdname is_forecast
 is_forecast_ordinal <- function(x) {
   inherits(x, "forecast_ordinal") && inherits(x, "forecast")
