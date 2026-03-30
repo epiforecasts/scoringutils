@@ -129,11 +129,11 @@ check_duplicates <- function(data) {
       forecast_type <- get_forecast_type(data)
       fu <- get_forecast_unit(data)
       fu_str <- paste0(
-        'c("', paste(fu, collapse = '", "'), '")'
+        "c(\"", paste(fu, collapse = "\", \""), "\")"
       )
       hint_args <- paste0(
-        ', forecast_unit = ', fu_str,
-        ', type = "', forecast_type, '"'
+        ", forecast_unit = ", fu_str,
+        ", type = \"", forecast_type, "\""
       )
     }
     msg <- paste0(
