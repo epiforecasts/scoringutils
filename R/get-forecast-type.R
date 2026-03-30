@@ -43,7 +43,7 @@ assert_forecast_type <- function(data,
       c(
         `!` = "Forecast type determined by scoringutils based on input:
         {.val {actual}}.",
-        `i` = "Desired forecast type: {.val {desired}}."
+        i = "Desired forecast type: {.val {desired}}."
       )
     )
     #nolint end

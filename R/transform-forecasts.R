@@ -134,7 +134,7 @@ transform_forecasts <- function(forecast,
     if (append && (label %in% original_forecast$scale)) {
       cli_warn(
         c(
-          `i` = "Appending new transformations with label '{label}'
+          i = "Appending new transformations with label '{label}'
           even though that entry is already present in column 'scale'."
         )
       )
@@ -236,7 +236,7 @@ log_shift <- function(x, offset = 0, base = exp(1)) {
     cli_warn(
       c(
         `!` = "Detected zeros in input values.",
-        `i` = "Try specifying offset = 1 (or any other offset)."
+        i = "Try specifying offset = 1 (or any other offset)."
       )
     )
   }

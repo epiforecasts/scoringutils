@@ -83,7 +83,7 @@ quantile_to_interval_dataframe <- function(forecast,
     cli_abort(
       c(
         `!` = "No valid forecast intervals found.",
-        `i` = "A forecast interval comprises two
+        i = "A forecast interval comprises two
       quantiles with quantile levels symmetric around the median
       (e.g. 0.25 and 0.75)"
       )

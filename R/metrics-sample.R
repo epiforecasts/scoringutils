@@ -229,7 +229,7 @@ logs_sample <- function(observed, predicted, ...) {
         "Predictions appear to be integer-valued." ,
         `!` = "The log score uses kernel density estimation, which may not be
         appropriate for integer-valued forecasts.",
-        `i` = "See the {.pkg scoringRules} package for alternatives for
+        i = "See the {.pkg scoringRules} package for alternatives for
         discrete probability distributions."
       )
     )

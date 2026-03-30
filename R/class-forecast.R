@@ -81,7 +81,7 @@ assert_forecast.default <- function(
   cli_abort(
     c(
       `!` = "The input needs to be a valid forecast object.",
-      `i` = "Please convert to `forecast` object first by calling the
+      i = "Please convert to `forecast` object first by calling the
       appropriate {.fn as_forecast_<type>} function)."
     )
   )
@@ -144,7 +144,7 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
     if (verbose) {
       cli_inform(
         c(
-          `i` = "Some rows containing NA values may be removed.
+          i = "Some rows containing NA values may be removed.
         This is fine if not unexpected."
         )
       )
@@ -290,7 +290,7 @@ is_forecast <- function(x) {
       cli_warn(
         c(
           `!` = "Error in validating forecast object: {validation}.",
-          `i` = "Note this error is sometimes related to `data.table`s `print`.
+          i = "Note this error is sometimes related to `data.table`s `print`.
           Run {.help [{.fun assert_forecast}](scoringutils::assert_forecast)}
           to confirm. To get rid of this warning entirely,
           call `as.data.table()` on the forecast object."

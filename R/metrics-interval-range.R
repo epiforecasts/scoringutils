@@ -43,7 +43,7 @@ assert_input_interval <- function(observed, lower, upper, interval_range) {
         `!` = "Found interval ranges between 0 and 1. Are you sure that's
         right? An interval range of 0.5 e.g. implies a (49.75%, 50.25%)
         prediction interval.",
-        `i` = "If you want to score a (25%, 75%) prediction interval, set
+        i = "If you want to score a (25%, 75%) prediction interval, set
         `interval_range = 50`."
       ),
       .frequency = "once",

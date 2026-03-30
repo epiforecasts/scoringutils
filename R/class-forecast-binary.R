@@ -73,7 +73,7 @@ assert_forecast.forecast_binary <- function(
       c(
         `!` = "Checking `forecast`: Input looks like a binary forecast, but an
          additional column called `sample_id` or `quantile` was found.",
-        `i` = "Please remove the column."
+        i = "Please remove the column."
       )
     )
   }

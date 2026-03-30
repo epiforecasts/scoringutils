@@ -54,7 +54,7 @@ assert_dims_ok_point <- function(observed, predicted) {
       c(
         `!` = "`observed` and `predicted` must either be of length 1 or
          of equal length.",
-        `i` = "Found {n_obs} and {n_pred}."
+        i = "Found {n_obs} and {n_pred}."
       )
     )
     #nolint end

@@ -104,9 +104,9 @@ assert_forecast.forecast_nominal <- function(
     issue_location <- paste(names(first_issue), "==", first_issue)
     cli_abort(
       c(`!` = "Found incomplete forecasts",
-        `i` = "For a nominal forecast, all possible outcomes must be assigned
+        i = "For a nominal forecast, all possible outcomes must be assigned
         a probability explicitly.",
-        `i` = "Found first missing probabilities in the forecast identified by
+        i = "Found first missing probabilities in the forecast identified by
         {.emph {issue_location}}")
     )
     #nolint end

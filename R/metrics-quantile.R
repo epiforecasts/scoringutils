@@ -444,7 +444,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
   if (!(0.5 %in% quantile_level)) {
     cli_inform(
       c(
-        `i` = "Median not available, interpolating median from the two
+        i = "Median not available, interpolating median from the two
         innermost quantiles in order to compute bias."
       )
     )

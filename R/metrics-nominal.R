@@ -80,7 +80,7 @@ assert_input_categorical <- function(
     cli_abort(
       c(
         `!` = "Probabilities belonging to a single forecast must sum to one",
-        `i` = "Found issues in row{?s} {row_indices} of {.var predicted}"
+        i = "Found issues in row{?s} {row_indices} of {.var predicted}"
       )
     )
     #nolint end

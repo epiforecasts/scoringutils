@@ -183,7 +183,7 @@ get_pairwise_comparisons <- function(
       c(
         `!` = "Some values for the metric {.var {metric}}
          are NA. These have been removed.",
-        `i` = "Maybe choose a different metric?"
+        i = "Maybe choose a different metric?"
       )
     )
     #nolint end
@@ -212,7 +212,7 @@ get_pairwise_comparisons <- function(
       c(
         `!` = "`compare` is set to the unit of a single forecast. This doesn't
             look right.",
-        `i` = "All relative skill scores will be equal to 1."
+        i = "All relative skill scores will be equal to 1."
       )
     )
   } else if (setequal(c(compare, by), forecast_unit)) {
@@ -220,7 +220,7 @@ get_pairwise_comparisons <- function(
       c(
         `!` = "relative skill can only be computed if the combination of
         `compare` and `by` is different from the unit of a single forecast.",
-        `i` = "`by` was set to an empty character vector"
+        i = "`by` was set to an empty character vector"
       )
     )
     by <- character(0)
