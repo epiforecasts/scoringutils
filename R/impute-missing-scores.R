@@ -62,7 +62,7 @@ impute_missing_scores <- function(
 
   scores <- copy(scores)
 
-  missing_rows <- build_missing_grid(scores, compare)
+  missing_rows <- build_missing_grid(scores, compare) # nolint: object_usage_linter
 
   if (nrow(missing_rows) == 0) {
     data.table::set(scores, j = ".imputed", value = FALSE)
