@@ -158,10 +158,7 @@ transform_forecasts <- function(forecast,
     fn <- get(fn_name)
     args <- list(data = out)
     if (".mv_group_id" %in% colnames(out)) {
-      args$joint_across <- setdiff(
-        get_forecast_unit(original_forecast),
-        get_grouping(original_forecast)
-      )
+      args$joint_across <- get_joint_across(original_forecast)
       out[, .mv_group_id := NULL]
       args$data <- out
     }

@@ -151,6 +151,19 @@ test_that("print() works on forecast_* objects", {
   }
 })
 
+test_that("print() shows joint_across for multivariate forecasts", {
+  data <- example_multivariate_sample
+  # cli_text output goes to stderr, so capture type = "message"
+  msgs <- capture.output(print(data), type = "message")
+  msgs_str <- paste(msgs, collapse = "\n")
+  expect_true(grepl("Joint across", msgs_str))
+  # Check that the joint_across columns appear in the output
+  joint <- get_joint_across(data)
+  for (col in joint) {
+    expect_true(grepl(col, msgs_str))
+  }
+})
+
 test_that("print() throws the expected messages", {
   test <- data.table::copy(example_point)
   class(test) <- c("point", "forecast", "data.table", "data.frame")

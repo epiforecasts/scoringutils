@@ -454,10 +454,7 @@ print.forecast <- function(x, ...) {
   # For multivariate forecasts, show joint_across
   if (".mv_group_id" %in% names(x)) {
     joint_across <- try(
-      setdiff(
-        get_forecast_unit(x),
-        get_grouping(x)
-      ),
+      get_joint_across(x),
       silent = TRUE
     )
     if (!inherits(joint_across, "try-error") &&

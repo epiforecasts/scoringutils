@@ -153,6 +153,34 @@ test_that(
   }
 )
 
+test_that("get_joint_across() recovers the joint_across columns", {
+  data <- example_multivariate_sample
+  # Use the actual joint_across from the example data
+  expected <- get_joint_across(data)
+  expect_type(expected, "character")
+  expect_true(length(expected) > 0)
+
+  # Verify round-trip: set_grouping with these columns produces the same result
+  data2 <- as.data.table(data)
+  data2[, .mv_group_id := NULL]
+  data2 <- scoringutils:::set_grouping(data2, expected)
+  result <- get_joint_across(data2)
+  expect_equal(sort(result), sort(expected))
+})
+
+test_that("get_joint_across() is the inverse of get_grouping()", {
+  data <- example_multivariate_sample
+  joint <- get_joint_across(data)
+  grouping <- get_grouping(data)
+
+  # Together they should cover the full forecast unit
+  forecast_unit <- get_forecast_unit(data)
+  expect_true(all(forecast_unit %in% c(joint, grouping)))
+  # And they should not overlap
+
+  expect_length(intersect(joint, grouping), 0)
+})
+
 test_that("set_grouping() preserves existing keys correctly", {
   data <- example_multivariate_sample
   grouping <- c(

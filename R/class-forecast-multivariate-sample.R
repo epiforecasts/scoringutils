@@ -325,6 +325,22 @@ get_grouping <- function(forecast) {
 }
 
 
+#' @title Get joint_across for a multivariate forecast
+#' @description
+#' Recovers the `joint_across` columns from a multivariate forecast by
+#' taking the set difference between the forecast unit and the grouping.
+#' This is the inverse of [get_grouping()].
+#' @inheritParams score
+#' @return
+#' A character vector with the names of the columns that the forecast is
+#' joint across.
+#' @export
+#' @keywords diagnose-inputs
+get_joint_across <- function(forecast) {
+  setdiff(get_forecast_unit(forecast), get_grouping(forecast))
+}
+
+
 #' Multivariate forecast example data
 #'
 #' A data set with continuous multivariate predictions for COVID-19 cases and
