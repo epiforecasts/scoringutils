@@ -66,7 +66,7 @@ test_that("filter_scores() drops incomplete targets", {
     wis = c(1, 2, 3)
   )
   scores <- new_scores(scores, "wis")
-  result <- filter_scores(scores)
+  result <- suppressMessages(filter_scores(scores))
   # Only DE should remain (both include have it)
   expect_equal(nrow(result), 2)
   expect_true(all(result$location == "DE"))
@@ -79,7 +79,7 @@ test_that("filter_scores() preserves class and metrics", {
     wis = c(1, 2, 3)
   )
   scores <- new_scores(scores, "wis")
-  result <- filter_scores(scores)
+  result <- suppressMessages(filter_scores(scores))
   expect_s3_class(result, "scores")
   expect_equal(attr(result, "metrics"), "wis")
 })
@@ -187,9 +187,9 @@ test_that("filter_scores() works with non-default compare", {
     wis = c(1, 2, 3)
   )
   scores <- new_scores(scores, "wis")
-  result <- filter_scores(
+  result <- suppressMessages(filter_scores(
     scores, compare = "forecaster"
-  )
+  ))
   expect_true(all(result$location == "DE"))
   expect_equal(nrow(result), 2)
 })
@@ -216,12 +216,12 @@ test_that(
     )
     n_epinow2 <- nrow(epinow2_targets)
 
-    result <- filter_scores(
+    result <- suppressMessages(filter_scores(
       scores,
       strategy = filter_to_intersection(
         include = "epiforecasts-EpiNow2"
       )
-    )
+    ))
 
     # All remaining targets should be EpiNow2's targets
     result_targets <- unique(
@@ -256,19 +256,19 @@ test_that(
     # 4 models total. UMass-MechBayes has no case targets
     # (128/256), so case targets are covered by 3/4 = 0.75.
     # At min_coverage = 0.75 case targets should be kept.
-    result_relaxed <- filter_scores(
+    result_relaxed <- suppressMessages(filter_scores(
       scores,
       strategy = filter_to_intersection(
         min_coverage = 0.75
       )
-    )
+    ))
     relaxed_types <- unique(result_relaxed$target_type)
     expect_true("Cases" %in% relaxed_types)
     expect_true("Deaths" %in% relaxed_types)
 
     # At min_coverage = 1.0 (default), case targets
     # should be dropped because UMass-MechBayes lacks them.
-    result_strict <- filter_scores(scores)
+    result_strict <- suppressMessages(filter_scores(scores))
     strict_types <- unique(result_strict$target_type)
     expect_false("Cases" %in% strict_types)
     expect_true("Deaths" %in% strict_types)
@@ -286,7 +286,7 @@ test_that(
     fu <- get_forecast_unit(scores)
     target_cols <- setdiff(fu, "model")
 
-    filtered <- filter_scores(scores)
+    filtered <- suppressMessages(filter_scores(scores))
 
     # Count distinct targets per model
     targets_per_model <- filtered[,

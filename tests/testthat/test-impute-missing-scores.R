@@ -14,9 +14,9 @@ test_that(
     scores <- new_scores(
       scores, get_metrics.scores(scores_quantile)
     )
-    result <- impute_missing_scores(
+    result <- suppressMessages(impute_missing_scores(
       scores, strategy = impute_na_score()
-    )
+    ))
     expect_true(".imputed" %in% names(result))
     expect_false(any(result$.imputed))
   }
@@ -26,9 +26,9 @@ test_that(
   "impute_missing_scores preserves scores class and metrics",
   {
     scores <- scores_quantile
-    result <- impute_missing_scores(
+    result <- suppressMessages(impute_missing_scores(
       scores, strategy = impute_na_score()
-    )
+    ))
     expect_s3_class(result, "scores")
     expect_identical(
       get_metrics.scores(result),
@@ -39,9 +39,9 @@ test_that(
 
 test_that(".imputed is not in get_metrics.scores output", {
   scores <- scores_quantile
-  result <- impute_missing_scores(
+  result <- suppressMessages(impute_missing_scores(
     scores, strategy = impute_na_score()
-  )
+  ))
   metrics <- get_metrics.scores(result)
   expect_false(".imputed" %in% metrics)
 })
@@ -54,9 +54,9 @@ test_that(".imputed is not in get_forecast_unit output", {
     ".imputed not yet in get_protected_columns"
   )
   scores <- scores_quantile
-  result <- impute_missing_scores(
+  result <- suppressMessages(impute_missing_scores(
     scores, strategy = impute_na_score()
-  )
+  ))
   fu <- get_forecast_unit(result)
   expect_false(".imputed" %in% fu)
 })
@@ -78,9 +78,9 @@ test_that("impute_worst_score fills with max observed score", {
   )
   scores <- scores_quantile
   metrics <- get_metrics.scores(scores)
-  result <- impute_missing_scores(
+  result <- suppressMessages(impute_missing_scores(
     scores, strategy = impute_worst_score()
-  )
+  ))
   # Imputed rows should exist
 
   imputed <- result[(.imputed)]
@@ -122,9 +122,9 @@ test_that("impute_mean_score fills with mean observed score", {
     "build_missing_grid not yet available"
   )
   scores <- scores_quantile
-  result <- impute_missing_scores(
+  result <- suppressMessages(impute_missing_scores(
     scores, strategy = impute_mean_score()
-  )
+  ))
   imputed <- result[(.imputed)]
   expect_gte(nrow(imputed), 0)
 })
@@ -137,9 +137,9 @@ test_that("impute_na_score fills with NA_real_", {
   )
   scores <- scores_quantile
   metrics <- get_metrics.scores(scores)
-  result <- impute_missing_scores(
+  result <- suppressMessages(impute_missing_scores(
     scores, strategy = impute_na_score()
-  )
+  ))
   imputed <- result[(.imputed)]
   if (nrow(imputed) > 0) {
     for (m in metrics) {
@@ -164,12 +164,12 @@ test_that(
     scores <- scores_quantile
     # EuroCOVIDhub-baseline has all 256 targets so can
     # serve as reference for all missing combinations
-    result <- impute_missing_scores(
+    result <- suppressMessages(impute_missing_scores(
       scores,
       strategy = impute_model_score(
         "EuroCOVIDhub-baseline"
       )
-    )
+    ))
     expect_s3_class(result, "scores")
   }
 )
@@ -210,9 +210,9 @@ test_that("custom strategy function works", {
   }
   scores <- scores_quantile
   metrics <- get_metrics.scores(scores)
-  result <- impute_missing_scores(
+  result <- suppressMessages(impute_missing_scores(
     scores, strategy = custom_strategy
-  )
+  ))
   imputed <- result[(.imputed)]
   if (nrow(imputed) > 0) {
     for (m in metrics) {
@@ -235,9 +235,10 @@ test_that(
       "build_missing_grid not yet available"
     )
     scores <- scores_quantile
-    result <- scores |>
-      impute_missing_scores(strategy = impute_na_score()) |>
-      summarise_scores(by = "model")
+    imputed <- suppressMessages(impute_missing_scores(
+      scores, strategy = impute_na_score()
+    ))
+    result <- summarise_scores(imputed, by = "model")
     expect_s3_class(result, "data.table")
   }
 )
@@ -263,15 +264,16 @@ test_that(
     scores <- scores_quantile
     ref_model <- "EuroCOVIDhub-baseline"
 
-    result <- scores |>
-      filter_scores(
-        strategy = filter_to_intersection(
-          include = ref_model
-        )
-      ) |>
-      impute_missing_scores(
-        strategy = impute_model_score(ref_model)
+    filtered <- suppressMessages(filter_scores(
+      scores,
+      strategy = filter_to_intersection(
+        include = ref_model
       )
+    ))
+    result <- suppressMessages(impute_missing_scores(
+      filtered,
+      strategy = impute_model_score(ref_model)
+    ))
     expect_s3_class(result, "scores")
   }
 )
@@ -287,11 +289,11 @@ test_that(
     # Attribute claims "wis" and "fake" but "fake" is
     # not a column
     scores <- new_scores(scores, c("wis", "fake"))
-    result <- suppressWarnings(
+    result <- suppressWarnings(suppressMessages(
       impute_missing_scores(
         scores, strategy = impute_worst_score()
       )
-    )
+    ))
     imputed <- result[result$.imputed]
     expect_equal(nrow(imputed), 1)
     expect_false("fake" %in% names(imputed))
@@ -307,11 +309,11 @@ test_that(
       wis = c(1, 2, 3)
     )
     scores <- new_scores(scores, c("wis", "fake"))
-    result <- suppressWarnings(
+    result <- suppressWarnings(suppressMessages(
       impute_missing_scores(
         scores, strategy = impute_mean_score()
       )
-    )
+    ))
     imputed <- result[result$.imputed]
     expect_equal(nrow(imputed), 1)
     expect_false("fake" %in% names(imputed))
@@ -346,11 +348,11 @@ test_that(
       wis = c(1, 2, 3)
     )
     scores <- new_scores(scores, "wis")
-    result <- impute_missing_scores(
+    result <- suppressMessages(impute_missing_scores(
       scores,
       strategy = impute_worst_score(),
       compare = "forecaster"
-    )
+    ))
     expect_true(".imputed" %in% names(result))
     imputed <- result[result$.imputed]
     expect_equal(nrow(imputed), 1)
@@ -370,9 +372,9 @@ test_that(
     fu <- get_forecast_unit(scores)
     target_cols <- setdiff(fu, "model")
 
-    result <- impute_missing_scores(
+    result <- suppressMessages(impute_missing_scores(
       scores, strategy = impute_na_score()
-    )
+    ))
 
     # After imputation, every model should have the same
     # number of rows (one per target combination)
@@ -400,10 +402,10 @@ test_that(
     target_cols <- setdiff(fu, "model")
     ref_name <- "EuroCOVIDhub-baseline"
 
-    result <- impute_missing_scores(
+    result <- suppressMessages(impute_missing_scores(
       scores,
       strategy = impute_model_score(ref_name)
-    )
+    ))
     imputed <- result[(.imputed)]
     expect_gt(nrow(imputed), 0)
 
