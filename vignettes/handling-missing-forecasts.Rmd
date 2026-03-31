@@ -20,10 +20,9 @@ This vignette walks through diagnosing which targets each model covers, scoring 
 
 The approaches here were initially inspired by [Kim, Ray & Reich (2026)](https://doi.org/10.1016/j.ijforecast.2025.12.006), who discuss the importance of handling missing forecasts when evaluating model contributions beyond simple leaderboard rankings.
 
-
 ## Diagnosing missingness
 
-Before adjusting scores it is worth understanding the pattern of missingness.
+Before adjusting scores we should aim to understand the patterns of potential missingness.
 Models may have different coverage for legitimate reasons (a model may only forecast deaths, not cases) or because of operational failures (a missed submission deadline).
 
 `get_forecast_counts()` tabulates how many forecasts each model has, grouped by the columns you choose.
@@ -50,12 +49,13 @@ death_counts[
 ]
 ```
 
-Note that `get_pairwise_comparisons()` has long handled missingness internally, restricting each pair of models to their shared set of targets before comparing.
+Note that `get_pairwise_comparisons()` handles missingness internally, restricting each pair of models to their shared set of targets before comparing.
 The functions below give you explicit control over how to handle missingness when computing score summaries.
 
 ## Scoring
 
 We score all forecasts first, then adjust the resulting scores table.
+Both `filter_scores()` and `impute_missing_scores()` accept a `compare` argument (default `"model"`) that specifies which column identifies the units being compared.
 
 ```{r score}
 scores <- score(fc)
@@ -71,7 +71,7 @@ The sections below show two approaches to addressing this: filtering scores to a
 
 ## Filtering to a common set of targets
 
-`filter_scores()` removes scores for target combinations not shared across models.
+`filter_scores()` removes scores based on the supplied strategy.
 This can be appropriate when a model legitimately does not cover certain targets and you want to compare only on shared ground.
 
 The default strategy, `filter_to_intersection()`, keeps only targets covered by **all** models.
@@ -83,9 +83,10 @@ summarise_scores(scores_filtered, by = "model")
 
 This drops all case targets (since `UMass-MechBayes` has no case forecasts) and the death targets `epiforecasts-EpiNow2` missed.
 
-### Relaxing with min_coverage
+### Requiring partial coverage
 
-You can relax the requirement with `min_coverage`, keeping targets covered by at least a given proportion of models.
+The default requires every model to cover a target for it to be kept.
+The `min_coverage` argument relaxes this by keeping targets covered by at least a given proportion of models.
 With four models, `min_coverage = 0.75` requires coverage by at least three.
 
 ```{r filter-relaxed}
@@ -96,7 +97,9 @@ scores_relaxed <- filter_scores(
 summarise_scores(scores_relaxed, by = "model")
 ```
 
-This retains the case targets (covered by three of four models) while still dropping any target covered by fewer.
+In this example, case targets are covered by three of four models and death targets by three or four, so `min_coverage = 0.75` retains all targets.
+The default (`min_coverage = 1`) is stricter and drops all case targets because `UMass-MechBayes` has no case forecasts.
+Between 0.75 and 1.0 no intermediate threshold changes the result here because no target is covered by exactly three out of four models while being missing for one that isn't `UMass-MechBayes`.
 
 ### Filtering to a specific model's targets
 
@@ -120,39 +123,11 @@ This keeps both case and death targets where EpiNow2 submitted forecasts, but `U
 Instead of dropping data, `impute_missing_scores()` fills in scores for target combinations a model did not cover.
 Imputed rows are marked with `.imputed = TRUE` so they can be identified later.
 
-### Worst score
-
-The simplest penalty: fill each missing score with the worst (maximum) observed score for that target.
-
-```{r impute-worst}
-scores_worst <- impute_missing_scores(
-  scores,
-  strategy = impute_worst_score()
-)
-summarise_scores(scores_worst, by = "model")
-```
-
-You can inspect which rows were imputed:
-
-```{r imputed-check}
-scores_worst[(.imputed)]
-```
-
-### Mean score
-
-A less severe penalty: fill with the mean score across models that did forecast each target.
-
-```{r impute-mean}
-scores_mean <- impute_missing_scores(
-  scores,
-  strategy = impute_mean_score()
-)
-summarise_scores(scores_mean, by = "model")
-```
-
 ### NA
 
-Fill with `NA`, which propagates through summaries unless explicitly handled.
+The simplest option: fill missing scores with `NA`.
+This preserves the structure of the data without making assumptions about what the score would have been.
+`NA` values propagate through summaries, so this can also serve as a diagnostic check to confirm where missingness exists.
 
 ```{r impute-na}
 scores_na <- impute_missing_scores(
@@ -162,9 +137,32 @@ scores_na <- impute_missing_scores(
 summarise_scores(scores_na, by = "model")
 ```
 
+### Worst score
+
+Fill each missing score with the worst (maximum) observed score for that target across all models.
+This penalises models most heavily for missing targets.
+
+```{r impute-worst}
+scores_worst <- impute_missing_scores(
+  scores,
+  strategy = impute_worst_score()
+)
+summarise_scores(scores_worst, by = "model")
+```
+
+We can check that the imputed rows match the models and targets we identified as missing earlier.
+
+```{r imputed-check}
+scores_worst[
+  (.imputed),
+  .(n_imputed = .N),
+  by = c("model", "target_type")
+]
+```
+
 ### Reference model
 
-Fill with the scores of a named baseline model, treating a missing forecast as performing no better than the baseline.
+Fill with the scores of a named baseline model, treating a missing forecast as performing no better than that baseline.
 
 ```{r impute-model}
 scores_ref <- impute_missing_scores(
@@ -174,10 +172,25 @@ scores_ref <- impute_missing_scores(
 summarise_scores(scores_ref, by = "model")
 ```
 
+This is a reasonable default when a suitable baseline exists, though more research is needed on best practice for choosing the reference model and understanding the impact of this choice.
+
+### Mean score
+
+Fill with the mean score across models that did forecast each target.
+This is the least severe penalty as it assigns the average performance, which may be close to the ensemble performance.
+
+```{r impute-mean}
+scores_mean <- impute_missing_scores(
+  scores,
+  strategy = impute_mean_score()
+)
+summarise_scores(scores_mean, by = "model")
+```
+
 ## Combining filter and impute
 
-When you want to focus on a specific model's targets but still need complete scores for all models, combine filtering with imputation.
-For example, to evaluate on the targets `epiforecasts-EpiNow2` covered and impute scores for models that are missing forecasts within that set:
+Consider combining filtering and imputation when you want to focus on a specific model's targets but still need complete scores for all models.
+For example, to evaluate on the targets `epiforecasts-EpiNow2` covered and then impute scores for models that are missing forecasts within that set:
 
 ```{r pipeline}
 result <- scores |>
