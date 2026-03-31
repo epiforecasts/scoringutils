@@ -27,7 +27,7 @@ navbar:
       href: https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf
 
 articles:
-  - title: Getting started
+  - title: Articles
     contents:
       - scoring-rules
       - scoring-multivariate-forecasts
