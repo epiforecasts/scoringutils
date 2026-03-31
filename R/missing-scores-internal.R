@@ -21,7 +21,6 @@ build_missing_grid <- function(scores, compare = "model") {
   forecast_unit <- get_forecast_unit(scores)
   target_cols <- setdiff(forecast_unit, compare)
 
-  # Observed target combinations (NOT per-column expand.grid)
   targets <- unique(scores[, target_cols, with = FALSE])
 
   # All unique compare values
