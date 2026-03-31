@@ -15,10 +15,11 @@ data.table::setDTthreads(2)
 ```
 
 When comparing forecast models, not all models will have made predictions for every target.
-Naively averaging scores across different sets of targets produces misleading summaries.
+Naively averaging scores across different sets of targets can produce misleading summaries.
 This vignette walks through diagnosing which targets each model covers, scoring the forecasts, and then adjusting the scores using filtering and imputation so that summaries are comparable.
 
 The approaches here were initially inspired by [Kim, Ray & Reich (2026)](https://doi.org/10.1016/j.ijforecast.2025.12.006), who discuss the importance of handling missing forecasts when evaluating model contributions beyond simple leaderboard rankings.
+
 
 ## Diagnosing missingness
 
@@ -60,18 +61,18 @@ We score all forecasts first, then adjust the resulting scores table.
 scores <- score(fc)
 ```
 
-A naive summary averages over different numbers of targets per model, making direct comparison unreliable.
+A naive summary averages over different numbers of targets per model, which can make direct comparison misleading.
 
 ```{r naive-summary}
 summarise_scores(scores, by = "model")
 ```
 
-The sections below show two approaches to fixing this: filtering scores to a common set of targets, and imputing scores for missing targets.
+The sections below show two approaches to addressing this: filtering scores to a common set of targets, and imputing scores for missing targets.
 
 ## Filtering to a common set of targets
 
 `filter_scores()` removes scores for target combinations not shared across models.
-This is appropriate when a model legitimately does not cover certain targets and you want to compare only on shared ground.
+This can be appropriate when a model legitimately does not cover certain targets and you want to compare only on shared ground.
 
 The default strategy, `filter_to_intersection()`, keeps only targets covered by **all** models.
 
