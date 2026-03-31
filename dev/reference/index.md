@@ -332,8 +332,6 @@
   : Get forecast type from forecast object
 - [`get_type()`](https://epiforecasts.io/scoringutils/dev/reference/get_type.md)
   : Get type of a vector or matrix of observed values or predictions
-- [`test_columns_not_present()`](https://epiforecasts.io/scoringutils/dev/reference/test_columns_not_present.md)
-  : Test whether column names are NOT present in a data.frame
 - [`test_columns_present()`](https://epiforecasts.io/scoringutils/dev/reference/test_columns_present.md)
   : Test whether all column names are present in a data.frame
 - [`validate_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/validate_metrics.md)
