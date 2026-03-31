@@ -2,6 +2,14 @@
 
 ## scoringutils (development version)
 
+- Renamed internal functions `assert_dims_ok_point()` and
+  `check_dims_ok_point()` to
+  [`assert_dims_ok_scalar()`](https://epiforecasts.io/scoringutils/dev/reference/assert_dims_ok_scalar.md)
+  and
+  [`check_dims_ok_scalar()`](https://epiforecasts.io/scoringutils/dev/reference/check_dims_ok_scalar.md)
+  to reflect that they are used by both point and binary forecasts, not
+  just point
+  ([\#938](https://github.com/epiforecasts/scoringutils/issues/938)).
 - Added `forecast_multivariate_point` class for scoring multivariate
   point forecasts with the variogram score. The new
   [`as_forecast_multivariate_point()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_point.md)

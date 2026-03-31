@@ -282,7 +282,7 @@
 
 ### Internal input check functions
 
-- [`assert_dims_ok_point()`](https://epiforecasts.io/scoringutils/dev/reference/assert_dims_ok_point.md)
+- [`assert_dims_ok_scalar()`](https://epiforecasts.io/scoringutils/dev/reference/assert_dims_ok_scalar.md)
   : Assert Inputs Have Matching Dimensions
 - [`assert_forecast_generic()`](https://epiforecasts.io/scoringutils/dev/reference/assert_forecast_generic.md)
   : Validation common to all forecast types
@@ -308,7 +308,7 @@
   : Assert that inputs are correct for sample-based forecast
 - [`check_columns_present()`](https://epiforecasts.io/scoringutils/dev/reference/check_columns_present.md)
   : Check column names are present in a data.frame
-- [`check_dims_ok_point()`](https://epiforecasts.io/scoringutils/dev/reference/check_dims_ok_point.md)
+- [`check_dims_ok_scalar()`](https://epiforecasts.io/scoringutils/dev/reference/check_dims_ok_scalar.md)
   : Check Inputs Have Matching Dimensions
 - [`check_duplicates()`](https://epiforecasts.io/scoringutils/dev/reference/check_duplicates.md)
   : Check that there are no duplicate forecasts
