@@ -26,17 +26,6 @@ navbar:
       text: "scoringutils paper"
       href: https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf
 
-articles:
-  - title: Articles
-    contents:
-      - scoring-rules
-      - scoring-multivariate-forecasts
-      - handling-missing-forecasts
-  - title: Deprecated
-    contents:
-      - Deprecated-functions
-      - Deprecated-visualisations
-
 reference:
         - title: Package documentation
           contents:
