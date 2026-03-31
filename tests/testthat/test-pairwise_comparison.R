@@ -343,7 +343,7 @@ test_that("Basic input checks for `add_relative_skill() work", {
       compare = "model", baseline = "EuroCOVIDhub-baseline",
       metric = "crps"
     ),
-    "At least one non-baseline model is needed to compute pairwise comparisons."
+    "not enough comparators"
   )
 
   # error if no relative skill metric is found

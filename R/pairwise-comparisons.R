@@ -157,16 +157,6 @@ get_pairwise_comparisons <- function(
   comparators <- as.vector(unique(scores[[compare]]))
   assert_subset(baseline, comparators)
 
-  # check there are enough comparators
-  if (length(setdiff(comparators, baseline)) < 1) {
-    cli_abort(
-      c(
-        `!` = "At least one non-baseline model is needed to compute
-        pairwise comparisons."
-      )
-    )
-  }
-
   # check that values of the chosen metric are not NA
   if (anyNA(scores[[metric]])) {
     scores <- scores[!is.na(scores[[metric]])]
