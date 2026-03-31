@@ -86,8 +86,7 @@ impute_missing_scores <- function(
     if (n_comparators != 1) "s" else ""
   )
   cli_inform(c(
-    "i" = "Imputing {n_missing} missing score row{?s}
-           across {compare_label}."
+    "i" = "Imputing {n_missing} missing score row{?s} across {compare_label}." # nolint: line_length_linter
   ))
   #nolint end
 
