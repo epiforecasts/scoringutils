@@ -18,6 +18,8 @@ When comparing forecast models, not all models will have made predictions for ev
 Naively averaging scores across different sets of targets produces misleading summaries.
 This vignette walks through diagnosing which targets each model covers, scoring the forecasts, and then adjusting the scores using filtering and imputation so that summaries are comparable.
 
+The approaches here were initially inspired by [Kim, Ray & Reich (2026)](https://doi.org/10.1016/j.ijforecast.2025.12.006), who discuss the importance of handling missing forecasts when evaluating model contributions beyond simple leaderboard rankings.
+
 ## Diagnosing missingness
 
 Before adjusting scores it is worth understanding the pattern of missingness.
