@@ -67,11 +67,9 @@ impute_missing_scores <- function(
   missing_rows <- build_missing_grid(scores, compare) # nolint: object_usage_linter
 
   if (nrow(missing_rows) == 0) {
-    #nolint start: keyword_quote_linter
     cli_inform(c(
-      "i" = "No missing scores to impute. Returning scores unchanged."
+      i = "No missing scores to impute. Returning scores unchanged."
     ))
-    #nolint end
     data.table::set(scores, j = ".imputed", value = FALSE)
     return(scores[])
   }
@@ -80,12 +78,10 @@ impute_missing_scores <- function(
   n_missing <- nrow(missing_rows)
   n_comparators <- length(unique(missing_rows[[compare]]))
   #nolint end
-  #nolint start: keyword_quote_linter
   cli_inform(c(
-    "i" = "Imputing {n_missing} missing score row{?s}.",
-    "i" = "{n_comparators} {compare} {cli::qty(n_comparators)}value{?s} affected." # nolint: line_length_linter
+    i = "Imputing {n_missing} missing score row{?s}.",
+    i = "{n_comparators} {compare} {cli::qty(n_comparators)}value{?s} affected." # nolint: line_length_linter
   ))
-  #nolint end
 
   filled <- strategy(scores, missing_rows, metrics, compare)
 

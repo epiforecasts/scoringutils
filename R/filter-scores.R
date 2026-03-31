@@ -47,20 +47,16 @@ filter_scores <- function(
   #nolint end
 
   if (n_dropped == 0) {
-    #nolint start: keyword_quote_linter
     cli_inform(c(
-      "i" = "No rows filtered. Returning scores unchanged."
+      i = "No rows filtered. Returning scores unchanged."
     ))
-    #nolint end
     return(scores)
   }
 
-  #nolint start: keyword_quote_linter
   cli_inform(c(
-    "i" = "Filtered out {n_dropped} rows.",
-    "i" = "{n_after} of {n_before} rows remaining."
+    i = "Filtered out {n_dropped} rows.",
+    i = "{n_after} of {n_before} rows remaining." # nolint: duplicate_argument_linter
   ))
-  #nolint end
 
   # Preserve class and metrics
   class(result) <- original_class
