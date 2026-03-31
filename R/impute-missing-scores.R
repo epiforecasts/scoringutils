@@ -38,7 +38,7 @@
 #' @importFrom data.table copy set rbindlist setattr
 #' @importFrom checkmate assert_class assert_function
 #'   assert_character assert_subset
-#' @importFrom cli cli_abort
+#' @importFrom cli cli_abort cli_inform
 #' @export
 #' @keywords handle-metrics
 #' @examples
@@ -67,9 +67,29 @@ impute_missing_scores <- function(
   missing_rows <- build_missing_grid(scores, compare) # nolint: object_usage_linter
 
   if (nrow(missing_rows) == 0) {
+    #nolint start: keyword_quote_linter
+    cli_inform(c(
+      "i" = "No missing scores to impute. Returning scores unchanged."
+    ))
+    #nolint end
     data.table::set(scores, j = ".imputed", value = FALSE)
     return(scores[])
   }
+
+  #nolint start: object_usage_linter
+  n_missing <- nrow(missing_rows)
+  n_comparators <- length(unique(missing_rows[[compare]]))
+  #nolint end
+  #nolint start: keyword_quote_linter
+  compare_label <- paste0(
+    n_comparators, " ", compare,
+    if (n_comparators != 1) "s" else ""
+  )
+  cli_inform(c(
+    "i" = "Imputing {n_missing} missing score row{?s}
+           across {compare_label}."
+  ))
+  #nolint end
 
   filled <- strategy(scores, missing_rows, metrics, compare)
 
