@@ -358,3 +358,82 @@ test_that(
     expect_equal(imputed$location, "US")
   }
 )
+
+
+# ==============================================================================
+# Additional integration tests
+# ==============================================================================
+test_that(
+  "impute then summarise gives equal row counts per model",
+  {
+    scores <- scores_quantile
+    fu <- get_forecast_unit(scores)
+    target_cols <- setdiff(fu, "model")
+
+    result <- impute_missing_scores(
+      scores, strategy = impute_na_score()
+    )
+
+    # After imputation, every model should have the same
+    # number of rows (one per target combination)
+    rows_per_model <- result[, .N, by = "model"]
+    expect_equal(
+      length(unique(rows_per_model$N)), 1,
+      info = paste(
+        "Expected equal rows per model, got:",
+        paste(
+          rows_per_model$model,
+          rows_per_model$N,
+          sep = "=", collapse = ", "
+        )
+      )
+    )
+  }
+)
+
+test_that(
+  "impute_model_score values match reference model scores",
+  {
+    scores <- scores_quantile
+    metrics <- attr(scores, "metrics")
+    fu <- get_forecast_unit(scores)
+    target_cols <- setdiff(fu, "model")
+    ref_name <- "EuroCOVIDhub-baseline"
+
+    result <- impute_missing_scores(
+      scores,
+      strategy = impute_model_score(ref_name)
+    )
+    imputed <- result[(.imputed)]
+    expect_gt(nrow(imputed), 0)
+
+    # Get the reference model's actual scores
+    ref_scores <- scores[model == ref_name]
+
+    # For each imputed row, the metric values should equal
+    # the reference model's scores for the same target
+    merged <- merge(
+      imputed,
+      ref_scores,
+      by = target_cols,
+      suffixes = c(".imputed", ".ref")
+    )
+    expect_equal(nrow(merged), nrow(imputed))
+
+    for (m in metrics) {
+      col_imp <- paste0(m, ".imputed")
+      col_ref <- paste0(m, ".ref")
+      if (col_imp %in% names(merged) &&
+            col_ref %in% names(merged)) {
+        expect_equal(
+          merged[[col_imp]],
+          merged[[col_ref]],
+          info = paste(
+            "Imputed", m,
+            "should match reference model"
+          )
+        )
+      }
+    }
+  }
+)

@@ -193,3 +193,116 @@ test_that("filter_scores() works with non-default compare", {
   expect_true(all(result$location == "DE"))
   expect_equal(nrow(result), 2)
 })
+
+
+# ==============================================================================
+# Integration tests with scores_quantile
+# ==============================================================================
+test_that(
+  "filter_to_intersection(include) with real data filters
+   to model's targets",
+  {
+    scores <- scores_quantile
+    fu <- get_forecast_unit(scores)
+    target_cols <- setdiff(fu, "model")
+
+    # EpiNow2 is missing 9 death targets out of 256
+    epinow2_targets <- unique(
+      scores[
+        model == "epiforecasts-EpiNow2",
+        target_cols,
+        with = FALSE
+      ]
+    )
+    n_epinow2 <- nrow(epinow2_targets)
+
+    result <- filter_scores(
+      scores,
+      strategy = filter_to_intersection(
+        include = "epiforecasts-EpiNow2"
+      )
+    )
+
+    # All remaining targets should be EpiNow2's targets
+    result_targets <- unique(
+      result[, target_cols, with = FALSE]
+    )
+    expect_equal(nrow(result_targets), n_epinow2)
+
+    # The 9 death targets EpiNow2 doesn't cover
+    # should have been dropped
+    all_targets <- unique(
+      scores[, target_cols, with = FALSE]
+    )
+    n_dropped_targets <- nrow(all_targets) - n_epinow2
+    expect_equal(n_dropped_targets, 9)
+
+    # Every model in the result should only have
+    # targets that EpiNow2 covers
+    data.table::setkeyv(result_targets, target_cols)
+    data.table::setkeyv(epinow2_targets, target_cols)
+    expect_equal(result_targets, epinow2_targets)
+  }
+)
+
+test_that(
+  "filter_to_intersection(min_coverage) boundary with
+   real data",
+  {
+    scores <- scores_quantile
+    fu <- get_forecast_unit(scores)
+    target_cols <- setdiff(fu, "model")
+
+    # 4 models total. UMass-MechBayes has no case targets
+    # (128/256), so case targets are covered by 3/4 = 0.75.
+    # At min_coverage = 0.75 case targets should be kept.
+    result_relaxed <- filter_scores(
+      scores,
+      strategy = filter_to_intersection(
+        min_coverage = 0.75
+      )
+    )
+    relaxed_types <- unique(result_relaxed$target_type)
+    expect_true("Cases" %in% relaxed_types)
+    expect_true("Deaths" %in% relaxed_types)
+
+    # At min_coverage = 1.0 (default), case targets
+    # should be dropped because UMass-MechBayes lacks them.
+    result_strict <- filter_scores(scores)
+    strict_types <- unique(result_strict$target_type)
+    expect_false("Cases" %in% strict_types)
+    expect_true("Deaths" %in% strict_types)
+
+    # Relaxed should have strictly more rows
+    expect_gt(nrow(result_relaxed), nrow(result_strict))
+  }
+)
+
+test_that(
+  "filter_scores then summarise_scores gives equal target
+   counts per model",
+  {
+    scores <- scores_quantile
+    fu <- get_forecast_unit(scores)
+    target_cols <- setdiff(fu, "model")
+
+    filtered <- filter_scores(scores)
+
+    # Count distinct targets per model
+    targets_per_model <- filtered[,
+      .(n_targets = data.table::uniqueN(
+        .SD[, target_cols, with = FALSE]
+      )),
+      by = "model"
+    ]
+    # All models should have the same number of targets
+    expect_length(unique(targets_per_model$n_targets), 1)
+
+    # Summarise should work and give a row per model
+    summary <- summarise_scores(filtered, by = "model")
+    expect_equal(
+      nrow(summary),
+      length(unique(filtered$model))
+    )
+  }
+)
