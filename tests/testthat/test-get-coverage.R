@@ -37,7 +37,7 @@ test_that("get_coverage() can deal with non-symmetric prediction intervals", {
 
   cov <- expect_no_condition(get_coverage(test))
 
-  prediction_intervals <- get_range_from_quantile(c(0.2, 0.3, 0.5))
+  prediction_intervals <- get_interval_range(c(0.2, 0.3, 0.5))
 
   missing <- cov[interval_range %in% prediction_intervals]
   not_missing <- cov[!interval_range %in% prediction_intervals]
