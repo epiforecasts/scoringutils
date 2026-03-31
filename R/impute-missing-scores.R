@@ -81,12 +81,9 @@ impute_missing_scores <- function(
   n_comparators <- length(unique(missing_rows[[compare]]))
   #nolint end
   #nolint start: keyword_quote_linter
-  compare_label <- paste0(
-    n_comparators, " ", compare,
-    if (n_comparators != 1) "s" else ""
-  )
   cli_inform(c(
-    "i" = "Imputing {n_missing} missing score row{?s} across {compare_label}." # nolint: line_length_linter
+    "i" = "Imputing {n_missing} missing score row{?s}.",
+    "i" = "{n_comparators} {compare} {cli::qty(n_comparators)}value{?s} affected." # nolint: line_length_linter
   ))
   #nolint end
 
