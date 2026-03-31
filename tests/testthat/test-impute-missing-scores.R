@@ -122,11 +122,38 @@ test_that("impute_mean_score fills with mean observed score", {
     "build_missing_grid not yet available"
   )
   scores <- scores_quantile
+  metrics <- get_metrics.scores(scores)
   result <- suppressMessages(impute_missing_scores(
     scores, strategy = impute_mean_score()
   ))
   imputed <- result[(.imputed)]
-  expect_gte(nrow(imputed), 0)
+  expect_gt(nrow(imputed), 0)
+
+  fu <- get_forecast_unit(scores)
+  target_cols <- setdiff(fu, "model")
+
+  for (m in metrics) {
+    if (!(m %in% names(imputed)) ||
+          !(m %in% names(scores))) next
+    mean_per_target <- scores[,
+      .(..mean = mean(get(m), na.rm = TRUE)),
+      by = target_cols
+    ]
+    merged <- merge(
+      imputed, mean_per_target,
+      by = target_cols, all.x = TRUE
+    )
+    expect_true(
+      all(
+        abs(merged[[m]] - merged[["..mean"]]) < 1e-10 |
+          is.na(merged[[m]])
+      ),
+      info = paste(
+        "metric", m,
+        "does not match per-target mean"
+      )
+    )
+  }
 })
 
 test_that("impute_na_score fills with NA_real_", {
@@ -436,6 +463,32 @@ test_that(
           )
         )
       }
+    }
+  }
+)
+
+test_that(
+  "imputation does not alter original score values",
+  {
+    scores <- scores_quantile
+    metrics <- get_metrics.scores(scores)
+    result <- suppressMessages(impute_missing_scores(
+      scores, strategy = impute_worst_score()
+    ))
+
+    originals <- result[!(.imputed)]
+    originals[, .imputed := NULL]
+
+    # Original metric values should be unchanged
+    for (m in metrics) {
+      if (!(m %in% names(originals))) next
+      data.table::setkeyv(originals, names(scores))
+      data.table::setkeyv(scores, names(scores))
+      expect_equal(
+        as.numeric(originals[[m]]),
+        as.numeric(scores[[m]]),
+        info = paste("metric", m, "changed")
+      )
     }
   }
 )

@@ -98,6 +98,19 @@ test_that("filter_scores() unchanged when nothing missing", {
   expect_equal(nrow(result), 4)
 })
 
+test_that("filter_scores() reports rows dropped", {
+  scores <- data.table::data.table(
+    model = c("A", "A", "B"),
+    location = c("DE", "US", "DE"),
+    wis = c(1, 2, 3)
+  )
+  scores <- new_scores(scores, "wis")
+  expect_message(
+    filter_scores(scores),
+    "Filtered out 1 row"
+  )
+})
+
 test_that("filter_scores() errors on invalid compare column", {
   scores <- data.table::data.table(
     model = c("A", "A", "B"),
