@@ -277,6 +277,67 @@ test_that(
 )
 
 test_that(
+  "impute_worst_score skips metrics not in columns",
+  {
+    scores <- data.table::data.table(
+      model = c("A", "A", "B"),
+      location = c("DE", "US", "DE"),
+      wis = c(1, 2, 3)
+    )
+    # Attribute claims "wis" and "fake" but "fake" is
+    # not a column
+    scores <- new_scores(scores, c("wis", "fake"))
+    result <- suppressWarnings(
+      impute_missing_scores(
+        scores, strategy = impute_worst_score()
+      )
+    )
+    imputed <- result[result$.imputed]
+    expect_equal(nrow(imputed), 1)
+    expect_false("fake" %in% names(imputed))
+  }
+)
+
+test_that(
+  "impute_mean_score skips metrics not in columns",
+  {
+    scores <- data.table::data.table(
+      model = c("A", "A", "B"),
+      location = c("DE", "US", "DE"),
+      wis = c(1, 2, 3)
+    )
+    scores <- new_scores(scores, c("wis", "fake"))
+    result <- suppressWarnings(
+      impute_missing_scores(
+        scores, strategy = impute_mean_score()
+      )
+    )
+    imputed <- result[result$.imputed]
+    expect_equal(nrow(imputed), 1)
+    expect_false("fake" %in% names(imputed))
+  }
+)
+
+test_that(
+  "impute_model_score errors for nonexistent model",
+  {
+    scores <- data.table::data.table(
+      model = c("A", "A", "B"),
+      location = c("DE", "US", "DE"),
+      wis = c(1, 2, 3)
+    )
+    scores <- new_scores(scores, "wis")
+    expect_error(
+      impute_missing_scores(
+        scores,
+        strategy = impute_model_score("nonexistent")
+      ),
+      "not found"
+    )
+  }
+)
+
+test_that(
   "impute_missing_scores works with non-default compare",
   {
     scores <- data.table::data.table(
