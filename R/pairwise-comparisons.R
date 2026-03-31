@@ -158,11 +158,11 @@ get_pairwise_comparisons <- function(
   assert_subset(baseline, comparators)
 
   # check there are enough comparators
-  if (length(setdiff(comparators, baseline)) < 2) {
+  if (length(setdiff(comparators, baseline)) < 1) {
     cli_abort(
       c(
-        `!` = "More than one non-baseline model is needed to compute
-        pairwise compairisons."
+        `!` = "At least one non-baseline model is needed to compute
+        pairwise comparisons."
       )
     )
   }
