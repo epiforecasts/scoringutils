@@ -50,6 +50,9 @@ reference:
         - title: Handling metrics/scoring functions
           contents:
                 - has_keyword("handle-metrics")
+        - title: Post-process scores
+          contents:
+                - has_keyword("postprocess-scores")
         - title: Evaluate forecasts
           contents:
                 - has_keyword("scoring")

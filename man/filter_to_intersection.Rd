@@ -27,4 +27,4 @@ Strategy factory for \code{\link[=filter_scores]{filter_scores()}}.
 Returns a function that keeps only target combinations
 covered by a minimum proportion of comparators.
 }
-\keyword{handle-metrics}
+\keyword{postprocess-scores}

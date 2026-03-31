@@ -26,4 +26,4 @@ scores <- example_quantile |>
 
 impute_missing_scores(scores, strategy = impute_mean_score())
 }
-\keyword{handle-metrics}
+\keyword{postprocess-scores}

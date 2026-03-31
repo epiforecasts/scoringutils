@@ -24,7 +24,7 @@
 #' @importFrom checkmate assert_class assert_character
 #'   assert_function assert_subset
 #' @export
-#' @keywords handle-metrics
+#' @keywords postprocess-scores
 filter_scores <- function(
   scores,
   strategy = filter_to_intersection(),
@@ -89,7 +89,7 @@ filter_scores <- function(
 #' @importFrom data.table as.data.table setkeyv
 #' @importFrom checkmate assert_number assert_character
 #' @export
-#' @keywords handle-metrics
+#' @keywords postprocess-scores
 filter_to_intersection <- function(
   min_coverage = 1,
   include = NULL

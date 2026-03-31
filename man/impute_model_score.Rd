@@ -34,4 +34,4 @@ impute_missing_scores(
   strategy = impute_model_score("EuroCOVIDhub-baseline")
 )
 }
-\keyword{handle-metrics}
+\keyword{postprocess-scores}

@@ -40,7 +40,7 @@
 #'   assert_character assert_subset
 #' @importFrom cli cli_abort cli_inform
 #' @export
-#' @keywords handle-metrics
+#' @keywords postprocess-scores
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -107,7 +107,7 @@ impute_missing_scores <- function(
 #' @return A function suitable for use as the `strategy`
 #'   argument in [impute_missing_scores()].
 #' @export
-#' @keywords handle-metrics
+#' @keywords postprocess-scores
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -158,7 +158,7 @@ impute_worst_score <- function() {
 #' @return A function suitable for use as the `strategy`
 #'   argument in [impute_missing_scores()].
 #' @export
-#' @keywords handle-metrics
+#' @keywords postprocess-scores
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -205,7 +205,7 @@ impute_mean_score <- function() {
 #' @return A function suitable for use as the `strategy`
 #'   argument in [impute_missing_scores()].
 #' @export
-#' @keywords handle-metrics
+#' @keywords postprocess-scores
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)
@@ -242,7 +242,7 @@ impute_na_score <- function() {
 #'
 #' @importFrom cli cli_abort
 #' @export
-#' @keywords handle-metrics
+#' @keywords postprocess-scores
 #' @examples
 #' \dontshow{
 #'   data.table::setDTthreads(2)

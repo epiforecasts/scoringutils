@@ -32,4 +32,4 @@ all logic to the strategy.
 \seealso{
 \code{vignette("handling-missing-forecasts")}
 }
-\keyword{handle-metrics}
+\keyword{postprocess-scores}
