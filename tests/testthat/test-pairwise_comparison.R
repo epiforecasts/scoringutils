@@ -319,7 +319,7 @@ test_that("Basic input checks for `add_relative_skill() work", {
     "Assertion on 'baseline' failed: Must be a subset of"
   )
 
-  # pairwise comparisons work with only two models (one baseline + one other)
+  # error if not enough models are present
   eval_few <- eval[model %in% c("EuroCOVIDhub-ensemble", "EuroCOVIDhub-baseline")]
   expect_no_error(
     add_relative_skill(
