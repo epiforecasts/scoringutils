@@ -123,7 +123,7 @@ test_that("apply_metrics() works", {
   # additional named argument works
   expect_no_condition(
     apply_metrics(
-      forecast = dt, metrics = list(test = function(x) x + 1),
+      forecast = dt, metrics = list(test2 = function(x) x + 1),
       dt$x, y = dt$test
     )
   )
@@ -131,9 +131,30 @@ test_that("apply_metrics() works", {
   # additional unnamed argument does not work
   expect_warning(
     apply_metrics(
-      forecast = dt, metrics = list(test = function(x) x + 1),
+      forecast = dt, metrics = list(test3 = function(x) x + 1),
       dt$x, dt$test
     )
+  )
+})
+
+test_that("apply_metrics() warns about column name clashes", {
+  dt <- data.table::data.table(x = 1:10, test = 0)
+  expect_warning(
+    apply_metrics(
+      forecast = dt,
+      metrics = list(test = function(x) x + 1),
+      dt$x
+    ),
+    "already present"
+  )
+})
+
+test_that("score() warns when data columns clash with metrics", {
+  ex <- data.table::copy(example_binary)
+  ex[, brier_score := 999]
+  expect_warning(
+    score(as_forecast_binary(ex)),
+    "brier_score"
   )
 })
 
