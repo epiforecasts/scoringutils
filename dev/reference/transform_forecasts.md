@@ -1,10 +1,50 @@
 # Transform forecasts and observed values
 
-Function to transform forecasts and observed values before scoring.
+`transform_forecasts()` is a generic that applies a transformation to
+forecasts and observed values before scoring. It dispatches on the class
+of the forecast object, so custom forecast types can define their own
+methods. The default method (for the `forecast` class) handles all
+standard forecast types.
 
 ## Usage
 
 ``` r
+transform_forecasts(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
+
+# Default S3 method
+transform_forecasts(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
+
+# S3 method for class 'forecast'
+transform_forecasts(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
+
+# S3 method for class 'forecast_multivariate_sample'
+transform_forecasts(
+  forecast,
+  fun = log_shift,
+  append = TRUE,
+  label = "log",
+  ...
+)
+
+# S3 method for class 'forecast_multivariate_point'
 transform_forecasts(
   forecast,
   fun = log_shift,
