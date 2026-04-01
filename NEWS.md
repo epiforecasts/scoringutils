@@ -1,5 +1,6 @@
 # scoringutils (development version)
 
+- The print method for multivariate forecasts now displays the `joint_across` columns, making it easier to see which variables are forecast jointly (#1043).
 - Renamed internal functions `assert_dims_ok_point()` and `check_dims_ok_point()` to `assert_dims_ok_scalar()` and `check_dims_ok_scalar()` to reflect that they are used by both point and binary forecasts, not just point (#938).
 - Added `forecast_multivariate_point` class for scoring multivariate point forecasts with the variogram score.
 The new `as_forecast_multivariate_point()` constructor takes a `joint_across` argument, matching the pattern of `as_forecast_multivariate_sample()`.
