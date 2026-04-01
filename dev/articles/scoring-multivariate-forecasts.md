@@ -242,6 +242,8 @@ example_multiv
 #> Forecast unit:
 #> location, location_name, target_end_date, target_type, forecast_date, model,
 #> and horizon
+#> Joint across:
+#> location and location_name
 #> 
 #>      location location_name target_end_date target_type forecast_date
 #>        <char>        <char>          <Date>      <char>        <Date>
