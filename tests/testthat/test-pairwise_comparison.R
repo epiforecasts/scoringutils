@@ -327,13 +327,23 @@ test_that("Basic input checks for `add_relative_skill() work", {
       compare = "model", metric = "crps"
     )
   )
-  expect_error(
+  expect_no_error(
     add_relative_skill(
       eval_few,
       compare = "model", baseline = "EuroCOVIDhub-baseline",
       metric = "crps"
+    )
+  )
+
+  # error if only the baseline model is present
+  eval_one <- eval[model == "EuroCOVIDhub-baseline"]
+  expect_error(
+    add_relative_skill(
+      eval_one,
+      compare = "model", baseline = "EuroCOVIDhub-baseline",
+      metric = "crps"
     ),
-    "More than one non-baseline model is needed to compute pairwise compairisons."
+    "not enough comparators"
   )
 
   # error if no relative skill metric is found
