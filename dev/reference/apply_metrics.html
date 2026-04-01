@@ -10,12 +10,14 @@ functions) to a data table of forecasts. apply_metrics is used within
 score() to apply all scoring rules to the data.
 Scoring rules are wrapped in run_safely() to catch errors and to make
 sure that only arguments are passed to the scoring rule that are actually
-accepted by it."><meta property="og:description" content="This helper function applies scoring rules (stored as a list of
+accepted by it. A warning is issued if any column names in the input
+data match names in the metrics list, as these will be overwritten."><meta property="og:description" content="This helper function applies scoring rules (stored as a list of
 functions) to a data table of forecasts. apply_metrics is used within
 score() to apply all scoring rules to the data.
 Scoring rules are wrapped in run_safely() to catch errors and to make
 sure that only arguments are passed to the scoring rule that are actually
-accepted by it."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"><meta name="robots" content="noindex"></head><body>
+accepted by it. A warning is issued if any column names in the input
+data match names in the metrics list, as these will be overwritten."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -61,7 +63,8 @@ functions) to a data table of forecasts. <code>apply_metrics</code> is used with
 <code><a href="score.html">score()</a></code> to apply all scoring rules to the data.
 Scoring rules are wrapped in <code><a href="run_safely.html">run_safely()</a></code> to catch errors and to make
 sure that only arguments are passed to the scoring rule that are actually
-accepted by it.</p>
+accepted by it. A warning is issued if any column names in the input
+data match names in the metrics list, as these will be overwritten.</p>
     </div>
 
     <div class="section level2">

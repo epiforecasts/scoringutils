@@ -6,7 +6,9 @@ functions) to a data table of forecasts. `apply_metrics` is used within
 to apply all scoring rules to the data. Scoring rules are wrapped in
 [`run_safely()`](https://epiforecasts.io/scoringutils/dev/reference/run_safely.md)
 to catch errors and to make sure that only arguments are passed to the
-scoring rule that are actually accepted by it.
+scoring rule that are actually accepted by it. A warning is issued if
+any column names in the input data match names in the metrics list, as
+these will be overwritten.
 
 ## Usage
 

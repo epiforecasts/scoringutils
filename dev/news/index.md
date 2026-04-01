@@ -2,6 +2,14 @@
 
 ## scoringutils (development version)
 
+- [`get_pairwise_comparisons()`](https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.md)
+  now works with only two models when a baseline is specified, instead
+  of requiring at least three
+  ([\#1022](https://github.com/epiforecasts/scoringutils/issues/1022)).
+- [`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md)
+  now warns when column names in the input data clash with metric names,
+  as these columns are overwritten during scoring
+  ([\#382](https://github.com/epiforecasts/scoringutils/issues/382)).
 - The print method for multivariate forecasts now displays the
   `joint_across` columns, making it easier to see which variables are
   forecast jointly
