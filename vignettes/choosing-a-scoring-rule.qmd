@@ -1,0 +1,95 @@
+---
+title: "Choosing a scoring rule"
+format: html
+vignette: >
+  %\VignetteIndexEntry{Choosing a scoring rule}
+  %\VignetteEngine{quarto::quarto}
+  %\VignetteEncoding{UTF-8}
+---
+
+## How to use this guide
+
+This guide helps you choose an appropriate scoring rule from the `scoringutils` package based on your forecast format and use case. Start at the top of the flowchart with the structure of your forecast (point vs. probabilistic, samples vs. quantiles, etc.), then follow the branches that match your situation.
+
+For detailed mathematical exposition and examples, see [Scoring rules in `scoringutils`](scoring-rules.html).
+
+```{mermaid}
+%%| fig-width: 10
+%%| fig-height: 14
+
+flowchart TD
+  classDef decision fill:#dbeafe,stroke:#0284c7,stroke-width:2px
+  classDef metric fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+  classDef warning fill:#fef3c7,stroke:#ca8a04,stroke-width:2px
+  classDef category fill:#f3e8ff,stroke:#7c3aed,stroke-width:2px
+
+  START["<b>What format is your forecast?</b>"]:::category
+
+  START --> PT["<b>Single number</b><br/>POINT"]:::category
+  START --> BIN["<b>Probability of<br/>binary event</b><br/>BINARY"]:::category
+  START --> PROB["<b>Distribution over<br/>numeric outcome</b><br/>PROBABILISTIC"]:::category
+  START --> CAT["<b>Distribution over<br/>categories</b><br/>CATEGORICAL"]:::category
+  START --> MV["<b>Joint forecast across<br/>multiple targets</b><br/>MULTIVARIATE"]:::category
+
+  PT --> PT_Q{"What does<br/>the number<br/>represent?"}:::decision
+  PT_Q -->|Median| PT_AE["<b>ae_point</b><br/>Absolute error"]:::metric
+  PT_Q -->|Mean| PT_SE["<b>se_point</b><br/>Squared error"]:::metric
+  PT_Q -->|Neither/<br/>unsure| PT_WARN["⚠️ Choose representation first<br/>(See Gneiting 2011)"]:::warning
+
+  BIN --> BIN_Q{"Penalty for<br/>overconfidence?"}:::decision
+  BIN_Q -->|Symmetric| BIN_BS["<b>brier_score</b><br/>Brier score"]:::metric
+  BIN_Q -->|Asymmetric<br/>penalise harder| BIN_LS["<b>log_score</b><br/>Log score"]:::metric
+
+  PROB --> PROB_Q{"Forecast<br/>format?"}:::decision
+  PROB_Q -->|Samples| SAMP_CRPS["<b>crps</b><br/>Continuous ranked probability score"]:::metric
+  PROB_Q -->|Quantiles| QUANT_WIS["<b>wis</b><br/>Weighted interval score"]:::metric
+
+  CAT --> CAT_Q{"Categories<br/>ordered?"}:::decision
+  CAT_Q -->|No<br/>Nominal| CAT_LOG["<b>log_score</b><br/>Log score"]:::metric
+  CAT_Q -->|Yes<br/>Ordinal| CAT_RPS["<b>rps</b><br/>Ranked probability score"]:::metric
+
+  MV --> MV_Q{"Forecast<br/>format?"}:::decision
+  MV_Q -->|Joint samples| MV_ES["<b>energy_score</b><br/>or<br/><b>vs</b>"]:::metric
+  MV_Q -->|Joint points| MV_VS["<b>vs</b><br/>Variogram score"]:::metric
+```
+
+## Alternative scoring rules
+
+For sample-based and quantile-based forecasts, we recommend `crps` and `wis` respectively as they are strictly proper. However, alternatives exist for specific use cases:
+
+### Sample-based alternatives
+
+| Metric | Use case |
+|--------|----------|
+| `dss` | Moment-based (mean and variance only). Easier to compute; loses information. |
+| `log_score` | Local score (probability at observed value only). Avoid for discrete/integer data due to kernel density estimation. |
+
+### Quantile-based alternatives
+
+| Metric | Use case |
+|--------|----------|
+| `quantile_score` | Per-quantile pinball loss. Useful for asymmetric loss or if you want level-by-level assessment. |
+
+### Categorical alternatives
+
+| Metric | Use case |
+|--------|--------|
+| `log_score` (ordinal data) | For ordinal categories, use if you only care about the probability assigned to the observed category, not the ordering. |
+
+## Supplementary metrics and diagnostics
+
+| Metric | Use case |
+|--------|----------|
+| `bias` | Directional bias: does the forecast tend to over- or under-predict? |
+| `mad` | Sharpness/spread: how concentrated is your forecast distribution? |
+| `interval_coverage_50`, `interval_coverage_90` | What fraction of observations fall within a prediction interval? |
+| `overprediction`, `underprediction`, `dispersion` | Decomposition of CRPS or WIS into components. |
+| `ae_median`, `se_mean` | Absolute/squared error of sample-based summary statistics. |
+
+For worked examples and more detail, see [Scoring rules in `scoringutils`](scoring-rules.html).
+
+## Further reading
+
+- [Scoring rules in `scoringutils`](scoring-rules.html) — detailed exposition and code examples
+- [Scoring multivariate forecasts](scoring-multivariate-forecasts.html) — joint forecasting across multiple targets
+- Gneiting, T. (2011). "Making and evaluating point forecasts". *Journal of the American Statistical Association*. — foundational paper on the correspondence between point forecasts and scoring rules
