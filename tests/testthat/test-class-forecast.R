@@ -53,6 +53,7 @@ test_that("as_forecast_*.default errors with helpful message for non-data.frame 
   expect_error(as_forecast_nominal(lst), "data.frame")
   expect_error(as_forecast_ordinal(chr), "data.frame")
   expect_error(as_forecast_multivariate_sample(mat), "data.frame")
+  expect_error(as_forecast_multivariate_point(vec), "data.frame")
 })
 
 test_that("as_forecast_*.default errors for matrix input", {

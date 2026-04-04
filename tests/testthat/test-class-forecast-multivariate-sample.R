@@ -23,10 +23,10 @@ test_that("as_forecast_multivariate_sample() works as expected", {
 test_that("as_forecast_multivariate_sample.data.frame works with a plain data.frame", {
   df <- as.data.frame(example_sample_continuous[
     target_type == "Cases" &
-    forecast_date == "2021-05-03" &
-    target_end_date == "2021-05-15" &
-    horizon == 2 &
-    model == "EuroCOVIDhub-ensemble"
+      forecast_date == "2021-05-03" &
+      target_end_date == "2021-05-15" &
+      horizon == 2 &
+      model == "EuroCOVIDhub-ensemble"
   ])
   result <- expect_no_condition(
     as_forecast_multivariate_sample(df, c("location", "location_name"))

@@ -2,12 +2,13 @@
 % Please edit documentation in R/class-forecast-multivariate-point.R
 \name{as_forecast_multivariate_point}
 \alias{as_forecast_multivariate_point}
+\alias{as_forecast_multivariate_point.data.frame}
 \alias{as_forecast_multivariate_point.default}
 \title{Create a \code{forecast} object for multivariate point forecasts}
 \usage{
 as_forecast_multivariate_point(data, ...)
 
-\method{as_forecast_multivariate_point}{default}(
+\method{as_forecast_multivariate_point}{data.frame}(
   data,
   joint_across = NULL,
   forecast_unit = NULL,
@@ -15,6 +16,8 @@ as_forecast_multivariate_point(data, ...)
   predicted = NULL,
   ...
 )
+
+\method{as_forecast_multivariate_point}{default}(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.

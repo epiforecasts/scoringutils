@@ -35,8 +35,9 @@ as_forecast_multivariate_point <- function(data, ...) {
 #' @inheritParams as_forecast_multivariate_sample.data.frame
 #' @export
 #' @importFrom cli cli_abort
+#' @method as_forecast_multivariate_point data.frame
 # nolint start: object_name_linter
-as_forecast_multivariate_point.default <- function(
+as_forecast_multivariate_point.data.frame <- function(
     data,
     joint_across = NULL,
     forecast_unit = NULL,
@@ -44,6 +45,7 @@ as_forecast_multivariate_point.default <- function(
     predicted = NULL,
     ...
 ) {
+  # nolint end
   data <- as_forecast_generic(
     data,
     forecast_unit,
@@ -56,7 +58,18 @@ as_forecast_multivariate_point.default <- function(
   assert_forecast(data)
   return(data)
 }
-# nolint end
+
+#' @rdname as_forecast_multivariate_point
+#' @export
+#' @method as_forecast_multivariate_point default
+# nolint start: object_name_linter
+as_forecast_multivariate_point.default <- function(data, ...) {
+  # nolint end
+  cli_abort(
+    "Input must be a data.frame or similar (e.g. a {.cls data.table} or
+    {.cls tibble}), not {.cls {class(data)}}."
+  )
+}
 
 
 #' @export
