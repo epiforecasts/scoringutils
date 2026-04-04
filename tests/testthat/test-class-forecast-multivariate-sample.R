@@ -505,7 +505,7 @@ test_that("print.forecast_multivariate_sample() still calls parent print.forecas
 test_that("print handles broken forecast_type gracefully", {
   broken <- copy(example_multivariate_sample)
   local_mocked_bindings(
-    get_forecast_type = function(...) stop("mocked error"),
+    get_forecast_type = function(...) stop("mocked error", call. = FALSE),
     .package = "scoringutils"
   )
   out <- capture.output(print(broken), type = "message")
@@ -518,7 +518,7 @@ test_that("print handles broken forecast_unit gracefully", {
   broken <- copy(example_multivariate_sample)
   # Mock get_forecast_unit to error, triggering the error branch
   local_mocked_bindings(
-    get_forecast_unit = function(...) stop("mocked error"),
+    get_forecast_unit = function(...) stop("mocked error", call. = FALSE),
     .package = "scoringutils"
   )
   out <- capture.output(print(broken), type = "message")
