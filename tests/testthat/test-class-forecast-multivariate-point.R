@@ -21,7 +21,7 @@ test_that(
       cat("Class:", class(result), "\n")
       cat(
         "Forecast type:",
-        scoringutils:::get_forecast_type(result), "\n"
+        get_forecast_type(result), "\n"
       )
       cat(
         "Forecast unit:",

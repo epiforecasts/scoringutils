@@ -44,30 +44,30 @@ test_that("check_input_quantile() works as expected", {
 test_that("Input checking for quantile forecasts works", {
   # everything correct
   expect_no_condition(
-    scoringutils:::assert_input_quantile(observed, predicted, quantile_level) # nolint: undesirable_operator_linter
+    assert_input_quantile(observed, predicted, quantile_level)
   )
 
   # quantile_level > 1 # nolint: commented_code_linter
   expect_error(
-    scoringutils:::assert_input_quantile(observed, predicted, quantile_level + 1), # nolint: undesirable_operator_linter
+    assert_input_quantile(observed, predicted, quantile_level + 1),
     "Assertion on 'quantile_level' failed: Element 1 is not <= 1."
   )
 
   # quantile_level < 0 # nolint: commented_code_linter
   expect_error(
-    scoringutils:::assert_input_quantile(observed, predicted, quantile_level - 1), # nolint: undesirable_operator_linter
+    assert_input_quantile(observed, predicted, quantile_level - 1),
     "Assertion on 'quantile_level' failed: Element 1 is not >= 0."
   )
 
   # 10 observations, but only 3 forecasts
   expect_error(
-    scoringutils:::assert_input_quantile(1:10, predicted, quantile_level), # nolint: undesirable_operator_linter
+    assert_input_quantile(1:10, predicted, quantile_level),
     "Assertion on 'predicted' failed: Must have exactly 10 rows, but has 3 rows."
   )
 
   # observed value is a factor
   expect_error(
-    scoringutils:::assert_input_quantile(factor(1:10), predicted, quantile_level), # nolint: undesirable_operator_linter
+    assert_input_quantile(factor(1:10), predicted, quantile_level),
     "Assertion on 'observed' failed: Must be of type 'numeric', not 'factor'."
   )
 
@@ -76,13 +76,13 @@ test_that("Input checking for quantile forecasts works", {
   # such that the test fails when executed alone, but works when executed
   # together with others.
   expect_error(
-    scoringutils:::assert_input_quantile(1, predicted, quantile_level), # nolint: undesirable_operator_linter
+    assert_input_quantile(1, predicted, quantile_level),
     "Assertion failed.*check_numeric_vector.*check_matrix"
   )
 
   # predicted is a vector
   expect_error(
-    scoringutils:::assert_input_quantile(observed, as.vector(predicted), quantile_level), # nolint: undesirable_operator_linter
+    assert_input_quantile(observed, as.vector(predicted), quantile_level),
     "Assertion on 'predicted' failed: Must be of type 'matrix', not 'double'."
   )
 })
