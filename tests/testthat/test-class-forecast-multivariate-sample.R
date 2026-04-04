@@ -274,7 +274,30 @@ test_that("print.forecast_sample_multivariate() returns object invisibly", {
 
 test_that("print.forecast_sample_multivariate() still calls parent print.forecast()", {
   out <- capture.output(print(example_multivariate_sample), type = "message")
-  expect_true(any(grepl("Forecast type:", out)))
-  expect_true(any(grepl("Forecast unit:", out)))
-  expect_true(any(grepl("Joint across:", out)))
+  expect_true(any(grepl("Forecast type:", out, fixed = TRUE)))
+  expect_true(any(grepl("Forecast unit:", out, fixed = TRUE)))
+  expect_true(any(grepl("Joint across:", out, fixed = TRUE)))
+})
+
+test_that("print handles broken forecast_type gracefully", {
+  broken <- copy(example_multivariate_sample)
+  # Add a second forecast_ class so get_forecast_type errors
+  class(broken) <- c("forecast_a", "forecast_b", class(broken))
+  out <- capture.output(print(broken), type = "message")
+  expect_true(any(grepl(
+    "Could not determine forecast type", out, fixed = TRUE
+  )))
+})
+
+test_that("print handles broken forecast_unit gracefully", {
+  broken <- copy(example_multivariate_sample)
+  # Mock get_forecast_unit to error, triggering the error branch
+  local_mocked_bindings(
+    get_forecast_unit = function(...) stop("mocked error"),
+    .package = "scoringutils"
+  )
+  out <- capture.output(print(broken), type = "message")
+  expect_true(any(grepl(
+    "Could not determine forecast unit", out, fixed = TRUE
+  )))
 })
