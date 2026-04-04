@@ -336,3 +336,62 @@ test_that("pit_histogram_sample() throws an error if inputs are wrong", {
     "`n_replicates` is ignored when `integers` is not `random`"
   )
 })
+
+
+# ============================================================================ #
+# logs_sample() integer warning
+# ============================================================================ #
+
+test_that("logs_sample() warns when predictions are integer-valued", {
+  observed <- rpois(30, lambda = 1:30)
+  predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+  expect_warning(
+    logs_sample(observed, predicted),
+    "integer"
+  )
+  result <- suppressWarnings(logs_sample(observed, predicted))
+  expect_length(result, 30)
+})
+
+test_that("logs_sample() does not warn for continuous predictions", {
+  observed <- rnorm(30, mean = 1:30)
+  predicted <- replicate(200, rnorm(30, mean = 1:30))
+  expect_no_condition(logs_sample(observed, predicted))
+  result <- logs_sample(observed, predicted)
+  expect_type(result, "double")
+  expect_length(result, 30)
+})
+
+test_that("logs_sample() warns for integer-valued predictions even when stored as doubles", {
+  observed <- as.numeric(rpois(30, lambda = 1:30))
+  predicted <- matrix(
+    as.numeric(replicate(200, rpois(n = 30, lambda = 1:30))),
+    nrow = 30
+  )
+  expect_warning(
+    logs_sample(observed, predicted),
+    "integer"
+  )
+})
+
+test_that("logs_sample() returns valid scores alongside the integer warning", {
+  observed <- rpois(30, lambda = 1:30)
+  predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+  result <- suppressWarnings(logs_sample(observed, predicted))
+  expect_type(result, "double")
+  expect_length(result, 30)
+  expect_true(all(is.finite(result)))
+})
+
+test_that("score() emits a warning when scoring integer samples with log_score", {
+  expect_warning(
+    score(as_forecast_sample(example_sample_discrete)),
+    "integer"
+  )
+})
+
+test_that("score() does not warn about log_score for continuous samples", {
+  expect_no_warning(
+    score(as_forecast_sample(example_sample_continuous))
+  )
+})
