@@ -75,12 +75,12 @@ assert_input_categorical <- function(
   # Allow for numeric errors
   invalid_rows <- abs(summed_predictions - 1) > 1e-4
   if (any(invalid_rows)) {
-    #nolint start: keyword_quote_linter object_usage_linter
+    #nolint start: object_usage_linter
     row_indices <- which(invalid_rows)
     cli_abort(
       c(
         `!` = "Probabilities belonging to a single forecast must sum to one",
-        `i` = "Found issues in row{?s} {row_indices} of {.var predicted}"
+        i = "Found issues in row{?s} {row_indices} of {.var predicted}"
       )
     )
     #nolint end

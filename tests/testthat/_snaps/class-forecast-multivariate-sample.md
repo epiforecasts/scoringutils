@@ -3,9 +3,11 @@
     Code
       print(result)
     Message
-      Forecast type: sample_multivariate
+      Forecast type: multivariate_sample
       Forecast unit:
       location, model, target_type, target_end_date, and horizon
+      Joint across:
+      location
     Output
       
                 predicted sample_id observed location                 model
@@ -40,11 +42,11 @@
     Code
       cat("Class:", class(result), "\n")
     Output
-      Class: forecast_sample_multivariate forecast data.table data.frame 
+      Class: forecast_multivariate_sample forecast data.table data.frame 
     Code
-      cat("Forecast type:", scoringutils:::get_forecast_type(result), "\n")
+      cat("Forecast type:", get_forecast_type(result), "\n")
     Output
-      Forecast type: sample_multivariate 
+      Forecast type: multivariate_sample 
     Code
       cat("Forecast unit:", toString(get_forecast_unit(result)), "\n")
     Output
@@ -66,7 +68,7 @@
     Output
       Number of unique groups: 224 
 
-# score.forecast_sample_multivariate() creates expected output structure
+# score.forecast_multivariate_sample() creates expected output
 
     Code
       print(scores)
@@ -89,19 +91,19 @@
       222:      2021-07-24      Deaths    2021-07-12       UMass-MechBayes       2
       223:      2021-07-24      Deaths    2021-07-05  epiforecasts-EpiNow2       3
       224:      2021-07-24      Deaths    2021-07-12  epiforecasts-EpiNow2       2
-           energy_score .mv_group_id
-                  <num>        <int>
-        1:   23454.2838           37
-        2:   34263.4665           38
-        3:   67609.0941           39
-        4:     138.9681           40
-        5:     401.5740           41
-       ---                          
-      220:     275.4460          256
-      221:     142.7219          257
-      222:      96.7978          258
-      223:     142.3382          259
-      224:     137.3695          260
+           energy_score variogram_score .mv_group_id
+                  <num>           <num>        <int>
+        1:   23454.2838     20896.14336           37
+        2:   34263.4665     17236.13992           38
+        3:   67609.0941    132166.57638           39
+        4:     138.9681       210.47403           40
+        5:     401.5740      1260.64947           41
+       ---                                          
+      220:     275.4460       787.91959          256
+      221:     142.7219       203.85518          257
+      222:      96.7978        72.22572          258
+      223:     142.3382       138.22312          259
+      224:     137.3695       249.47336          260
 
 ---
 
@@ -116,11 +118,11 @@
     Code
       cat("Number of columns:", ncol(scores), "\n")
     Output
-      Number of columns: 7 
+      Number of columns: 8 
     Code
       cat("Column names:", toString(names(scores)), "\n")
     Output
-      Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, .mv_group_id 
+      Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, variogram_score, .mv_group_id 
     Code
       cat("Energy score range:", paste(range(scores$energy_score, na.rm = TRUE),
       collapse = " to "), "\n")

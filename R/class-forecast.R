@@ -79,13 +79,11 @@ assert_forecast.default <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   cli_abort(
-    #nolint start: keyword_quote_linter
     c(
-      "!" = "The input needs to be a valid forecast object.",
-      "i" = "Please convert to `forecast` object first by calling the
+      `!` = "The input needs to be a valid forecast object.",
+      i = "Please convert to `forecast` object first by calling the
       appropriate {.fn as_forecast_<type>} function)."
     )
-    #nolint end
   )
 }
 
@@ -117,7 +115,7 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
   if (problem) {
     cli_abort(
       c(
-        "!" = "Found columns `quantile_level` and `sample_id`.
+        `!` = "Found columns `quantile_level` and `sample_id`.
       Only one of these is allowed"
       )
     )
@@ -136,10 +134,9 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
   # check whether there are any NA values
   if (anyNA(data)) {
     if (nrow(na.omit(data)) == 0) {
-      #nolint start: keyword_quote_linter
       cli_abort(
         c(
-          "!" = "After removing rows with NA values in the data, no forecasts
+          `!` = "After removing rows with NA values in the data, no forecasts
           are left."
         )
       )
@@ -147,12 +144,11 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
     if (verbose) {
       cli_inform(
         c(
-          "i" = "Some rows containing NA values may be removed.
+          i = "Some rows containing NA values may be removed.
         This is fine if not unexpected."
         )
       )
     }
-    #nolint end
   }
 
   return(data[])
@@ -284,7 +280,7 @@ is_forecast <- function(x) {
   # print.data.table will internally subset the data.table before printing.
   # this subsetting triggers the validation, which is not desired in this case.
   # this is a hack and ideally, we'd do things differently.
-  if (nrow(out) > 30 && data.table::is.data.table(out) && !is_dt_force_print) {
+  if (nrow(out) > 30 && is.data.table(out) && !is_dt_force_print) {
     # check whether subset object passes validation
     validation <- try(
       assert_forecast(forecast = out, verbose = FALSE),
@@ -292,15 +288,13 @@ is_forecast <- function(x) {
     )
     if (inherits(validation, "try-error")) {
       cli_warn(
-        #nolint start: keyword_quote_linter
         c(
-          "!" = "Error in validating forecast object: {validation}.",
-          "i" = "Note this error is sometimes related to `data.table`s `print`.
+          `!` = "Error in validating forecast object: {validation}.",
+          i = "Note this error is sometimes related to `data.table`s `print`.
           Run {.help [{.fun assert_forecast}](scoringutils::assert_forecast)}
           to confirm. To get rid of this warning entirely,
           call `as.data.table()` on the forecast object."
         )
-        #nolint end
       )
     }
   }
@@ -323,7 +317,7 @@ is_forecast <- function(x) {
   if (inherits(validation, "try-error")) {
     cli_warn(
       c(
-        "!" = "Error in validating forecast object: {validation}"
+        `!` = "Error in validating forecast object: {validation}"
       )
     )
   }
@@ -346,7 +340,7 @@ is_forecast <- function(x) {
   if (inherits(validation, "try-error")) {
     cli_warn(
       c(
-        "!" = "Error in validating forecast object: {validation}"
+        `!` = "Error in validating forecast object: {validation}"
       )
     )
   }
@@ -369,7 +363,7 @@ is_forecast <- function(x) {
   if (inherits(validation, "try-error")) {
     cli_warn(
       c(
-        "!" = "Error in validating forecast object: {validation}"
+        `!` = "Error in validating forecast object: {validation}"
       )
     )
   }
@@ -393,7 +387,7 @@ head.forecast <- function(x, ...) {
 tail.forecast <- function(x, ...) {
   # We use this custom method just to unclass before forwarding to avoid
   # validation when we expect (and don't care) that objects are invalidated
-  utils::tail(as.data.table(x), ...)
+  tail(as.data.table(x), ...)
 }
 
 
@@ -428,7 +422,7 @@ print.forecast <- function(x, ...) {
   if (inherits(forecast_type, "try-error")) {
     cli_inform(
       c(
-        "!" = "Could not determine forecast type due to error in validation." #nolint
+        `!` = "Could not determine forecast type due to error in validation."
       )
     )
   } else {
@@ -443,7 +437,7 @@ print.forecast <- function(x, ...) {
   if (inherits(forecast_unit, "try-error")) {
     cli_inform(
       c(
-        "!" = "Could not determine forecast unit." #nolint
+        `!` = "Could not determine forecast unit."
       )
     )
   } else {
@@ -455,6 +449,28 @@ print.forecast <- function(x, ...) {
     cli_text(
       "{forecast_unit}"
     )
+  }
+
+  # For multivariate forecasts, show joint_across
+  if (".mv_group_id" %in% names(x)) {
+    joint_across <- try(
+      setdiff(
+        get_forecast_unit(x),
+        get_grouping(x)
+      ),
+      silent = TRUE
+    )
+    if (!inherits(joint_across, "try-error") &&
+          length(joint_across) > 0) {
+      cli_text(
+        col_blue(
+          "Joint across:"
+        )
+      )
+      cli_text(
+        "{joint_across}"
+      )
+    }
   }
 
   cat("\n")

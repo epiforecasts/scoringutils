@@ -163,6 +163,7 @@ test_that("Binary metrics work within and outside of `score()`", {
 })
 
 test_that("`logs_binary()` works as expected", {
+  skip_if_not_installed("Metrics")
   # check against the function Metrics::ll
   obs2 <- as.numeric(as.character(observed))
   expect_equal( # nolint: expect_identical_linter
