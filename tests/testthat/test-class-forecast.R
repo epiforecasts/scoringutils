@@ -155,8 +155,6 @@ test_that("print() throws the expected messages", {
   test <- data.table::copy(example_point)
   class(test) <- c("point", "forecast", "data.table", "data.frame")
 
-  # note that since introducing a length maximum for validation to be triggered,
-  # we don't throw a warning automatically anymore
   suppressMessages(
     expect_message(
       capture.output(print(test)),
@@ -170,6 +168,114 @@ test_that("print() throws the expected messages", {
       capture.output(print(test)),
       "Could not determine forecast unit."
     )
+  )
+})
+
+
+# ==============================================================================
+# Autoprint suppression during := operations (issue #935)
+# ==============================================================================
+
+test_that(":= on forecast objects does not trigger spurious printing", {
+  # This is the core issue from #935: modifying a column via := should
+  # not print the forecast object
+  ex <- data.table::copy(example_quantile)
+  output <- capture.output(ex[, model := paste(model, "a")])
+  expect_identical(output, character(0))
+})
+
+test_that(":= adding a new column to forecast objects does not print", {
+  ex <- data.table::copy(example_quantile)
+  output <- capture.output(ex[, new_col := "test"])
+  expect_identical(output, character(0))
+})
+
+test_that(":= on different forecast types does not trigger printing", {
+  # Test across all forecast types to ensure the fix is comprehensive
+  forecast_objects <- list(
+    binary = data.table::copy(example_binary),
+    quantile = data.table::copy(example_quantile),
+    point = data.table::copy(example_point),
+    sample_continuous = data.table::copy(example_sample_continuous),
+    sample_discrete = data.table::copy(example_sample_discrete)
+  )
+
+  for (name in names(forecast_objects)) {
+    ex <- forecast_objects[[name]]
+    output <- capture.output(ex[, model := paste(model, "a")])
+    expect_identical(
+      output, character(0),
+      label = paste("Spurious printing for forecast type:", name)
+    )
+  }
+})
+
+test_that("multiple sequential := operations do not trigger printing", {
+  ex <- data.table::copy(example_quantile)
+  output <- capture.output({
+    ex[, model := paste(model, "a")]
+    ex[, new_col1 := 1]
+    ex[, new_col2 := "test"]
+  })
+  expect_identical(output, character(0))
+})
+
+test_that("explicit print() still works after := suppression", {
+  # After :=, data.table sets a flag that suppresses the next print.
+  # In interactive R, autoprint consumes this flag. In non-interactive
+  # contexts (testthat, scripts), we consume it manually with x[].
+  ex <- data.table::copy(example_quantile)
+  ex[, model := paste(model, "a")]
+  invisible(capture.output(suppressMessages(ex[])))  # consume shouldPrint flag
+
+  output <- capture.output(suppressMessages(print(ex)))
+  expect_true(length(output) > 0)
+})
+
+test_that("print() on forecast objects still shows header and data", {
+  ex <- as_forecast_quantile(na.omit(example_quantile))
+
+  messages <- capture.output(print(ex), type = "message")
+  output <- capture.output(suppressMessages(print(ex)))
+
+  # Header should contain forecast type and unit info
+  header_text <- paste(messages, collapse = " ")
+  expect_true(grepl("Forecast type", header_text))
+  expect_true(grepl("Forecast unit", header_text))
+
+  # Data should be printed
+  expect_true(length(output) > 0)
+})
+
+test_that("x[] force-print still works on forecast objects", {
+  # x[] is data.table's force-print syntax, should still produce output
+  ex <- as_forecast_quantile(na.omit(example_quantile))
+  output <- capture.output(suppressMessages(ex[]))
+  expect_true(length(output) > 0)
+})
+
+test_that(":= on scores objects does not trigger spurious printing", {
+  scores <- score(example_quantile)
+  output <- capture.output(scores[, test := 3])
+  expect_identical(output, character(0))
+})
+
+test_that("[.forecast() validates subsets regardless of size", {
+  # After removing the 30-row hack, validation should trigger for
+  # any size subset that breaks the forecast contract
+  test <- na.omit(data.table::copy(example_quantile))
+
+  # Small subset (previously skipped validation due to nrow <= 30 hack)
+  small_test <- test[1:20]
+  expect_warning(
+    local(small_test[, colnames(small_test) != "observed", with = FALSE]),
+    "Error in validating"
+  )
+
+  # Large subset (was already validated before)
+  expect_warning(
+    local(test[, colnames(test) != "observed", with = FALSE]),
+    "Error in validating"
   )
 })
 
