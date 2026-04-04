@@ -229,7 +229,7 @@ test_that("explicit print() still works after := suppression", {
   invisible(capture.output(suppressMessages(ex[])))  # consume shouldPrint flag
 
   output <- capture.output(suppressMessages(print(ex)))
-  expect_true(length(output) > 0)
+  expect_gt(length(output), 0)
 })
 
 test_that("print() on forecast objects still shows header and data", {
@@ -240,18 +240,18 @@ test_that("print() on forecast objects still shows header and data", {
 
   # Header should contain forecast type and unit info
   header_text <- paste(messages, collapse = " ")
-  expect_true(grepl("Forecast type", header_text))
-  expect_true(grepl("Forecast unit", header_text))
+  expect_true(grepl("Forecast type", header_text, fixed = TRUE))
+  expect_true(grepl("Forecast unit", header_text, fixed = TRUE))
 
   # Data should be printed
-  expect_true(length(output) > 0)
+  expect_gt(length(output), 0)
 })
 
 test_that("x[] force-print still works on forecast objects", {
   # x[] is data.table's force-print syntax, should still produce output
   ex <- as_forecast_quantile(na.omit(example_quantile))
   output <- capture.output(suppressMessages(ex[]))
-  expect_true(length(output) > 0)
+  expect_gt(length(output), 0)
 })
 
 test_that(":= on scores objects does not trigger spurious printing", {
