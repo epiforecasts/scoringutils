@@ -466,13 +466,13 @@ test_that("assert_forecast() accepts correct forecast_type for multivariate samp
 
 
 # ==============================================================================
-# print.forecast_sample_multivariate()
+# print.forecast_multivariate_sample()
 # ==============================================================================
-test_that("print.forecast_sample_multivariate() displays joint_across columns", {
+test_that("print.forecast_multivariate_sample() displays joint_across columns", {
   expect_snapshot(print(example_multivariate_sample))
 })
 
-test_that("print.forecast_sample_multivariate() shows correct joint_across for single-column grouping", {
+test_that("print.forecast_multivariate_sample() shows correct joint_across for single-column grouping", {
   test <- na.omit(data.table::copy(example_sample_continuous))
   result <- as_forecast_multivariate_sample(
     test,
@@ -482,20 +482,20 @@ test_that("print.forecast_sample_multivariate() shows correct joint_across for s
   expect_snapshot(print(result))
 })
 
-test_that("print.forecast_sample_multivariate() computes joint_across correctly from grouping", {
+test_that("print.forecast_multivariate_sample() computes joint_across correctly from grouping", {
   grouping <- get_grouping(example_multivariate_sample)
   forecast_unit <- get_forecast_unit(example_multivariate_sample)
   joint_across <- setdiff(forecast_unit, grouping)
   expect_true(setequal(joint_across, c("location", "location_name")))
 })
 
-test_that("print.forecast_sample_multivariate() returns object invisibly", {
+test_that("print.forecast_multivariate_sample() returns object invisibly", {
   expect_invisible(print(example_multivariate_sample))
   result <- print(example_multivariate_sample)
   expect_identical(result, example_multivariate_sample)
 })
 
-test_that("print.forecast_sample_multivariate() still calls parent print.forecast()", {
+test_that("print.forecast_multivariate_sample() still calls parent print.forecast()", {
   out <- capture.output(print(example_multivariate_sample), type = "message")
   expect_true(any(grepl("Forecast type:", out, fixed = TRUE)))
   expect_true(any(grepl("Forecast unit:", out, fixed = TRUE)))
@@ -504,8 +504,10 @@ test_that("print.forecast_sample_multivariate() still calls parent print.forecas
 
 test_that("print handles broken forecast_type gracefully", {
   broken <- copy(example_multivariate_sample)
-  # Add a second forecast_ class so get_forecast_type errors
-  class(broken) <- c("forecast_a", "forecast_b", class(broken))
+  local_mocked_bindings(
+    get_forecast_type = function(...) stop("mocked error"),
+    .package = "scoringutils"
+  )
   out <- capture.output(print(broken), type = "message")
   expect_true(any(grepl(
     "Could not determine forecast type", out, fixed = TRUE

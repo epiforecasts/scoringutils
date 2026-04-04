@@ -160,12 +160,12 @@
     Output
       Energy score range: 37.8373892350605 to 433525.521054322 
 
-# print.forecast_sample_multivariate() displays joint_across columns
+# print.forecast_multivariate_sample() displays joint_across columns
 
     Code
       print(example_multivariate_sample)
     Message
-      Forecast type: sample_multivariate
+      Forecast type: multivariate_sample
       Forecast unit:
       location, location_name, target_end_date, target_type, forecast_date, model,
       and horizon
@@ -200,12 +200,12 @@
       35623: epiforecasts-EpiNow2       2 141.06659        39       78          260
       35624: epiforecasts-EpiNow2       2  24.43419        40       78          260
 
-# print.forecast_sample_multivariate() shows correct joint_across for single-column grouping
+# print.forecast_multivariate_sample() shows correct joint_across for single-column grouping
 
     Code
       print(result)
     Message
-      Forecast type: sample_multivariate
+      Forecast type: multivariate_sample
       Forecast unit:
       location, model, target_type, target_end_date, and horizon
       Joint across:

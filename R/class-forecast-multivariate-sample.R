@@ -133,13 +133,27 @@ is_forecast_multivariate_sample <- function(x) {
 #' This function prints information about a multivariate forecast object,
 #' including "Forecast type", "Forecast unit", and "Joint across" columns.
 #'
-#' @param x A forecast object of class `forecast_sample_multivariate`.
+#' @param x A forecast object of class `forecast_multivariate_sample`.
 #' @param ... Additional arguments for [print()].
 #' @returns Returns `x` invisibly.
 #' @importFrom cli col_blue cli_text
 #' @export
 #' @keywords gain-insights
-print.forecast_sample_multivariate <- function(x, ...) {
+print.forecast_multivariate_sample <- function(x, ...) {
+  print_multivariate_forecast(x, ...)
+}
+
+
+#' Print helper for multivariate forecast objects
+#'
+#' Shared implementation for printing multivariate forecast objects.
+#' Displays forecast type, forecast unit, and "Joint across" columns.
+#' @param x A multivariate forecast object.
+#' @param ... Additional arguments passed to [print()].
+#' @returns Returns `x` invisibly.
+#' @importFrom cli col_blue cli_text cli_inform
+#' @keywords internal
+print_multivariate_forecast <- function(x, ...) {
   forecast_type <- try(
     do.call(get_forecast_type, list(forecast = x)),
     silent = TRUE
