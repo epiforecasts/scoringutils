@@ -114,3 +114,34 @@ test_that("get_metrics.forecast_point() works as expected", {
     c("ae_point", "se_point", "ape")
   )
 })
+
+test_that("point metric implementations match Metrics package", {
+  skip_if_not_installed("Metrics")
+  observed <- c(1, -15, 22, 0, 5.5)
+  predicted <- c(5, 6, 7, 0, 5.5)
+  metrics <- get_metrics(example_point)
+  expect_identical(
+    metrics$ae_point(observed, predicted),
+    Metrics::ae(observed, predicted)
+  )
+  expect_identical(
+    metrics$se_point(observed, predicted),
+    Metrics::se(observed, predicted)
+  )
+  expect_equal(
+    metrics$ape(observed, predicted),
+    Metrics::ape(observed, predicted)
+  )
+})
+
+test_that("get_metrics.forecast_point() returns expected functions", {
+  metrics <- get_metrics(example_point)
+  expect_type(metrics, "list")
+  expect_named(metrics, c("ae_point", "se_point", "ape"))
+  expect_true(all(vapply(metrics, is.function, logical(1))))
+  expect_true(
+    all(vapply(
+      metrics, function(f) length(formals(f)) == 2, logical(1)
+    ))
+  )
+})

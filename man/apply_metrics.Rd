@@ -32,6 +32,7 @@ functions) to a data table of forecasts. \code{apply_metrics} is used within
 \code{score()} to apply all scoring rules to the data.
 Scoring rules are wrapped in \code{\link[=run_safely]{run_safely()}} to catch errors and to make
 sure that only arguments are passed to the scoring rule that are actually
-accepted by it.
+accepted by it. A warning is issued if any column names in the input
+data match names in the metrics list, as these will be overwritten.
 }
 \keyword{internal}

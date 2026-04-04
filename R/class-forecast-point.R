@@ -63,12 +63,12 @@ assert_forecast.forecast_point <- function(
 ) {
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
-  #nolint start: keyword_quote_linter object_usage_linter
+  #nolint start: object_usage_linter
   input_check <- check_input_point(forecast$observed, forecast$predicted)
   if (!isTRUE(input_check)) {
     cli_abort(
       c(
-        "!" = "Checking `forecast`: Input looks like a point forecast, but found
+        `!` = "Checking `forecast`: Input looks like a point forecast, but found
         the following issue: {input_check}"
       )
     )
@@ -85,7 +85,6 @@ is_forecast_point <- function(x) {
 }
 
 
-#' @importFrom Metrics se ae ape
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr copy
 #' @rdname score
@@ -110,9 +109,12 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
 #'
 #' @description
 #' For point forecasts, the default scoring rules are:
-#' - "ae_point" = [ae()][Metrics::ae()]
-#' - "se_point" = [se()][Metrics::se()]
-#' - "ape" = [ape()][Metrics::ape()]
+#' - "ae_point" = absolute error, calculated as
+#'   \eqn{\text{ae} = |y - \hat{y}|}{ae = |y - y_hat|}
+#' - "se_point" = squared error, calculated as
+#'   \eqn{\text{se} = (y - \hat{y})^2}{se = (y - y_hat)^2}
+#' - "ape" = absolute percentage error, calculated as
+#'   \eqn{\text{ape} = |y - \hat{y}| / |y|}{ape = |y - y_hat| / |y|}
 #'
 #' A note of caution: Every scoring rule for a point forecast
 #' is implicitly minimised by a specific aspect of the predictive distribution
@@ -155,9 +157,9 @@ score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...)
 #' Journal of the American Statistical Association.
 get_metrics.forecast_point <- function(x, select = NULL, exclude = NULL, ...) {
   all <- list(
-    ae_point = Metrics::ae,
-    se_point = Metrics::se,
-    ape = Metrics::ape
+    ae_point = function(actual, predicted) abs(actual - predicted),
+    se_point = function(actual, predicted) (actual - predicted)^2,
+    ape = function(actual, predicted) abs(actual - predicted) / abs(actual)
   )
   select_metrics(all, select, exclude)
 }

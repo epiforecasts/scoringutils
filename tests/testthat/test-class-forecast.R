@@ -48,6 +48,11 @@ test_that("as_forecast_*.default errors with helpful message for non-data.frame 
 
   expect_error(as_forecast_sample(vec), "data.frame")
   expect_error(as_forecast_quantile(mat), "data.frame")
+
+  expect_error(as_forecast_point(vec), "data.frame")
+  expect_error(as_forecast_nominal(lst), "data.frame")
+  expect_error(as_forecast_ordinal(chr), "data.frame")
+  expect_error(as_forecast_multivariate_sample(mat), "data.frame")
 })
 
 test_that("as_forecast_*.default errors for matrix input", {
@@ -206,7 +211,7 @@ test_that("print() works on forecast_* objects", {
   )
   test_dat <- lapply(test_dat, na.omit)
   for (dat in test_dat) {
-    forecast_type <- scoringutils:::get_forecast_type(dat) # nolint: undesirable_operator_linter
+    forecast_type <- get_forecast_type(dat)
     forecast_unit <- get_forecast_unit(dat)
 
     fn_name <- paste0("as_forecast_", forecast_type)

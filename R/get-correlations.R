@@ -87,21 +87,19 @@ plot_correlations <- function(correlations, digits = NULL) {
   # check correlations is actually a matrix of correlations
   col_present <- check_columns_present(correlations, "metric")
   if (any(lower_triangle > 1, na.rm = TRUE) || !isTRUE(col_present)) {
-    #nolint start: keyword_quote_linter
     cli_abort(
       c(
         "Found correlations > 1 or missing `metric` column.",
-        "i" = "Did you forget to call {.fn scoringutils::get_correlations}?"
+        i = "Did you forget to call {.fn scoringutils::get_correlations}?"
       )
     )
-    #nolint end
   }
 
   rownames(lower_triangle) <- colnames(lower_triangle)
 
   # get plot data.frame
-  plot_df <- data.table::as.data.table(lower_triangle)[, metric := metrics]
-  plot_df <- na.omit(data.table::melt(plot_df, id.vars = "metric"))
+  plot_df <- as.data.table(lower_triangle)[, metric := metrics]
+  plot_df <- na.omit(melt(plot_df, id.vars = "metric"))
 
   # refactor levels according to the metrics
   plot_df[, metric := factor(metric, levels = metrics)]

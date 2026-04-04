@@ -10,7 +10,7 @@ as_forecast_multivariate_sample(data, ...)
 
 \method{as_forecast_multivariate_sample}{data.frame}(
   data,
-  joint_across,
+  joint_across = NULL,
   forecast_unit = NULL,
   observed = NULL,
   predicted = NULL,
@@ -124,6 +124,7 @@ or "observed" are retained.
 \seealso{
 Other functions to create forecast objects: 
 \code{\link{as_forecast_binary}()},
+\code{\link{as_forecast_multivariate_point}()},
 \code{\link{as_forecast_nominal}()},
 \code{\link{as_forecast_ordinal}()},
 \code{\link{as_forecast_point}()},

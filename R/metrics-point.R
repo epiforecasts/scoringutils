@@ -9,7 +9,7 @@
 assert_input_point <- function(observed, predicted) {
   assert(check_numeric(observed))
   assert(check_numeric(predicted))
-  assert(check_dims_ok_point(observed, predicted))
+  assert(check_dims_ok_scalar(observed, predicted))
   return(invisible(NULL))
 }
 
@@ -39,7 +39,7 @@ check_input_point <- function(observed, predicted) {
 #' @importFrom checkmate assert_vector check_matrix check_vector assert
 #' @importFrom cli cli_abort
 #' @keywords internal_input_check
-assert_dims_ok_point <- function(observed, predicted) {
+assert_dims_ok_scalar <- function(observed, predicted) {
   assert_vector(observed, min.len = 1)
   n_obs <- length(observed)
   assert(
@@ -49,12 +49,12 @@ assert_dims_ok_point <- function(observed, predicted) {
   n_pred <- length(as.vector(predicted))
   # check that both are either of length 1 or of equal length
   if ((n_obs != 1) && (n_pred != 1) && (n_obs != n_pred)) {
-    #nolint start: keyword_quote_linter object_usage_linter
+    #nolint start: object_usage_linter
     cli_abort(
       c(
-        "!" = "`observed` and `predicted` must either be of length 1 or
+        `!` = "`observed` and `predicted` must either be of length 1 or
          of equal length.",
-        "i" = "Found {n_obs} and {n_pred}."
+        i = "Found {n_obs} and {n_pred}."
       )
     )
     #nolint end
@@ -64,10 +64,10 @@ assert_dims_ok_point <- function(observed, predicted) {
 
 
 #' @title Check Inputs Have Matching Dimensions
-#' @inherit assert_dims_ok_point params description
+#' @inherit assert_dims_ok_scalar params description
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
-check_dims_ok_point <- function(observed, predicted) {
-  result <- check_try(assert_dims_ok_point(observed, predicted))
+check_dims_ok_scalar <- function(observed, predicted) {
+  result <- check_try(assert_dims_ok_scalar(observed, predicted))
   return(result)
 }
