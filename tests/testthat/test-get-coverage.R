@@ -41,9 +41,9 @@ test_that("get_coverage() interval coverage matches interval_coverage() for same
   # (one per quantile_level), but interval_coverage is the same for all rows
   # with the same interval_range. Take unique per forecast unit + interval_range.
   cov_50 <- unique(cov[interval_range == 50, c(get_forecast_unit(fc_obj),
-                                                "interval_range",
-                                                "interval_coverage"),
-                        with = FALSE])
+                                               "interval_range",
+                                               "interval_coverage"),
+                       with = FALSE])
 
   # Get matching numeric data for interval_coverage()
   obs <- fc[quantile_level == 0.5]$observed
@@ -81,23 +81,23 @@ test_that("get_coverage() produces correct interval_coverage for known inputs", 
 
   # For observed=5, 50% interval [3,7]: TRUE (5 >= 3 and 5 <= 7)
   cov_50_obs5 <- cov[target_end_date == as.Date("2020-01-01") &
-                        interval_range == 50]
+                       interval_range == 50]
   # interval_coverage is the same for all quantile_levels in this range
-  expect_true(all(cov_50_obs5$interval_coverage == TRUE))
+  expect_true(all(cov_50_obs5$interval_coverage))
 
   # For observed=10, 50% interval [3,7]: FALSE (10 > 7)
   cov_50_obs10 <- cov[target_end_date == as.Date("2020-01-02") &
-                         interval_range == 50]
-  expect_true(all(cov_50_obs10$interval_coverage == FALSE))
+                        interval_range == 50]
+  expect_true(all(!cov_50_obs10$interval_coverage))
 
   # Quantile coverage for quantile_level=0.5: TRUE for observed=5, FALSE for observed=10
   qcov_obs5 <- cov[target_end_date == as.Date("2020-01-01") &
-                      quantile_level == 0.5]
+                     quantile_level == 0.5]
   expect_equal(nrow(qcov_obs5), 1)
   expect_true(as.logical(qcov_obs5$quantile_coverage))
 
   qcov_obs10 <- cov[target_end_date == as.Date("2020-01-02") &
-                       quantile_level == 0.5]
+                      quantile_level == 0.5]
   expect_equal(nrow(qcov_obs10), 1)
   expect_false(as.logical(qcov_obs10$quantile_coverage))
 })
@@ -114,7 +114,7 @@ test_that("get_coverage() and interval_coverage() agree when observation outside
   cov <- get_coverage(fc, by = get_forecast_unit(fc))
 
   # All interval_coverage should be FALSE
-  expect_true(all(cov$interval_coverage == FALSE))
+  expect_true(all(!cov$interval_coverage))
 
   # interval_coverage() should agree
   pred_mat <- matrix(c(1, 3, 5, 7, 9), nrow = 1)

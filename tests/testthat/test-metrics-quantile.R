@@ -701,9 +701,9 @@ test_that("interval_coverage() handles multiple interval ranges correctly", {
   pred <- matrix(c(1, 3, 5, 7, 9), nrow = 1)
   ql <- c(0.1, 0.25, 0.5, 0.75, 0.9)
   # 50% interval: [3, 7]
-  expect_equal(interval_coverage(obs, pred, ql, interval_range = 50), TRUE)
+  expect_true(interval_coverage(obs, pred, ql, interval_range = 50))
   # 80% interval: [1, 9]
-  expect_equal(interval_coverage(obs, pred, ql, interval_range = 80), TRUE)
+  expect_true(interval_coverage(obs, pred, ql, interval_range = 80))
 })
 
 test_that("interval_coverage_quantile throws a warning when a required quantile is not available", {
