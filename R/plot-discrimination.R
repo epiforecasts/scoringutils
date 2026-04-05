@@ -50,10 +50,10 @@ plot_discrimination <- function(forecast, type = c("histogram", "density"), ...)
   } else {
     plot <- plot +
       geom_histogram(
-        aes(y = after_stat(density)),
+        aes(y = after_stat(ave(count, group, FUN = function(x) x / sum(x)))),
         position = "identity", alpha = 0.5, ...
       ) +
-      labs(y = "Density")
+      labs(y = "Proportion")
   }
 
   plot <- plot +
