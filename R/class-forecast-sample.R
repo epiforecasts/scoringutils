@@ -214,7 +214,7 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
     quantiles <- unique(c(0, breaks, 1))
   }
 
-  forecast_wide <- data.table::dcast(
+  forecast_wide <- dcast(
     forecast,
     ... ~ paste0("InternalSampl_", sample_id),
     value.var = "predicted"
