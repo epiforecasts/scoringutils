@@ -123,13 +123,11 @@ score <- function(forecast, metrics, ...) {
 #' @export
 score.default <- function(forecast, metrics, ...) {
   cli_abort(
-    #nolint start: keyword_quote_linter
     c(
-      "!" = "The input needs to be a valid forecast object.",
-      "i" = "Please convert to a `forecast` object first by calling the
+      `!` = "The input needs to be a valid forecast object.",
+      i = "Please convert to a `forecast` object first by calling the
       appropriate {.fn as_forecast_<type>} function)."
     )
-    #nolint end
   )
 }
 
@@ -141,15 +139,25 @@ score.default <- function(forecast, metrics, ...) {
 #' `score()` to apply all scoring rules to the data.
 #' Scoring rules are wrapped in [run_safely()] to catch errors and to make
 #' sure that only arguments are passed to the scoring rule that are actually
-#' accepted by it.
+#' accepted by it. A warning is issued if any column names in the input
+#' data match names in the metrics list, as these will be overwritten.
 #' @param ... Additional arguments to be passed to the scoring rules. Note that
 #'   this is currently not used, as all calls to `apply_scores` currently
 #'   avoid passing arguments via `...` and instead expect that the metrics
 #'   directly be modified using [purrr::partial()].
 #' @inheritParams score
 #' @returns A data table with the forecasts and the calculated metrics.
+#' @importFrom cli cli_warn
 #' @keywords internal
 apply_metrics <- function(forecast, metrics, ...) {
+  clashing <- intersect(names(metrics), colnames(forecast))
+  if (length(clashing) > 0) {
+    cli_warn(c(
+      `!` = "Column{?s} {.val {clashing}} already
+      present in the data will be overwritten with
+      metric results."
+    ))
+  }
   lapply(names(metrics), function(metric_name) {
     result <- do.call(
       run_safely,
@@ -213,7 +221,7 @@ run_safely <- function(..., fun, metric_name) {
     msg <- conditionMessage(attr(result, "condition"))
     cli_warn(
       c(
-        "!" = "Computation for {.var {metric_name}} failed.
+        `!` = "Computation for {.var {metric_name}} failed.
         Error: {msg}."
       )
     )
@@ -249,13 +257,11 @@ validate_metrics <- function(metrics) {
   for (i in seq_along(metrics)) {
     check_fun <- check_function(metrics[[i]])
     if (!isTRUE(check_fun)) {
-      #nolint start: keyword_quote_linter
       cli_warn(
         c(
-          "!" = "`Metrics` element number {i} is not a valid function."
+          `!` = "`Metrics` element number {i} is not a valid function."
         )
       )
-      #nolint end
       names(metrics)[i] <- "scoringutils_delete"
     }
   }

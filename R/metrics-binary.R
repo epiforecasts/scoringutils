@@ -18,7 +18,7 @@
 assert_input_binary <- function(observed, predicted) {
   assert_factor(observed, n.levels = 2, min.len = 1)
   assert_numeric(predicted, lower = 0, upper = 1)
-  assert_dims_ok_point(observed, predicted)
+  assert_dims_ok_scalar(observed, predicted)
 
   # Warn if factor levels appear to be in counterintuitive order.
   # Predictions represent P(outcome = highest factor level). If the levels

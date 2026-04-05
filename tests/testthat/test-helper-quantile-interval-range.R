@@ -54,7 +54,7 @@ test_that("quantile_to_interval_dataframe() works", {
     regexp = "[Aa]ggregate.*default.*length"
   )
   quantile <- quantile[-c(1, 3), ]
-  wide2 <- scoringutils:::quantile_to_interval( # nolint: undesirable_operator_linter
+  wide2 <- quantile_to_interval(
     quantile,
     keep_quantile_col = FALSE,
     format = "wide"
@@ -85,7 +85,7 @@ test_that("sample_to_range_long works", {
     stringsAsFactors = FALSE
   )
 
-  long2 <- scoringutils:::sample_to_interval_long(as_forecast_sample(samples), # nolint: undesirable_operator_linter
+  long2 <- sample_to_interval_long(as_forecast_sample(samples),
     interval_range = 50,
     keep_quantile_col = FALSE
   )

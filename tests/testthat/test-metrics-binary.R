@@ -109,7 +109,7 @@ test_that("function throws an error for wrong input formats", {
 # ==============================================================================
 # Test factor level order warning
 # ==============================================================================
-test_that("assert_input_binary() warns when 0/1 factor levels are in counterintuitive order", {
+test_that("assert_input_binary() warns when 0-1 factor levels are in counterintuitive order", {
   observed_rev <- factor(c(0, 1, 1, 0, 1), levels = c("1", "0"))
   predicted_rev <- c(0.1, 0.9, 0.8, 0.2, 0.7)
   expect_warning(
@@ -118,7 +118,7 @@ test_that("assert_input_binary() warns when 0/1 factor levels are in counterintu
   )
 })
 
-test_that("assert_input_binary() does not warn for standard 0/1 level order", {
+test_that("assert_input_binary() does not warn for standard 0-1 level order", {
   observed_std <- factor(c(0, 1, 1, 0, 1), levels = c("0", "1"))
   predicted_std <- c(0.1, 0.9, 0.8, 0.2, 0.7)
   expect_no_warning(assert_input_binary(observed_std, predicted_std))
@@ -145,7 +145,7 @@ test_that("brier_score() produces different results with reversed factor levels"
   expect_false(all(scores_correct == scores_reversed))
 })
 
-test_that("logs_binary() warns with reversed 0/1 factor levels", {
+test_that("logs_binary() warns with reversed 0-1 factor levels", {
   observed_reversed <- factor(c(0, 1, 1, 0), levels = c("1", "0"))
   predicted_lb <- c(0.1, 0.9, 0.8, 0.2)
   expect_warning(
@@ -154,7 +154,7 @@ test_that("logs_binary() warns with reversed 0/1 factor levels", {
   )
 })
 
-test_that("assert_input_binary() warns for TRUE/FALSE levels in counterintuitive order", {
+test_that("assert_input_binary() warns for TRUE-FALSE levels in counterintuitive order", {
   observed_tf <- factor(c(TRUE, FALSE, TRUE), levels = c("TRUE", "FALSE"))
   predicted_tf <- c(0.8, 0.2, 0.9)
   expect_warning(
@@ -221,6 +221,7 @@ test_that("Binary metrics work within and outside of `score()`", {
 })
 
 test_that("`logs_binary()` works as expected", {
+  skip_if_not_installed("Metrics")
   # check against the function Metrics::ll
   obs2 <- as.numeric(as.character(observed))
   expect_equal( # nolint: expect_identical_linter
