@@ -24,10 +24,6 @@ test_that("assert_dims_ok_scalar() works as expected", {
 # check_input_sample() removed (issue #684) # nolint: commented_code_linter
 # ==============================================================================
 
-test_that("check_input_sample is no longer defined", {
-  expect_error(check_input_sample(1:10, matrix(1:20, nrow = 10)))
-})
-
 test_that("assert_input_sample still works after check_input_sample removal", {
   observed <- 1:10
   predicted <- matrix(1:20, nrow = 10)

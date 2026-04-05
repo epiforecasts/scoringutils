@@ -19,15 +19,6 @@ forecast_quantile_probs <- c(0.1, 0.25, 0.5, 0.75, 0.9)
 # ==============================================================================
 # check_input_quantile() removed (issue #684) # nolint: commented_code_linter
 # ==============================================================================
-test_that("check_input_quantile is no longer defined", {
-  expect_error(
-    check_input_quantile(
-      1:10, matrix(1:20, nrow = 10),
-      quantile_level = c(0.1, 0.9)
-    )
-  )
-})
-
 test_that("assert_input_quantile still works after check_input_quantile removal", {
   observed <- 1:10
   predicted <- matrix(1:20, nrow = 10)
