@@ -65,7 +65,7 @@ get_metrics(example_nominal)
 #>     logs <- -log(pred_for_observed)
 #>     return(logs)
 #> }
-#> <bytecode: 0x5591ae44bd88>
+#> <bytecode: 0x55623908be38>
 #> <environment: namespace:scoringutils>
 #> 
 ```

@@ -2,6 +2,8 @@
 
 ## scoringutils (development version)
 
+## scoringutils 2.2.0
+
 - [`get_pairwise_comparisons()`](https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.md)
   now works with only two models when a baseline is specified, instead
   of requiring at least three
