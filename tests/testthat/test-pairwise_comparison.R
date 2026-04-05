@@ -114,14 +114,14 @@ test_that("get_pairwise_comparisons() works", {
 
     # perform permutation tests:
     if (permutation_test) {
-      pval <- scoringutils:::permutation_test(sub$wis.x, sub$wis.y, # nolint: undesirable_operator_linter
+      pval <- permutation_test(sub$wis.x, sub$wis.y,
         n_permutation = 999,
         comparison_mode = "difference"
       )
 
       # aggregate by forecast date:
       sub_fcd <- aggregate(cbind(wis.x, wis.y) ~ timezero, data = sub, FUN = mean)
-      pval_fcd <- scoringutils:::permutation_test(sub_fcd$wis.x, sub_fcd$wis.y, # nolint: undesirable_operator_linter
+      pval_fcd <- permutation_test(sub_fcd$wis.x, sub_fcd$wis.y,
         n_permutation = 999
       )
     } else {
@@ -219,7 +219,7 @@ test_that("get_pairwise_comparisons() works", {
 })
 
 test_that("get_pairwise_comparisons() work in score() with integer data", {
-  eval <- suppressMessages(score(forecast = as_forecast_sample(example_sample_discrete)))
+  eval <- suppressWarnings(suppressMessages(score(forecast = as_forecast_sample(example_sample_discrete))))
   eval_summarised <- summarise_scores(eval, by = c("model", "target_type"))
   eval <- add_relative_skill(eval_summarised)
   expect_true("crps_relative_skill" %in% colnames(eval))
@@ -327,13 +327,23 @@ test_that("Basic input checks for `add_relative_skill() work", {
       compare = "model", metric = "crps"
     )
   )
-  expect_error(
+  expect_no_error(
     add_relative_skill(
       eval_few,
       compare = "model", baseline = "EuroCOVIDhub-baseline",
       metric = "crps"
+    )
+  )
+
+  # error if only the baseline model is present
+  eval_one <- eval[model == "EuroCOVIDhub-baseline"]
+  expect_error(
+    add_relative_skill(
+      eval_one,
+      compare = "model", baseline = "EuroCOVIDhub-baseline",
+      metric = "crps"
     ),
-    "More than one non-baseline model is needed to compute pairwise compairisons."
+    "not enough comparators"
   )
 
   # error if no relative skill metric is found

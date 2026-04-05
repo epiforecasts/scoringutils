@@ -63,14 +63,3 @@ check_try <- function(expr) {
 }
 
 
-#' Test whether column names are NOT present in a data.frame
-#' @description The function checks whether all column names are NOT present.
-#' If none of the columns are present, the function returns TRUE. If one or
-#' more columns are present, the function returns FALSE.
-#' @inheritParams document_check_functions
-#' @returns Returns TRUE if none of the columns are present and FALSE otherwise
-#' @importFrom checkmate test_names
-#' @keywords internal_input_check
-test_columns_not_present <- function(data, columns) {
-  test_names(colnames(data), disjunct.from = columns)
-}

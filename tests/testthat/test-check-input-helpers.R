@@ -11,12 +11,3 @@ test_that("Check equal length works if all arguments have length 1", {
 })
 
 
-test_that("test_columns_not_present works", {
-  expect_true(
-    test_columns_not_present(example_binary, "sample_id")
-  )
-  expect_false(
-    test_columns_not_present(example_binary, "location")
-  )
-})
-

@@ -6,8 +6,17 @@
 get_forecast_type <- function(forecast) {
   classname <- class(forecast)
   forecast_class <- classname[grepl("forecast_", classname, fixed = TRUE)]
-  if (length(forecast_class) == 1) {
-    return(gsub("forecast_", "", forecast_class, fixed = TRUE))
+  if (length(forecast_class) >= 1) {
+    forecast_type <- gsub(
+      "forecast_", "", forecast_class[1], fixed = TRUE
+    )
+    if (!nzchar(forecast_type)) {
+      cli_abort(
+        "Input is not a valid forecast object
+        (Column `forecast_` prefix found but no type suffix)."
+      )
+    }
+    return(forecast_type)
   }
   cli_abort(
     "Input is not a valid forecast object
@@ -29,12 +38,12 @@ assert_forecast_type <- function(data,
                                  desired = NULL) {
   assert_character(desired, null.ok = TRUE)
   if (!is.null(desired) && desired != actual) {
-    #nolint start: object_usage_linter keyword_quote_linter
+    #nolint start: object_usage_linter
     cli_abort(
       c(
-        "!" = "Forecast type determined by scoringutils based on input:
+        `!` = "Forecast type determined by scoringutils based on input:
         {.val {actual}}.",
-        "i" = "Desired forecast type: {.val {desired}}."
+        i = "Desired forecast type: {.val {desired}}."
       )
     )
     #nolint end

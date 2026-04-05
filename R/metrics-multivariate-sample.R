@@ -29,13 +29,28 @@ assert_input_multivariate_sample <- function(observed, predicted, mv_group_id) {
 
 #' @title Energy score for multivariate forecasts
 #' @description
-#' Compute the multivariate energy score
-#' (see \link[scoringRules:es_sample]{scoringRules::es_sample})
-#' for each group defined by `mv_group_id`.
+#' Compute the energy score (Gneiting et al., 2008) for each
+#' multivariate group defined by `mv_group_id`. The energy
+#' score is a multivariate generalisation of the CRPS that
+#' measures both calibration and sharpness of the forecast
+#' distribution.
+#'
+#' The score is computed using
+#' [scoringRules::es_sample()].
 #' @inheritParams ae_median_sample
 #' @inheritParams assert_input_multivariate_sample
-#' @inherit scoringRules::es_sample params
-#' @keywords internal_input_check
+#' @param w Optional numeric vector of weights for forecast samples
+#'   (length equal to the number of columns of `predicted`).
+#'   If `NULL` (the default), equal weights are used.
+#' @return A named numeric vector of scores, one per multivariate
+#'   group. Lower values are better.
+#' @references
+#' Gneiting, T., Stanberry, L.I., Grimit, E.P., Held, L. and
+#' Johnson, N.A. (2008). Assessing probabilistic forecasts of
+#' multivariate quantities, with an application to ensemble
+#' predictions of surface winds.
+#' *TEST*, 17, 211-235.
+#' @keywords metric
 #' @export
 energy_score_multivariate <- function(observed, predicted, mv_group_id, w = NULL) {
   assert_input_multivariate_sample(observed, predicted, mv_group_id)
@@ -48,4 +63,71 @@ energy_score_multivariate <- function(observed, predicted, mv_group_id, w = NULL
 
   names(energy_score) <- unique_groups
   return(energy_score)
+}
+
+
+#' Variogram score for multivariate forecasts
+#'
+#' @description
+#' Compute the variogram score for each multivariate group
+#' defined by `mv_group_id`.
+#' The variogram score (Scheuerer and Hamill, 2015) assesses
+#' whether a forecast captures the correlation structure across
+#' the targets being forecast jointly (e.g. locations, age
+#' groups). For each pair of targets (i, j), it compares the
+#' observed absolute difference |y_i - y_j|^p against the
+#' expected absolute difference under the forecast distribution.
+#' A forecast that misspecifies correlations between targets
+#' will predict pairwise differences that do not match the
+#' observations, resulting in a higher score.
+#'
+#' The score is computed using
+#' [scoringRules::vs_sample()].
+#'
+#' @inheritParams energy_score_multivariate
+#' @param w_vs Optional non-negative weight matrix for the
+#'   pairwise comparisons between targets. Entry `w_vs[i, j]`
+#'   controls the importance of the pair (i, j) in the score.
+#'   Must be a symmetric square matrix with rows and columns
+#'   equal to the number of targets within each multivariate
+#'   group.
+#'   If `NULL` (the default), all pairs are weighted equally.
+#' @param p Numeric, order of the variogram score. This controls
+#'   how pairwise differences are scaled: the score compares
+#'   |y_i - y_j|^p across targets. Lower values of `p` give
+#'   less weight to large differences, making the score more
+#'   robust to outliers. Typical choices are 0.5 (the default)
+#'   and 1.
+#' @return A named numeric vector of scores, one per multivariate
+#'   group. Lower values are better.
+#' @references
+#' Scheuerer, M. and Hamill, T.M. (2015). Variogram-Based
+#' Proper Scoring Rules for Probabilistic Forecasts of
+#' Multivariate Quantities. *Monthly Weather Review*, 143,
+#' 1321-1334.
+#' @importFrom scoringRules vs_sample
+#' @export
+#' @keywords metric
+variogram_score_multivariate <- function(
+  observed, predicted, mv_group_id,
+  w = NULL, w_vs = NULL, p = 0.5
+) {
+  assert_input_multivariate_sample(
+    observed, predicted, mv_group_id
+  )
+  unique_groups <- unique(mv_group_id)
+
+  variogram_score <- vapply(
+    unique_groups, function(group) {
+      idx <- which(mv_group_id == group)
+      vs_sample(
+        y = observed[idx],
+        dat = predicted[idx, , drop = FALSE],
+        w = w, w_vs = w_vs, p = p
+      )
+    }, numeric(1)
+  )
+
+  names(variogram_score) <- unique_groups
+  return(variogram_score)
 }
