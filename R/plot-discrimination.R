@@ -13,6 +13,9 @@
 #' @param type Character, either `"histogram"` (default) or `"density"`.
 #'   `"histogram"` shows a histogram with proportions on the y-axis;
 #'   `"density"` shows kernel density curves.
+#' @param ... Additional arguments passed to [ggplot2::geom_histogram()] or
+#'   [ggplot2::geom_density()], depending on `type`. For example, `bins` or
+#'   `binwidth` for histograms, or `bw` and `adjust` for density plots.
 #' @returns A ggplot object showing the distribution of predicted
 #'   probabilities, coloured by observed outcome level.
 #' @importFrom ggplot2 ggplot aes geom_density geom_histogram
@@ -25,10 +28,12 @@
 #'
 #' plot_discrimination(na.omit(example_binary), type = "density")
 #'
+#' plot_discrimination(na.omit(example_binary), bins = 10)
+#'
 #' plot_discrimination(na.omit(example_binary)) +
 #'   facet_wrap(~model)
 
-plot_discrimination <- function(forecast, type = c("histogram", "density")) {
+plot_discrimination <- function(forecast, type = c("histogram", "density"), ...) {
   forecast <- ensure_data.table(forecast)
   assert(check_columns_present(forecast, c("observed", "predicted")))
   type <- match.arg(type)
@@ -40,13 +45,13 @@ plot_discrimination <- function(forecast, type = c("histogram", "density")) {
 
   if (type == "density") {
     plot <- plot +
-      geom_density(alpha = 0.5) +
+      geom_density(alpha = 0.5, ...) +
       labs(y = "Density")
   } else {
     plot <- plot +
       geom_histogram(
         aes(y = after_stat(density)),
-        position = "identity", alpha = 0.5
+        position = "identity", alpha = 0.5, ...
       ) +
       labs(y = "Density")
   }

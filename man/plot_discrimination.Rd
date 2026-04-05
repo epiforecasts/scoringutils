@@ -4,7 +4,7 @@
 \alias{plot_discrimination}
 \title{Plot discrimination for binary forecasts}
 \usage{
-plot_discrimination(forecast, type = c("histogram", "density"))
+plot_discrimination(forecast, type = c("histogram", "density"), ...)
 }
 \arguments{
 \item{forecast}{A data.table (or data.frame) containing at least columns
@@ -15,6 +15,10 @@ between 0 and 1). Typically a \code{forecast_binary} object or the output of
 \item{type}{Character, either \code{"histogram"} (default) or \code{"density"}.
 \code{"histogram"} shows a histogram with proportions on the y-axis;
 \code{"density"} shows kernel density curves.}
+
+\item{...}{Additional arguments passed to \code{\link[ggplot2:geom_histogram]{ggplot2::geom_histogram()}} or
+\code{\link[ggplot2:geom_density]{ggplot2::geom_density()}}, depending on \code{type}. For example, \code{bins} or
+\code{binwidth} for histograms, or \code{bw} and \code{adjust} for density plots.}
 }
 \value{
 A ggplot object showing the distribution of predicted
@@ -31,6 +35,8 @@ library(ggplot2)
 plot_discrimination(na.omit(example_binary))
 
 plot_discrimination(na.omit(example_binary), type = "density")
+
+plot_discrimination(na.omit(example_binary), bins = 10)
 
 plot_discrimination(na.omit(example_binary)) +
   facet_wrap(~model)
