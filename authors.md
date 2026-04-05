@@ -27,7 +27,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/epiforecasts/scoringutils/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/epiforecasts/scoringutils/blob/v2.2.0/inst/CITATION)
 
 Nikos I. Bosse, Hugo Gruson, Sebastian Funk, Anne Cori, Edwin van
 Leeuwen, and Sam Abbott (2022). Evaluating Forecasts with scoringutils
