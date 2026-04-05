@@ -1,3 +1,5 @@
+# scoringutils (development version)
+
 # scoringutils 2.2.0
 
 - `get_pairwise_comparisons()` now works with only two models when a baseline is specified, instead of requiring at least three (#1022).
