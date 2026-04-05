@@ -9,5 +9,3 @@ test_that("Check equal length works if all arguments have length 1", {
   )
   expect_equal(out, 0.05)
 })
-
-

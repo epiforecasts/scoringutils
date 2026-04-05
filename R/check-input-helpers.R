@@ -61,5 +61,3 @@ check_try <- function(expr) {
   msg <- conditionMessage(attr(result, "condition"))
   return(msg)
 }
-
-
