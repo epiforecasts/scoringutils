@@ -45,12 +45,14 @@ plot_discrimination <- function(forecast, type = c("histogram", "density"), ...)
 
   if (type == "density") {
     plot <- plot +
-      geom_density(alpha = 0.5, ...) +
+      geom_density(alpha = 0.5, ...) + # nolint object_usage_linter
       labs(y = "Density")
   } else {
     plot <- plot +
-      geom_histogram(
-        aes(y = after_stat(ave(count, group, FUN = function(x) x / sum(x)))),
+      geom_histogram( # nolint object_usage_linter
+        aes(y = after_stat( # nolint object_usage_linter
+          ave(count, group, FUN = function(x) x / sum(x)) # nolint object_usage_linter
+        )),
         position = "identity", alpha = 0.5, ...
       ) +
       labs(y = "Proportion")
