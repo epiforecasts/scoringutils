@@ -2,6 +2,7 @@ test_that("plot_discrimination() works with a forecast_binary object", {
   p <- plot_discrimination(na.omit(example_binary))
   expect_s3_class(p, "ggplot")
   skip_on_cran()
+  skip_if(getRversion() < "4.2.0", "density estimation differs on R < 4.2")
   vdiffr::expect_doppelganger("plot_discrimination", p)
 })
 
@@ -10,6 +11,7 @@ test_that("plot_discrimination() works with faceting by model", {
     facet_wrap(~model)
   expect_s3_class(p, "ggplot")
   skip_on_cran()
+  skip_if(getRversion() < "4.2.0", "density estimation differs on R < 4.2")
   vdiffr::expect_doppelganger("plot_discrimination_facet_model", p)
 })
 
@@ -52,7 +54,7 @@ test_that("plot_discrimination() shows separation between observed levels", {
   build_data <- ggplot2::ggplot_build(p)
   # The density layer should have at least 2 groups
   layer_data <- build_data$data[[1]]
-  expect_true(length(unique(layer_data$group)) >= 2)
+  expect_gte(length(unique(layer_data$group)), 2)
 })
 
 test_that("plot_discrimination() handles edge case with all identical predictions", {
