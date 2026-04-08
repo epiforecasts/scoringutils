@@ -1,6 +1,9 @@
 # scoringutils (development version)
 
 - Added `filter_scores()` and `impute_missing_scores()` for handling missing forecasts before summarisation. `filter_scores()` removes target combinations with insufficient model coverage, while `impute_missing_scores()` fills in missing scores using configurable strategies (worst, mean, NA, or reference model). Both use a strategy function pattern for extensibility. See `vignette("handling-missing-forecasts")` for details (#1122).
+
+# scoringutils 2.2.0
+
 - `get_pairwise_comparisons()` now works with only two models when a baseline is specified, instead of requiring at least three (#1022).
 - `score()` now warns when column names in the input data clash with metric names, as these columns are overwritten during scoring (#382).
 - The print method for multivariate forecasts now displays the `joint_across` columns, making it easier to see which variables are forecast jointly (#1043).
