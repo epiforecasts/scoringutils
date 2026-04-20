@@ -96,10 +96,18 @@ is_forecast_quantile <- function(x) {
 }
 
 
-#' @rdname as_forecast_point
+#' @title Convert a `forecast_quantile` to a `forecast_point`
+#'
 #' @description
 #' When converting a `forecast_quantile` object into a `forecast_point` object,
 #' the 0.5 quantile is extracted and returned as the point forecast.
+#'
+#' @param data A `forecast_quantile` object (as created by
+#'   [as_forecast_quantile()]).
+#' @param ... Unused.
+#' @returns A `forecast` object of class `forecast_point`.
+#' @family functions to create forecast objects
+#' @seealso [as_forecast_point()]
 #' @export
 #' @keywords as_forecast
 as_forecast_point.forecast_quantile <- function(data, ...) {
