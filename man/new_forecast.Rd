@@ -8,7 +8,7 @@ new_forecast(data, classname)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of for additional information
+See the "Target format" section in Details for additional information
 on the required input format.}
 
 \item{classname}{name of the class to be created}

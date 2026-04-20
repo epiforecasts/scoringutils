@@ -17,7 +17,7 @@ as_forecast_binary(data, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of for additional information
+See the "Target format" section in Details for additional information
 on the required input format.}
 
 \item{...}{Unused}

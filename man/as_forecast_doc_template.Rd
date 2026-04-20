@@ -5,7 +5,7 @@
 \title{General information on creating a \code{forecast} object}
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of for additional information
+See the "Target format" section in Details for additional information
 on the required input format.}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after

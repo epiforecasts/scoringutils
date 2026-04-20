@@ -62,11 +62,12 @@ as_forecast_multivariate_point.default <- function(
 #' @export
 #' @rdname assert_forecast
 #' @importFrom cli cli_abort
+#' @importFrom checkmate assert_subset
 #' @keywords validate-forecast-object
 assert_forecast.forecast_multivariate_point <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  assert(check_columns_present(forecast, ".mv_group_id"))
+  assert_subset(".mv_group_id", colnames(forecast))
   forecast <- assert_forecast_generic(forecast, verbose)
 
   input_check <- check_input_point(

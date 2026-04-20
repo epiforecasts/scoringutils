@@ -77,11 +77,12 @@ as_forecast_quantile.default <- function(data,
 
 #' @export
 #' @rdname assert_forecast
+#' @importFrom checkmate assert_subset
 #' @keywords validate-forecast-object
 assert_forecast.forecast_quantile <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  assert(check_columns_present(forecast, "quantile_level"))
+  assert_subset("quantile_level", colnames(forecast))
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
   assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
