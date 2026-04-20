@@ -115,6 +115,13 @@ assert_forecast.forecast_nominal <- function(
 }
 
 
+#' @rdname get_forecast_type_ids
+#' @export
+get_forecast_type_ids.forecast_nominal <- function(data) {
+  "predicted_label"
+}
+
+
 #' @export
 #' @rdname is_forecast
 is_forecast_nominal <- function(x) {
