@@ -86,8 +86,8 @@ get_metrics(example_point, select = "ape")
 #> $ape
 #> function (actual, predicted) 
 #> abs(actual - predicted)/abs(actual)
-#> <bytecode: 0x55623b7e87e8>
-#> <environment: 0x55623b7e80e8>
+#> <bytecode: 0x55dec92e67c0>
+#> <environment: 0x55dec92e60c0>
 #> 
 
 set.seed(123)
