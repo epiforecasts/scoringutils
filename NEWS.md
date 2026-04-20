@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- Removed the deprecated vignettes `Deprecated-functions` and `Deprecated-visualisations`. The code for removed functions (`plot_predictions()`, `make_NA()`, `plot_ranges()`, `plot_score_table()`, `merge_pred_and_obs()`) can still be found in the [git history](https://github.com/epiforecasts/scoringutils/tree/d0cd8e2/vignettes) (#1158).
+
 # scoringutils 2.2.0
 
 - `get_pairwise_comparisons()` now works with only two models when a baseline is specified, instead of requiring at least three (#1022).
