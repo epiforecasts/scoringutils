@@ -4,7 +4,12 @@
 \alias{get_duplicate_forecasts}
 \title{Find duplicate forecasts}
 \usage{
-get_duplicate_forecasts(data, forecast_unit = NULL, counts = FALSE)
+get_duplicate_forecasts(
+  data,
+  forecast_unit = NULL,
+  type = NULL,
+  counts = FALSE
+)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
@@ -18,19 +23,35 @@ If \code{NULL} (the default), all columns that are not required columns are
 assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.}
 
-\item{counts}{Should the output show the number of duplicates per forecast
-unit instead of the individual duplicated rows? Default is \code{FALSE}.}
+\item{type}{Character string naming the forecast type, corresponding
+to the class suffix after \code{forecast_} (e.g. \code{"quantile"} for
+class \code{forecast_quantile}, \code{"sample"} for \code{forecast_sample}).
+Used to determine type-specific ID columns when \code{data} is not
+already a \code{forecast} object. Ignored when \code{data} already
+inherits from \code{forecast}.}
+
+\item{counts}{Should the output show the number of duplicates per
+forecast unit instead of the individual duplicated rows?
+Default is \code{FALSE}.}
 }
 \value{
-A data.frame with all rows for which a duplicate forecast was found
+A data.frame with all rows for which a duplicate forecast
+was found
 }
 \description{
-Internal helper function to identify duplicate forecasts, i.e.
-instances where there is more than one forecast for the same prediction
-target.
+Identify duplicate forecasts, i.e. instances where there is more than
+one forecast for the same prediction target.
+
+Uses \code{\link[=get_forecast_type_ids]{get_forecast_type_ids()}} to determine the type-specific columns
+(beyond the forecast unit) that identify a unique row. For \code{forecast}
+objects the type is detected automatically. For plain \code{data.frame}s
+you should pass \code{type} (e.g. \code{"quantile"}, \code{"sample"}) so that the
+correct columns are used. Calling on a plain \code{data.frame} without
+\code{type} is deprecated; it falls back to column-name detection but
+this behaviour will be removed in a future version.
 }
 \examples{
 example <- rbind(example_quantile, example_quantile[1000:1010])
-get_duplicate_forecasts(example)
+get_duplicate_forecasts(example, type = "quantile")
 }
 \keyword{diagnose-inputs}
