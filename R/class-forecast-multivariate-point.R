@@ -99,6 +99,21 @@ is_forecast_multivariate_point <- function(x) {
 # nolint end
 
 
+#' @title Print information about a multivariate point forecast object
+#' @description
+#' This function prints information about a multivariate point forecast object,
+#' including "Forecast type", "Forecast unit", and "Joint across" columns.
+#'
+#' @param x A forecast object of class `forecast_multivariate_point`.
+#' @param ... Additional arguments for [print()].
+#' @returns Returns `x` invisibly.
+#' @export
+#' @keywords gain-insights
+print.forecast_multivariate_point <- function(x, ...) {
+  print_multivariate_forecast(x, ...)
+}
+
+
 #' @importFrom stats na.omit
 #' @importFrom data.table setattr copy
 #' @rdname score
