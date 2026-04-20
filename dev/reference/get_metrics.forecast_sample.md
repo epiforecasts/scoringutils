@@ -105,7 +105,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         return(res)
 #>     }
 #> }
-#> <bytecode: 0x55de25fda058>
+#> <bytecode: 0x55f912a0a2b0>
 #> <environment: namespace:scoringutils>
 #> 
 #> $dss
@@ -114,7 +114,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     assert_input_sample(observed, predicted)
 #>     scoringRules::dss_sample(y = observed, dat = predicted, ...)
 #> }
-#> <bytecode: 0x55de2d105138>
+#> <bytecode: 0x55f911cf7580>
 #> <environment: namespace:scoringutils>
 #> 
 #> $crps
@@ -142,7 +142,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         return(crps)
 #>     }
 #> }
-#> <bytecode: 0x55de271488e0>
+#> <bytecode: 0x55f912f7eed8>
 #> <environment: namespace:scoringutils>
 #> 
 #> $overprediction
@@ -152,7 +152,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$overprediction)
 #> }
-#> <bytecode: 0x55de298153a0>
+#> <bytecode: 0x55f910dbae10>
 #> <environment: namespace:scoringutils>
 #> 
 #> $underprediction
@@ -162,7 +162,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$underprediction)
 #> }
-#> <bytecode: 0x55de298133a0>
+#> <bytecode: 0x55f910bb7508>
 #> <environment: namespace:scoringutils>
 #> 
 #> $dispersion
@@ -172,7 +172,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>         ...)
 #>     return(crps$dispersion)
 #> }
-#> <bytecode: 0x55de2980bed8>
+#> <bytecode: 0x55f912a6c230>
 #> <environment: namespace:scoringutils>
 #> 
 #> $log_score
@@ -187,7 +187,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     scoringRules::logs_sample(y = observed, dat = predicted, 
 #>         ...)
 #> }
-#> <bytecode: 0x55de2980b988>
+#> <bytecode: 0x55f912a6b660>
 #> <environment: namespace:scoringutils>
 #> 
 #> $ae_median
@@ -199,7 +199,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     ae_median <- abs(observed - median_predictions)
 #>     return(ae_median)
 #> }
-#> <bytecode: 0x55de31408440>
+#> <bytecode: 0x55f9130c29b8>
 #> <environment: namespace:scoringutils>
 #> 
 #> $se_mean
@@ -210,7 +210,7 @@ get_metrics(example_sample_continuous, exclude = "mad")
 #>     se_mean <- (observed - mean_predictions)^2
 #>     return(se_mean)
 #> }
-#> <bytecode: 0x55de297fc4f8>
+#> <bytecode: 0x55f912e05448>
 #> <environment: namespace:scoringutils>
 #> 
 ```

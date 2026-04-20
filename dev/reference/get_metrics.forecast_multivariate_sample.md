@@ -79,7 +79,7 @@ get_metrics(example)
 #>     names(energy_score) <- unique_groups
 #>     return(energy_score)
 #> }
-#> <bytecode: 0x55de2dd673a0>
+#> <bytecode: 0x55f90ff7a210>
 #> <environment: namespace:scoringutils>
 #> 
 #> $variogram_score
@@ -96,7 +96,7 @@ get_metrics(example)
 #>     names(variogram_score) <- unique_groups
 #>     return(variogram_score)
 #> }
-#> <bytecode: 0x55de2dd607c0>
+#> <bytecode: 0x55f90ff60648>
 #> <environment: namespace:scoringutils>
 #> 
 ```

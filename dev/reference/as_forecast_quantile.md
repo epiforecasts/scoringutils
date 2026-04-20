@@ -41,8 +41,8 @@ as_forecast_quantile(
 - data:
 
   A data.frame (or similar) with predicted and observed values. See the
-  details section of for additional information on the required input
-  format.
+  "Target format" section in Details for additional information on the
+  required input format.
 
 - ...:
 
