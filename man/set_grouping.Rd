@@ -8,7 +8,7 @@ set_grouping(data, joint_across)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
-See the details section of for additional information
+See the "Target format" section in Details for additional information
 on the required input format.}
 
 \item{joint_across}{Character vector with columns names that define the
