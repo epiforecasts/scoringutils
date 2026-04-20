@@ -73,7 +73,7 @@ get_metrics(example_binary)
 #>     brierscore <- (observed - predicted)^2
 #>     return(brierscore)
 #> }
-#> <bytecode: 0x564e1739c0f8>
+#> <bytecode: 0x560250497688>
 #> <environment: namespace:scoringutils>
 #> 
 #> $log_score
@@ -84,7 +84,7 @@ get_metrics(example_binary)
 #>     logs <- -log(1 - abs(observed - predicted))
 #>     return(logs)
 #> }
-#> <bytecode: 0x564e1739cf68>
+#> <bytecode: 0x560250492770>
 #> <environment: namespace:scoringutils>
 #> 
 get_metrics(example_binary, select = "brier_score")
@@ -96,7 +96,7 @@ get_metrics(example_binary, select = "brier_score")
 #>     brierscore <- (observed - predicted)^2
 #>     return(brierscore)
 #> }
-#> <bytecode: 0x564e1739c0f8>
+#> <bytecode: 0x560250497688>
 #> <environment: namespace:scoringutils>
 #> 
 get_metrics(example_binary, exclude = "log_score")
@@ -108,7 +108,7 @@ get_metrics(example_binary, exclude = "log_score")
 #>     brierscore <- (observed - predicted)^2
 #>     return(brierscore)
 #> }
-#> <bytecode: 0x564e1739c0f8>
+#> <bytecode: 0x560250497688>
 #> <environment: namespace:scoringutils>
 #> 
 ```
