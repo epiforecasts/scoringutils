@@ -8,6 +8,59 @@ test_that("as_forecast_point() works", {
   )
 })
 
+test_that("as_forecast_point.forecast_quantile() uses default quantile_level = 0.5", {
+  data <- as_forecast_quantile(na.omit(example_quantile))
+  result <- as_forecast_point(data)
+  expect_s3_class(result, c("forecast_point", "forecast", "data.table", "data.frame"), exact = TRUE)
+  # predicted values should match those at quantile_level 0.5
+  expected <- na.omit(as.data.table(example_quantile))[quantile_level == 0.5]
+  expect_equal(sort(result$predicted), sort(expected$predicted))
+  expect_false("quantile_level" %in% colnames(result))
+})
+
+test_that("as_forecast_point.forecast_quantile() accepts custom quantile_level", {
+  data <- as_forecast_quantile(na.omit(example_quantile))
+  result <- as_forecast_point(data, quantile_level = 0.25)
+  expect_s3_class(result, c("forecast_point", "forecast", "data.table", "data.frame"), exact = TRUE)
+  expected <- na.omit(as.data.table(example_quantile))[quantile_level == 0.25]
+  expect_equal(sort(result$predicted), sort(expected$predicted))
+  expect_false("quantile_level" %in% colnames(result))
+})
+
+test_that("as_forecast_point.forecast_quantile() errors when requested quantile_level is not present", {
+  data <- as_forecast_quantile(na.omit(example_quantile))
+  expect_error(
+    as_forecast_point(data, quantile_level = 0.33),
+    "0.33"
+  )
+})
+
+test_that("as_forecast_point.forecast_quantile() errors when quantile_level is not a single numeric value", {
+  data <- as_forecast_quantile(na.omit(example_quantile))
+  expect_error(
+    as_forecast_point(data, quantile_level = c(0.25, 0.75))
+  )
+  expect_error(
+    as_forecast_point(data, quantile_level = "0.5")
+  )
+})
+
+test_that("as_forecast_point.forecast_quantile() with custom quantile_level produces correct predicted values", {
+  dt <- data.frame(
+    observed = c(10, 10, 20, 20),
+    predicted = c(8, 12, 18, 22),
+    quantile_level = c(0.25, 0.75, 0.25, 0.75),
+    model = c("m", "m", "m", "m"),
+    target = c("a", "a", "b", "b")
+  )
+  data <- suppressMessages(as_forecast_quantile(dt))
+  result <- as_forecast_point(data, quantile_level = 0.25)
+  expect_equal(nrow(result), 2)
+  expect_equal(sort(result$predicted), c(8, 18))
+  expect_equal(sort(result$observed), c(10, 20))
+  expect_false("quantile_level" %in% colnames(result))
+})
+
 
 # ==============================================================================
 # is_forecast_point() # nolint: commented_code_linter
