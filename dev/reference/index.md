@@ -77,6 +77,9 @@
 
   Create a `forecast` object for sample-based forecasts
 
+- [`get_forecast_type_ids()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_type_ids.md)
+  : Get type-specific ID columns for a forecast
+
 - [`set_forecast_unit()`](https://epiforecasts.io/scoringutils/dev/reference/set_forecast_unit.md)
   : Set unit of a single forecast manually
 

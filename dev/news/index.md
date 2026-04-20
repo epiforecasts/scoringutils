@@ -2,6 +2,13 @@
 
 ## scoringutils (development version)
 
+- Added internal S3 generic
+  [`get_forecast_type_ids()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_type_ids.md)
+  so each forecast type declares the columns (beyond the forecast unit)
+  that identify a unique row.
+  [`get_duplicate_forecasts()`](https://epiforecasts.io/scoringutils/dev/reference/get_duplicate_forecasts.md)
+  now uses this instead of hard-coded column names
+  ([\#888](https://github.com/epiforecasts/scoringutils/issues/888)).
 - Removed the deprecated vignettes `Deprecated-functions` and
   `Deprecated-visualisations`. The code for removed functions
   (`plot_predictions()`, `make_NA()`, `plot_ranges()`,

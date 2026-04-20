@@ -1,12 +1,27 @@
 # Find duplicate forecasts
 
-Internal helper function to identify duplicate forecasts, i.e. instances
-where there is more than one forecast for the same prediction target.
+Identify duplicate forecasts, i.e. instances where there is more than
+one forecast for the same prediction target.
+
+Uses
+[`get_forecast_type_ids()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_type_ids.md)
+to determine the type-specific columns (beyond the forecast unit) that
+identify a unique row. For `forecast` objects the type is detected
+automatically. For plain `data.frame`s you should pass `type` (e.g.
+`"quantile"`, `"sample"`) so that the correct columns are used. Calling
+on a plain `data.frame` without `type` is deprecated; it falls back to
+column-name detection but this behaviour will be removed in a future
+version.
 
 ## Usage
 
 ``` r
-get_duplicate_forecasts(data, forecast_unit = NULL, counts = FALSE)
+get_duplicate_forecasts(
+  data,
+  forecast_unit = NULL,
+  type = NULL,
+  counts = FALSE
+)
 ```
 
 ## Arguments
@@ -27,6 +42,15 @@ get_duplicate_forecasts(data, forecast_unit = NULL, counts = FALSE)
   specified, all columns that are not part of the forecast unit (or
   required columns) will be removed.
 
+- type:
+
+  Character string naming the forecast type, corresponding to the class
+  suffix after `forecast_` (e.g. `"quantile"` for class
+  `forecast_quantile`, `"sample"` for `forecast_sample`). Used to
+  determine type-specific ID columns when `data` is not already a
+  `forecast` object. Ignored when `data` already inherits from
+  `forecast`.
+
 - counts:
 
   Should the output show the number of duplicates per forecast unit
@@ -40,7 +64,7 @@ A data.frame with all rows for which a duplicate forecast was found
 
 ``` r
 example <- rbind(example_quantile, example_quantile[1000:1010])
-get_duplicate_forecasts(example)
+get_duplicate_forecasts(example, type = "quantile")
 #>     location target_end_date target_type observed location_name forecast_date
 #>       <char>          <Date>      <char>    <num>        <char>        <Date>
 #>  1:       DE      2021-05-22      Deaths     1285       Germany    2021-05-17
