@@ -309,8 +309,6 @@
   : Assert that inputs are correct for quantile-based forecast
 - [`assert_input_sample()`](https://epiforecasts.io/scoringutils/dev/reference/assert_input_sample.md)
   : Assert that inputs are correct for sample-based forecast
-- [`check_columns_present()`](https://epiforecasts.io/scoringutils/dev/reference/check_columns_present.md)
-  : Check column names are present in a data.frame
 - [`check_dims_ok_scalar()`](https://epiforecasts.io/scoringutils/dev/reference/check_dims_ok_scalar.md)
   : Check Inputs Have Matching Dimensions
 - [`check_duplicates()`](https://epiforecasts.io/scoringutils/dev/reference/check_duplicates.md)
@@ -335,8 +333,6 @@
   : Get forecast type from forecast object
 - [`get_type()`](https://epiforecasts.io/scoringutils/dev/reference/get_type.md)
   : Get type of a vector or matrix of observed values or predictions
-- [`test_columns_present()`](https://epiforecasts.io/scoringutils/dev/reference/test_columns_present.md)
-  : Test whether all column names are present in a data.frame
 - [`validate_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/validate_metrics.md)
   : Validate metrics
 

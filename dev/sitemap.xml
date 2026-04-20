@@ -42,7 +42,6 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/bias_quantile.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/bias_quantile_single_vector.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/bias_sample.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_columns_present.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_dims_ok_scalar.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_duplicates.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_input_binary.html</loc></url>
@@ -137,7 +136,6 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/set_forecast_unit.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/set_grouping.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/summarise_scores.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/test_columns_present.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/theme_scoringutils.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/transform_forecasts.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/validate_metrics.html</loc></url>
