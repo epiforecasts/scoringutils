@@ -65,6 +65,13 @@ assert_forecast.forecast_sample <- function(
 }
 
 
+#' @rdname get_forecast_type_ids
+#' @export
+get_forecast_type_ids.forecast_sample <- function(data) {
+  "sample_id"
+}
+
+
 #' @export
 #' @rdname is_forecast
 is_forecast_sample <- function(x) {
