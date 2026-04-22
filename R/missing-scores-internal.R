@@ -1,3 +1,43 @@
+#' Assert that a strategy has the expected signature
+#'
+#' @description
+#' Internal helper used by [filter_scores()] and
+#' [impute_missing_scores()] to check that a user-supplied
+#' strategy function has at least the required named formals.
+#' This catches common mistakes early (e.g. forgetting the
+#' `compare` argument) without constraining the strategy
+#' author to a specific internal type.
+#'
+#' @param strategy A function.
+#' @param required Character vector of formal names that
+#'   `strategy` must accept.
+#'
+#' @return `invisible(NULL)`. Called for its side effect of
+#'   erroring when the check fails.
+#'
+#' @importFrom checkmate assert_function
+#' @importFrom cli cli_abort
+#' @keywords internal
+assert_strategy <- function(strategy, required) {
+  assert_function(strategy)
+  strategy_formals <- names(formals(strategy))
+  missing_args <- setdiff(required, strategy_formals)
+  if (length(missing_args) > 0) {
+    cli_abort(c(
+      "!" = paste0(
+        "Strategy function is missing required ",
+        "argument{?s}: {.arg {missing_args}}."
+      ),
+      i = paste0(
+        "Expected formals including: ",
+        "{.arg {required}}."
+      )
+    ))
+  }
+  return(invisible(NULL))
+}
+
+
 #' Build grid of missing model-target combinations
 #'
 #' @description

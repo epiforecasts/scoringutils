@@ -2,29 +2,45 @@
 % Please edit documentation in R/filter-scores.R
 \name{filter_to_intersection}
 \alias{filter_to_intersection}
-\title{Filter to intersection of model-target combinations}
+\title{Filter to target combinations meeting a coverage threshold}
 \usage{
-filter_to_intersection(min_coverage = 1, include = NULL)
+filter_to_intersection(min_coverage = 1)
 }
 \arguments{
 \item{min_coverage}{Numeric between 0 and 1 (default \code{1}).
-Minimum proportion of comparators that must cover a
+Minimum proportion of compare values that must cover a
 target combination for it to be kept.}
-
-\item{include}{Character vector or \code{NULL} (default). If
-provided, the target grid is restricted to targets
-covered by these values of the \code{compare} column. When
-multiple values are given, only the intersection of
-their targets is used.}
 }
 \value{
-A function with signature \verb{function(scores, compare)}
-suitable for use as a strategy in
-\code{\link[=filter_scores]{filter_scores()}}.
+A strategy function for \code{\link[=filter_scores]{filter_scores()}}. Intended
+to be passed to \code{filter_scores()} rather than called
+directly — \code{filter_scores()} is where the \code{scores} class
+and \code{metrics} attribute are preserved.
 }
 \description{
-Strategy factory for \code{\link[=filter_scores]{filter_scores()}}.
-Returns a function that keeps only target combinations
-covered by a minimum proportion of comparators.
+Strategy for \code{\link[=filter_scores]{filter_scores()}} that keeps target combinations
+covered by at least \code{min_coverage} of the values in the
+\code{compare} column. With the default \code{min_coverage = 1}, only
+target combinations present for every compare value are kept
+(strict intersection across the full set).
+
+To restrict to the targets covered by a named subset of
+compare values instead of by a proportion, use
+\code{\link[=filter_to_include]{filter_to_include()}}.
+}
+\examples{
+\dontshow{
+  data.table::setDTthreads(2)
+}
+scores <- example_quantile |>
+  as_forecast_quantile() |>
+  score()
+filter_scores(
+  scores,
+  strategy = filter_to_intersection(min_coverage = 0.75)
+)
+}
+\seealso{
+\code{\link[=filter_scores]{filter_scores()}}, \code{\link[=filter_to_include]{filter_to_include()}}
 }
 \keyword{postprocess-scores}

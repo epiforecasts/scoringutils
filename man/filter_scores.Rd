@@ -8,28 +8,57 @@ filter_scores(scores, strategy = filter_to_intersection(), compare = "model")
 }
 \arguments{
 \item{scores}{An object of class \code{scores} (a data.table with
-scores and an additional attribute \code{metrics} as produced
-by \code{\link[=score]{score()}}).}
+an additional \code{metrics} attribute as produced by \code{\link[=score]{score()}}).}
 
-\item{strategy}{A strategy function as returned by
-\code{\link[=filter_to_intersection]{filter_to_intersection()}}. Default is
-\code{filter_to_intersection()}.}
+\item{strategy}{A strategy function. See Description for the
+expected signature. Default: \code{\link[=filter_to_intersection]{filter_to_intersection()}}.}
 
 \item{compare}{Character string (default \code{"model"}) naming the
-column whose values are compared for filtering.}
+column whose values are compared when deciding which
+target combinations to keep.}
 }
 \value{
-A filtered \code{scores} object with the same class and
-\code{metrics} attribute as the input.
+A \code{scores} object with the same class and \code{metrics}
+attribute as the input, with rows filtered according to
+\code{strategy}.
 }
 \description{
-Filters a \code{scores} object according to a given strategy.
-The filtering behaviour is controlled by the \code{strategy}
-argument, which defaults to \code{\link[=filter_to_intersection]{filter_to_intersection()}}.
-This is a general-purpose filtering function that delegates
-all logic to the strategy.
+Filter a \code{scores} object using a supplied strategy function.
+\code{filter_scores()} is responsible for preserving the \code{scores}
+class and the \code{metrics} attribute; the strategy is
+responsible only for the filtering logic.
+
+Strategies are constructed by helpers such as
+\code{\link[=filter_to_intersection]{filter_to_intersection()}} and \code{\link[=filter_to_include]{filter_to_include()}} and can
+also be user-defined. A strategy is a function with
+signature \verb{function(scores, compare)} that returns a
+filtered data.table with the same columns as its input.
+}
+\examples{
+\dontshow{
+  data.table::setDTthreads(2)
+}
+scores <- example_quantile |>
+  as_forecast_quantile() |>
+  score()
+
+# Keep only targets covered by every model (the default)
+filter_scores(scores)
+
+# Keep targets covered by at least 75\% of models
+filter_scores(
+  scores,
+  strategy = filter_to_intersection(min_coverage = 0.75)
+)
+
+# Keep only targets covered by a named model
+filter_scores(
+  scores,
+  strategy = filter_to_include("EuroCOVIDhub-baseline")
+)
 }
 \seealso{
+\code{\link[=filter_to_intersection]{filter_to_intersection()}}, \code{\link[=filter_to_include]{filter_to_include()}},
 \code{vignette("handling-missing-forecasts")}
 }
 \keyword{postprocess-scores}

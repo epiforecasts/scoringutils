@@ -147,14 +147,14 @@ test_that("filter_to_intersection(min_coverage=0.5) works", {
   expect_equal(nrow(result2), 5)
 })
 
-test_that("filter_to_intersection(include) keeps targets", {
+test_that("filter_to_include() keeps targets of single model", {
   scores <- data.table::data.table(
     model = c("m1", "m1", "m2", "m2", "m3"),
     location = c("DE", "US", "DE", "FR", "DE"),
     wis = c(1, 2, 3, 4, 5)
   )
   scores <- new_scores(scores, "wis")
-  strategy <- filter_to_intersection(include = "m1")
+  strategy <- filter_to_include("m1")
   result <- strategy(scores, compare = "model")
   # m1 covers DE and US, so keep all rows with DE or US
   expect_true(all(result$location %in% c("DE", "US")))
@@ -162,22 +162,20 @@ test_that("filter_to_intersection(include) keeps targets", {
   expect_false("FR" %in% result$location)
 })
 
-test_that("filter_to_intersection(include=c()) intersects", {
+test_that("filter_to_include() intersects multiple models", {
   scores <- data.table::data.table(
     model = c("m1", "m1", "m2", "m2", "m3"),
     location = c("DE", "US", "DE", "FR", "DE"),
     wis = c(1, 2, 3, 4, 5)
   )
   scores <- new_scores(scores, "wis")
-  strategy <- filter_to_intersection(
-    include = c("m1", "m2")
-  )
+  strategy <- filter_to_include(c("m1", "m2"))
   result <- strategy(scores, compare = "model")
   # m1 covers DE, US; m2 covers DE, FR; intersection = DE
   expect_true(all(result$location == "DE"))
 })
 
-test_that("filter_to_intersection(include) errors on unknown", {
+test_that("filter_to_include() errors on unknown compare value", {
   scores <- data.table::data.table(
     model = c("A", "B"),
     location = c("DE", "DE"),
@@ -187,7 +185,7 @@ test_that("filter_to_intersection(include) errors on unknown", {
   expect_error(
     filter_scores(
       scores,
-      strategy = filter_to_intersection(include = "Z")
+      strategy = filter_to_include("Z")
     ),
     "not found"
   )
@@ -212,7 +210,7 @@ test_that("filter_scores() works with non-default compare", {
 # Integration tests with scores_quantile
 # ==============================================================================
 test_that(
-  "filter_to_intersection(include) with real data filters
+  "filter_to_include() with real data filters
    to model's targets",
   {
     scores <- scores_quantile
@@ -231,8 +229,8 @@ test_that(
 
     result <- suppressMessages(filter_scores(
       scores,
-      strategy = filter_to_intersection(
-        include = "epiforecasts-EpiNow2"
+      strategy = filter_to_include(
+        "epiforecasts-EpiNow2"
       )
     ))
 

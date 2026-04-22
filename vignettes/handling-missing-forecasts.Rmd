@@ -103,15 +103,13 @@ Between 0.75 and 1.0 no intermediate threshold changes the result here because n
 
 ### Filtering to a specific model's targets
 
-The `include` argument restricts to targets covered by named models.
+`filter_to_include()` restricts to targets covered by named models.
 For example, to evaluate all models only on the targets `epiforecasts-EpiNow2` covered:
 
 ```{r filter-include}
 scores_epinow2 <- filter_scores(
   scores,
-  strategy = filter_to_intersection(
-    include = "epiforecasts-EpiNow2"
-  )
+  strategy = filter_to_include("epiforecasts-EpiNow2")
 )
 summarise_scores(scores_epinow2, by = "model")
 ```
@@ -195,9 +193,7 @@ For example, to evaluate on the targets `epiforecasts-EpiNow2` covered and then 
 ```{r pipeline}
 result <- scores |>
   filter_scores(
-    strategy = filter_to_intersection(
-      include = "epiforecasts-EpiNow2"
-    )
+    strategy = filter_to_include("epiforecasts-EpiNow2")
   ) |>
   impute_missing_scores(
     strategy = impute_worst_score()

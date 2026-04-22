@@ -284,18 +284,16 @@ test_that(
       "filter_scores not yet available"
     )
     skip_if_not(
-      exists("filter_to_intersection",
+      exists("filter_to_include",
              where = asNamespace("scoringutils")),
-      "filter_to_intersection not yet available"
+      "filter_to_include not yet available"
     )
     scores <- scores_quantile
     ref_model <- "EuroCOVIDhub-baseline"
 
     filtered <- suppressMessages(filter_scores(
       scores,
-      strategy = filter_to_intersection(
-        include = ref_model
-      )
+      strategy = filter_to_include(ref_model)
     ))
     result <- suppressMessages(impute_missing_scores(
       filtered,
