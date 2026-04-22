@@ -111,6 +111,20 @@ test_that("filter_scores() reports rows dropped", {
   )
 })
 
+test_that("filter_scores() errors on strategy with wrong formals", {
+  scores <- data.table::data.table(
+    model = c("A", "A", "B"),
+    location = c("DE", "US", "DE"),
+    wis = c(1, 2, 3)
+  )
+  scores <- new_scores(scores, "wis")
+  bad_strategy <- function(scores) scores
+  expect_error(
+    filter_scores(scores, strategy = bad_strategy),
+    "missing required"
+  )
+})
+
 test_that("filter_scores() errors on invalid compare column", {
   scores <- data.table::data.table(
     model = c("A", "A", "B"),

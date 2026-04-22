@@ -7,14 +7,14 @@
 impute_mean_score()
 }
 \value{
-A function suitable for use as the \code{strategy}
-argument in \code{\link[=impute_missing_scores]{impute_missing_scores()}}.
+A strategy function for \code{\link[=impute_missing_scores]{impute_missing_scores()}}.
 }
 \description{
-Creates an imputation strategy that fills each missing
-metric with the mean observed value for that metric within
-the same target combination across all elements of
-\code{compare}.
+Strategy for \code{\link[=impute_missing_scores]{impute_missing_scores()}} that fills each
+missing metric with the mean observed value for that metric
+within the same target combination across all values of the
+\code{compare} column. Target combinations with no non-NA
+observations are filled with \code{NA_real_}.
 }
 \examples{
 \dontshow{
@@ -25,5 +25,8 @@ scores <- example_quantile |>
   score()
 
 impute_missing_scores(scores, strategy = impute_mean_score())
+}
+\seealso{
+\code{\link[=impute_missing_scores]{impute_missing_scores()}}, \code{\link[=impute_worst_score]{impute_worst_score()}}
 }
 \keyword{postprocess-scores}

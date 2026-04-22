@@ -7,12 +7,11 @@
 impute_na_score()
 }
 \value{
-A function suitable for use as the \code{strategy}
-argument in \code{\link[=impute_missing_scores]{impute_missing_scores()}}.
+A strategy function for \code{\link[=impute_missing_scores]{impute_missing_scores()}}.
 }
 \description{
-Creates an imputation strategy that fills each missing
-metric with \code{NA_real_}.
+Strategy for \code{\link[=impute_missing_scores]{impute_missing_scores()}} that fills each
+missing metric with \code{NA_real_}.
 }
 \examples{
 \dontshow{
@@ -23,5 +22,8 @@ scores <- example_quantile |>
   score()
 
 impute_missing_scores(scores, strategy = impute_na_score())
+}
+\seealso{
+\code{\link[=impute_missing_scores]{impute_missing_scores()}}
 }
 \keyword{postprocess-scores}

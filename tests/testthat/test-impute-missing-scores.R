@@ -365,6 +365,61 @@ test_that(
 )
 
 test_that(
+  "impute_worst_score returns NA when all scores for a target are NA",
+  {
+    scores <- data.table::data.table(
+      model = c("A", "A", "B", "C"),
+      location = c("DE", "US", "DE", "DE"),
+      wis = c(NA_real_, 2, NA_real_, NA_real_)
+    )
+    scores <- new_scores(scores, "wis")
+    result <- suppressMessages(impute_missing_scores(
+      scores, strategy = impute_worst_score()
+    ))
+    # B and C are missing US; all DE wis are NA so the
+    # imputed DE rows for any model should be NA, not -Inf.
+    imputed <- result[(.imputed) & location == "DE"]
+    expect_true(all(is.na(imputed$wis)))
+    expect_false(any(is.infinite(imputed$wis)))
+  }
+)
+
+test_that(
+  "impute_mean_score returns NA when all scores for a target are NA",
+  {
+    scores <- data.table::data.table(
+      model = c("A", "A", "B", "C"),
+      location = c("DE", "US", "DE", "DE"),
+      wis = c(NA_real_, 2, NA_real_, NA_real_)
+    )
+    scores <- new_scores(scores, "wis")
+    result <- suppressMessages(impute_missing_scores(
+      scores, strategy = impute_mean_score()
+    ))
+    imputed <- result[(.imputed) & location == "DE"]
+    expect_true(all(is.na(imputed$wis)))
+    expect_false(any(is.nan(imputed$wis)))
+  }
+)
+
+test_that(
+  "impute_missing_scores errors on strategy with wrong formals",
+  {
+    scores <- data.table::data.table(
+      model = c("A", "A", "B"),
+      location = c("DE", "US", "DE"),
+      wis = c(1, 2, 3)
+    )
+    scores <- new_scores(scores, "wis")
+    bad_strategy <- function(scores, missing_rows) missing_rows
+    expect_error(
+      impute_missing_scores(scores, strategy = bad_strategy),
+      "missing required"
+    )
+  }
+)
+
+test_that(
   "impute_missing_scores works with non-default compare",
   {
     scores <- data.table::data.table(

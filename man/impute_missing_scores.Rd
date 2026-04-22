@@ -7,26 +7,24 @@
 impute_missing_scores(scores, strategy, compare = "model")
 }
 \arguments{
-\item{scores}{An object of class \code{scores} (a data.table
-with scores and an additional attribute \code{metrics} as
-produced by \code{\link[=score]{score()}}).}
+\item{scores}{An object of class \code{scores} (a data.table with
+an additional \code{metrics} attribute as produced by \code{\link[=score]{score()}}).}
 
-\item{strategy}{A function or factory-created function that
-fills missing metric values. Built-in options are
-\code{\link[=impute_worst_score]{impute_worst_score()}}, \code{\link[=impute_mean_score]{impute_mean_score()}},
-\code{\link[=impute_na_score]{impute_na_score()}}, and \code{\link[=impute_model_score]{impute_model_score()}}.
-The function must accept four arguments:
-\verb{(scores, missing_rows, metrics, compare)} and return
-\code{missing_rows} with metric columns filled.}
+\item{strategy}{A strategy function with signature
+\verb{function(scores, missing_rows, metrics, compare)} that
+returns \code{missing_rows} with the metric columns filled.
+Built-in options are \code{\link[=impute_worst_score]{impute_worst_score()}},
+\code{\link[=impute_mean_score]{impute_mean_score()}}, \code{\link[=impute_na_score]{impute_na_score()}}, and
+\code{\link[=impute_model_score]{impute_model_score()}}. Custom strategies are also
+supported.}
 
-\item{compare}{Character vector of length one with the
-column name that defines the unit of comparison.
-Default is \code{"model"}.}
+\item{compare}{Character string (default \code{"model"}) naming the
+column whose values are compared against each target to
+identify missing combinations.}
 }
 \value{
-An object of class \code{scores} with an additional
-\code{.imputed} column. Rows that were imputed have
-\code{.imputed = TRUE}.
+A \code{scores} object with an additional \code{.imputed}
+column. Rows that were imputed have \code{.imputed = TRUE}.
 }
 \description{
 Fills in scores for forecast-target combinations that are
@@ -35,14 +33,13 @@ strategy. This is useful to ensure all models are evaluated
 on the same set of targets, which avoids bias when
 summarising scores.
 
-Missing combinations are identified by comparing each
-element in \code{compare} against the full set of targets
-present across all elements. The strategy function then
-provides the imputed values for the missing metric columns.
+Missing combinations are identified by comparing each value
+of the \code{compare} column against the union of targets observed
+across all values. The strategy is then called to fill the
+metric columns for those rows.
 
-An \code{.imputed} column is added to the output indicating
-which rows were imputed (\code{TRUE}) and which are original
-(\code{FALSE}).
+An \code{.imputed} column is added to the output indicating which
+rows were imputed (\code{TRUE}) and which are original (\code{FALSE}).
 }
 \examples{
 \dontshow{
@@ -56,6 +53,8 @@ scores <- example_quantile |>
 impute_missing_scores(scores, strategy = impute_na_score())
 }
 \seealso{
+\code{\link[=impute_worst_score]{impute_worst_score()}}, \code{\link[=impute_mean_score]{impute_mean_score()}},
+\code{\link[=impute_na_score]{impute_na_score()}}, \code{\link[=impute_model_score]{impute_model_score()}},
 \code{vignette("handling-missing-forecasts")}
 }
 \keyword{postprocess-scores}

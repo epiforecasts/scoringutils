@@ -7,37 +7,36 @@
 #' on the same set of targets, which avoids bias when
 #' summarising scores.
 #'
-#' Missing combinations are identified by comparing each
-#' element in `compare` against the full set of targets
-#' present across all elements. The strategy function then
-#' provides the imputed values for the missing metric columns.
+#' Missing combinations are identified by comparing each value
+#' of the `compare` column against the union of targets observed
+#' across all values. The strategy is then called to fill the
+#' metric columns for those rows.
 #'
-#' An `.imputed` column is added to the output indicating
-#' which rows were imputed (`TRUE`) and which are original
-#' (`FALSE`).
+#' An `.imputed` column is added to the output indicating which
+#' rows were imputed (`TRUE`) and which are original (`FALSE`).
 #'
-#' @param scores An object of class `scores` (a data.table
-#'   with scores and an additional attribute `metrics` as
-#'   produced by [score()]).
-#' @param strategy A function or factory-created function that
-#'   fills missing metric values. Built-in options are
-#'   [impute_worst_score()], [impute_mean_score()],
-#'   [impute_na_score()], and [impute_model_score()].
-#'   The function must accept four arguments:
-#'   `(scores, missing_rows, metrics, compare)` and return
-#'   `missing_rows` with metric columns filled.
-#' @param compare Character vector of length one with the
-#'   column name that defines the unit of comparison.
-#'   Default is `"model"`.
+#' @param scores An object of class `scores` (a data.table with
+#'   an additional `metrics` attribute as produced by [score()]).
+#' @param strategy A strategy function with signature
+#'   `function(scores, missing_rows, metrics, compare)` that
+#'   returns `missing_rows` with the metric columns filled.
+#'   Built-in options are [impute_worst_score()],
+#'   [impute_mean_score()], [impute_na_score()], and
+#'   [impute_model_score()]. Custom strategies are also
+#'   supported.
+#' @param compare Character string (default `"model"`) naming the
+#'   column whose values are compared against each target to
+#'   identify missing combinations.
 #'
-#' @return An object of class `scores` with an additional
-#'   `.imputed` column. Rows that were imputed have
-#'   `.imputed = TRUE`.
+#' @return A `scores` object with an additional `.imputed`
+#'   column. Rows that were imputed have `.imputed = TRUE`.
 #'
-#' @seealso \code{vignette("handling-missing-forecasts")}
+#' @seealso [impute_worst_score()], [impute_mean_score()],
+#'   [impute_na_score()], [impute_model_score()],
+#'   \code{vignette("handling-missing-forecasts")}
 #' @importFrom data.table copy set rbindlist setattr
-#' @importFrom checkmate assert_class assert_function
-#'   assert_character assert_subset
+#' @importFrom checkmate assert_class assert_character
+#'   assert_subset
 #' @importFrom cli cli_abort cli_inform
 #' @export
 #' @keywords postprocess-scores
@@ -60,7 +59,10 @@ impute_missing_scores <- function(
   metrics <- get_metrics.scores(scores, error = TRUE)
   assert_character(compare, len = 1)
   assert_subset(compare, names(scores))
-  assert_function(strategy)
+  assert_strategy(
+    strategy,
+    required = c("scores", "missing_rows", "metrics", "compare")
+  )
 
   scores <- copy(scores)
 
@@ -74,10 +76,8 @@ impute_missing_scores <- function(
     return(scores[])
   }
 
-  #nolint start: object_usage_linter
-  n_missing <- nrow(missing_rows)
-  n_comparators <- length(unique(missing_rows[[compare]]))
-  #nolint end
+  n_missing <- nrow(missing_rows) # nolint: object_usage_linter
+  n_comparators <- length(unique(missing_rows[[compare]])) # nolint: object_usage_linter, line_length_linter
   cli_inform(c(
     i = "Imputing {n_missing} missing score row{?s}.",
     i = "{n_comparators} {compare} {cli::qty(n_comparators)}value{?s} affected." # nolint: line_length_linter
@@ -88,24 +88,72 @@ impute_missing_scores <- function(
   data.table::set(filled, j = ".imputed", value = TRUE)
   data.table::set(scores, j = ".imputed", value = FALSE)
 
-  out <- rbindlist(list(scores, filled), use.names = TRUE,
-                   fill = TRUE)
+  out <- rbindlist(
+    list(scores, filled),
+    use.names = TRUE,
+    fill = TRUE
+  )
 
-  out <- new_scores(out, metrics)
-  return(out[])
+  return(new_scores(out, metrics))
+}
+
+
+# Shared implementation for simple summary-based imputation
+# (e.g. max, mean). `fn` is a summary function applied to each
+# metric within the same target combination across all compare
+# values. NA values are ignored; target combinations with no
+# non-NA observations produce NA rather than -Inf or NaN.
+impute_summary_score <- function(fn) {
+  safe_fn <- function(x) {
+    x <- x[!is.na(x)]
+    if (length(x) == 0) {
+      return(NA_real_)
+    }
+    fn(x)
+  }
+  function(scores, missing_rows, metrics, compare) {
+    fu <- get_forecast_unit(scores)
+    target_cols <- setdiff(fu, compare)
+
+    for (m in metrics) {
+      if (!(m %in% names(scores))) next
+      agg <- scores[,
+        .(..val = safe_fn(get(m))),
+        by = target_cols
+      ]
+      missing_rows <- merge(
+        missing_rows,
+        agg,
+        by = target_cols,
+        all.x = TRUE
+      )
+      data.table::set(
+        missing_rows,
+        j = m,
+        value = missing_rows[["..val"]]
+      )
+      data.table::set(
+        missing_rows,
+        j = "..val",
+        value = NULL
+      )
+    }
+    return(missing_rows)
+  }
 }
 
 
 #' @title Impute with worst (maximum) observed score
 #'
 #' @description
-#' Creates an imputation strategy that fills each missing
-#' metric with the worst (maximum) observed value for that
-#' metric within the same target combination across all
-#' elements of `compare`.
+#' Strategy for [impute_missing_scores()] that fills each
+#' missing metric with the worst (maximum) observed value for
+#' that metric within the same target combination across all
+#' values of the `compare` column. Target combinations with no
+#' non-NA observations are filled with `NA_real_`.
 #'
-#' @return A function suitable for use as the `strategy`
-#'   argument in [impute_missing_scores()].
+#' @return A strategy function for [impute_missing_scores()].
+#' @seealso [impute_missing_scores()], [impute_mean_score()]
 #' @export
 #' @keywords postprocess-scores
 #' @examples
@@ -118,45 +166,21 @@ impute_missing_scores <- function(
 #'
 #' impute_missing_scores(scores, strategy = impute_worst_score())
 impute_worst_score <- function() {
-  function(scores, missing_rows, metrics, compare) {
-    fu <- get_forecast_unit(scores)
-    target_cols <- setdiff(fu, compare)
-
-    for (m in metrics) {
-      if (!(m %in% names(scores))) next
-      # Compute max per target combination
-      agg <- scores[,
-        .(..val = max(get(m), na.rm = TRUE)),
-        by = target_cols
-      ]
-      # Merge onto missing_rows
-      missing_rows <- merge(
-        missing_rows, agg,
-        by = target_cols, all.x = TRUE
-      )
-      data.table::set(
-        missing_rows, j = m,
-        value = missing_rows[["..val"]]
-      )
-      data.table::set(
-        missing_rows, j = "..val", value = NULL
-      )
-    }
-    return(missing_rows)
-  }
+  impute_summary_score(max)
 }
 
 
 #' @title Impute with mean observed score
 #'
 #' @description
-#' Creates an imputation strategy that fills each missing
-#' metric with the mean observed value for that metric within
-#' the same target combination across all elements of
-#' `compare`.
+#' Strategy for [impute_missing_scores()] that fills each
+#' missing metric with the mean observed value for that metric
+#' within the same target combination across all values of the
+#' `compare` column. Target combinations with no non-NA
+#' observations are filled with `NA_real_`.
 #'
-#' @return A function suitable for use as the `strategy`
-#'   argument in [impute_missing_scores()].
+#' @return A strategy function for [impute_missing_scores()].
+#' @seealso [impute_missing_scores()], [impute_worst_score()]
 #' @export
 #' @keywords postprocess-scores
 #' @examples
@@ -169,41 +193,18 @@ impute_worst_score <- function() {
 #'
 #' impute_missing_scores(scores, strategy = impute_mean_score())
 impute_mean_score <- function() {
-  function(scores, missing_rows, metrics, compare) {
-    fu <- get_forecast_unit(scores)
-    target_cols <- setdiff(fu, compare)
-
-    for (m in metrics) {
-      if (!(m %in% names(scores))) next
-      agg <- scores[,
-        .(..val = mean(get(m), na.rm = TRUE)),
-        by = target_cols
-      ]
-      missing_rows <- merge(
-        missing_rows, agg,
-        by = target_cols, all.x = TRUE
-      )
-      data.table::set(
-        missing_rows, j = m,
-        value = missing_rows[["..val"]]
-      )
-      data.table::set(
-        missing_rows, j = "..val", value = NULL
-      )
-    }
-    return(missing_rows)
-  }
+  impute_summary_score(mean)
 }
 
 
 #' @title Impute with NA values
 #'
 #' @description
-#' Creates an imputation strategy that fills each missing
-#' metric with `NA_real_`.
+#' Strategy for [impute_missing_scores()] that fills each
+#' missing metric with `NA_real_`.
 #'
-#' @return A function suitable for use as the `strategy`
-#'   argument in [impute_missing_scores()].
+#' @return A strategy function for [impute_missing_scores()].
+#' @seealso [impute_missing_scores()]
 #' @export
 #' @keywords postprocess-scores
 #' @examples
@@ -228,18 +229,17 @@ impute_na_score <- function() {
 #' @title Impute with a reference model's scores
 #'
 #' @description
-#' Creates an imputation strategy that fills missing scores
-#' with the actual scores from a specified reference model
-#' for each target combination.
+#' Strategy for [impute_missing_scores()] that fills missing
+#' scores with the scores of a specified reference model for
+#' the same target combination.
 #'
 #' @param model Character string naming the reference model
 #'   whose scores should be used for imputation. The reference
 #'   model must have scores for all target combinations that
-#'   need imputing.
+#'   need imputing; otherwise an error is raised.
 #'
-#' @return A function suitable for use as the `strategy`
-#'   argument in [impute_missing_scores()].
-#'
+#' @return A strategy function for [impute_missing_scores()].
+#' @seealso [impute_missing_scores()]
 #' @importFrom cli cli_abort
 #' @export
 #' @keywords postprocess-scores
@@ -257,8 +257,8 @@ impute_na_score <- function() {
 #' )
 impute_model_score <- function(model) {
   assert_character(model, len = 1)
-  # Store in a different name to avoid collision with
-  # the "model" column in data.table expressions
+  # Store under a different name to avoid collision with
+  # the "model" column in data.table expressions below.
   ref_model_name <- model
   function(scores, missing_rows, metrics, compare) {
     fu <- get_forecast_unit(scores)
@@ -277,17 +277,13 @@ impute_model_score <- function(model) {
       ))
     }
 
-    # Check that the reference model has scores for all
-    # needed target combinations
     needed <- unique(
       missing_rows[, target_cols, with = FALSE]
     )
     available <- unique(
       ref[, target_cols, with = FALSE]
     )
-    missing_targets <- needed[!available,
-      on = target_cols
-    ]
+    missing_targets <- needed[!available, on = target_cols]
     if (nrow(missing_targets) > 0) {
       cli_abort(c(
         "!" = paste0(
@@ -299,7 +295,6 @@ impute_model_score <- function(model) {
       ))
     }
 
-    # Merge reference model scores onto missing rows
     ref_scores <- ref[,
       c(
         target_cols,

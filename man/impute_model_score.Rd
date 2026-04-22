@@ -10,16 +10,15 @@ impute_model_score(model)
 \item{model}{Character string naming the reference model
 whose scores should be used for imputation. The reference
 model must have scores for all target combinations that
-need imputing.}
+need imputing; otherwise an error is raised.}
 }
 \value{
-A function suitable for use as the \code{strategy}
-argument in \code{\link[=impute_missing_scores]{impute_missing_scores()}}.
+A strategy function for \code{\link[=impute_missing_scores]{impute_missing_scores()}}.
 }
 \description{
-Creates an imputation strategy that fills missing scores
-with the actual scores from a specified reference model
-for each target combination.
+Strategy for \code{\link[=impute_missing_scores]{impute_missing_scores()}} that fills missing
+scores with the scores of a specified reference model for
+the same target combination.
 }
 \examples{
 \dontshow{
@@ -33,5 +32,8 @@ impute_missing_scores(
   scores,
   strategy = impute_model_score("EuroCOVIDhub-baseline")
 )
+}
+\seealso{
+\code{\link[=impute_missing_scores]{impute_missing_scores()}}
 }
 \keyword{postprocess-scores}
