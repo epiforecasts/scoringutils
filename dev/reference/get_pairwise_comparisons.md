@@ -127,6 +127,7 @@ Johannes Bracher, <johannes.bracher@kit.edu>
 
 ``` r
 
+
 scores <- example_quantile |>
  as_forecast_quantile() |>
  score()

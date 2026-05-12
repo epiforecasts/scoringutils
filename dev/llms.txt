@@ -48,12 +48,14 @@ scoring see:
 Install the CRAN version of this package using
 
 ``` r
+
 install.packages("scoringutils")
 ```
 
 Install the unstable development version from GitHub using
 
 ``` r
+
 remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
 ```
 
@@ -94,6 +96,7 @@ Before scoring, input data needs to be validated and transformed into a
 forecast object using one of the `as_forecast_<type>()` functions.
 
 ``` r
+
 forecast_quantile <- example_quantile |>
   as_forecast_quantile(
     forecast_unit = c(
@@ -145,6 +148,7 @@ Forecasts can be scored by calling
 on a validated forecast object.
 
 ``` r
+
 scores <- forecast_quantile |> 
   score()
 ```
@@ -165,6 +169,7 @@ stick to the mean as a primary summary function, as other functions can
 lead to improper scores.
 
 ``` r
+
 scores |> 
   summarise_scores(by = c("model", "target_type")) |>
   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 3)

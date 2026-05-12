@@ -120,6 +120,7 @@ Nikos Bosse <nikosbosse@gmail.com>
 ## Examples
 
 ``` r
+
 validated <- as_forecast_quantile(example_quantile)
 #> ℹ Some rows containing NA values may be removed. This is fine if not
 #>   unexpected.

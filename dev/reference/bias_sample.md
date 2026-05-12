@@ -69,6 +69,7 @@ e1006785.
 ## Examples
 
 ``` r
+
 ## integer valued forecasts
 observed <- rpois(30, lambda = 1:30)
 predicted <- replicate(200, rpois(n = 30, lambda = 1:30))

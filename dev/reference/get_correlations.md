@@ -37,6 +37,7 @@ different metrics
 ## Examples
 
 ``` r
+
 scores <- example_quantile |>
  as_forecast_quantile() |>
  score()

@@ -599,6 +599,7 @@ if the interval range is between 0 and 1.
   operator. For example, one can now use something like the following:
 
 ``` r
+
 example_quantile |>
   set_forecast_unit(c("model", "location", "forecast_date", "horizon", "target_type")) |>
   check_forecasts() |>
@@ -619,6 +620,7 @@ like the following to score a transformed version of the data in
 addition to the original one:
 
 ``` r
+
 data <- example_quantile[true_value > 0, ]
 data |>
   transform_forecasts(fun = log_shift, offset = 1) |>

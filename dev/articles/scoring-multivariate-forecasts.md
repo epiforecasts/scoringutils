@@ -11,6 +11,7 @@ EuroCOVIDhub-ensemble model on 2021-05-03. In our example, this forecast
 is represented by a set of 40 samples from the predictive distribution.
 
 ``` r
+
 library(scoringutils)
 
 example_univ_single <- example_sample_continuous[
@@ -120,6 +121,7 @@ example_univ_single
 We can score this forecast and will receive a single score.
 
 ``` r
+
 score(example_univ_single)
 #>    location location_name target_end_date target_type forecast_date
 #>      <char>        <char>          <Date>      <char>        <Date>
@@ -137,6 +139,7 @@ time. Let’s say we’re not only interested in Germany, but other
 countries as well.
 
 ``` r
+
 example_univ_multi <- example_sample_continuous[
   target_type == "Cases" &
     forecast_date == "2021-05-03" &
@@ -186,6 +189,7 @@ When we score these forecasts, we will get 4 scores, one for each
 forecast and observed value.
 
 ``` r
+
 score(example_univ_multi)
 #>    location  location_name target_end_date target_type forecast_date
 #>      <char>         <char>          <Date>      <char>        <Date>
@@ -233,6 +237,7 @@ include both in `joint_across` (or could alternatively delete one of
 them)).
 
 ``` r
+
 example_multiv <- as_forecast_multivariate_sample(
   data = example_univ_multi,
   c("location", "location_name")
@@ -283,6 +288,7 @@ scoring, it doesn’t matter that sample ids are still 1-40, repeated 4
 times, instead of 1-160. `scoringutils` handles this appropriately.)
 
 ``` r
+
 score(example_multiv)
 #>    target_end_date target_type forecast_date                 model horizon
 #>             <Date>      <char>        <Date>                <char>   <num>
@@ -316,6 +322,7 @@ absolute difference. See
 for full parameter documentation. For example, to use `p = 1`:
 
 ``` r
+
 score(
   example_multiv,
   metrics = list(
@@ -341,6 +348,7 @@ using the variogram score via
 This treats each point forecast as a single-sample ensemble.
 
 ``` r
+
 example_point_multi <- example_point[
   target_type == "Cases" &
     forecast_date == "2021-05-03" &

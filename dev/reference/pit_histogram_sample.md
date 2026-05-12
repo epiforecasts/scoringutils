@@ -118,6 +118,7 @@ Leone, 2014-15,
 ## Examples
 
 ``` r
+
 ## continuous predictions
 observed <- rnorm(20, mean = 1:20)
 predicted <- replicate(100, rnorm(n = 20, mean = 1:20))
