@@ -23,25 +23,21 @@ and to visualise the results of the evaluation. The package is easily
 extendable, meaning that users can supply their own scoring rules or
 extend existing classes to handle new types of forecasts.
 
-The package underwent a major re-write. The most comprehensive
-documentation for the updated package is the [revised
-version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
-of our [original](https://doi.org/10.48550/arXiv.2205.07090)
-`scoringutils` paper.
-
-Another good starting point are the vignettes [Details on the metrics
+A good starting point are the vignettes [Details on the metrics
 implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
 and [Scoring forecasts
 directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
+We also have several related manuscripts
 
-For further details on the specific issue of transforming forecasts for
-scoring see:
+and
 
 > Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes
 > Bracher\* and Sebastian Funk\* (\*: equal contribution) (2023).
 > *`Scoring epidemiological forecasts on transformed scales`*, PLoS
 > Comput Biol 19(8): e1011393
 > <https://doi.org/10.1371/journal.pcbi.1011393>
+
+for specific details on transforming forecasts for scoring.
 
 ## Installation
 
