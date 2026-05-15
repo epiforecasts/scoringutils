@@ -17,7 +17,7 @@ as_forecast_point(data, ...)
   ...
 )
 
-\method{as_forecast_point}{forecast_quantile}(data, ...)
+\method{as_forecast_point}{forecast_quantile}(data, quantile_level = 0.5, ...)
 }
 \arguments{
 \item{data}{A data.frame (or similar) with predicted and observed values.
@@ -38,13 +38,18 @@ observed values. This column will be renamed to "observed".}
 
 \item{predicted}{(optional) Name of the column in \code{data} that contains the
 predicted values. This column will be renamed to "predicted".}
+
+\item{quantile_level}{Numeric scalar specifying which quantile level to
+extract as the point forecast. Defaults to \code{0.5} (the median). The
+requested quantile level must be present in the data.}
 }
 \value{
 A \code{forecast} object of class \code{forecast_point}
 }
 \description{
 When converting a \code{forecast_quantile} object into a \code{forecast_point} object,
-the 0.5 quantile is extracted and returned as the point forecast.
+the quantile specified by \code{quantile_level} (default \code{0.5}, i.e. the median)
+is extracted and returned as the point forecast.
 }
 \section{Target format}{
 The input for all further scoring needs to be a data.frame or similar with
