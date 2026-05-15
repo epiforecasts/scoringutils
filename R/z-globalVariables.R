@@ -51,6 +51,7 @@ globalVariables(c(
   "metrics",
   "metrics_select",
   "model",
+  "N_unique",
   "n_obs",
   "n_obs wis_component_name",
   "observed",
