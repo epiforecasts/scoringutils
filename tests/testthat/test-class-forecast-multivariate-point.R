@@ -170,3 +170,27 @@ test_that(
     )
   }
 )
+
+
+# ==============================================================================
+# print.forecast_multivariate_point()
+# ==============================================================================
+test_that("print.forecast_multivariate_point() displays joint_across columns", {
+  result <- make_mv_point()
+  expect_snapshot(print(result))
+})
+
+test_that("print.forecast_multivariate_point() returns object invisibly", {
+  result <- make_mv_point()
+  expect_invisible(print(result))
+  out <- print(result)
+  expect_identical(out, result)
+})
+
+test_that("print.forecast_multivariate_point() shows expected sections", {
+  result <- make_mv_point()
+  out <- capture.output(print(result), type = "message")
+  expect_true(any(grepl("Forecast type:", out, fixed = TRUE)))
+  expect_true(any(grepl("Forecast unit:", out, fixed = TRUE)))
+  expect_true(any(grepl("Joint across:", out, fixed = TRUE)))
+})
