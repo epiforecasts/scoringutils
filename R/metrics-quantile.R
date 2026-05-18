@@ -360,7 +360,7 @@ interval_coverage <- function(observed, predicted,
   r <- interval_range
   reformatted <- quantile_to_interval(observed, predicted, quantile_level)
   reformatted <- reformatted[interval_range %in% r]
-  reformatted[, interval_coverage := (observed >= lower) & (observed <= upper)]
+  reformatted[, interval_coverage := check_interval_coverage(observed, lower, upper)]
   return(reformatted$interval_coverage)
 }
 
