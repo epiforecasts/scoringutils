@@ -10,7 +10,9 @@ add_relative_skill(
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
-  ...
+  test_type = c("non_parametric", "permutation"),
+  one_sided = FALSE,
+  n_permutations = 999
 )
 }
 \arguments{
@@ -37,8 +39,19 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
-\item{...}{Additional arguments for the comparison between two models. See
-\code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
+\item{test_type}{Character, either "non_parametric" (the default),
+"permutation", or NULL. Determines which test is used to compute
+p-values. "non_parametric" uses a paired Wilcoxon signed-rank test,
+"permutation" uses a permutation test. If NULL, no test is conducted
+and p-values will be \code{NA}. See \code{\link[=compare_forecasts]{compare_forecasts()}} for details.}
+
+\item{one_sided}{Boolean, default is \code{FALSE}. Whether to conduct a
+one-sided instead of a two-sided test to determine significance in a
+pairwise comparison.}
+
+\item{n_permutations}{Numeric, the number of permutations for a
+permutation test. Default is 999. Only used if
+\code{test_type = "permutation"}.}
 }
 \description{
 Adds a columns with relative skills computed by running
