@@ -271,16 +271,20 @@ is_forecast <- function(x) {
   #   where we used data.table := operator which will turn x into out before we
   #   arrive to this function.
   is_dt_force_print <- identical(x, out) && ...length() == 1
-  #   ...length() as it still returns 1 in x[] and then skips validations in
-  #   undesired situation if we set ...length() > 1
+
+  # Detect in-place modification via `:=`. When `:=` is used, data.table
+  # modifies x in place so x and out are identical. We distinguish from x[]
+  # (force-print) by checking ...length(): x[] has ...length() == 1, while
+  # := has ...length() > 1. We skip validation for := since the user is just
+  # modifying a column and the autoprint suppression is handled by
+  # print.forecast()'s shouldPrint() check.
+  # See https://github.com/epiforecasts/scoringutils/issues/935
+  is_inplace_modify <- identical(x, out) && ...length() > 1
+
   # is.data.table: when [.data.table returns an atomic vector, it's clear it
   #   cannot be a valid forecast object, and it is likely intended by the user
 
-  # in addition, we also check for a maximum length. The reason is that
-  # print.data.table will internally subset the data.table before printing.
-  # this subsetting triggers the validation, which is not desired in this case.
-  # this is a hack and ideally, we'd do things differently.
-  if (nrow(out) > 30 && is.data.table(out) && !is_dt_force_print) {
+  if (is.data.table(out) && !is_dt_force_print && !is_inplace_modify) {
     # check whether subset object passes validation
     validation <- try(
       assert_forecast(forecast = out, verbose = FALSE),
@@ -290,8 +294,7 @@ is_forecast <- function(x) {
       cli_warn(
         c(
           `!` = "Error in validating forecast object: {validation}.",
-          i = "Note this error is sometimes related to `data.table`s `print`.
-          Run {.help [{.fun assert_forecast}](scoringutils::assert_forecast)}
+          i = "Run {.help [{.fun assert_forecast}](scoringutils::assert_forecast)}
           to confirm. To get rid of this warning entirely,
           call `as.data.table()` on the forecast object."
         )
@@ -407,6 +410,17 @@ tail.forecast <- function(x, ...) {
 #' dat <- as_forecast_quantile(example_quantile)
 #' print(dat)
 print.forecast <- function(x, ...) {
+
+  # Suppress autoprinting during data.table `:=` operations.
+  # When `:=` modifies a data.table in place, R's autoprint mechanism triggers
+  # the print method. data.table tracks this via an internal shouldPrint()
+  # function which returns FALSE when `:=` was just used. We check this early
+  # to avoid printing the forecast header in that case.
+  # See https://github.com/epiforecasts/scoringutils/issues/935
+  shouldPrint <- utils::getFromNamespace("shouldPrint", "data.table") # nolint: object_name_linter
+  if (!shouldPrint(x)) {
+    return(invisible(x))
+  }
 
   # get forecast type, forecast unit and score columns
   forecast_type <- try(
