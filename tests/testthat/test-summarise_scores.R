@@ -71,3 +71,29 @@ test_that("summarise_scores() errors if `by = NULL", {
     "Assertion on 'by' failed: Must be a subset of"
   )
 })
+
+test_that("summarise_scores() errors if there are no score columns", {
+  # mimics the situation in which every metric passed to `score()` failed:
+  # `scores` carries an empty `metrics` attribute, so there is nothing to
+  # summarise. Previously this silently produced a data.table with a
+  # duplicate `by` column (gh #1179).
+  empty_scores <- data.table::copy(scores_quantile)
+  metric_cols <- attr(empty_scores, "metrics")
+  empty_scores[, (metric_cols) := NULL]
+  attr(empty_scores, "metrics") <- character(0)
+
+  expect_error(
+    summarise_scores(empty_scores, by = "model"),
+    "No score columns to summarise"
+  )
+})
+
+test_that("summarise_scores() does not partial-match metric names", {
+  # ensures we use exact column matching rather than regex partial matching:
+  # a metric named e.g. "wis" should not pull in a column called
+  # "wis_something_else" that happens to share a prefix.
+  test <- data.table::copy(scores_quantile)
+  test[, wis_extra := 0]
+  result <- summarise_scores(test, by = "model")
+  expect_false("wis_extra" %in% colnames(result))
+})
