@@ -137,7 +137,7 @@ get_metrics(example_quantile, select = "wis")
 #>         return(reformatted$wis)
 #>     }
 #> }
-#> <bytecode: 0x55acafdf8bf8>
+#> <bytecode: 0x55b3a9f74fb0>
 #> <environment: namespace:scoringutils>
 #> 
 ```

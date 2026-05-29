@@ -158,6 +158,14 @@ as_forecast_ordinal(
 #> Forecast unit:
 #> model, target_type, target_end_date, horizon, and location
 #> 
+#> Warning: ! Error in validating forecast object: Error in assert_forecast(forecast = out,
+#>   verbose = FALSE) : ! Found incomplete forecasts ℹ For an ordinal forecast,
+#>   all possible outcomes must be assigned a probability explicitly. ℹ Found
+#>   first missing probabilities in the forecast identified by model == NA,
+#>   target_type == NA, target_end_date == NA, horizon == NA, and location == NA .
+#> ℹ Run `assert_forecast()` (`?scoringutils::assert_forecast()`) to confirm. To
+#>   get rid of this warning entirely, call `as.data.table()` on the forecast
+#>   object.
 #>       observed predicted_label predicted                 model target_type
 #>          <ord>           <ord>     <num>                <char>      <char>
 #>    1:      low             low     0.525 EuroCOVIDhub-ensemble       Cases

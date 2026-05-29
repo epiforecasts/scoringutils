@@ -104,6 +104,8 @@
   : Count number of available forecasts
 - [`print(`*`<forecast>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/print.forecast.md)
   : Print information about a forecast object
+- [`print(`*`<scores>`*`)`](https://epiforecasts.io/scoringutils/dev/reference/print.scores.md)
+  : Print a scores object
 - [`get_duplicate_forecasts()`](https://epiforecasts.io/scoringutils/dev/reference/get_duplicate_forecasts.md)
   : Find duplicate forecasts
 - [`get_forecast_unit()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_unit.md)
