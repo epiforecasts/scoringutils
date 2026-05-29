@@ -272,19 +272,21 @@ is_forecast <- function(x) {
   #   arrive to this function.
   is_dt_force_print <- identical(x, out) && ...length() == 1
 
-  # Detect in-place modification via `:=`. When `:=` is used, data.table
-  # modifies x in place so x and out are identical. We distinguish from x[]
-  # (force-print) by checking ...length(): x[] has ...length() == 1, while
-  # := has ...length() > 1. We skip validation for := since the user is just
-  # modifying a column and the autoprint suppression is handled by
-  # print.forecast()'s shouldPrint() check.
-  # See https://github.com/epiforecasts/scoringutils/issues/935
-  is_inplace_modify <- identical(x, out) && ...length() > 1
-
   # is.data.table: when [.data.table returns an atomic vector, it's clear it
   #   cannot be a valid forecast object, and it is likely intended by the user
 
-  if (is.data.table(out) && !is_dt_force_print && !is_inplace_modify) {
+  if (is.data.table(out) && !is_dt_force_print) {
+    # Validation (e.g. after a `:=` in-place modification) runs data.table
+    # operations internally that overwrite data.table's autoprint-suppression
+    # flag. data.table records the address of an object modified by `:=` in its
+    # internal `.global$print`, and print.forecast() reads it via shouldPrint()
+    # to suppress the spurious autoprint. We capture that state before
+    # validating and restore it afterwards so `:=` keeps validating without
+    # reintroducing the spurious print.
+    # See https://github.com/epiforecasts/scoringutils/issues/935
+    dt_global <- utils::getFromNamespace(".global", "data.table")
+    suppress_autoprint <- identical(dt_global$print, data.table::address(out))
+
     # check whether subset object passes validation
     validation <- try(
       assert_forecast(forecast = out, verbose = FALSE),
@@ -299,6 +301,10 @@ is_forecast <- function(x) {
           call `as.data.table()` on the forecast object."
         )
       )
+    }
+
+    if (suppress_autoprint) {
+      dt_global$print <- data.table::address(out)
     }
   }
 

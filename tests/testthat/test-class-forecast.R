@@ -260,6 +260,25 @@ test_that(":= on scores objects does not trigger spurious printing", {
   expect_identical(output, character(0))
 })
 
+test_that(":= that breaks the forecast contract still validates", {
+  # Validation must keep running during in-place `:=` modification: removing a
+  # required column should warn, even though the autoprint stays suppressed.
+  ex <- as_forecast_quantile(na.omit(example_quantile))
+  expect_warning(
+    ex[, observed := NULL],
+    "Error in validating"
+  )
+})
+
+test_that(":= that breaks the contract does not trigger spurious printing", {
+  # Restoring validation must not reintroduce the spurious autoprint from #935.
+  ex <- as_forecast_quantile(na.omit(example_quantile))
+  output <- capture.output(
+    suppressWarnings(ex[, observed := NULL])
+  )
+  expect_identical(output, character(0))
+})
+
 test_that("[.forecast() validates subsets regardless of size", {
   # After removing the 30-row hack, validation should trigger for
   # any size subset that breaks the forecast contract
