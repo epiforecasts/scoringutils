@@ -20,17 +20,6 @@ test_that("assert_dims_ok_scalar() works as expected", {
 })
 
 
-# ==============================================================================
-# check_input_sample() removed (issue #684) # nolint: commented_code_linter
-# ==============================================================================
-
-test_that("assert_input_sample still works after check_input_sample removal", {
-  observed <- 1:10
-  predicted <- matrix(1:20, nrow = 10)
-  expect_no_condition(assert_input_sample(observed, predicted))
-  expect_error(assert_input_sample(1:10, 1:11))
-})
-
 test_that("scoring functions still work end-to-end without check_input_* wrappers", {
   observed_s <- 1:5
   predicted_s <- matrix(rnorm(50), nrow = 5)

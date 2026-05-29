@@ -25,14 +25,3 @@ test_that("assert_input_interval() works as expected", {
     "Found interval ranges between 0 and 1. Are you sure that's right?"
   )
 })
-
-
-test_that("assert_input_interval still works after check_input_interval removal", {
-  expect_no_condition(
-    assert_input_interval(observed, lower, upper, interval_range)
-  )
-  expect_error(
-    assert_input_interval(observed, upper, lower, interval_range),
-    "All values in `upper` need to be greater than or equal"
-  )
-})
