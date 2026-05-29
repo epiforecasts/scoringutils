@@ -43,7 +43,7 @@ plot_discrimination <- function(forecast, type = c("histogram", "density"),
 
   if (type == "density") {
     plot <- plot +
-      geom_density(alpha = 0.5, ...) +
+      geom_density(alpha = 0.5, ...) + # nolint: object_usage_linter.
       labs(y = "Density")
   } else {
     # `count` and `group` are columns created by `stat_bin()` at plot-build
