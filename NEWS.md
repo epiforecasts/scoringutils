@@ -1,5 +1,6 @@
 # scoringutils (development version)
 
+- Added `filter_scores()` and `impute_missing_scores()` for handling missing forecasts before summarisation. `filter_scores()` removes target combinations with insufficient model coverage, while `impute_missing_scores()` fills in missing scores using configurable strategies (worst, mean, NA, or reference model). Both use a strategy function pattern for extensibility. See `vignette("handling-missing-forecasts")` for details (#1122).
 - Added internal S3 generic `get_forecast_type_ids()` so each forecast type declares the columns (beyond the forecast unit) that identify a unique row. `get_duplicate_forecasts()` now uses this instead of hard-coded column names (#888).
 - Removed the deprecated vignettes `Deprecated-functions` and `Deprecated-visualisations`. The code for removed functions (`plot_predictions()`, `make_NA()`, `plot_ranges()`, `plot_score_table()`, `merge_pred_and_obs()`) can still be found in the [git history](https://github.com/epiforecasts/scoringutils/tree/d0cd8e2/vignettes) (#1158).
 
