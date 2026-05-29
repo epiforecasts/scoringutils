@@ -412,7 +412,7 @@ test_that(
         data_bad,
         joint_across = c("location", "location_name")
       ),
-      "Column 'sample_id' not found in data."
+      "Must be a subset of"
     )
 
     # Test with inconsistent sample lengths within groups
