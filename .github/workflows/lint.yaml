@@ -18,13 +18,14 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - uses: r-lib/actions/setup-r@v2
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
-            any::gh
             any::lintr
             any::purrr
             any::cyclocomp
@@ -40,8 +41,13 @@ jobs:
 
       - name: Extract and lint files changed by this PR
         run: |
-          files <- gh::gh("GET https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files")
-          changed_files <- purrr::map_chr(files, "filename")
+          base_ref <- Sys.getenv("GITHUB_BASE_REF")
+          system2("git", c("fetch", "--no-tags", "origin", base_ref))
+          changed_files <- system2(
+            "git",
+            c("diff", "--name-only", sprintf("origin/%s...", base_ref)),
+            stdout = TRUE
+          )
           all_files <- list.files(recursive = TRUE)
           exclusions_list <- as.list(setdiff(all_files, changed_files))
           lintr::lint_package(exclusions = exclusions_list)
