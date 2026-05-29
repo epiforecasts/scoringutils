@@ -119,18 +119,19 @@
     Output
       Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, variogram_score, .mv_group_id 
     Code
-      cat("Energy score range:", paste(range(scores$energy_score, na.rm = TRUE),
-      collapse = " to "), "\n")
+      cat("Energy score range:", paste(round(range(scores$energy_score, na.rm = TRUE),
+      4), collapse = " to "), "\n")
     Output
-      Energy score range: 37.8373892350605 to 433525.521054322 
+      Energy score range: 37.8374 to 433525.5211 
     Code
       cat("Number of non-NA energy scores:", sum(!is.na(scores$energy_score)), "\n")
     Output
       Number of non-NA energy scores: 224 
     Code
-      cat("Sample of energy scores:", toString(head(scores$energy_score, 5)), "\n")
+      cat("Sample of energy scores:", toString(round(head(scores$energy_score, 5), 4)),
+      "\n")
     Output
-      Sample of energy scores: 23454.2837522622, 34263.4664789642, 67609.0941230609, 138.968094149042, 401.574009570395 
+      Sample of energy scores: 23454.2838, 34263.4665, 67609.0941, 138.9681, 401.574 
 
 ---
 
@@ -155,8 +156,8 @@
     Output
       Column names: target_end_date, target_type, forecast_date, model, horizon, energy_score, .mv_group_id 
     Code
-      cat("Energy score range:", paste(range(scores_specific$energy_score, na.rm = TRUE),
-      collapse = " to "), "\n")
+      cat("Energy score range:", paste(round(range(scores_specific$energy_score,
+      na.rm = TRUE), 4), collapse = " to "), "\n")
     Output
-      Energy score range: 37.8373892350605 to 433525.521054322 
+      Energy score range: 37.8374 to 433525.5211 
 
