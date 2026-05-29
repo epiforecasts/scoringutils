@@ -26,15 +26,6 @@ assert_input_sample <- function(observed, predicted) {
   return(invisible(NULL))
 }
 
-#' @title Check that inputs are correct for sample-based forecast
-#' @inherit assert_input_sample params description
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_input_sample <- function(observed, predicted) {
-  result <- check_try(assert_input_sample(observed, predicted))
-  return(result)
-}
-
 
 #' @title Determine bias of forecasts
 #'
