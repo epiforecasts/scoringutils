@@ -268,6 +268,8 @@
 
 - [`plot_correlations()`](https://epiforecasts.io/scoringutils/dev/reference/plot_correlations.md)
   : Plot correlation between metrics
+- [`plot_discrimination()`](https://epiforecasts.io/scoringutils/dev/reference/plot_discrimination.md)
+  : Plot discrimination for binary forecasts
 - [`plot_forecast_counts()`](https://epiforecasts.io/scoringutils/dev/reference/plot_forecast_counts.md)
   : Visualise the number of available forecasts
 - [`plot_heatmap()`](https://epiforecasts.io/scoringutils/dev/reference/plot_heatmap.md)

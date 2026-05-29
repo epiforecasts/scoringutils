@@ -2,6 +2,14 @@
 
 ## scoringutils (development version)
 
+- Added
+  [`plot_discrimination()`](https://epiforecasts.io/scoringutils/dev/reference/plot_discrimination.md)
+  to visualise the discrimination ability of binary forecasts by
+  plotting the distribution of predicted probabilities, stratified by
+  the observed outcome. The function requires a `forecast_binary` object
+  (created with
+  [`as_forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_binary.md))
+  ([\#942](https://github.com/epiforecasts/scoringutils/issues/942)).
 - Added internal S3 generic
   [`get_forecast_type_ids()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_type_ids.md)
   so each forecast type declares the columns (beyond the forecast unit)
