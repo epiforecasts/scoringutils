@@ -71,11 +71,11 @@ as_forecast_ordinal.default <- function(data,
 
 #' @export
 #' @keywords check-forecasts
-#' @importFrom checkmate assert_names assert_set_equal test_set_equal assert_factor
+#' @importFrom checkmate assert_names assert_set_equal test_set_equal assert_factor assert_subset
 assert_forecast.forecast_ordinal <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  assert(check_columns_present(forecast, "predicted_label"))
+  assert_subset("predicted_label", colnames(forecast))
   assert_names(
     colnames(forecast),
     disjunct.from = c("sample_id", "quantile_level")
@@ -118,6 +118,13 @@ assert_forecast.forecast_ordinal <- function(
     #nolint end
   }
   return(forecast[])
+}
+
+
+#' @rdname get_forecast_type_ids
+#' @export
+get_forecast_type_ids.forecast_ordinal <- function(data) {
+  "predicted_label"
 }
 
 

@@ -50,7 +50,7 @@ plot_wis <- function(scores,
   # input checks
   scores <- ensure_data.table(scores)
   wis_components <- c("overprediction", "underprediction", "dispersion")
-  assert(check_columns_present(scores, wis_components))
+  assert_subset(wis_components, colnames(scores))
   assert_subset(x, names(scores))
   assert_logical(relative_contributions, len = 1)
   assert_logical(flip, len = 1)

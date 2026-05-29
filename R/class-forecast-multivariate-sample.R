@@ -80,11 +80,12 @@ as_forecast_multivariate_sample.default <- function(data,
 #' @export
 #' @rdname assert_forecast
 #' @importFrom cli cli_abort qty
+#' @importFrom checkmate assert_subset
 #' @keywords validate-forecast-object
 assert_forecast.forecast_multivariate_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
-  assert(check_columns_present(forecast, c("sample_id", ".mv_group_id")))
+  assert_subset(c("sample_id", ".mv_group_id"), colnames(forecast))
   forecast <- assert_forecast_generic(forecast, verbose)
 
   # make sure that for every .mv_group_id, the number of samples per
@@ -117,6 +118,15 @@ assert_forecast.forecast_multivariate_sample <- function(
   )
   return(invisible(NULL))
 }
+
+
+#' @rdname get_forecast_type_ids
+#' @export
+# nolint start: object_name_linter
+get_forecast_type_ids.forecast_multivariate_sample <- function(data) {
+  "sample_id"
+}
+# nolint end
 
 
 #' @export

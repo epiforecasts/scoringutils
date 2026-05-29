@@ -61,8 +61,7 @@ test_that("as_forecast_quantile() function throws an error with duplicate foreca
 
   expect_error(
     suppressMessages(suppressWarnings(as_forecast_quantile(example))),
-    "Assertion on 'data' failed: There are instances with more than one forecast for the same target. This can't be right and needs to be resolved. Maybe you need to check the unit of a single forecast and add missing columns? Use the function get_duplicate_forecasts() to identify duplicate rows.", # nolint
-    fixed = TRUE
+    "There are instances with more than one forecast for the same target"
   )
 })
 
@@ -71,21 +70,21 @@ test_that("as_forecast_quantile() function throws an error when no predictions o
     suppressMessages(suppressWarnings(as_forecast_quantile(
       data.table::copy(example_quantile)[, predicted := NULL]
     ))),
-    "Assertion on 'data' failed: Column 'predicted' not found in data."
+    "Must be a subset of"
   )
 
   expect_error(
     suppressMessages(suppressWarnings(as_forecast_quantile(
       data.table::copy(example_quantile)[, observed := NULL]
     ))),
-    "Assertion on 'data' failed: Column 'observed' not found in data."
+    "Must be a subset of"
   )
 
   expect_error(
     suppressMessages(suppressWarnings(as_forecast_quantile(
       data.table::copy(example_quantile)[, c("observed", "predicted") := NULL]
     ))),
-    "Assertion on 'data' failed: Columns 'observed', 'predicted' not found in data."
+    "Must be a subset of"
   )
 })
 
