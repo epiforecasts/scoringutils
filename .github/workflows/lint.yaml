@@ -27,7 +27,6 @@ jobs:
         with:
           extra-packages: |
             any::lintr
-            any::purrr
             any::cyclocomp
           needs: check
 
