@@ -66,6 +66,27 @@ test_that("test_columns_not_present() is no longer exported or defined", {
 })
 
 
+test_that("as_forecast_binary() warns when data has reversed 0-1 factor levels", {
+  dt <- data.table(
+    model = "m1",
+    id = 1:4,
+    observed = factor(c(0, 1, 1, 0), levels = c("1", "0")),
+    predicted = c(0.1, 0.9, 0.8, 0.2)
+  )
+  expect_warning(
+    as_forecast_binary(dt),
+    "counterintuitive"
+  )
+})
+
+test_that("score() produces correct results with standard 0-1 factor levels", {
+  # example_binary has standard levels c("0", "1"), should not warn about levels
+  expect_no_warning(
+    suppressMessages(score(as_forecast_binary(example_binary)))
+  )
+})
+
+
 # ==============================================================================
 # score.forecast_binary() # nolint: commented_code_linter
 # ==============================================================================

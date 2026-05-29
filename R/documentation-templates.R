@@ -13,7 +13,7 @@
 #' other, unneeded columns. See section "Forecast Unit" below for details).
 #'
 #' @param data A data.frame (or similar) with predicted and observed values.
-#'   See the details section of for additional information
+#'   See the "Target format" section in Details for additional information
 #'   on the required input format.
 #' @param forecast_unit (optional) Name of the columns in `data` (after
 #'   any renaming of columns) that denote the unit of a

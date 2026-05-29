@@ -24,6 +24,8 @@ jobs:
 
       - name: Setup pandoc
         uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: 'latest'
 
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
