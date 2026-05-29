@@ -177,8 +177,6 @@ test_that("print() throws the expected messages", {
 # ==============================================================================
 
 test_that(":= on forecast objects does not trigger spurious printing", {
-  # This is the core issue from #935: modifying a column via := should
-  # not print the forecast object
   ex <- data.table::copy(example_quantile)
   output <- capture.output(ex[, model := paste(model, "a")])
   expect_identical(output, character(0))
