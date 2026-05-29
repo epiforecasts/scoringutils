@@ -7,10 +7,7 @@
 plot_discrimination(forecast, type = c("histogram", "density"), ...)
 }
 \arguments{
-\item{forecast}{A data.table (or data.frame) containing at least columns
-\code{observed} (factor with two levels) and \code{predicted} (numeric probabilities
-between 0 and 1). Typically a \code{forecast_binary} object or the output of
-\code{\link[=as_forecast_binary]{as_forecast_binary()}}.}
+\item{forecast}{A \code{forecast_binary} object (see \code{\link[=as_forecast_binary]{as_forecast_binary()}}).}
 
 \item{type}{Character, either \code{"histogram"} (default) or \code{"density"}.
 \code{"histogram"} shows a histogram with proportions on the y-axis;
@@ -32,12 +29,14 @@ the two observed levels.
 }
 \examples{
 library(ggplot2)
-plot_discrimination(na.omit(example_binary))
+forecast <- as_forecast_binary(na.omit(example_binary))
 
-plot_discrimination(na.omit(example_binary), type = "density")
+plot_discrimination(forecast)
 
-plot_discrimination(na.omit(example_binary), bins = 10)
+plot_discrimination(forecast, type = "density")
 
-plot_discrimination(na.omit(example_binary)) +
+plot_discrimination(forecast, bins = 10)
+
+plot_discrimination(forecast) +
   facet_wrap(~model)
 }
