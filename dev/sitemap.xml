@@ -45,10 +45,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_dims_ok_scalar.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_duplicates.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_input_binary.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_input_interval.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_input_point.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_input_quantile.html</loc></url>
-<url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_input_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_number_per_forecast.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_numeric_vector.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_try.html</loc></url>
