@@ -1,6 +1,7 @@
 # scoringutils (development version)
 
 - Added `plot_discrimination()` to visualise the discrimination ability of binary forecasts by plotting the distribution of predicted probabilities, stratified by the observed outcome. The function requires a `forecast_binary` object (created with `as_forecast_binary()`) (#942).
+- Fixed `summarise_scores()` producing a data.table with duplicate column names when the input `scores` object had no score columns (e.g. because every metric in `score()` warned and returned nothing). `summarise_scores()` now matches metric columns by exact name rather than regex partial match, and errors with a clear message when there is nothing to summarise (#1179).
 - Added internal S3 generic `get_forecast_type_ids()` so each forecast type declares the columns (beyond the forecast unit) that identify a unique row. `get_duplicate_forecasts()` now uses this instead of hard-coded column names (#888).
 - Removed the deprecated vignettes `Deprecated-functions` and `Deprecated-visualisations`. The code for removed functions (`plot_predictions()`, `make_NA()`, `plot_ranges()`, `plot_score_table()`, `merge_pred_and_obs()`) can still be found in the [git history](https://github.com/epiforecasts/scoringutils/tree/d0cd8e2/vignettes) (#1158).
 

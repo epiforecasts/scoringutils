@@ -46,6 +46,7 @@
 #' @export
 #' @importFrom checkmate assert_subset assert_function test_subset
 #'   assert_data_frame
+#' @importFrom cli cli_abort
 #' @keywords scoring
 
 summarise_scores <- function(scores,
@@ -59,11 +60,23 @@ summarise_scores <- function(scores,
   assert_function(fun)
 
   metrics <- get_metrics.scores(scores, error = TRUE)
+  metric_cols <- intersect(colnames(scores), metrics)
+  if (length(metric_cols) == 0) {
+    cli_abort(
+      c(
+        `!` = "No score columns to summarise.",
+        i = "The {.cls scores} object has no columns matching its
+             {.code metrics} attribute. This usually means every metric
+             passed to {.fn score} failed (e.g. warned and returned no
+             values)."
+      )
+    )
+  }
 
   # summarise scores -----------------------------------------------------------
   scores <- scores[, lapply(.SD, fun, ...),
     by = c(by),
-    .SDcols = colnames(scores) %like% paste(metrics, collapse = "|")
+    .SDcols = metric_cols
   ]
 
   attr(scores, "metrics") <- metrics
