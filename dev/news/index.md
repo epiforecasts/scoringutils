@@ -10,6 +10,17 @@
   (created with
   [`as_forecast_binary()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_binary.md))
   ([\#942](https://github.com/epiforecasts/scoringutils/issues/942)).
+- Fixed
+  [`summarise_scores()`](https://epiforecasts.io/scoringutils/dev/reference/summarise_scores.md)
+  producing a data.table with duplicate column names when the input
+  `scores` object had no score columns (e.g. because every metric in
+  [`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md)
+  warned and returned nothing).
+  [`summarise_scores()`](https://epiforecasts.io/scoringutils/dev/reference/summarise_scores.md)
+  now matches metric columns by exact name rather than regex partial
+  match, and errors with a clear message when there is nothing to
+  summarise
+  ([\#1179](https://github.com/epiforecasts/scoringutils/issues/1179)).
 - Added internal S3 generic
   [`get_forecast_type_ids()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_type_ids.md)
   so each forecast type declares the columns (beyond the forecast unit)
