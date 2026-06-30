@@ -25,7 +25,8 @@
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/handling-missing-forecasts.html">Handling missing forecasts</a></li>
+    <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -454,6 +455,71 @@
 
         </dt>
         <dd>Select metrics from a list of functions</dd>
+      </dl></div><div class="section level2">
+      <h2 id="post-process-scores">Post-process scores<a class="anchor" aria-label="anchor" href="#post-process-scores"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="filter_scores.html">filter_scores()</a></code>
+
+        </dt>
+        <dd>Filter scores</dd>
+
+        <dt>
+
+          <code><a href="filter_to_include.html">filter_to_include()</a></code>
+
+        </dt>
+        <dd>Filter to targets covered by named compare values</dd>
+
+        <dt>
+
+          <code><a href="filter_to_intersection.html">filter_to_intersection()</a></code>
+
+        </dt>
+        <dd>Filter to target combinations meeting a coverage threshold</dd>
+
+        <dt>
+
+          <code><a href="impute_mean_score.html">impute_mean_score()</a></code>
+
+        </dt>
+        <dd>Impute with mean observed score</dd>
+
+        <dt>
+
+          <code><a href="impute_missing_scores.html">impute_missing_scores()</a></code>
+
+        </dt>
+        <dd>Impute missing scores</dd>
+
+        <dt>
+
+          <code><a href="impute_model_score.html">impute_model_score()</a></code>
+
+        </dt>
+        <dd>Impute with a reference model's scores</dd>
+
+        <dt>
+
+          <code><a href="impute_na_score.html">impute_na_score()</a></code>
+
+        </dt>
+        <dd>Impute with NA values</dd>
+
+        <dt>
+
+          <code><a href="impute_worst_score.html">impute_worst_score()</a></code>
+
+        </dt>
+        <dd>Impute with worst (maximum) observed score</dd>
       </dl></div><div class="section level2">
       <h2 id="evaluate-forecasts">Evaluate forecasts<a class="anchor" aria-label="anchor" href="#evaluate-forecasts"></a></h2>
 
@@ -934,10 +1000,24 @@
 
         <dt>
 
+          <code><a href="assert_strategy.html">assert_strategy()</a></code>
+
+        </dt>
+        <dd>Assert that a strategy has the expected signature</dd>
+
+        <dt>
+
           <code><a href="bias_quantile_single_vector.html">bias_quantile_single_vector()</a></code>
 
         </dt>
         <dd>Compute bias for a single vector of quantile predictions</dd>
+
+        <dt>
+
+          <code><a href="build_missing_grid.html">build_missing_grid()</a></code>
+
+        </dt>
+        <dd>Build grid of missing model-target combinations</dd>
 
         <dt>
 

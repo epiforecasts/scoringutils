@@ -186,6 +186,25 @@
 - [`select_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/select_metrics.md)
   : Select metrics from a list of functions
 
+## Post-process scores
+
+- [`filter_scores()`](https://epiforecasts.io/scoringutils/dev/reference/filter_scores.md)
+  : Filter scores
+- [`filter_to_include()`](https://epiforecasts.io/scoringutils/dev/reference/filter_to_include.md)
+  : Filter to targets covered by named compare values
+- [`filter_to_intersection()`](https://epiforecasts.io/scoringutils/dev/reference/filter_to_intersection.md)
+  : Filter to target combinations meeting a coverage threshold
+- [`impute_mean_score()`](https://epiforecasts.io/scoringutils/dev/reference/impute_mean_score.md)
+  : Impute with mean observed score
+- [`impute_missing_scores()`](https://epiforecasts.io/scoringutils/dev/reference/impute_missing_scores.md)
+  : Impute missing scores
+- [`impute_model_score()`](https://epiforecasts.io/scoringutils/dev/reference/impute_model_score.md)
+  : Impute with a reference model's scores
+- [`impute_na_score()`](https://epiforecasts.io/scoringutils/dev/reference/impute_na_score.md)
+  : Impute with NA values
+- [`impute_worst_score()`](https://epiforecasts.io/scoringutils/dev/reference/impute_worst_score.md)
+  : Impute with worst (maximum) observed score
+
 ## Evaluate forecasts
 
 - [`add_relative_skill()`](https://epiforecasts.io/scoringutils/dev/reference/add_relative_skill.md)
@@ -349,8 +368,14 @@
 
   Validate an object of class `scores`
 
+- [`assert_strategy()`](https://epiforecasts.io/scoringutils/dev/reference/assert_strategy.md)
+  : Assert that a strategy has the expected signature
+
 - [`bias_quantile_single_vector()`](https://epiforecasts.io/scoringutils/dev/reference/bias_quantile_single_vector.md)
   : Compute bias for a single vector of quantile predictions
+
+- [`build_missing_grid()`](https://epiforecasts.io/scoringutils/dev/reference/build_missing_grid.md)
+  : Build grid of missing model-target combinations
 
 - [`clean_forecast()`](https://epiforecasts.io/scoringutils/dev/reference/clean_forecast.md)
   : Clean forecast object

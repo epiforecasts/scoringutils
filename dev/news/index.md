@@ -3,6 +3,20 @@
 ## scoringutils (development version)
 
 - Added
+  [`filter_scores()`](https://epiforecasts.io/scoringutils/dev/reference/filter_scores.md)
+  and
+  [`impute_missing_scores()`](https://epiforecasts.io/scoringutils/dev/reference/impute_missing_scores.md)
+  for handling missing forecasts before summarisation.
+  [`filter_scores()`](https://epiforecasts.io/scoringutils/dev/reference/filter_scores.md)
+  removes target combinations with insufficient model coverage, while
+  [`impute_missing_scores()`](https://epiforecasts.io/scoringutils/dev/reference/impute_missing_scores.md)
+  fills in missing scores using configurable strategies (worst, mean,
+  NA, or reference model). Both use a strategy function pattern for
+  extensibility. See
+  [`vignette("handling-missing-forecasts")`](https://epiforecasts.io/scoringutils/dev/articles/handling-missing-forecasts.md)
+  for details
+  ([\#1122](https://github.com/epiforecasts/scoringutils/issues/1122)).
+- Added
   [`plot_discrimination()`](https://epiforecasts.io/scoringutils/dev/reference/plot_discrimination.md)
   to visualise the discrimination ability of binary forecasts by
   plotting the distribution of predicted probabilities, stratified by
