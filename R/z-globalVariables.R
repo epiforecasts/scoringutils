@@ -37,6 +37,7 @@ globalVariables(c(
   "fill_col",
   "forecast_id",
   "g",
+  "group",
   "hist",
   "identifCol",
   "Interval_Score",

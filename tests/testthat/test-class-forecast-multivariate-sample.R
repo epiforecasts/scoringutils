@@ -351,7 +351,7 @@ test_that(
       cat(
         "Energy score range:",
         paste(
-          range(scores$energy_score, na.rm = TRUE),
+          round(range(scores$energy_score, na.rm = TRUE), 4),
           collapse = " to "
         ), "\n"
       )
@@ -361,7 +361,7 @@ test_that(
       )
       cat(
         "Sample of energy scores:",
-        toString(head(scores$energy_score, 5)), "\n"
+        toString(round(head(scores$energy_score, 5), 4)), "\n"
       )
     })
 
@@ -387,8 +387,8 @@ test_that(
       cat(
         "Energy score range:",
         paste(
-          range(
-            scores_specific$energy_score, na.rm = TRUE
+          round(
+            range(scores_specific$energy_score, na.rm = TRUE), 4
           ),
           collapse = " to "
         ), "\n"

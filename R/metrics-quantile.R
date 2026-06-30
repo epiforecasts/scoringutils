@@ -42,17 +42,6 @@ assert_input_quantile <- function(observed, predicted, quantile_level,
   return(invisible(NULL))
 }
 
-#' @title Check that inputs are correct for quantile-based forecast
-#' @inherit assert_input_quantile params description
-#' @inherit check_input_sample return description
-#' @keywords internal_input_check
-check_input_quantile <- function(observed, predicted, quantile_level) {
-  result <- check_try(
-    assert_input_quantile(observed, predicted, quantile_level)
-  )
-  return(result)
-}
-
 
 #' Weighted interval score (WIS)
 #' @description

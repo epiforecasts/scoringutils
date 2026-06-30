@@ -71,6 +71,27 @@ assert_scores <- function(scores) {
 }
 
 
+#' @title Print a scores object
+#' @description
+#' Prints a `scores` object. Suppresses autoprinting during data.table
+#' `:=` operations by checking data.table's internal `shouldPrint()` flag.
+#' @param x A `scores` object
+#' @param ... Additional arguments for [print()].
+#' @returns Returns `x` invisibly.
+#' @export
+#' @keywords gain-insights
+print.scores <- function(x, ...) {
+  # Suppress autoprinting during data.table `:=` operations.
+  # See https://github.com/epiforecasts/scoringutils/issues/935
+  shouldPrint <- utils::getFromNamespace("shouldPrint", "data.table") # nolint: object_name_linter
+  if (!shouldPrint(x)) {
+    return(invisible(x))
+  }
+  NextMethod()
+  return(invisible(x))
+}
+
+
 #' @title Get names of the metrics that were used for scoring
 #' @description
 #' When applying a scoring rule via [score()], the names of the scoring rules
