@@ -128,4 +128,51 @@ example_mv_point <- as_forecast_multivariate_point(
 score(example_mv_point)
 ```
 
+## What about quantile forecasts?
+
+Both the energy score and the variogram score need samples drawn from the joint predictive distribution.
+Each sample gives one value for every target at once, and it is the variation across samples that tells the score how the targets move together.
+Quantile forecasts do not carry this information.
+A set of quantiles describes each target on its own and says nothing about the relationship between them.
+
+It is tempting to line the quantile levels up across targets and treat them as samples, for instance by passing `sample_id = "quantile_level"` to `as_forecast_multivariate_sample()`.
+`scoringutils` will warn you about the leftover `quantile_level` column, but it will still return a score.
+That score is not the one you want.
+Pairing the 5% quantile in one country with the 5% quantile in another assumes the two are perfectly rank correlated, so every quantile forecast ends up scored as though it had predicted perfect dependence, whatever it actually predicted.
+
+The two scores suffer differently.
+The energy score still responds to the marginal distributions, so its values stay in a plausible range, but it loses almost all of its ability to separate forecasts with different correlation structures.
+The variogram score fares worse, because dependence is the only thing it measures.
+Replace the dependence with an assumption and what is left is close to a function of the observed values alone, which can rank models in the wrong order.
+
+If you have quantile forecasts and want to score them jointly, you have to supply the missing dependence structure.
+You can ask forecasters for samples or trajectories instead of quantiles, which is the route several forecast hubs have taken.
+Alternatively you can rebuild a joint distribution from the marginal quantiles using ensemble copula coupling (Schefzik et al., 2013) or the Schaake shuffle (Clark et al., 2004).
+Both borrow a rank structure from elsewhere, usually a raw ensemble or the historical observations, so any score you compute afterwards partly reflects that choice.
+
+Multivariate point forecasts are a different matter.
+A point forecast does specify a joint distribution, a degenerate one that places all its mass on a single vector, which is why the variogram score is well defined for it.
+
 If, at any point, you want to score the same forecast using different groupings, you'd have create a new separate forecast object with a different grouping and score that new forecast object.
+
+## References
+
+Clark, M., Gangopadhyay, S., Hay, L., Rajagopalan, B. and Wilby, R. (2004).
+The Schaake Shuffle: A Method for Reconstructing Space-Time Variability in Forecasted Precipitation and Temperature Fields.
+*Journal of Hydrometeorology*, 5(1), 243-262.
+<https://doi.org/10.1175/1525-7541(2004)005%3C0243:TSSAMF%3E2.0.CO;2>
+
+Gneiting, T., Stanberry, L. I., Grimit, E. P., Held, L. and Johnson, N. A. (2008).
+Assessing probabilistic forecasts of multivariate quantities, with an application to ensemble predictions of surface winds.
+*TEST*, 17, 211-235.
+<https://doi.org/10.1007/s11749-008-0114-x>
+
+Schefzik, R., Thorarinsdottir, T. L. and Gneiting, T. (2013).
+Uncertainty Quantification in Complex Simulation Models Using Ensemble Copula Coupling.
+*Statistical Science*, 28(4), 616-640.
+<https://doi.org/10.1214/13-STS443>
+
+Scheuerer, M. and Hamill, T. M. (2015).
+Variogram-Based Proper Scoring Rules for Probabilistic Forecasts of Multivariate Quantities.
+*Monthly Weather Review*, 143(4), 1321-1334.
+<https://doi.org/10.1175/MWR-D-14-00269.1>
