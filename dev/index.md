@@ -261,7 +261,7 @@ Health.
 
 All contributions to this project are gratefully acknowledged using the
 [`allcontributors` package](https://github.com/ropensci/allcontributors)
-following the [all-contributors](https://allcontributors.org)
+following the [allcontributors](https://allcontributors.org)
 specification. Contributions of any kind are welcome!
 
 ### Code
@@ -277,8 +277,7 @@ specification. Contributions of any kind are welcome!
 [jcken95](https://github.com/epiforecasts/scoringutils/commits?author=jcken95),
 [athowes](https://github.com/epiforecasts/scoringutils/commits?author=athowes),
 [nickreich](https://github.com/epiforecasts/scoringutils/commits?author=nickreich),
-[damonbayer](https://github.com/epiforecasts/scoringutils/commits?author=damonbayer),
-[seabbs-bot](https://github.com/epiforecasts/scoringutils/commits?author=seabbs-bot)
+[damonbayer](https://github.com/epiforecasts/scoringutils/commits?author=damonbayer)
 
 ### Issue Authors
 
@@ -293,7 +292,8 @@ specification. Contributions of any kind are welcome!
 [robchallen](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen),
 [teunbrand](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand),
 [RokGrah](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah),
-[zsusswein](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Azsusswein)
+[zsusswein](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Azsusswein),
+[kaitejohnson](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Akaitejohnson)
 
 ### Issue Contributors
 
