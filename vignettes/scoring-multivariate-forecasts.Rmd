@@ -67,6 +67,8 @@ The corresponding multivariate forecast would similarly specify a predictive dis
 
 In the following, let's assume that our samples were draws from a multivariate distribution all along (we just treated them as independent for the univariate case).
 
+> **Note on the demonstration.** The forecasts used in this vignette are for demonstration only and do not represent joint draws of a multivariate distribution. This means the dependence structure scored by multivariate scoring is more an artefact of how the data were prepared than a property of the original forecasts. (See `create-example-data.R` in the `inst/` folder for detail.)
+
 To tell `scoringutils` that we want to treat these as a multivariate forecast, we need to specify the columns that are pooled together to form a single multivariate forecast. We do this via the `joint_across` argument. For example, if we want to pool forecasts across locations and treat them as a single multivariate forecast, we could set `joint_across = c("location", "location_name")` (in our example, the two columns contain essentially the same information - we therefore have to include both in `joint_across` (or could alternatively delete one of them)).
 
 ```{r}
@@ -107,6 +109,28 @@ score(
 )
 ```
 
+A set of multivariate targets can be pooled to account for different correlation structures. 
+If, at any point, you want to score the same forecast using different groupings, you'd have create a new separate forecast object with a different grouping and score that new forecast object.
+For example, to pool across horizons, we bring `target_end_date` along with `horizon`, because the two both vary within a trajectory.
+
+```{r}
+example_cases <- na.omit(
+  example_sample_continuous[
+    target_type == "Cases" &
+      model == "EuroCOVIDhub-ensemble"
+  ]
+)
+
+example_traj <- as_forecast_multivariate_sample(
+  data = example_cases,
+  joint_across = c("horizon", "target_end_date")
+)
+
+head(score(example_traj), 3)
+```
+
+Each single score now covers one whole trajectory over three horizons. 
+
 ## Multivariate point forecasts
 
 If you have point forecasts rather than samples, you can score them using the variogram score via `as_forecast_multivariate_point()`.
@@ -128,51 +152,68 @@ example_mv_point <- as_forecast_multivariate_point(
 score(example_mv_point)
 ```
 
-## What about quantile forecasts?
+## Multivariate quantile forecasts
 
-Both the energy score and the variogram score need samples drawn from the joint predictive distribution.
-Each sample gives one value for every target at once, and it is the variation across samples that tells the score how the targets move together.
-Quantile forecasts do not carry this information.
-A set of quantiles describes each target on its own and says nothing about the relationship between them.
+Both the energy score and the variogram score need samples drawn from the joint predictive distribution. We cannot use the same multivariate scoring for quantile forecasts as they do not describe the relationship between targets in this way. It is tempting to line the quantile levels up across targets and treat them as samples (for instance by passing `sample_id = "quantile_level"` to `as_forecast_multivariate_sample()`). `scoringutils` will warn you about the leftover `quantile_level` column, but it will still return a score. However that score is not the one you want, as in this case, every quantile forecast ends up scored as though it had predicted perfect dependence (regardless of what the underlying model actually predicted).
 
-It is tempting to line the quantile levels up across targets and treat them as samples, for instance by passing `sample_id = "quantile_level"` to `as_forecast_multivariate_sample()`.
-`scoringutils` will warn you about the leftover `quantile_level` column, but it will still return a score.
-That score is not the one you want.
-Pairing the 5% quantile in one country with the 5% quantile in another assumes the two are perfectly rank correlated, so every quantile forecast ends up scored as though it had predicted perfect dependence, whatever it actually predicted.
+## Comparing the energy and variogram scores
 
-The two scores suffer differently.
-The energy score still responds to the marginal distributions, so its values stay in a plausible range, but it loses almost all of its ability to separate forecasts with different correlation structures.
-The variogram score fares worse, because dependence is the only thing it measures.
-Replace the dependence with an assumption and what is left is close to a function of the observed values alone, which can rank models in the wrong order.
+The energy and variogram scores are complementary to each other. The energy score summarises overall accuracy across all the pooled targets at once, a multivariate generalisation of the CRPS. The variogram score instead looks only at the differences between the specific targets that were pooled together to compare the size of the observed difference against the size of predicted differences. It is pairwise on whatever dimension `joint_across` specified. 
 
-If you have quantile forecasts and want to score them jointly, you have to supply the missing dependence structure.
-You can ask forecasters for samples or trajectories instead of quantiles, which is the route several forecast hubs have taken.
-Alternatively you can rebuild a joint distribution from the marginal quantiles using ensemble copula coupling (Schefzik et al., 2013) or the Schaake shuffle (Clark et al., 2004).
-Both borrow a rank structure from elsewhere, usually a raw ensemble or the historical observations, so any score you compute afterwards partly reflects that choice.
+For example, when pooling across forecast horizon, the variogram compares the differences between weeks and is therefore sensitive to the shape of the trajectory. But because it uses only differences between targets, it is insensitive to any bias that shifts the overall trajectory away from the observed data.
 
-Multivariate point forecasts are a different matter.
-A point forecast does specify a joint distribution, a degenerate one that places all its mass on a single vector, which is why the variogram score is well defined for it.
+We can see this comparison between the two scores, comparing two models' forecasts of 1-3 week ahead cases in Germany as above. The dashed line shows the observed trajectory, with cases falling after the first week.
 
-If, at any point, you want to score the same forecast using different groupings, you'd have create a new separate forecast object with a different grouping and score that new forecast object.
+```{r}
+#| fig.width: 7
+#| fig.height: 3.4
+#| fig.alt: >-
+#|   Median forecasts with 50% intervals for two models over three weekly
+#|   horizons in Germany, alongside the observed trajectory as a dashed line.
+#|   The ensemble stays roughly flat near the first observed value while EpiNow2
+#|   rises away from it, and the observed cases fall steeply.
+library(ggplot2)
+library(data.table)
 
-## References
+cases_de <- as.data.table(example_sample_continuous)[
+  target_type == "Cases" &
+    location == "DE" &
+    forecast_date == "2021-05-03" &
+    model %in% c("EuroCOVIDhub-ensemble", "epiforecasts-EpiNow2")
+]
 
-Clark, M., Gangopadhyay, S., Hay, L., Rajagopalan, B. and Wilby, R. (2004).
-The Schaake Shuffle: A Method for Reconstructing Space-Time Variability in Forecasted Precipitation and Temperature Fields.
-*Journal of Hydrometeorology*, 5(1), 243-262.
-<https://doi.org/10.1175/1525-7541(2004)005%3C0243:TSSAMF%3E2.0.CO;2>
+band <- cases_de[, .(
+  median = median(predicted),
+  lower = quantile(predicted, 0.25),
+  upper = quantile(predicted, 0.75)
+), by = .(model, target_end_date)]
 
-Gneiting, T., Stanberry, L. I., Grimit, E. P., Held, L. and Johnson, N. A. (2008).
-Assessing probabilistic forecasts of multivariate quantities, with an application to ensemble predictions of surface winds.
-*TEST*, 17, 211-235.
-<https://doi.org/10.1007/s11749-008-0114-x>
+observed <- unique(cases_de[, .(target_end_date, observed)])
 
-Schefzik, R., Thorarinsdottir, T. L. and Gneiting, T. (2013).
-Uncertainty Quantification in Complex Simulation Models Using Ensemble Copula Coupling.
-*Statistical Science*, 28(4), 616-640.
-<https://doi.org/10.1214/13-STS443>
+ggplot(band, aes(target_end_date, median, colour = model, fill = model)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2, colour = NA) +
+  geom_line() +
+  geom_line(
+    data = observed, aes(target_end_date, observed),
+    inherit.aes = FALSE, linetype = "dashed"
+  ) +
+  geom_point(
+    data = observed, aes(target_end_date, observed),
+    inherit.aes = FALSE
+  ) +
+  labs(x = "Target date", y = "Weekly cases", colour = "Model", fill = "Model") +
+  theme_scoringutils() +
+  theme(legend.position = "bottom")
+```
 
-Scheuerer, M. and Hamill, T. M. (2015).
-Variogram-Based Proper Scoring Rules for Probabilistic Forecasts of Multivariate Quantities.
-*Monthly Weather Review*, 143(4), 1321-1334.
-<https://doi.org/10.1175/MWR-D-14-00269.1>
+We pool the three horizons into a single multivariate forecast for each model, then score both.
+
+```{r}
+cases_mv <- as_forecast_multivariate_sample(
+  data = na.omit(cases_de),
+  joint_across = c("horizon", "target_end_date")
+)
+score(cases_mv)[, c("model", "energy_score", "variogram_score")]
+```
+
+The two scores disagree about which model performed better. The energy score prefers the ensemble, whose level stays close to the observed cases, while the variogram score prefers EpiNow2. The observed cases move sharply from week to week, and EpiNow2 predicts changes of a similar size, whereas the near-flat ensemble predicts changes that are too small. Note that EpiNow2 wins on the variogram score even though it has the wrong direction of the change. The energy score rewards getting the overall level right; the variogram score rewards getting the size of the joint movement right.
