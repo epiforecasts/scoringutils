@@ -40,6 +40,26 @@ test_that("summarise_scores() handles wrong by argument well", {
   )
 })
 
+test_that("summarise_scores() errors when `by` contains metric columns", {
+  # grouping by a score column would silently return an unsummarised table
+  # with duplicate column names (gh #1204)
+  expect_error(
+    summarise_scores(scores_quantile, by = c("model", "wis")),
+    "metric"
+  )
+
+  # the error message should name all offending columns
+  expect_error(
+    summarise_scores(scores_quantile, by = c("model", "wis", "bias")),
+    "\"wis\" and \"bias\""
+  )
+
+  # legitimate calls still work
+  expect_no_condition(
+    summarise_scores(scores_quantile, by = get_forecast_unit(scores_quantile))
+  )
+})
+
 test_that("summarise_scores() handles the `metrics` attribute correctly", {
   test <- data.table::copy(scores_quantile)
   attr(test, "metrics") <- NULL
