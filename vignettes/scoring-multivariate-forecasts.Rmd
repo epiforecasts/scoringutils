@@ -102,7 +102,7 @@ score(
   example_multiv,
   metrics = list(
     energy_score = energy_score_multivariate,
-    variogram_score = purrr::partial(
+    variogram_score = purrr::partial( # nolint: namespace_linter.
       variogram_score_multivariate, p = 1
     )
   )
