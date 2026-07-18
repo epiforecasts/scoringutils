@@ -80,9 +80,9 @@ is_forecast_point <- function(x) {
 #' @rdname score
 #' @export
 score.forecast_point <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
+  prep <- prepare_forecast_for_scoring(forecast, metrics)
+  forecast <- prep$forecast
+  metrics <- prep$metrics
 
   scores <- apply_metrics(
     forecast, metrics,
