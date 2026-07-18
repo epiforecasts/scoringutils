@@ -10,13 +10,8 @@ prepare_forecast_for_scoring(forecast, metrics)
 \item{forecast}{A forecast object (a validated data.table with predicted and
 observed values).}
 
-\item{metrics}{A named list of scoring functions. Each element should be a
-function reference, not a function call. For example, use
-\code{list("crps" = crps_sample)} rather than \code{list("crps" = crps_sample())}.
-Names will be used as column names in the output. See \code{\link[=get_metrics]{get_metrics()}} for
-more information on the default metrics used. See the \emph{Customising metrics}
-section below for information on how to pass custom arguments to scoring
-functions.}
+\item{metrics}{A named list of scoring functions. See \code{\link[=score]{score()}} for
+details.}
 }
 \value{
 A list with three elements: \code{forecast} (the cleaned forecast as
@@ -30,9 +25,13 @@ This function performs the input preparation steps shared by all
 rows with missing values), determines the forecast unit, validates the
 metrics, and converts the forecast to a plain \code{data.table}.
 
-The metrics are validated within this function so that the default
-\code{metrics = get_metrics(forecast)} in the \code{\link[=score]{score()}} methods is evaluated
-while \code{forecast} is still a forecast object (method dispatch for
-\code{\link[=get_metrics]{get_metrics()}} would fail after the conversion to a plain \code{data.table}).
+The metrics are validated within this function so that the lazy default
+\code{metrics = get_metrics(forecast)} of the \code{\link[=score]{score()}} methods is forced
+before those methods rebind \code{forecast} to a plain \code{data.table} (there is
+no \code{get_metrics.default()}, so forcing the default after that rebind
+would fail). The default is thereby evaluated on the original forecast
+object passed to \code{\link[=score]{score()}}, i.e. before rows with missing values are
+removed. This makes no difference for the built-in \code{\link[=get_metrics]{get_metrics()}}
+methods, which do not inspect the data.
 }
 \keyword{internal}

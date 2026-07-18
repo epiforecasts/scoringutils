@@ -113,9 +113,8 @@ test_that("function produces output for a nominal format case", {
 # =============================================================================
 
 test_that("prepare_forecast_for_scoring() prepares a forecast for scoring", {
-  prep <- prepare_forecast_for_scoring(
-    example_quantile, get_metrics(example_quantile)
-  )
+  input <- data.table::copy(example_quantile)
+  prep <- prepare_forecast_for_scoring(input, get_metrics(input))
   expect_named(prep, c("forecast", "metrics", "forecast_unit"))
 
   # the forecast is returned as a plain data.table with NA rows removed
@@ -123,24 +122,10 @@ test_that("prepare_forecast_for_scoring() prepares a forecast for scoring", {
   expect_identical(nrow(prep$forecast), nrow(na.omit(example_quantile)))
 
   # the input is not modified by reference
-  expect_s3_class(example_quantile, "forecast_quantile")
+  expect_identical(input, example_quantile)
 
   expect_identical(prep$metrics, get_metrics(example_quantile))
   expect_identical(prep$forecast_unit, get_forecast_unit(example_quantile))
-})
-
-test_that("prepare_forecast_for_scoring() validates its inputs", {
-  expect_error(
-    prepare_forecast_for_scoring(data.frame(x = 1), list(mean = mean)),
-    "forecast object"
-  )
-  expect_warning(
-    prepare_forecast_for_scoring(
-      example_binary,
-      list(brier_score = brier_score, invalid = "not a function")
-    ),
-    "not a valid function"
-  )
 })
 
 

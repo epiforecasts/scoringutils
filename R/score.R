@@ -140,12 +140,18 @@ score.default <- function(forecast, metrics, ...) {
 #' rows with missing values), determines the forecast unit, validates the
 #' metrics, and converts the forecast to a plain `data.table`.
 #'
-#' The metrics are validated within this function so that the default
-#' `metrics = get_metrics(forecast)` in the [score()] methods is evaluated
-#' while `forecast` is still a forecast object (method dispatch for
-#' [get_metrics()] would fail after the conversion to a plain `data.table`).
+#' The metrics are validated within this function so that the lazy default
+#' `metrics = get_metrics(forecast)` of the [score()] methods is forced
+#' before those methods rebind `forecast` to a plain `data.table` (there is
+#' no `get_metrics.default()`, so forcing the default after that rebind
+#' would fail). The default is thereby evaluated on the original forecast
+#' object passed to [score()], i.e. before rows with missing values are
+#' removed. This makes no difference for the built-in [get_metrics()]
+#' methods, which do not inspect the data.
 #'
 #' @inheritParams score
+#' @param metrics A named list of scoring functions. See [score()] for
+#'   details.
 #' @returns A list with three elements: `forecast` (the cleaned forecast as
 #'   a plain `data.table`), `metrics` (the validated list of metrics) and
 #'   `forecast_unit` (a character vector with the columns that define the
