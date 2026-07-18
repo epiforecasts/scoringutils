@@ -97,6 +97,7 @@ assert_forecast.default <- function(
 #' `predicted`
 #' - checks the forecast type and forecast unit
 #' - checks there are no duplicate forecasts
+#' - checks that observed values are constant within each forecast unit
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts.
 #' @param data A data.table with forecasts and observed values that should
@@ -124,6 +125,9 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that there aren't any duplicated forecasts
   forecast_unit <- get_forecast_unit(data)
   assert(check_duplicates(data))
+
+  # check that observed values are constant within each forecast unit
+  assert(check_observed_constant(data, forecast_unit))
 
   # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
@@ -182,6 +186,38 @@ check_number_per_forecast <- function(data, forecast_unit) {
       ". This may be a problem (it can potentially distort scores, ",
       "making it more difficult to compare them), ",
       "so make sure this is intended."
+    )
+    return(msg)
+  }
+  return(TRUE)
+}
+
+
+#' Check that observed values are constant within each forecast unit
+#' @description
+#' Helper function that checks that all rows belonging to the same forecast
+#' (as defined by the forecast unit) share a single observed value. Rows
+#' where `observed` is `NA` are ignored.
+#' If the observed values are constant within each forecast unit, the
+#' function returns `TRUE` and a string with an error message otherwise.
+#' @param forecast_unit Character vector denoting the unit of a single forecast.
+#' @importFrom data.table as.data.table uniqueN
+#' @inherit document_check_functions params return
+#' @keywords internal_input_check
+check_observed_constant <- function(data, forecast_unit) {
+  # This function doesn't return a forecast object so it's fine to unclass it
+  # to avoid validation error while subsetting
+  data <- as.data.table(data)
+  data <- data[!is.na(observed)]
+  data <- data[, .(scoringutils_InternalNumCheck = uniqueN(observed)),
+               by = forecast_unit]
+  if (any(data$scoringutils_InternalNumCheck > 1)) {
+    msg <- paste0(
+      "There are instances with different observed values for the ",
+      "same forecast. Observed values must be constant within each ",
+      "forecast unit. This can't be right and needs to be resolved. ",
+      "Maybe you need to check the unit of a single forecast and ",
+      "add missing columns?"
     )
     return(msg)
   }
