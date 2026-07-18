@@ -448,6 +448,57 @@ test_that("get_pairwise_comparisons() throws errors with wrong inputs", {
   )
 })
 
+test_that("get_pairwise_comparisons() skips subgroups with fewer than two comparators", {
+  # only one model left for Deaths, but Cases still has three models
+  scores_sub <- scores_quantile[
+    !(target_type == "Deaths" & model != "EuroCOVIDhub-ensemble")
+  ]
+
+  expect_warning(
+    res <- get_pairwise_comparisons(scores_sub, by = "target_type"),
+    "fewer than two comparators"
+  )
+
+  # results are returned for the valid subgroup only
+  expect_identical(unique(res$target_type), "Cases")
+  expect_identical(nrow(res), 9L)
+
+  # results are identical to computing on the valid subgroup alone
+  res_cases <- get_pairwise_comparisons(
+    scores_quantile[target_type == "Cases"],
+    by = "target_type"
+  )
+  expect_equal(res, res_cases) # nolint: expect_identical_linter
+
+  # warning names the offending subgroup
+  expect_warning(
+    get_pairwise_comparisons(scores_sub, by = "target_type"),
+    "target_type=Deaths"
+  )
+
+  # if all subgroups have fewer than two comparators, an error is thrown
+  expect_error(
+    get_pairwise_comparisons(
+      scores_quantile[model == "EuroCOVIDhub-ensemble"],
+      by = "target_type"
+    ),
+    "not enough comparators"
+  )
+})
+
+test_that("add_relative_skill() fills NA for subgroups with too few comparators", {
+  scores_sub <- scores_quantile[
+    !(target_type == "Deaths" & model != "EuroCOVIDhub-ensemble")
+  ]
+
+  expect_warning(
+    rs <- add_relative_skill(scores_sub, by = "target_type"),
+    "fewer than two comparators"
+  )
+  expect_true(all(is.na(rs[target_type == "Deaths"]$wis_relative_skill)))
+  expect_false(anyNA(rs[target_type == "Cases"]$wis_relative_skill))
+})
+
 test_that("pairwise_comparison_one_group() throws error with wrong inputs", {
   test <- data.table::copy(scores_sample_continuous)
   test <- test[, "model" := NULL]

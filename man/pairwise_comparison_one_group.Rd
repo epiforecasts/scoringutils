@@ -35,7 +35,9 @@ compared.}
 levels for the pairwise comparisons. By default this is \code{NULL} and there
 will be one relative skill score per distinct entry of the column selected
 in \code{compare}. If further columns are given here, for example, \code{by = "location"} with \code{compare = "model"}, then one separate relative skill
-score is calculated for every model in every location.}
+score is calculated for every model in every location. Subgroups with
+fewer than two comparators are skipped with a warning; if no subgroup
+has at least two comparators, an error is thrown.}
 
 \item{...}{Additional arguments for the comparison between two models. See
 \code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
