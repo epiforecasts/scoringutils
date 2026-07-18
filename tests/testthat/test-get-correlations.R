@@ -32,6 +32,24 @@ test_that("get_correlations() works as expected", {
   )
 })
 
+test_that("get_correlations() respects the order of the `metrics` argument", {
+  m <- rev(get_metrics.scores(scores_quantile))
+  correlations <- get_correlations(
+    summarise_scores(scores_quantile),
+    metrics = m
+  )
+  # columns, rows and the stored attribute all share the requested order
+  expect_identical(colnames(correlations), c(m, "metric"))
+  expect_identical(correlations$metric, m)
+  expect_identical(get_metrics.scores(correlations), m)
+  # the diagonal of the correlation matrix is 1
+  expect_equal(
+    diag(as.matrix(correlations[, .SD, .SDcols = m])),
+    rep(1, length(m)),
+    ignore_attr = TRUE
+  )
+})
+
 # ==============================================================================
 # plot_correlation() # nolint: commented_code_linter
 # ==============================================================================
@@ -51,5 +69,53 @@ test_that("plot_correlations() works as expected", {
   expect_error(
     plot_correlations(summarise_scores(scores_quantile)),
     "Did you forget to call `scoringutils::get_correlations()`?"
+  )
+})
+
+test_that("plot_correlations() aligns cells with non-default metrics order", {
+  summarised <- summarise_scores(scores_quantile)
+  m <- rev(get_metrics.scores(scores_quantile))
+  correlations <- get_correlations(summarised, metrics = m)
+  p <- plot_correlations(correlations, digits = 2)
+  pd <- data.table::as.data.table(p$data)
+
+  # the diagonal of the plotted heatmap must be 1
+  expect_true(
+    all(pd[as.character(metric) == as.character(variable)]$value == 1)
+  )
+
+  # every plotted cell must match the true correlation matrix
+  true_cor <- stats::cor(as.matrix(summarised[, .SD, .SDcols = m]))
+  expect_equal(
+    pd$value,
+    round(
+      true_cor[cbind(as.character(pd$metric), as.character(pd$variable))],
+      2
+    ),
+    ignore_attr = TRUE
+  )
+
+  # same checks with a subset of metrics in non-default order
+  m_subset <- c("dispersion", "wis", "bias")
+  correlations_subset <- get_correlations(summarised, metrics = m_subset)
+  p_subset <- plot_correlations(correlations_subset, digits = 2)
+  pd_subset <- data.table::as.data.table(p_subset$data)
+  expect_true(
+    all(
+      pd_subset[as.character(metric) == as.character(variable)]$value == 1
+    )
+  )
+  true_cor_subset <- stats::cor(
+    as.matrix(summarised[, .SD, .SDcols = m_subset])
+  )
+  expect_equal(
+    pd_subset$value,
+    round(
+      true_cor_subset[
+        cbind(as.character(pd_subset$metric), as.character(pd_subset$variable))
+      ],
+      2
+    ),
+    ignore_attr = TRUE
   )
 })

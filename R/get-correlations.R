@@ -30,7 +30,7 @@ get_correlations <- function(scores,
                              ...) {
   scores <- ensure_data.table(scores)
   assert_subset(metrics, colnames(scores), empty.ok = FALSE)
-  df <- scores[, .SD, .SDcols = names(scores) %in% metrics]
+  df <- scores[, .SD, .SDcols = metrics]
 
   # define correlation matrix
   cor_mat <- cor(as.matrix(df), ...)
@@ -77,16 +77,13 @@ plot_correlations <- function(correlations, digits = NULL) {
   assert_data_frame(correlations)
   metrics <- get_metrics.scores(correlations, error = TRUE)
 
-  lower_triangle <- get_lower_tri(correlations[, .SD, .SDcols = metrics])
-
-  if (!is.null(digits)) {
-    lower_triangle <- round(lower_triangle, digits)
-  }
-
-
   # check correlations is actually a matrix of correlations
   col_present <- check_subset("metric", colnames(correlations))
-  if (any(lower_triangle > 1, na.rm = TRUE) || !isTRUE(col_present)) {
+  values_above_one <- any(
+    correlations[, .SD, .SDcols = metrics] > 1,
+    na.rm = TRUE
+  )
+  if (values_above_one || !isTRUE(col_present)) {
     cli_abort(
       c(
         "Found correlations > 1 or missing `metric` column.",
@@ -95,7 +92,16 @@ plot_correlations <- function(correlations, digits = NULL) {
     )
   }
 
-  rownames(lower_triangle) <- colnames(lower_triangle)
+  # align rows and columns with the order given by `metrics`
+  cor_mat <- as.matrix(correlations[, .SD, .SDcols = metrics])
+  rownames(cor_mat) <- correlations$metric
+  cor_mat <- cor_mat[metrics, , drop = FALSE]
+
+  lower_triangle <- get_lower_tri(cor_mat)
+
+  if (!is.null(digits)) {
+    lower_triangle <- round(lower_triangle, digits)
+  }
 
   # get plot data.frame
   plot_df <- as.data.table(lower_triangle)[, metric := metrics]
