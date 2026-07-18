@@ -71,9 +71,12 @@ rps_ordinal <- function(observed, predicted, predicted_label) {
     predicted <- matrix(predicted, nrow = 1)
   }
 
-  # Reorder the predicted matrix columns to match the natural ordering
-  correct_order <- as.numeric(predicted_label)
-  ordered_predicted <- predicted[, correct_order]
+  # Reorder the predicted matrix columns to match the natural level order:
+  # column k of `predicted` holds probabilities for level
+  # `as.numeric(predicted_label)[k]`, so the inverse permutation given by
+  # `order()` puts the column for level k into position k
+  ordered_predicted <-
+    predicted[, order(as.numeric(predicted_label)), drop = FALSE]
 
   rps <- rps_probs(as.numeric(observed), ordered_predicted)
   return(rps)
