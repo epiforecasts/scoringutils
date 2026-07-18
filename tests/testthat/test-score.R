@@ -108,6 +108,12 @@ test_that("function produces output for a nominal format case", {
 })
 
 
+# test ordinal case ------------------------------------------------------------
+test_that("function produces output for an ordinal format case", {
+  expect_no_condition(score(as_forecast_ordinal(na.omit(example_ordinal))))
+})
+
+
 # =============================================================================
 # prepare_forecast_for_scoring() # nolint: commented_code_linter
 # =============================================================================
