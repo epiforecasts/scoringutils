@@ -5,7 +5,7 @@
 - Fixed `summarise_scores()` producing a data.table with duplicate column names when the input `scores` object had no score columns (e.g. because every metric in `score()` warned and returned nothing). `summarise_scores()` now matches metric columns by exact name rather than regex partial match, and errors with a clear message when there is nothing to summarise (#1179).
 - Added internal S3 generic `get_forecast_type_ids()` so each forecast type declares the columns (beyond the forecast unit) that identify a unique row. `get_duplicate_forecasts()` now uses this instead of hard-coded column names (#888).
 - Removed the deprecated vignettes `Deprecated-functions` and `Deprecated-visualisations`. The code for removed functions (`plot_predictions()`, `make_NA()`, `plot_ranges()`, `plot_score_table()`, `merge_pred_and_obs()`) can still be found in the [git history](https://github.com/epiforecasts/scoringutils/tree/d0cd8e2/vignettes) (#1158).
-- Added a more descriptive explanation of the use of energy and variogram scores in the vignette "Scoring multivariate forecasts", including an extended description of use for pooling over single-origin forecast horizon and a multi-model comparison. Added a note explaining where these scores cannot be applied to quantile forecasts.
+- Added a more descriptive explanation of the use of energy and variogram scores in the vignette "Scoring multivariate forecasts", including an extended description of use for pooling over single-origin forecast horizon and a multi-model comparison. Added a note explaining where these scores cannot be applied to quantile forecasts (#1193).
 
 # scoringutils 2.2.0
 
