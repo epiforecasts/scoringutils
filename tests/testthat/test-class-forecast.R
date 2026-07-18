@@ -4,6 +4,48 @@
 # see tests for each forecast type for more specific tests.
 
 
+test_that("as_forecast_generic() errors when renaming onto an existing column", {
+  # stale `predicted` column alongside the column that should be renamed
+  dt <- data.table::data.table(
+    model = "m",
+    id = 1:2,
+    observed = factor(c(0, 1)),
+    predicted = c(0.9, 0.9),
+    prob = c(0.3, 0.7)
+  )
+  expect_error(
+    as_forecast_binary(dt, predicted = "prob"),
+    "already exists"
+  )
+
+  # same for other renameable columns, e.g. `quantile_level`
+  quantile_dt <- data.table::data.table(
+    model = "m",
+    target = "t",
+    observed = 5,
+    predicted = c(1, 5, 9),
+    quantile_level = c(0.1, 0.5, 0.9),
+    q = c(0.1, 0.5, 0.9)
+  )
+  expect_error(
+    as_forecast_quantile(quantile_dt, quantile_level = "q"),
+    "already exists"
+  )
+})
+
+test_that("as_forecast_generic() still allows identity renames", {
+  dt <- data.table::data.table(
+    model = "m",
+    id = 1:2,
+    observed = factor(c(0, 1)),
+    predicted = c(0.3, 0.7)
+  )
+  expect_no_condition(
+    as_forecast_binary(dt, observed = "observed", predicted = "predicted")
+  )
+})
+
+
 # ==============================================================================
 # is_forecast() # nolint: commented_code_linter
 # ==============================================================================
@@ -36,6 +78,21 @@ test_that("assert_forecast_generic() works as expected with a data.frame", {
   expect_error(
     assert_forecast_generic(example_quantile_df),
     "Assertion on 'data' failed: Must be a data.table, not data.frame."
+  )
+})
+
+test_that("assert_forecast_generic() errors on duplicate column names", {
+  dt <- data.table::data.table(
+    model = "m",
+    id = 1:2,
+    observed = factor(c(0, 1)),
+    predicted = c(0.3, 0.7),
+    stale = c(0.9, 0.9)
+  )
+  data.table::setnames(dt, "stale", "predicted")
+  expect_error(
+    assert_forecast_generic(dt),
+    "duplicate"
   )
 })
 

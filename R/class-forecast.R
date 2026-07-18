@@ -7,6 +7,7 @@
 #' @param ... Named arguments that are used to rename columns. The names of the
 #'  arguments are the names of the columns that should be renamed. The values
 #'  are the new names.
+#' @importFrom cli cli_abort
 #' @keywords as_forecast
 as_forecast_generic <- function(data,
                                 forecast_unit = NULL,
@@ -26,6 +27,20 @@ as_forecast_generic <- function(data,
   oldnames <- unlist(oldnames[provided])
   newnames <- unlist(newnames[provided])
   if (!is.null(oldnames) && length(oldnames) > 0) {
+    # renaming a column onto a name that already exists (and is not itself
+    # being renamed away) would create duplicate column names
+    remaining <- setdiff(colnames(data), oldnames)
+    collisions <- unique(newnames[newnames %in% remaining])
+    if (length(collisions) > 0) {
+      cli_abort(
+        c(
+          `!` = "Cannot rename to {.val {collisions}}: {?a column/columns}
+          with {?this name/these names} already exist{?s/} in the data.",
+          i = "Rename or remove the existing {cli::qty(collisions)}
+          column{?s} first."
+        )
+      )
+    }
     setnames(data, old = oldnames, new = newnames)
   }
 
@@ -110,6 +125,16 @@ assert_forecast.default <- function(
 assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data, min.rows = 1)
+  duplicated_cols <- unique(colnames(data)[duplicated(colnames(data))])
+  if (length(duplicated_cols) > 0) {
+    cli_abort(
+      c(
+        `!` = "Found duplicate column{?s} in the data:
+        {.val {duplicated_cols}}.",
+        i = "Column names must be unique."
+      )
+    )
+  }
   assert_subset(c("observed", "predicted"), colnames(data))
   problem <- test_subset(c("sample_id", "quantile_level"), colnames(data))
   if (problem) {
