@@ -30,6 +30,51 @@ test_that("as_forecast.forecast_ordinal() breaks when rows with zero probability
   )
 })
 
+test_that("assert_forecast.forecast_ordinal() names the incomplete forecast in its error message", {
+  # modA is complete, modB is missing the "high" outcome
+  dat <- data.table(
+    model = rep(c("modA", "modB"), times = c(3, 2)),
+    observed = factor(
+      "high", levels = c("low", "medium", "high"), ordered = TRUE
+    ),
+    predicted_label = factor(
+      c("low", "medium", "high", "low", "medium"),
+      levels = c("low", "medium", "high"),
+      ordered = TRUE
+    ),
+    predicted = c(0.2, 0.3, 0.5, 0.4, 0.6)
+  )
+  expect_warning(
+    expect_error(
+      as_forecast_ordinal(dat),
+      "modB"
+    ),
+    "Some forecasts have different numbers of rows"
+  )
+
+  # all forecasts incomplete - the first one should be named, not NA
+  dat_all_incomplete <- data.table(
+    model = c("modA", "modB"),
+    observed = factor(
+      "high", levels = c("low", "medium", "high"), ordered = TRUE
+    ),
+    predicted_label = factor(
+      "low", levels = c("low", "medium", "high"), ordered = TRUE
+    ),
+    predicted = c(1, 1)
+  )
+  expect_error(
+    as_forecast_ordinal(dat_all_incomplete),
+    "modA"
+  )
+})
+
+test_that("assert_forecast.forecast_ordinal() returns invisible(NULL)", {
+  fc <- as_forecast_ordinal(na.omit(example_ordinal))
+  expect_invisible(assert_forecast(fc))
+  expect_null(assert_forecast(fc))
+})
+
 test_that("assert_forecast.forecast_ordinal() fails if factors are not ordered", {
   ex_faulty <- na.omit(data.table::copy(example_nominal))
   expect_error(
