@@ -103,17 +103,15 @@ as_forecast_quantile.forecast_sample <- function(
   ...
 ) {
   forecast <- as.data.table(data)
-  assert_numeric(probs, min.len = 1)
+  assert_numeric(probs, min.len = 1, lower = 0, upper = 1)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(forecast), reserved_columns)
 
-  quantile_level <- unique(
-    round(c(probs, 1 - probs), digits = 10)
-  )
+  quantile_level <- unique(round(probs, digits = 10))
 
   forecast <-
     forecast[, .(quantile_level = quantile_level,
-                 predicted = quantile(x = predicted, probs = ..probs,
+                 predicted = quantile(x = predicted, probs = ..quantile_level,
                                       type = ..type, na.rm = TRUE)),
              by = by]
 
