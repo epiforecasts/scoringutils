@@ -54,7 +54,7 @@ as_forecast_sample.default <- function(data,
 
 #' @export
 #' @rdname assert_forecast
-#' @importFrom checkmate assert_subset
+#' @importFrom checkmate assert_subset assert_numeric
 #' @keywords validate-forecast-object
 assert_forecast.forecast_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
@@ -62,6 +62,8 @@ assert_forecast.forecast_sample <- function(
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_subset("sample_id", colnames(forecast))
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
+  assert_numeric(forecast$observed, .var.name = "observed")
+  assert_numeric(forecast$predicted, .var.name = "predicted")
   return(invisible(NULL))
 }
 
