@@ -475,10 +475,16 @@ bias_quantile_single_vector <- function(observed, predicted,
     predicted <- predicted[!is.na(predicted)]
     predicted <- predicted[!is.na(quantile_level)]
     quantile_level <- quantile_level[!is.na(quantile_level)]
+    # if NA removal leaves no quantile level on one side of the median, the
+    # median cannot be interpolated and no bias can be computed
+    if (!any(quantile_level <= 0.5) || !any(quantile_level >= 0.5)) {
+      return(NA_real_)
+    }
   }
 
   order <- order(quantile_level)
   predicted <- predicted[order]
+  quantile_level <- quantile_level[order]
   if (!all(diff(predicted) >= 0)) {
     cli_abort(
       c(

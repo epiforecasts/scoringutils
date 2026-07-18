@@ -751,6 +751,35 @@ test_that("bias_quantile() handles NA values", {
   )
 })
 
+test_that("bias_quantile() is invariant to the order of quantile levels", {
+  expect_equal( # nolint: expect_identical_linter
+    bias_quantile(observed = 1.5, c(3, 1, 2), c(0.75, 0.25, 0.5)),
+    0.5
+  )
+  expect_equal(
+    bias_quantile(observed = 1.5, c(3, 1, 2), c(0.75, 0.25, 0.5)),
+    bias_quantile(observed = 1.5, c(1, 2, 3), c(0.25, 0.5, 0.75))
+  )
+})
+
+test_that("bias_quantile() returns NA when na.rm removes one side of the median", {
+  expect_equal( # nolint: expect_identical_linter
+    bias_quantile(observed = 2, c(NA, NA, 3), c(0.25, 0.5, 0.75), na.rm = TRUE),
+    NA_real_
+  )
+  expect_equal( # nolint: expect_identical_linter
+    suppressMessages(
+      bias_quantile(observed = 2, c(NA, 3), c(0.25, 0.75), na.rm = TRUE)
+    ),
+    NA_real_
+  )
+  # if the median itself survives NA removal, the forecast can still be scored
+  expect_equal( # nolint: expect_identical_linter
+    bias_quantile(observed = 1, c(NA, 2, 3), c(0.25, 0.5, 0.75), na.rm = TRUE),
+    1
+  )
+})
+
 test_that("bias_quantile() errors if no predictions", {
   expect_error(
     bias_quantile(observed = 2, numeric(0), numeric(0)),
