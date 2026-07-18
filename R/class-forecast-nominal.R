@@ -134,10 +134,10 @@ is_forecast_nominal <- function(x) {
 #' @rdname score
 #' @export
 score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
+  prep <- prepare_forecast_for_scoring(forecast, metrics)
+  forecast <- prep$forecast
+  metrics <- prep$metrics
+  forecast_unit <- prep$forecast_unit
 
   # transpose the forecasts that belong to the same forecast unit
   # make sure the labels and predictions are ordered in the same way

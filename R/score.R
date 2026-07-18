@@ -132,6 +132,38 @@ score.default <- function(forecast, metrics, ...) {
 }
 
 
+#' @title Prepare a forecast object for scoring
+#'
+#' @description
+#' This function performs the input preparation steps shared by all
+#' [score()] methods: it validates and cleans the forecast object (removing
+#' rows with missing values), determines the forecast unit, validates the
+#' metrics, and converts the forecast to a plain `data.table`.
+#'
+#' The metrics are validated within this function so that the default
+#' `metrics = get_metrics(forecast)` in the [score()] methods is evaluated
+#' while `forecast` is still a forecast object (method dispatch for
+#' [get_metrics()] would fail after the conversion to a plain `data.table`).
+#'
+#' @inheritParams score
+#' @returns A list with three elements: `forecast` (the cleaned forecast as
+#'   a plain `data.table`), `metrics` (the validated list of metrics) and
+#'   `forecast_unit` (a character vector with the columns that define the
+#'   unit of a single forecast).
+#' @importFrom data.table as.data.table
+#' @keywords internal
+prepare_forecast_for_scoring <- function(forecast, metrics) {
+  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
+  forecast_unit <- get_forecast_unit(forecast)
+  metrics <- validate_metrics(metrics)
+  list(
+    forecast = as.data.table(forecast),
+    metrics = metrics,
+    forecast_unit = forecast_unit
+  )
+}
+
+
 #' @title Apply a list of functions to a data table of forecasts
 #' @description
 #' This helper function applies scoring rules (stored as a list of

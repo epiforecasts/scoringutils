@@ -107,11 +107,9 @@ is_forecast_multivariate_point <- function(x) {
 score.forecast_multivariate_point <- function(
   forecast, metrics = get_metrics(forecast), ...
 ) {
-  forecast <- clean_forecast(
-    forecast, copy = TRUE, na.omit = TRUE
-  )
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
+  prep <- prepare_forecast_for_scoring(forecast, metrics)
+  forecast <- prep$forecast
+  metrics <- prep$metrics
 
   observed <- forecast$observed
   predicted <- matrix(forecast$predicted, ncol = 1)
