@@ -245,7 +245,7 @@ logs_sample <- function(observed, predicted, ...) {
       )
     )
   }
-  scoringRules::logs_sample(
+  scoringRules::logs_sample( # nolint: namespace_linter.
     y = observed,
     dat = predicted,
     ...
@@ -277,7 +277,7 @@ logs_sample <- function(observed, predicted, ...) {
 dss_sample <- function(observed, predicted, ...) {
   assert_input_sample(observed, predicted)
 
-  scoringRules::dss_sample(
+  scoringRules::dss_sample( # nolint: namespace_linter.
     y = observed,
     dat = predicted,
     ...
@@ -328,7 +328,7 @@ dss_sample <- function(observed, predicted, ...) {
 crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
   assert_input_sample(observed, predicted)
 
-  crps <- scoringRules::crps_sample(
+  crps <- scoringRules::crps_sample( # nolint: namespace_linter.
     y = observed,
     dat = predicted,
     ...
@@ -337,7 +337,7 @@ crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
   if (separate_results) {
     predicted <- ensure_sample_matrix(predicted)
     medians <- apply(predicted, 1, median)
-    dispersion <- scoringRules::crps_sample(
+    dispersion <- scoringRules::crps_sample( # nolint: namespace_linter.
       y = medians,
       dat = predicted,
       ...
