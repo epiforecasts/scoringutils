@@ -206,6 +206,22 @@ test_that("bias_sample() approx equals bias_quantile() for many samples", {
 })
 
 
+test_that("bias_sample() works with a vector of samples", {
+  # integer case
+  bias_vector <- expect_no_condition(bias_sample(1, c(0, 2, 4)))
+  expect_equal( # nolint: expect_identical_linter
+    bias_vector,
+    bias_sample(1, matrix(c(0, 2, 4), nrow = 1))
+  )
+  # continuous case
+  bias_vector <- expect_no_condition(bias_sample(1.5, c(0.5, 2.5, 4.5)))
+  expect_equal( # nolint: expect_identical_linter
+    bias_vector,
+    bias_sample(1.5, matrix(c(0.5, 2.5, 4.5), nrow = 1))
+  )
+})
+
+
 # `ae_median_sample` ===========================================================
 test_that("ae_median_sample works", {
   observed <- rnorm(30, mean = 1:30)
@@ -215,12 +231,54 @@ test_that("ae_median_sample works", {
   expect_equal(ae, scoringutils) # nolint: expect_identical_linter # nolint: expect_identical_linter
 })
 
+test_that("ae_median_sample() works with a vector of samples for a single observation", {
+  ae <- expect_no_condition(ae_median_sample(1, c(0, 2, 4)))
+  expect_length(ae, 1)
+  expect_equal(ae, 1) # nolint: expect_identical_linter
+})
+
+# `se_mean_sample()` ===========================================================
+test_that("se_mean_sample() works with a vector of samples", {
+  se <- expect_no_condition(se_mean_sample(1, c(0, 2, 4)))
+  expect_length(se, 1)
+  expect_equal(se, 1) # nolint: expect_identical_linter
+})
+
 # `mad_sample()` ===============================================================
 test_that("function throws an error when missing 'predicted'", {
   predicted <- replicate(50, rpois(n = 10, lambda = 1:10))
 
   expect_error(
     mad_sample()
+  )
+})
+
+test_that("mad_sample() works with a vector of samples", {
+  dispersion <- expect_no_condition(mad_sample(predicted = c(0, 2, 4)))
+  expect_equal(dispersion, mad(c(0, 2, 4))) # nolint: expect_identical_linter
+})
+
+# vector input =================================================================
+test_that("sample metrics give identical results for vector and 1-row matrix", {
+  observed <- 2.3
+  predicted <- rnorm(20, mean = 2)
+  predicted_matrix <- matrix(predicted, nrow = 1)
+
+  expect_identical(
+    ae_median_sample(observed, predicted),
+    ae_median_sample(observed, predicted_matrix)
+  )
+  expect_identical(
+    se_mean_sample(observed, predicted),
+    se_mean_sample(observed, predicted_matrix)
+  )
+  expect_identical(
+    bias_sample(observed, predicted),
+    bias_sample(observed, predicted_matrix)
+  )
+  expect_identical(
+    mad_sample(predicted = predicted),
+    mad_sample(predicted = predicted_matrix)
   )
 })
 
