@@ -486,6 +486,53 @@ test_that("get_pairwise_comparisons() skips subgroups with fewer than two compar
   )
 })
 
+test_that("get_pairwise_comparisons() silently drops empty subgroups from unused factor levels", {
+  # only one model left for Deaths, but Cases still has three models
+  scores_sub <- scores_quantile[
+    !(target_type == "Deaths" & model != "EuroCOVIDhub-ensemble")
+  ]
+
+  # same data, but with `target_type` as a factor with an unused level
+  scores_factor <- data.table::copy(scores_sub)
+  scores_factor[, target_type := factor(
+    target_type,
+    levels = c("Cases", "Deaths", "Hospitalisations")
+  )]
+  scores_nolevel <- data.table::copy(scores_factor)
+  scores_nolevel[, target_type := droplevels(target_type)]
+
+  # the empty subgroup from the unused level is dropped silently: the only
+  # warning names the real skipped subgroup, with no "NA" label
+  warnings <- testthat::capture_warnings(
+    res_factor <- get_pairwise_comparisons(scores_factor, by = "target_type")
+  )
+  expect_length(warnings, 1)
+  expect_match(warnings, "target_type=Deaths")
+  expect_false(any(grepl("NA", warnings, fixed = TRUE)))
+
+  # results are identical to the same data without the unused level
+  suppressWarnings(
+    res_nolevel <- get_pairwise_comparisons(scores_nolevel, by = "target_type")
+  )
+  expect_identical(
+    droplevels(res_factor$target_type),
+    droplevels(res_nolevel$target_type)
+  )
+  res_factor[, target_type := NULL]
+  res_nolevel[, target_type := NULL]
+  expect_identical(res_factor, res_nolevel)
+
+  # an unused factor level alone triggers no warning at all
+  scores_valid <- data.table::copy(scores_quantile)
+  scores_valid[, target_type := factor(
+    target_type,
+    levels = c("Cases", "Deaths", "Hospitalisations")
+  )]
+  expect_no_warning(
+    get_pairwise_comparisons(scores_valid, by = "target_type")
+  )
+})
+
 test_that("add_relative_skill() fills NA for subgroups with too few comparators", {
   scores_sub <- scores_quantile[
     !(target_type == "Deaths" & model != "EuroCOVIDhub-ensemble")

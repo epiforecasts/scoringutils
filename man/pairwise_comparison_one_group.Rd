@@ -32,12 +32,10 @@ elements for the pairwise comparison. For example, if this is set to
 compared.}
 
 \item{by}{Character vector with column names that define further grouping
-levels for the pairwise comparisons. By default this is \code{NULL} and there
-will be one relative skill score per distinct entry of the column selected
-in \code{compare}. If further columns are given here, for example, \code{by = "location"} with \code{compare = "model"}, then one separate relative skill
-score is calculated for every model in every location. Subgroups with
-fewer than two comparators are skipped with a warning; if no subgroup
-has at least two comparators, an error is thrown.}
+levels for the pairwise comparisons. Unlike
+\code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}, this function does not skip subgroups with
+fewer than two comparators: it operates on a single subgroup and throws
+an error if \code{scores} contains fewer than two comparators.}
 
 \item{...}{Additional arguments for the comparison between two models. See
 \code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}

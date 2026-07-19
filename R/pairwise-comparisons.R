@@ -219,8 +219,10 @@ get_pairwise_comparisons <- function(
   }
 
   # do the pairwise comparison -------------------------------------------------
-  # split data set into groups determined by 'by'
-  split_scores <- split(scores, by = by)
+  # split data set into groups determined by 'by'. `drop = TRUE` silently
+  # drops empty groups (e.g. from unused factor levels in a `by` column) so
+  # that only subgroups actually present in the data are compared.
+  split_scores <- split(scores, by = by, drop = TRUE)
 
   # exclude groups with fewer than two comparators, as no pairwise comparison
   # is possible there. Error if no group has enough comparators.
@@ -286,6 +288,11 @@ get_pairwise_comparisons <- function(
 #' that subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_forecasts()].
+#' @param by Character vector with column names that define further grouping
+#'   levels for the pairwise comparisons. Unlike
+#'   [get_pairwise_comparisons()], this function does not skip subgroups with
+#'   fewer than two comparators: it operates on a single subgroup and throws
+#'   an error if `scores` contains fewer than two comparators.
 #' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
 #' @importFrom data.table setnames
