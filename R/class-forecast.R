@@ -225,7 +225,6 @@ check_observed_constant <- function(data, forecast_unit) {
 }
 
 
-
 #' Clean forecast object
 #' @description
 #' The function makes it possible to silently validate an object. In addition,
