@@ -103,6 +103,16 @@ assert_input_quantile <- function(observed, predicted, quantile_level,
 #' for an increasing number of equally spaced quantiles, the WIS
 #' converges to the continuous ranked probability score (CRPS).
 #'
+#' Note that the equivalence between the WIS and the mean of the quantile
+#' scores (see [quantile_score()]) only holds for this default weighting
+#' (`weigh = TRUE`). With `weigh = FALSE` and the quantile levels 0 and 1
+#' present, the two differ: the 0%-100% prediction interval contributes its
+#' full dispersion to the unweighted interval score, whereas the quantile
+#' levels 0 and 1 contribute a score of 0 to the unweighted quantile scores.
+#' For example, `wis(5, matrix(c(1, 3, 5, 7, 9), nrow = 1),
+#' c(0, 0.25, 0.5, 0.75, 1), weigh = FALSE)` returns 4.8, while the
+#' corresponding call to [quantile_score()] returns 1.6.
+#'
 #' **Quantile score**
 #'
 #' In addition to the interval score, there also exists a quantile score (QS)
@@ -616,7 +626,10 @@ ae_median_quantile <- function(observed, predicted, quantile_level) {
 #'
 #' `quantile_score()` returns the average quantile score across the quantile
 #' levels provided. For a set of quantile levels that form pairwise central
-#' prediction intervals, the quantile score is equivalent to the interval score.
+#' prediction intervals, the quantile score is equivalent to the interval score
+#' for the default weighting (`weigh = TRUE`). With `weigh = FALSE`, the two
+#' can differ when the quantile levels 0 and 1 are present (see [wis()] for
+#' details).
 #' @returns Numeric vector of length n with the quantile score. The scores are
 #' averaged across quantile levels if multiple quantile levels are provided
 #' (the result of calling `rowMeans()` on the matrix of quantile scores that
