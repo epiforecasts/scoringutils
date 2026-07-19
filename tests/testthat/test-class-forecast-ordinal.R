@@ -30,6 +30,21 @@ test_that("as_forecast.forecast_ordinal() breaks when rows with zero probability
   )
 })
 
+test_that("as_forecast_ordinal() errors on conflicting observed values in a forecast unit", {
+  expect_error(
+    as_forecast_ordinal(data.table::data.table(
+      model = "m1", target = "t1",
+      predicted_label = factor(c("a", "b", "c"), ordered = TRUE),
+      predicted = c(0.2, 0.3, 0.5),
+      observed = factor(
+        c("a", "a", "b"),
+        levels = c("a", "b", "c"), ordered = TRUE
+      )
+    )),
+    "different observed values"
+  )
+})
+
 test_that("assert_forecast.forecast_ordinal() fails if factors are not ordered", {
   ex_faulty <- na.omit(data.table::copy(example_nominal))
   expect_error(

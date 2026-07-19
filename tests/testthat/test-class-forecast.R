@@ -325,6 +325,102 @@ test_that("check_number_per_forecast works", {
 
 
 # ==============================================================================
+# check_observed_constant() # nolint: commented_code_linter
+# ==============================================================================
+test_that("check_observed_constant() works as expected", {
+  consistent <- data.table::data.table(
+    model = "m1", target = "t1",
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = 1:3,
+    observed = 10
+  )
+  expect_true(
+    check_observed_constant(consistent, forecast_unit = c("model", "target"))
+  )
+
+  conflicting <- data.table::copy(consistent)
+  conflicting$observed <- c(10, 10, 20)
+  result <- check_observed_constant(
+    conflicting,
+    forecast_unit = c("model", "target")
+  )
+  expect_type(result, "character")
+  expect_match(result, "different observed values")
+})
+
+test_that("check_observed_constant() ignores rows with NA observed values", {
+  dt <- data.table::data.table(
+    model = "m1", target = "t1",
+    sample_id = 1:4,
+    predicted = c(1, 2, 3, 4),
+    observed = c(5, 5, 5, NA)
+  )
+  expect_true(
+    check_observed_constant(dt, forecast_unit = c("model", "target"))
+  )
+})
+
+test_that("validation errors on conflicting observed values in a forecast unit", {
+  # quantile
+  expect_error(
+    as_forecast_quantile(data.table::data.table(
+      model = "m1", target = "t1",
+      quantile_level = c(0.25, 0.5, 0.75),
+      predicted = 1:3,
+      observed = c(10, 10, 20)
+    )),
+    "different observed values"
+  )
+
+  # sample
+  expect_error(
+    as_forecast_sample(data.table::data.table(
+      model = "m1", target = "t1",
+      sample_id = 1:4,
+      predicted = c(1, 2, 3, 4),
+      observed = c(5, 5, 5, 7)
+    )),
+    "different observed values"
+  )
+
+  # nominal
+  expect_error(
+    as_forecast_nominal(data.table::data.table(
+      model = "m1", target = "t1",
+      predicted_label = factor(c("a", "b", "c")),
+      predicted = c(0.2, 0.3, 0.5),
+      observed = factor(c("a", "a", "b"), levels = c("a", "b", "c"))
+    )),
+    "different observed values"
+  )
+})
+
+test_that("validation still passes when observed is constant apart from NAs", {
+  dt <- data.table::data.table(
+    model = "m1", target = "t1",
+    sample_id = 1:4,
+    predicted = c(1, 2, 3, 4),
+    observed = c(5, 5, 5, NA)
+  )
+  expect_s3_class(
+    suppressMessages(as_forecast_sample(dt)),
+    "forecast_sample"
+  )
+})
+
+test_that("multivariate sample forecasts with constant observed still validate", {
+  # observed varies across the multivariate group but not within a single
+  # (univariate) forecast unit, so this must not trigger the constancy check
+  expect_no_condition(
+    as_forecast_multivariate_sample(
+      na.omit(data.table::copy(example_sample_continuous)),
+      joint_across = c("location", "location_name")
+    )
+  )
+})
+
+
+# ==============================================================================
 # Test removing `NA` values from the data # nolint: commented_code_linter
 # ==============================================================================
 test_that("removing NA rows from data works as expected", {
