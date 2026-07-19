@@ -30,13 +30,17 @@ as_forecast_generic <- function(data,
     # renaming a column onto a name that already exists (and is not itself
     # being renamed away) would create duplicate column names
     remaining <- setdiff(colnames(data), oldnames)
-    collisions <- unique(newnames[newnames %in% remaining])
-    if (length(collisions) > 0) {
+    collides <- newnames %in% remaining
+    if (any(collides)) {
+      # sources/targets are used inside the cli glue strings below
+      sources <- oldnames[collides] # nolint: object_usage_linter.
+      targets <- newnames[collides] # nolint: object_usage_linter.
       cli_abort(
         c(
-          `!` = "Cannot rename to {.val {collisions}}: {?a column/columns}
-          with {?this name/these names} already exist{?s/} in the data.",
-          i = "Rename or remove the existing {cli::qty(collisions)}
+          `!` = "Cannot rename {cli::qty(sources)} column{?s} {.val {sources}}
+          to {.val {targets}}: {?a column/columns} with {?this name/these
+          names} already exist{?s/} in the data.",
+          i = "Rename or remove the existing {cli::qty(targets)}
           column{?s} first."
         )
       )

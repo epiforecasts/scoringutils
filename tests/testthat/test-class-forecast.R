@@ -15,7 +15,7 @@ test_that("as_forecast_generic() errors when renaming onto an existing column", 
   )
   expect_error(
     as_forecast_binary(dt, predicted = "prob"),
-    "already exists"
+    'rename column "prob" to "predicted".*already exists'
   )
 
   # same for other renameable columns, e.g. `quantile_level`
@@ -29,7 +29,25 @@ test_that("as_forecast_generic() errors when renaming onto an existing column", 
   )
   expect_error(
     as_forecast_quantile(quantile_dt, quantile_level = "q"),
-    "already exists"
+    'rename column "q" to "quantile_level".*already exists'
+  )
+
+  # multiple collisions produce a correctly pluralised message naming all
+  # source and target columns
+  multi_dt <- data.table::data.table(
+    model = "m",
+    id = 1:2,
+    observed = 1,
+    obs = 2,
+    predicted = 3,
+    prob = 4
+  )
+  expect_error(
+    as_forecast_binary(multi_dt, observed = "obs", predicted = "prob"),
+    paste0(
+      'rename\\s+columns\\s+"obs"\\s+and\\s+"prob"\\s+to\\s+"observed"',
+      '\\s+and\\s+"predicted".*already\\s+exist\\s+in\\s+the\\s+data'
+    )
   )
 })
 
