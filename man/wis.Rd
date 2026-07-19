@@ -131,6 +131,15 @@ The individual scores are usually weighted with
 for an increasing number of equally spaced quantiles, the WIS
 converges to the continuous ranked probability score (CRPS).
 
+Note that the equivalence between the WIS and the mean of the quantile
+scores (see \code{\link[=quantile_score]{quantile_score()}}) only holds for this default weighting
+(\code{weigh = TRUE}). With \code{weigh = FALSE} and the quantile levels 0 and 1
+present, the two differ: the 0\%-100\% prediction interval contributes its
+full dispersion to the unweighted interval score, whereas the quantile
+levels 0 and 1 contribute a score of 0 to the unweighted quantile scores.
+For example, \code{wis(5, matrix(c(1, 3, 5, 7, 9), nrow = 1), c(0, 0.25, 0.5, 0.75, 1), weigh = FALSE)} returns 4.8, while the
+corresponding call to \code{\link[=quantile_score]{quantile_score()}} returns 1.6.
+
 \strong{Quantile score}
 
 In addition to the interval score, there also exists a quantile score (QS)
