@@ -15,7 +15,7 @@
 #' @importFrom data.table setDT
 #' @importFrom stats cor na.omit
 #' @importFrom cli cli_warn
-#' @importFrom checkmate assert_subset
+#' @importFrom checkmate assert_character assert_subset
 #' @export
 #' @keywords scoring
 #' @examples
@@ -30,6 +30,7 @@ get_correlations <- function(scores,
                              ...) {
   scores <- ensure_data.table(scores)
   assert_subset(metrics, colnames(scores), empty.ok = FALSE)
+  assert_character(metrics, unique = TRUE)
   df <- scores[, .SD, .SDcols = metrics]
 
   # define correlation matrix

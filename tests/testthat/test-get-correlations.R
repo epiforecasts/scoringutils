@@ -30,6 +30,12 @@ test_that("get_correlations() works as expected", {
     get_correlations(as.data.frame(as.matrix(scores_quantile))),
     "Assertion on 'metrics' failed: Must be a subset of"
   )
+
+  # check we get an error if `metrics` contains duplicates
+  expect_error(
+    get_correlations(scores_quantile, metrics = c("wis", "wis", "bias")),
+    "Assertion on 'metrics' failed: Contains duplicated values"
+  )
 })
 
 test_that("get_correlations() respects the order of the `metrics` argument", {
@@ -114,6 +120,36 @@ test_that("plot_correlations() aligns cells with non-default metrics order", {
       true_cor_subset[
         cbind(as.character(pd_subset$metric), as.character(pd_subset$variable))
       ],
+      2
+    ),
+    ignore_attr = TRUE
+  )
+})
+
+test_that("plot_correlations() aligns rows of a row-scrambled input", {
+  # simulate an object created by the pre-fix get_correlations():
+  # rows (and the `metric` column) in data-column order, but the `metrics`
+  # attribute in a different, user-supplied order
+  summarised <- summarise_scores(scores_quantile)
+  data_order <- get_metrics.scores(scores_quantile)
+  m <- rev(data_order)
+  true_cor <- stats::cor(as.matrix(summarised[, .SD, .SDcols = data_order]))
+  scrambled <- data.table::as.data.table(true_cor)[, metric := data_order]
+  attr(scrambled, "metrics") <- m
+
+  p <- plot_correlations(scrambled, digits = 2)
+  pd <- data.table::as.data.table(p$data)
+
+  # the diagonal of the plotted heatmap must be 1
+  expect_true(
+    all(pd[as.character(metric) == as.character(variable)]$value == 1)
+  )
+
+  # every plotted cell must match the true correlation matrix
+  expect_equal(
+    pd$value,
+    round(
+      true_cor[cbind(as.character(pd$metric), as.character(pd$variable))],
       2
     ),
     ignore_attr = TRUE
