@@ -67,7 +67,9 @@
 #'   will be one relative skill score per distinct entry of the column selected
 #'   in `compare`. If further columns are given here, for example, `by =
 #'   "location"` with `compare = "model"`, then one separate relative skill
-#'   score is calculated for every model in every location.
+#'   score is calculated for every model in every location. Subgroups with
+#'   fewer than two comparators are skipped with a warning; if no subgroup
+#'   has at least two comparators, an error is thrown.
 #' @param metric A string with the name of the metric for which
 #'   a relative skill shall be computed. By default this is either "crps",
 #'   "wis" or "brier_score" if any of these are available.
@@ -217,8 +219,45 @@ get_pairwise_comparisons <- function(
   }
 
   # do the pairwise comparison -------------------------------------------------
-  # split data set into groups determined by 'by'
-  split_scores <- split(scores, by = by)
+  # split data set into groups determined by 'by'. `drop = TRUE` silently
+  # drops empty groups (e.g. from unused factor levels in a `by` column) so
+  # that only subgroups actually present in the data are compared.
+  split_scores <- split(scores, by = by, drop = TRUE)
+
+  # exclude groups with fewer than two comparators, as no pairwise comparison
+  # is possible there. Error if no group has enough comparators.
+  n_comparators <- vapply(
+    split_scores,
+    function(x) length(unique(x[[compare]])),
+    integer(1)
+  )
+  if (all(n_comparators < 2)) {
+    cli_abort(
+      c(`!` = "There are not enough comparators to do any comparison")
+    )
+  }
+  if (any(n_comparators < 2)) {
+    #nolint start: object_usage_linter
+    too_few <- vapply(
+      split_scores[n_comparators < 2],
+      function(x) {
+        toString(
+          paste0(by, "=", vapply(by, function(col) {
+            format(x[[col]][1])
+          }, character(1)))
+        )
+      },
+      character(1)
+    )
+    cli_warn(
+      c(
+        `!` = "Some groups have fewer than two comparators and were excluded
+        from the pairwise comparisons: {.val {too_few}}"
+      )
+    )
+    #nolint end
+    split_scores <- split_scores[n_comparators >= 2]
+  }
 
   results <- lapply(split_scores,
     FUN = function(scores) {
@@ -249,6 +288,11 @@ get_pairwise_comparisons <- function(
 #' that subgroup is managed from [pairwise_comparison_one_group()]. In order to
 #' actually do the comparison between two models over a subset of common
 #' forecasts it calls [compare_forecasts()].
+#' @param by Character vector with column names that define further grouping
+#'   levels for the pairwise comparisons. Unlike
+#'   [get_pairwise_comparisons()], this function does not skip subgroups with
+#'   fewer than two comparators: it operates on a single subgroup and throws
+#'   an error if `scores` contains fewer than two comparators.
 #' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
 #' @importFrom data.table setnames
