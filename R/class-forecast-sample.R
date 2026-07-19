@@ -103,7 +103,7 @@ as_forecast_quantile.forecast_sample <- function(
   ...
 ) {
   forecast <- as.data.table(data)
-  assert_numeric(probs, min.len = 1, lower = 0, upper = 1)
+  assert_numeric(probs, min.len = 1, lower = 0, upper = 1, any.missing = FALSE)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(forecast), reserved_columns)
 

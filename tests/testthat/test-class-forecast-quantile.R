@@ -220,6 +220,21 @@ test_that("as_forecast_quantiles errors on out-of-range probs", {
   )
 })
 
+test_that("as_forecast_quantiles errors on missing values in probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  expect_error(
+    as_forecast_quantile(samples, probs = c(0.5, NA)),
+    "Assertion on 'probs' failed"
+  )
+})
+
 test_that("as_forecast_quantiles issue 557 fix", {
   out <- example_sample_discrete |>
     na.omit() |>
