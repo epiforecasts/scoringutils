@@ -1,4 +1,7 @@
 url: https://epiforecasts.io/scoringutils/
+
+redirects:
+  - ["articles/getting-started.html", "articles/scoringutils.html"]
 template:
   math-rendering: mathjax
   bootstrap: 5
