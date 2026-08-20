@@ -80,13 +80,15 @@ as_forecast_multivariate_sample.default <- function(data,
 #' @export
 #' @rdname assert_forecast
 #' @importFrom cli cli_abort qty
-#' @importFrom checkmate assert_subset
+#' @importFrom checkmate assert_subset assert_numeric
 #' @keywords validate-forecast-object
 assert_forecast.forecast_multivariate_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   assert_subset(c("sample_id", ".mv_group_id"), colnames(forecast))
   forecast <- assert_forecast_generic(forecast, verbose)
+  assert_numeric(forecast$observed, .var.name = "observed")
+  assert_numeric(forecast$predicted, .var.name = "predicted")
 
   # make sure that for every .mv_group_id, the number of samples per
   # forecast unit is the same

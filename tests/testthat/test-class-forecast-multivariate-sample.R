@@ -20,6 +20,26 @@ test_that("as_forecast_multivariate_sample() works as expected", {
   )
 })
 
+test_that("as_forecast_multivariate_sample() errors on non-numeric observed and predicted", {
+  df <- data.frame(
+    observed = as.character(c(5, 5, 5, 6, 6, 6)),
+    predicted = as.character(c(4, 5, 6, 5, 6, 7)),
+    sample_id = rep(1:3, 2),
+    location = rep(c("A", "B"), each = 3),
+    model = "m1"
+  )
+  expect_error(
+    as_forecast_multivariate_sample(df, joint_across = "location"),
+    "Must be of type 'numeric', not 'character'"
+  )
+
+  df$observed <- c(5, 5, 5, 6, 6, 6)
+  expect_error(
+    as_forecast_multivariate_sample(df, joint_across = "location"),
+    "Must be of type 'numeric', not 'character'"
+  )
+})
+
 test_that("as_forecast_multivariate_sample() creates expected structure", {
   test <- na.omit(data.table::copy(example_sample_continuous))
   data.table::setnames(test,
