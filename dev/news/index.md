@@ -2,6 +2,23 @@
 
 ## scoringutils (development version)
 
+- Fixed several validation and messaging issues
+  ([\#1211](https://github.com/epiforecasts/scoringutils/issues/1211)):
+  [`as_forecast_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_sample.md),
+  [`as_forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_quantile.md)
+  and
+  [`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md)
+  now error at validation time when `observed` or `predicted` are not
+  numeric, instead of failing later inside
+  [`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md);
+  the rounding warning in
+  [`as_forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_quantile.md)
+  now correctly states that quantile levels are rounded to 9 digits; and
+  [`get_pit_histogram()`](https://epiforecasts.io/scoringutils/dev/reference/get_pit_histogram.md)
+  for quantile-based forecasts now displays its full warning message and
+  actually falls back to the quantiles present in the forecast when
+  requested quantiles are missing, instead of returning an empty or
+  incorrect result.
 - Added
   [`filter_scores()`](https://epiforecasts.io/scoringutils/dev/reference/filter_scores.md)
   and
