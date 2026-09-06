@@ -732,3 +732,23 @@ test_that("get_pairwise_comparisons() works when `compare` is a factor", {
     pairwise_character[order(model, compare_against)]
   )
 })
+
+test_that("add_relative_skill() skips the test by default", {
+  scores <- data.table::copy(scores_quantile)
+  # tie the scores of two models so that wilcox.test() would warn
+  scores[model == "EuroCOVIDhub-baseline", wis := 1]
+  scores[model == "EuroCOVIDhub-ensemble", wis := 1]
+
+  with_test <- suppressWarnings(
+    add_relative_skill(scores, metric = "wis", test_type = "non_parametric")
+  )
+  expect_warning(
+    add_relative_skill(scores, metric = "wis", test_type = "non_parametric"),
+    "cannot compute exact p-value"
+  )
+  without_test <- expect_no_warning(
+    add_relative_skill(scores, metric = "wis")
+  )
+  expect_identical(without_test, with_test)
+  expect_false("pval" %in% colnames(without_test))
+})

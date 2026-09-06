@@ -673,7 +673,17 @@ permutation_test <- function(scores1,
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
 #'
+#' Unlike [get_pairwise_comparisons()], this function does not return
+#' p-values. By default no statistical test is therefore run for the
+#' pairwise comparisons (`test_type = NULL`), which avoids unnecessary
+#' computation. Relative skill scores do not depend on `test_type`.
+#'
 #' @inheritParams get_pairwise_comparisons
+#' @param test_type Character, either "non_parametric", "permutation", or
+#'   `NULL` (the default). Determines which kind of test is run for the
+#'   pairwise comparisons. As p-values are not returned by
+#'   `add_relative_skill()`, no test is run by default. See
+#'   [compare_forecasts()] for more information.
 #' @export
 #' @keywords scoring
 add_relative_skill <- function(
@@ -682,6 +692,7 @@ add_relative_skill <- function(
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
+  test_type = NULL,
   ...
 ) {
 
@@ -693,6 +704,7 @@ add_relative_skill <- function(
     baseline = baseline,
     compare = compare,
     by = by,
+    test_type = test_type,
     ...
   )
 
