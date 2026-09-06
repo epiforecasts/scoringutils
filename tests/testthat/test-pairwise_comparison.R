@@ -734,10 +734,12 @@ test_that("get_pairwise_comparisons() works when `compare` is a factor", {
 })
 
 test_that("add_relative_skill() skips the test by default", {
-  scores <- data.table::copy(scores_quantile)
-  # tie the scores of two models so that wilcox.test() would warn
+  # use a small subset (fewer than 50 forecasts per model) so that
+  # wilcox.test() attempts an exact test, and make the paired differences
+  # between two models tied (but non-zero) so that it warns
+  scores <- scores_quantile[location == "DE" & target_type == "Cases"]
   scores[model == "EuroCOVIDhub-baseline", wis := 1]
-  scores[model == "EuroCOVIDhub-ensemble", wis := 1]
+  scores[model == "EuroCOVIDhub-ensemble", wis := 2]
 
   with_test <- suppressWarnings(
     add_relative_skill(scores, metric = "wis", test_type = "non_parametric")
