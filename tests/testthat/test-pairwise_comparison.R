@@ -734,23 +734,27 @@ test_that("get_pairwise_comparisons() works when `compare` is a factor", {
 })
 
 test_that("add_relative_skill() skips the test by default", {
-  # use a small subset (fewer than 50 forecasts per model) so that
-  # wilcox.test() attempts an exact test, and make the paired differences
-  # between two models tied (but non-zero) so that it warns
-  scores <- scores_quantile[location == "DE" & target_type == "Cases"]
-  scores[model == "EuroCOVIDhub-baseline", wis := 1]
-  scores[model == "EuroCOVIDhub-ensemble", wis := 2]
+  scores <- data.table::copy(scores_quantile)
 
-  with_test <- suppressWarnings(
-    add_relative_skill(scores, metric = "wis", test_type = "non_parametric")
+  # count calls to wilcox.test() rather than relying on its warnings, which
+  # differ across R versions
+  calls <- new.env()
+  calls$n <- 0L
+  testthat::local_mocked_bindings(
+    wilcox.test = function(...) {
+      calls$n <- calls$n + 1L
+      list(p.value = NA_real_)
+    },
+    .package = "scoringutils"
   )
-  expect_warning(
-    add_relative_skill(scores, metric = "wis", test_type = "non_parametric"),
-    "cannot compute exact p-value"
-  )
-  without_test <- expect_no_warning(
-    add_relative_skill(scores, metric = "wis")
-  )
-  expect_identical(without_test, with_test)
+
+  without_test <- expect_no_warning(add_relative_skill(scores, metric = "wis"))
+  expect_identical(calls$n, 0L)
   expect_false("pval" %in% colnames(without_test))
+
+  with_test <- add_relative_skill(
+    scores, metric = "wis", test_type = "non_parametric"
+  )
+  expect_gt(calls$n, 0L)
+  expect_identical(without_test, with_test)
 })
