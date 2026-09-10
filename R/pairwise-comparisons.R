@@ -250,7 +250,7 @@ get_pairwise_comparisons <- function(
 #'
 #' Internally, the scores are pivoted once into a matrix with one row per
 #' forecast unit (excluding the `compare` column) and one column per
-#' comparator (see [.pivot_scores()]). The set of overlapping forecasts for
+#' comparator (see [pivot_scores()]). The set of overlapping forecasts for
 #' any pair of comparators is then simply the set of rows for which both
 #' columns are non-missing.
 #' @inherit get_pairwise_comparisons params return
@@ -292,7 +292,7 @@ pairwise_comparison_one_group <- function(scores,
   # pivot the scores once into a forecast unit x comparator matrix. For every
   # pair of comparators the overlapping forecasts are the rows where both
   # columns are non-missing.
-  score_matrix <- .pivot_scores(scores, compare = compare, metric = metric)
+  score_matrix <- pivot_scores(scores, compare = compare, metric = metric)
   idx1 <- match(as.character(combinations$..compare), colnames(score_matrix))
   idx2 <- match(
     as.character(combinations$compare_against), colnames(score_matrix)
@@ -307,7 +307,7 @@ pairwise_comparison_one_group <- function(scores,
     if (!any(overlap)) {
       next
     }
-    comparison <- .compare_scores(values_x[overlap], values_y[overlap], ...)
+    comparison <- compare_scores(values_x[overlap], values_y[overlap], ...)
     ratios[i] <- comparison$mean_scores_ratio
     pvals[i] <- comparison$pval
   }
@@ -402,8 +402,9 @@ pairwise_comparison_one_group <- function(scores,
 #'
 #' The function is used by [pairwise_comparison_one_group()] to align the
 #' scores of all comparators once, rather than once per pair of comparators.
-#' It errors if there is more than one score for the same forecast unit and
-#' comparator, as the scores could then not be pivoted unambiguously.
+#' Exact duplicate rows are dropped silently; rows that share a forecast
+#' unit and comparator but differ in the score value raise an error, as the
+#' scores could then not be pivoted unambiguously.
 #' @inheritParams get_pairwise_comparisons
 #' @returns A numeric matrix with one row per forecast unit and one column
 #'   per comparator. Column names are the comparators (as character).
@@ -411,7 +412,7 @@ pairwise_comparison_one_group <- function(scores,
 #' @importFrom stats as.formula
 #' @importFrom cli cli_abort
 #' @keywords internal
-.pivot_scores <- function(scores, compare = "model", metric) {
+pivot_scores <- function(scores, compare = "model", metric) {
   forecast_unit <- get_forecast_unit(scores)
   merge_by <- setdiff(forecast_unit, compare)
 
@@ -468,7 +469,7 @@ pairwise_comparison_one_group <- function(scores,
 #' @inherit compare_forecasts return
 #' @importFrom stats wilcox.test
 #' @keywords internal
-.compare_scores <- function(
+compare_scores <- function(
   values_x,
   values_y,
   one_sided = FALSE,
@@ -515,10 +516,10 @@ pairwise_comparison_one_group <- function(scores,
 #' This function compares two comparators based on the subset of forecasts for
 #' which both comparators have made a prediction. The overlapping forecasts
 #' are found by merging the scores of the two comparators on the forecast
-#' unit. The actual comparison is then done by [.compare_scores()].
+#' unit. The actual comparison is then done by [compare_scores()].
 #'
 #' [pairwise_comparison_one_group()] does not call this function; it aligns
-#' all comparators at once via [.pivot_scores()]. [compare_forecasts()] is
+#' all comparators at once via [pivot_scores()]. [compare_forecasts()] is
 #' kept as a reference implementation for testing.
 #' @inheritParams get_pairwise_comparisons
 #' @param name_comparator1 Character, name of the first comparator
@@ -573,7 +574,7 @@ compare_forecasts <- function(scores,
   values_x <- overlap[[paste0(metric, ".x")]]
   values_y <- overlap[[paste0(metric, ".y")]]
 
-  return(.compare_scores(
+  return(compare_scores(
     values_x = values_x,
     values_y = values_y,
     one_sided = one_sided,

@@ -58,7 +58,7 @@ that subgroup is managed from \code{\link[=pairwise_comparison_one_group]{pairwi
 
 Internally, the scores are pivoted once into a matrix with one row per
 forecast unit (excluding the \code{compare} column) and one column per
-comparator (see \code{\link[=.pivot_scores]{.pivot_scores()}}). The set of overlapping forecasts for
+comparator (see \code{\link[=pivot_scores]{pivot_scores()}}). The set of overlapping forecasts for
 any pair of comparators is then simply the set of rows for which both
 columns are non-missing.
 }

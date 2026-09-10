@@ -608,12 +608,12 @@ test_that("add_relative_skill() works without warnings when not computing p-valu
 
 # tests for the pivot-based implementation ------------------------------------
 
-test_that(".pivot_scores() pivots scores into a forecast unit x model matrix", {
+test_that("pivot_scores() pivots scores into a forecast unit x model matrix", {
   scores <- data.table::copy(scores_quantile)
   # drop some forecasts for one model to create missing overlap
   scores <- scores[!(model == "EuroCOVIDhub-ensemble" & location == "DE")]
 
-  score_matrix <- .pivot_scores(scores, compare = "model", metric = "wis")
+  score_matrix <- pivot_scores(scores, compare = "model", metric = "wis")
   forecast_unit <- setdiff(get_forecast_unit(scores), "model")
   n_units <- nrow(unique(scores[, forecast_unit, with = FALSE]))
 
@@ -631,19 +631,19 @@ test_that(".pivot_scores() pivots scores into a forecast unit x model matrix", {
   )
 })
 
-test_that(".pivot_scores() errors with duplicated scores per forecast unit", {
+test_that("pivot_scores() errors with duplicated scores per forecast unit", {
   scores <- data.table::copy(scores_quantile)
   metrics <- get_metrics(scores)
   duplicated_scores <- rbind(scores, scores[1:5][, wis := wis + 1])
   duplicated_scores <- new_scores(duplicated_scores, metrics = metrics)
   expect_error(
-    .pivot_scores(duplicated_scores, compare = "model", metric = "wis"),
+    pivot_scores(duplicated_scores, compare = "model", metric = "wis"),
     "more than one score for the same forecast unit"
   )
   # exact duplicates are removed rather than causing an error
   exact_duplicates <- new_scores(rbind(scores, scores[1:5]), metrics = metrics)
   expect_no_error(
-    .pivot_scores(exact_duplicates, compare = "model", metric = "wis")
+    pivot_scores(exact_duplicates, compare = "model", metric = "wis")
   )
 })
 
