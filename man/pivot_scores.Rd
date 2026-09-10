@@ -32,7 +32,7 @@ provide a forecast for a given forecast unit.
 The function is used by \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}} to align the
 scores of all comparators once, rather than once per pair of comparators.
 Exact duplicate rows are dropped silently; rows that share a forecast
-unit and comparator but differ in the score value raise an error, as the
-scores could then not be pivoted unambiguously.
+unit and comparator but are not otherwise identical raise an error, as
+the scores could then not be pivoted unambiguously.
 }
 \keyword{internal}

@@ -403,8 +403,8 @@ pairwise_comparison_one_group <- function(scores,
 #' The function is used by [pairwise_comparison_one_group()] to align the
 #' scores of all comparators once, rather than once per pair of comparators.
 #' Exact duplicate rows are dropped silently; rows that share a forecast
-#' unit and comparator but differ in the score value raise an error, as the
-#' scores could then not be pivoted unambiguously.
+#' unit and comparator but are not otherwise identical raise an error, as
+#' the scores could then not be pivoted unambiguously.
 #' @inheritParams get_pairwise_comparisons
 #' @returns A numeric matrix with one row per forecast unit and one column
 #'   per comparator. Column names are the comparators (as character).
@@ -450,7 +450,6 @@ pivot_scores <- function(scores, compare = "model", metric) {
   # single placeholder column if `merge_by` is empty)
   value_cols <- setdiff(names(wide), c(merge_by, "."))
   score_matrix <- as.matrix(wide[, value_cols, with = FALSE])
-  colnames(score_matrix) <- value_cols
   return(score_matrix)
 }
 
