@@ -133,6 +133,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/plot_pairwise_comparisons.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/plot_quantile_coverage.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/plot_wis.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/prepare_forecast_for_scoring.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/print.forecast.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/print.scores.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/quantile_score.html</loc></url>

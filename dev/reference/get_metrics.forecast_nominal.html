@@ -108,12 +108,14 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (n == 1) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         predicted &lt;- matrix(predicted, nrow = 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     predicted &lt;- predicted[, order(as.numeric(predicted_label)), </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         drop = FALSE]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     observed_indices &lt;- as.numeric(observed)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     pred_for_observed &lt;- predicted[cbind(1:n, observed_indices)]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     logs &lt;- -log(pred_for_observed)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(logs)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5588680f5eb8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5580cb41ca28&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

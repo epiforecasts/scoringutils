@@ -63,12 +63,14 @@ get_metrics(example_ordinal)
 #>     if (n == 1) {
 #>         predicted <- matrix(predicted, nrow = 1)
 #>     }
+#>     predicted <- predicted[, order(as.numeric(predicted_label)), 
+#>         drop = FALSE]
 #>     observed_indices <- as.numeric(observed)
 #>     pred_for_observed <- predicted[cbind(1:n, observed_indices)]
 #>     logs <- -log(pred_for_observed)
 #>     return(logs)
 #> }
-#> <bytecode: 0x5588680f5eb8>
+#> <bytecode: 0x5580cb41ca28>
 #> <environment: namespace:scoringutils>
 #> 
 #> $rps
@@ -79,12 +81,12 @@ get_metrics(example_ordinal)
 #>     if (n == 1) {
 #>         predicted <- matrix(predicted, nrow = 1)
 #>     }
-#>     correct_order <- as.numeric(predicted_label)
-#>     ordered_predicted <- predicted[, correct_order]
+#>     ordered_predicted <- predicted[, order(as.numeric(predicted_label)), 
+#>         drop = FALSE]
 #>     rps <- rps_probs(as.numeric(observed), ordered_predicted)
 #>     return(rps)
 #> }
-#> <bytecode: 0x55886736aa40>
+#> <bytecode: 0x5580c5bc2f38>
 #> <environment: namespace:scoringutils>
 #> 
 ```

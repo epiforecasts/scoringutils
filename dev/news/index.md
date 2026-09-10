@@ -2,6 +2,35 @@
 
 ## scoringutils (development version)
 
+- Fixed
+  [`rps_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/rps_ordinal.md)
+  and
+  [`logs_categorical()`](https://epiforecasts.io/scoringutils/dev/reference/scoring-functions-nominal.md)
+  returning wrong scores when called directly with a `predicted_label`
+  that was not in the order of the factor levels:
+  [`rps_ordinal()`](https://epiforecasts.io/scoringutils/dev/reference/rps_ordinal.md)
+  applied the wrong (forward instead of inverse) permutation when
+  reordering the columns of `predicted`, and
+  [`logs_categorical()`](https://epiforecasts.io/scoringutils/dev/reference/scoring-functions-nominal.md)
+  ignored `predicted_label` entirely. Scores are now invariant to how
+  the columns of `predicted` are labelled. Forecasts scored via
+  [`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md)
+  were unaffected, as the pipeline sorts predictions into level order
+  before calling the metrics. Additionally, input validation for
+  categorical forecasts now errors when `predicted` has more or fewer
+  columns than there are factor levels for inputs with more than one
+  observation (previously such input was silently accepted and scored
+  meaninglessly; the check already existed for a single observation)
+  ([\#1200](https://github.com/epiforecasts/scoringutils/issues/1200)).
+- Added an internal helper
+  [`prepare_forecast_for_scoring()`](https://epiforecasts.io/scoringutils/dev/reference/prepare_forecast_for_scoring.md)
+  that consolidates the input preparation steps previously duplicated
+  across the
+  [`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md)
+  methods: cleaning the forecast, validating the metrics and converting
+  to a plain `data.table`, plus determining the forecast unit for the
+  methods that need it
+  ([\#941](https://github.com/epiforecasts/scoringutils/issues/941)).
 - Fixed the sample-based metrics
   [`bias_sample()`](https://epiforecasts.io/scoringutils/dev/reference/bias_sample.md),
   [`ae_median_sample()`](https://epiforecasts.io/scoringutils/dev/reference/ae_median_sample.md),

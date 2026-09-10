@@ -458,6 +458,9 @@
 - [`pivot_scores()`](https://epiforecasts.io/scoringutils/dev/reference/pivot_scores.md)
   : Pivot scores into a forecast unit by comparator matrix
 
+- [`prepare_forecast_for_scoring()`](https://epiforecasts.io/scoringutils/dev/reference/prepare_forecast_for_scoring.md)
+  : Prepare a forecast object for scoring
+
 - [`quantile_to_interval()`](https://epiforecasts.io/scoringutils/dev/reference/quantile_to_interval.md)
   [`quantile_to_interval_dataframe()`](https://epiforecasts.io/scoringutils/dev/reference/quantile_to_interval.md)
   [`quantile_to_interval_numeric()`](https://epiforecasts.io/scoringutils/dev/reference/quantile_to_interval.md)

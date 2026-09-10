@@ -111,12 +111,14 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (n == 1) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         predicted &lt;- matrix(predicted, nrow = 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     predicted &lt;- predicted[, order(as.numeric(predicted_label)), </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         drop = FALSE]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     observed_indices &lt;- as.numeric(observed)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     pred_for_observed &lt;- predicted[cbind(1:n, observed_indices)]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     logs &lt;- -log(pred_for_observed)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(logs)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5588680f5eb8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5580cb41ca28&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $rps</span>
@@ -127,12 +129,12 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (n == 1) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         predicted &lt;- matrix(predicted, nrow = 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     correct_order &lt;- as.numeric(predicted_label)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ordered_predicted &lt;- predicted[, correct_order]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ordered_predicted &lt;- predicted[, order(as.numeric(predicted_label)), </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         drop = FALSE]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     rps &lt;- rps_probs(as.numeric(observed), ordered_predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(rps)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55886736aa40&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5580c5bc2f38&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
