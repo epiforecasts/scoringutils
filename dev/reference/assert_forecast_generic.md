@@ -10,6 +10,8 @@ of forecast type. The function
 
 - checks there are no duplicate forecasts
 
+- checks that observed values are constant within each forecast unit
+
 - if appropriate, checks the number of samples / quantiles is the same
   for all forecasts.
 

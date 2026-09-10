@@ -2,6 +2,23 @@
 
 ## scoringutils (development version)
 
+- Fixed
+  [`bias_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/bias_quantile.md)
+  returning wrong values when quantile levels were passed unsorted:
+  predictions were reordered by quantile level but the quantile levels
+  themselves were not, so predictions and levels became mispaired. Also
+  fixed a crash (“argument is of length zero”) when `na.rm = TRUE`
+  removed all quantile levels on one side of the median;
+  [`bias_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/bias_quantile.md)
+  now returns `NA` in this case, consistent with `na.rm = FALSE`
+  ([\#1198](https://github.com/epiforecasts/scoringutils/issues/1198)).
+- Forecast validation now errors when the same forecast unit has
+  conflicting observed values. Previously, such invalid data passed
+  validation for quantile, sample, nominal, ordinal and multivariate
+  sample forecasts and
+  [`score()`](https://epiforecasts.io/scoringutils/dev/reference/score.md)
+  silently returned multiple wrong score rows for a single forecast
+  ([\#1201](https://github.com/epiforecasts/scoringutils/issues/1201)).
 - Fixed `as_forecast_<type>()` functions silently creating forecast
   objects with duplicate column names when asked to rename a column onto
   a name that already exists in the data (e.g. `predicted = "prob"`

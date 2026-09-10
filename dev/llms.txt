@@ -647,6 +647,8 @@ specification. Contributions of any kind are welcome!
   : Check that all forecasts have the same number of rows
 - [`check_numeric_vector()`](https://epiforecasts.io/scoringutils/dev/reference/check_numeric_vector.md)
   : Check whether an input is an atomic vector of mode 'numeric'
+- [`check_observed_constant()`](https://epiforecasts.io/scoringutils/dev/reference/check_observed_constant.md)
+  : Check that observed values are constant within each forecast unit
 - [`check_try()`](https://epiforecasts.io/scoringutils/dev/reference/check_try.md)
   : Helper function to convert assert statements into checks
 - [`get_forecast_type()`](https://epiforecasts.io/scoringutils/dev/reference/get_forecast_type.md)
