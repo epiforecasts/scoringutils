@@ -163,17 +163,28 @@ interval_score <- function(observed,
   # calculate alpha from the interval range
   alpha <- (100 - interval_range) / 100
 
-  # calculate three components of WIS
+  # calculate three components of WIS. The penalties are computed per unit
+  # (indicator applied first, without the 2 / alpha factor) so that quantile
+  # levels 0 and 1 (interval_range = 100, i.e. alpha = 0) yield finite scores
+  # instead of Inf * 0 = NaN
   dispersion <- (upper - lower)
-  overprediction <-
-    2 / alpha * (lower - observed) * as.numeric(observed < lower)
-  underprediction <-
-    2 / alpha * (observed - upper) * as.numeric(observed > upper)
+  overprediction <- (lower - observed) * as.numeric(observed < lower)
+  underprediction <- (observed - upper) * as.numeric(observed > upper)
 
   if (weigh) {
+    # the weight alpha / 2 cancels analytically with the 2 / alpha factor of
+    # the penalties, so only the dispersion needs to be weighted
     dispersion <- dispersion * alpha / 2
-    underprediction <- underprediction * alpha / 2
-    overprediction <- overprediction * alpha / 2
+  } else {
+    # zero penalties stay zero; otherwise apply the 2 / alpha factor, which
+    # correctly yields Inf when the observation falls outside a 100%
+    # prediction interval
+    overprediction <- ifelse(
+      overprediction == 0, 0, 2 / alpha * overprediction
+    )
+    underprediction <- ifelse(
+      underprediction == 0, 0, 2 / alpha * underprediction
+    )
   }
 
   score <- dispersion + underprediction + overprediction
