@@ -605,3 +605,179 @@ test_that("add_relative_skill() works without warnings when not computing p-valu
   expect_type(scores_w_rel_skill$ae_median_relative_skill, "double")
   expect_false(anyNA(scores_w_rel_skill$ae_median_relative_skill))
 })
+
+# tests for the pivot-based implementation ------------------------------------
+
+test_that("pivot_scores() pivots scores into a forecast unit x model matrix", {
+  scores <- data.table::copy(scores_quantile)
+  # drop some forecasts for one model to create missing overlap
+  scores <- scores[!(model == "EuroCOVIDhub-ensemble" & location == "DE")]
+
+  score_matrix <- pivot_scores(scores, compare = "model", metric = "wis")
+  forecast_unit <- setdiff(get_forecast_unit(scores), "model")
+  n_units <- nrow(unique(scores[, forecast_unit, with = FALSE]))
+
+  expect_true(is.matrix(score_matrix))
+  expect_type(score_matrix, "double")
+  expect_identical(nrow(score_matrix), n_units)
+  expect_setequal(colnames(score_matrix), unique(scores$model))
+  expect_identical(
+    sum(!is.na(score_matrix[, "EuroCOVIDhub-ensemble"])),
+    nrow(scores[model == "EuroCOVIDhub-ensemble"])
+  )
+  expect_identical(
+    sum(!is.na(score_matrix)),
+    nrow(scores)
+  )
+})
+
+test_that("pivot_scores() errors with duplicated scores per forecast unit", {
+  scores <- data.table::copy(scores_quantile)
+  metrics <- get_metrics(scores)
+  duplicated_scores <- rbind(scores, scores[1:5][, wis := wis + 1])
+  duplicated_scores <- new_scores(duplicated_scores, metrics = metrics)
+  expect_error(
+    pivot_scores(duplicated_scores, compare = "model", metric = "wis"),
+    "more than one score for the same forecast unit"
+  )
+  # exact duplicates are removed rather than causing an error
+  exact_duplicates <- new_scores(rbind(scores, scores[1:5]), metrics = metrics)
+  expect_no_error(
+    pivot_scores(exact_duplicates, compare = "model", metric = "wis")
+  )
+})
+
+test_that("get_pairwise_comparisons() and add_relative_skill() error on duplicated scores through the public API", {
+  scores <- data.table::copy(scores_quantile)
+  metrics <- get_metrics(scores)
+  duplicated_scores <- rbind(scores, scores[1:5][, wis := wis + 1])
+  duplicated_scores <- new_scores(duplicated_scores, metrics = metrics)
+
+  expect_error(
+    get_pairwise_comparisons(duplicated_scores, metric = "wis"),
+    "more than one score for the same forecast unit"
+  )
+  expect_error(
+    suppressMessages(add_relative_skill(duplicated_scores, metric = "wis")),
+    "more than one score for the same forecast unit"
+  )
+
+  # exact duplicates are removed rather than causing an error
+  exact_duplicates <- new_scores(rbind(scores, scores[1:5]), metrics = metrics)
+  expect_no_error(get_pairwise_comparisons(exact_duplicates, metric = "wis"))
+  expect_no_error(
+    suppressMessages(add_relative_skill(exact_duplicates, metric = "wis"))
+  )
+})
+
+test_that("get_pairwise_comparisons() matches per-pair compare_forecasts()", {
+  scores <- data.table::copy(scores_quantile)
+  # drop some forecasts so that models do not overlap perfectly and so that
+  # one pair of models has no overlapping forecasts at all
+  scores <- scores[!(model == "EuroCOVIDhub-ensemble" & location == "DE")]
+  scores <- scores[!(model == "EuroCOVIDhub-ensemble" & target_type == "Cases")]
+  scores <- scores[!(model == "epiforecasts-EpiNow2" & target_type == "Deaths")]
+
+  reference <- function(scores, ...) {
+    models <- unique(scores$model)
+    pairs <- data.table::as.data.table(t(combn(models, m = 2)))
+    data.table::setnames(pairs, c("model", "compare_against"))
+    pairs[, c("mean_scores_ratio", "pval") := compare_forecasts(
+      scores = scores,
+      compare = "model",
+      name_comparator1 = model,
+      name_comparator2 = compare_against,
+      metric = "wis",
+      ...
+    ), by = seq_len(nrow(pairs))]
+    pairs[]
+  }
+
+  check_against_reference <- function(pairwise, reference) {
+    merged <- merge(
+      pairwise, reference,
+      by = c("model", "compare_against"), suffixes = c("", "_ref")
+    )
+    expect_identical(nrow(merged), nrow(reference))
+    expect_identical(merged$mean_scores_ratio, merged$mean_scores_ratio_ref)
+    expect_identical(merged$pval, merged$pval_ref)
+  }
+
+  # default non-parametric test, no grouping
+  pairwise <- get_pairwise_comparisons(scores, metric = "wis")
+  check_against_reference(pairwise, reference(scores))
+
+  # pairs without any overlap get NA
+  expect_true(anyNA(pairwise$mean_scores_ratio))
+
+  # grouping via `by`
+  pairwise_by <- get_pairwise_comparisons(
+    scores, metric = "wis", by = "target_type"
+  )
+  reference_by <- scores[, reference(.SD), by = "target_type"]
+  merged <- merge(
+    pairwise_by, reference_by,
+    by = c("target_type", "model", "compare_against"),
+    suffixes = c("", "_ref")
+  )
+  expect_identical(nrow(merged), nrow(reference_by))
+  expect_identical(merged$mean_scores_ratio, merged$mean_scores_ratio_ref)
+  expect_identical(merged$pval, merged$pval_ref)
+
+  # no test
+  pairwise_notest <- get_pairwise_comparisons(
+    scores, metric = "wis", test_type = NULL
+  )
+  check_against_reference(pairwise_notest, reference(scores, test_type = NULL))
+  expect_true(all(is.na(pairwise_notest[model != compare_against]$pval)))
+
+  # permutation test with the same seed gives the same p-values
+  set.seed(42)
+  pairwise_perm <- get_pairwise_comparisons(
+    scores, metric = "wis", test_type = "permutation", n_permutations = 50
+  )
+  set.seed(42)
+  reference_perm <- reference(
+    scores, test_type = "permutation", n_permutations = 50
+  )
+  check_against_reference(pairwise_perm, reference_perm)
+})
+
+test_that("get_pairwise_comparisons() works when `compare` is a factor", {
+  scores <- data.table::copy(scores_quantile)
+  scores[, model := factor(model)]
+  pairwise_factor <- get_pairwise_comparisons(scores, metric = "wis")
+  pairwise_character <- get_pairwise_comparisons(
+    data.table::copy(scores_quantile), metric = "wis"
+  )
+  expect_identical(
+    pairwise_factor[order(model, compare_against)],
+    pairwise_character[order(model, compare_against)]
+  )
+})
+
+test_that("add_relative_skill() skips the test by default", {
+  scores <- data.table::copy(scores_quantile)
+
+  # count calls to wilcox.test() rather than relying on its warnings, which
+  # differ across R versions
+  calls <- new.env()
+  calls$n <- 0L
+  testthat::local_mocked_bindings(
+    wilcox.test = function(...) {
+      calls$n <- calls$n + 1L
+      list(p.value = NA_real_)
+    },
+    .package = "scoringutils"
+  )
+
+  without_test <- expect_no_warning(add_relative_skill(scores, metric = "wis"))
+  expect_identical(calls$n, 0L)
+  expect_false("pval" %in% colnames(without_test))
+
+  with_test <- add_relative_skill(
+    scores, metric = "wis", test_type = "non_parametric"
+  )
+  expect_gt(calls$n, 0L)
+  expect_identical(without_test, with_test)
+})

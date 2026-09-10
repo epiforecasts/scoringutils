@@ -28,6 +28,25 @@ test_that("Running `as_forecast_sample()` twice returns the same object", {
   )
 })
 
+test_that("as_forecast_sample() errors on non-numeric observed and predicted", {
+  df <- data.frame(
+    observed = as.character(c(5, 5, 5)),
+    predicted = as.character(c(4, 5, 6)),
+    sample_id = 1:3,
+    model = "m1"
+  )
+  expect_error(
+    as_forecast_sample(df),
+    "Must be of type 'numeric', not 'character'"
+  )
+
+  df$observed <- c(5, 5, 5)
+  expect_error(
+    as_forecast_sample(df),
+    "Must be of type 'numeric', not 'character'"
+  )
+})
+
 
 # ==============================================================================
 # is_forecast_sample() # nolint: commented_code_linter
