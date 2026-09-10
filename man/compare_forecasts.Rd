@@ -48,15 +48,14 @@ A list with mean score ratios and p-values for the comparison
 between two comparators
 }
 \description{
-This function compares two comparators based on the subset of forecasts for which
-both comparators have made a prediction. It gets called
-from \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}, which handles the
-comparison of multiple comparators on a single set of forecasts (there are no
-subsets of forecasts to be distinguished). \code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}}
-in turn gets called from from \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}} which can handle
-pairwise comparisons for a set of forecasts with multiple subsets, e.g.
-pairwise comparisons for one set of forecasts, but done separately for two
-different forecast targets.
+This function compares two comparators based on the subset of forecasts for
+which both comparators have made a prediction. The overlapping forecasts
+are found by merging the scores of the two comparators on the forecast
+unit. The actual comparison is then done by \code{\link[=compare_scores]{compare_scores()}}.
+
+\code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}} does not call this function; it aligns
+all comparators at once via \code{\link[=pivot_scores]{pivot_scores()}}. \code{\link[=compare_forecasts]{compare_forecasts()}} is
+kept as a reference implementation for testing.
 }
 \author{
 Johannes Bracher, \email{johannes.bracher@kit.edu}
