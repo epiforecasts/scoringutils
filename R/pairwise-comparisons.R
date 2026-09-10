@@ -406,6 +406,9 @@ pairwise_comparison_one_group <- function(scores,
 #' unit and comparator but are not otherwise identical raise an error, as
 #' the scores could then not be pivoted unambiguously.
 #' @inheritParams get_pairwise_comparisons
+#' @param metric A string with the name of the metric to pivot. Unlike in
+#'   [get_pairwise_comparisons()], there is no default: the caller must
+#'   supply a single metric present in `scores`.
 #' @returns A numeric matrix with one row per forecast unit and one column
 #'   per comparator. Column names are the comparators (as character).
 #' @importFrom data.table as.data.table dcast

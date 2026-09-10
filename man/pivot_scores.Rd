@@ -15,9 +15,9 @@ elements for the pairwise comparison. For example, if this is set to
 "model" (the default), then elements of the "model" column will be
 compared.}
 
-\item{metric}{A string with the name of the metric for which
-a relative skill shall be computed. By default this is either "crps",
-"wis" or "brier_score" if any of these are available.}
+\item{metric}{A string with the name of the metric to pivot. Unlike in
+\code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}, there is no default: the caller must
+supply a single metric present in \code{scores}.}
 }
 \value{
 A numeric matrix with one row per forecast unit and one column
