@@ -647,6 +647,29 @@ test_that("pivot_scores() errors with duplicated scores per forecast unit", {
   )
 })
 
+test_that("get_pairwise_comparisons() and add_relative_skill() error on duplicated scores through the public API", {
+  scores <- data.table::copy(scores_quantile)
+  metrics <- get_metrics(scores)
+  duplicated_scores <- rbind(scores, scores[1:5][, wis := wis + 1])
+  duplicated_scores <- new_scores(duplicated_scores, metrics = metrics)
+
+  expect_error(
+    get_pairwise_comparisons(duplicated_scores, metric = "wis"),
+    "more than one score for the same forecast unit"
+  )
+  expect_error(
+    suppressMessages(add_relative_skill(duplicated_scores, metric = "wis")),
+    "more than one score for the same forecast unit"
+  )
+
+  # exact duplicates are removed rather than causing an error
+  exact_duplicates <- new_scores(rbind(scores, scores[1:5]), metrics = metrics)
+  expect_no_error(get_pairwise_comparisons(exact_duplicates, metric = "wis"))
+  expect_no_error(
+    suppressMessages(add_relative_skill(exact_duplicates, metric = "wis"))
+  )
+})
+
 test_that("get_pairwise_comparisons() matches per-pair compare_forecasts()", {
   scores <- data.table::copy(scores_quantile)
   # drop some forecasts so that models do not overlap perfectly and so that
