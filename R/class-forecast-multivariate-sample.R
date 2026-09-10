@@ -80,13 +80,15 @@ as_forecast_multivariate_sample.default <- function(data,
 #' @export
 #' @rdname assert_forecast
 #' @importFrom cli cli_abort qty
-#' @importFrom checkmate assert_subset
+#' @importFrom checkmate assert_subset assert_numeric
 #' @keywords validate-forecast-object
 assert_forecast.forecast_multivariate_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
 ) {
   assert_subset(c("sample_id", ".mv_group_id"), colnames(forecast))
   forecast <- assert_forecast_generic(forecast, verbose)
+  assert_numeric(forecast$observed, .var.name = "observed")
+  assert_numeric(forecast$predicted, .var.name = "predicted")
 
   # make sure that for every .mv_group_id, the number of samples per
   # forecast unit is the same
@@ -144,10 +146,10 @@ is_forecast_multivariate_sample <- function(x) {
 #' @rdname score
 #' @export
 score.forecast_multivariate_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
+  prep <- prepare_forecast_for_scoring(forecast, metrics)
+  forecast <- prep$forecast
+  metrics <- prep$metrics
+  forecast_unit <- prep$forecast_unit
 
   # transpose the forecasts that belong to the same forecast unit
   f_transposed <- forecast[, .(

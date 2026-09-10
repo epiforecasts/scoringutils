@@ -4,6 +4,66 @@
 # see tests for each forecast type for more specific tests.
 
 
+test_that("as_forecast_generic() errors when renaming onto an existing column", {
+  # stale `predicted` column alongside the column that should be renamed
+  dt <- data.table::data.table(
+    model = "m",
+    id = 1:2,
+    observed = factor(c(0, 1)),
+    predicted = c(0.9, 0.9),
+    prob = c(0.3, 0.7)
+  )
+  expect_error(
+    as_forecast_binary(dt, predicted = "prob"),
+    'rename column "prob" to "predicted".*already exists'
+  )
+
+  # same for other renameable columns, e.g. `quantile_level`
+  quantile_dt <- data.table::data.table(
+    model = "m",
+    target = "t",
+    observed = 5,
+    predicted = c(1, 5, 9),
+    quantile_level = c(0.1, 0.5, 0.9),
+    q = c(0.1, 0.5, 0.9)
+  )
+  expect_error(
+    as_forecast_quantile(quantile_dt, quantile_level = "q"),
+    'rename column "q" to "quantile_level".*already exists'
+  )
+
+  # multiple collisions produce a correctly pluralised message naming all
+  # source and target columns
+  multi_dt <- data.table::data.table(
+    model = "m",
+    id = 1:2,
+    observed = 1,
+    obs = 2,
+    predicted = 3,
+    prob = 4
+  )
+  expect_error(
+    as_forecast_binary(multi_dt, observed = "obs", predicted = "prob"),
+    paste0(
+      'rename\\s+columns\\s+"obs"\\s+and\\s+"prob"\\s+to\\s+"observed"',
+      '\\s+and\\s+"predicted".*already\\s+exist\\s+in\\s+the\\s+data'
+    )
+  )
+})
+
+test_that("as_forecast_generic() still allows identity renames", {
+  dt <- data.table::data.table(
+    model = "m",
+    id = 1:2,
+    observed = factor(c(0, 1)),
+    predicted = c(0.3, 0.7)
+  )
+  expect_no_condition(
+    as_forecast_binary(dt, observed = "observed", predicted = "predicted")
+  )
+})
+
+
 # ==============================================================================
 # is_forecast() # nolint: commented_code_linter
 # ==============================================================================
@@ -36,6 +96,21 @@ test_that("assert_forecast_generic() works as expected with a data.frame", {
   expect_error(
     assert_forecast_generic(example_quantile_df),
     "Assertion on 'data' failed: Must be a data.table, not data.frame."
+  )
+})
+
+test_that("assert_forecast_generic() errors on duplicate column names", {
+  dt <- data.table::data.table(
+    model = "m",
+    id = 1:2,
+    observed = factor(c(0, 1)),
+    predicted = c(0.3, 0.7),
+    stale = c(0.9, 0.9)
+  )
+  data.table::setnames(dt, "stale", "predicted")
+  expect_error(
+    assert_forecast_generic(dt),
+    "duplicate"
   )
 })
 
@@ -319,6 +394,102 @@ test_that("check_number_per_forecast works", {
   expect_true(
     check_number_per_forecast(
       example_binary
+    )
+  )
+})
+
+
+# ==============================================================================
+# check_observed_constant() # nolint: commented_code_linter
+# ==============================================================================
+test_that("check_observed_constant() works as expected", {
+  consistent <- data.table::data.table(
+    model = "m1", target = "t1",
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = 1:3,
+    observed = 10
+  )
+  expect_true(
+    check_observed_constant(consistent, forecast_unit = c("model", "target"))
+  )
+
+  conflicting <- data.table::copy(consistent)
+  conflicting$observed <- c(10, 10, 20)
+  result <- check_observed_constant(
+    conflicting,
+    forecast_unit = c("model", "target")
+  )
+  expect_type(result, "character")
+  expect_match(result, "different observed values")
+})
+
+test_that("check_observed_constant() ignores rows with NA observed values", {
+  dt <- data.table::data.table(
+    model = "m1", target = "t1",
+    sample_id = 1:4,
+    predicted = c(1, 2, 3, 4),
+    observed = c(5, 5, 5, NA)
+  )
+  expect_true(
+    check_observed_constant(dt, forecast_unit = c("model", "target"))
+  )
+})
+
+test_that("validation errors on conflicting observed values in a forecast unit", {
+  # quantile
+  expect_error(
+    as_forecast_quantile(data.table::data.table(
+      model = "m1", target = "t1",
+      quantile_level = c(0.25, 0.5, 0.75),
+      predicted = 1:3,
+      observed = c(10, 10, 20)
+    )),
+    "different observed values"
+  )
+
+  # sample
+  expect_error(
+    as_forecast_sample(data.table::data.table(
+      model = "m1", target = "t1",
+      sample_id = 1:4,
+      predicted = c(1, 2, 3, 4),
+      observed = c(5, 5, 5, 7)
+    )),
+    "different observed values"
+  )
+
+  # nominal
+  expect_error(
+    as_forecast_nominal(data.table::data.table(
+      model = "m1", target = "t1",
+      predicted_label = factor(c("a", "b", "c")),
+      predicted = c(0.2, 0.3, 0.5),
+      observed = factor(c("a", "a", "b"), levels = c("a", "b", "c"))
+    )),
+    "different observed values"
+  )
+})
+
+test_that("validation still passes when observed is constant apart from NAs", {
+  dt <- data.table::data.table(
+    model = "m1", target = "t1",
+    sample_id = 1:4,
+    predicted = c(1, 2, 3, 4),
+    observed = c(5, 5, 5, NA)
+  )
+  expect_s3_class(
+    suppressMessages(as_forecast_sample(dt)),
+    "forecast_sample"
+  )
+})
+
+test_that("multivariate sample forecasts with constant observed still validate", {
+  # observed varies across the multivariate group but not within a single
+  # (univariate) forecast unit, so this must not trigger the constancy check
+  expect_no_condition(
+    as_forecast_multivariate_sample(
+      na.omit(data.table::copy(example_sample_continuous)),
+      joint_across = c("location", "location_name")
     )
   )
 })

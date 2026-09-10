@@ -7,6 +7,7 @@
 #' @param ... Named arguments that are used to rename columns. The names of the
 #'  arguments are the names of the columns that should be renamed. The values
 #'  are the new names.
+#' @importFrom cli cli_abort
 #' @keywords as_forecast
 as_forecast_generic <- function(data,
                                 forecast_unit = NULL,
@@ -26,6 +27,24 @@ as_forecast_generic <- function(data,
   oldnames <- unlist(oldnames[provided])
   newnames <- unlist(newnames[provided])
   if (!is.null(oldnames) && length(oldnames) > 0) {
+    # renaming a column onto a name that already exists (and is not itself
+    # being renamed away) would create duplicate column names
+    remaining <- setdiff(colnames(data), oldnames)
+    collides <- newnames %in% remaining
+    if (any(collides)) {
+      # sources/targets are used inside the cli glue strings below
+      sources <- oldnames[collides] # nolint: object_usage_linter.
+      targets <- newnames[collides] # nolint: object_usage_linter.
+      cli_abort(
+        c(
+          `!` = "Cannot rename {cli::qty(sources)} column{?s} {.val {sources}}
+          to {.val {targets}}: {?a column/columns} with {?this name/these
+          names} already exist{?s/} in the data.",
+          i = "Rename or remove the existing {cli::qty(targets)}
+          column{?s} first."
+        )
+      )
+    }
     setnames(data, old = oldnames, new = newnames)
   }
 
@@ -97,6 +116,7 @@ assert_forecast.default <- function(
 #' `predicted`
 #' - checks the forecast type and forecast unit
 #' - checks there are no duplicate forecasts
+#' - checks that observed values are constant within each forecast unit
 #' - if appropriate, checks the number of samples / quantiles is the same
 #' for all forecasts.
 #' @param data A data.table with forecasts and observed values that should
@@ -110,6 +130,16 @@ assert_forecast.default <- function(
 assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that data is a data.table and that the columns look fine
   assert_data_table(data, min.rows = 1)
+  duplicated_cols <- unique(colnames(data)[duplicated(colnames(data))])
+  if (length(duplicated_cols) > 0) {
+    cli_abort(
+      c(
+        `!` = "Found duplicate column{?s} in the data:
+        {.val {duplicated_cols}}.",
+        i = "Column names must be unique."
+      )
+    )
+  }
   assert_subset(c("observed", "predicted"), colnames(data))
   problem <- test_subset(c("sample_id", "quantile_level"), colnames(data))
   if (problem) {
@@ -124,6 +154,9 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that there aren't any duplicated forecasts
   forecast_unit <- get_forecast_unit(data)
   assert(check_duplicates(data))
+
+  # check that observed values are constant within each forecast unit
+  assert(check_observed_constant(data, forecast_unit))
 
   # check that the number of forecasts per sample / quantile level is the same
   number_quantiles_samples <- check_number_per_forecast(data, forecast_unit)
@@ -188,6 +221,37 @@ check_number_per_forecast <- function(data, forecast_unit) {
   return(TRUE)
 }
 
+
+#' Check that observed values are constant within each forecast unit
+#' @description
+#' Helper function that checks that all rows belonging to the same forecast
+#' (as defined by the forecast unit) share a single observed value. Rows
+#' where `observed` is `NA` are ignored.
+#' If the observed values are constant within each forecast unit, the
+#' function returns `TRUE` and a string with an error message otherwise.
+#' @param forecast_unit Character vector denoting the unit of a single forecast.
+#' @importFrom data.table as.data.table uniqueN
+#' @inherit document_check_functions params return
+#' @keywords internal_input_check
+check_observed_constant <- function(data, forecast_unit) {
+  # This function doesn't return a forecast object so it's fine to unclass it
+  # to avoid validation error while subsetting
+  data <- as.data.table(data)
+  data <- data[!is.na(observed)]
+  data <- data[, .(scoringutils_InternalNumCheck = uniqueN(observed)),
+               by = forecast_unit]
+  if (any(data$scoringutils_InternalNumCheck > 1)) {
+    msg <- paste0(
+      "There are instances with different observed values for the ",
+      "same forecast. Observed values must be constant within each ",
+      "forecast unit. This can't be right and needs to be resolved. ",
+      "Maybe you need to check the unit of a single forecast and ",
+      "add missing columns?"
+    )
+    return(msg)
+  }
+  return(TRUE)
+}
 
 
 #' Clean forecast object

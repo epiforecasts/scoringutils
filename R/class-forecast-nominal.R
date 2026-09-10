@@ -98,7 +98,7 @@ assert_forecast.forecast_nominal <- function(
   ), by = forecast_unit]
 
   if (!all(complete$correct)) {
-    first_issue <- complete[(correct), ..forecast_unit][1]
+    first_issue <- complete[!(correct), ..forecast_unit][1]
     first_issue <- lapply(first_issue, FUN = as.character)
     #nolint start: object_usage_linter duplicate_argument_linter
     issue_location <- paste(names(first_issue), "==", first_issue)
@@ -111,7 +111,7 @@ assert_forecast.forecast_nominal <- function(
     )
     #nolint end
   }
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
@@ -134,10 +134,10 @@ is_forecast_nominal <- function(x) {
 #' @rdname score
 #' @export
 score.forecast_nominal <- function(forecast, metrics = get_metrics(forecast), ...) {
-  forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
-  forecast_unit <- get_forecast_unit(forecast)
-  metrics <- validate_metrics(metrics)
-  forecast <- as.data.table(forecast)
+  prep <- prepare_forecast_for_scoring(forecast, metrics)
+  forecast <- prep$forecast
+  metrics <- prep$metrics
+  forecast_unit <- prep$forecast_unit
 
   # transpose the forecasts that belong to the same forecast unit
   # make sure the labels and predictions are ordered in the same way
