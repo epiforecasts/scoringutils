@@ -98,7 +98,7 @@ assert_forecast.forecast_nominal <- function(
   ), by = forecast_unit]
 
   if (!all(complete$correct)) {
-    first_issue <- complete[(correct), ..forecast_unit][1]
+    first_issue <- complete[!(correct), ..forecast_unit][1]
     first_issue <- lapply(first_issue, FUN = as.character)
     #nolint start: object_usage_linter duplicate_argument_linter
     issue_location <- paste(names(first_issue), "==", first_issue)
@@ -111,7 +111,7 @@ assert_forecast.forecast_nominal <- function(
     )
     #nolint end
   }
-  return(forecast[])
+  return(invisible(NULL))
 }
 
 
