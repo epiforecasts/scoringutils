@@ -30,7 +30,10 @@ $$
 See the SI of Bracher et al. (2021) for more details.
 quantile_score() returns the average quantile score across the quantile
 levels provided. For a set of quantile levels that form pairwise central
-prediction intervals, the quantile score is equivalent to the interval score."><meta property="og:description" content="Proper Scoring Rule to score quantile predictions. Smaller values are better.
+prediction intervals, the quantile score is equivalent to the interval score
+for the default weighting (weigh = TRUE). With weigh = FALSE, the two
+can differ when the quantile levels 0 and 1 are present (see wis() for
+details)."><meta property="og:description" content="Proper Scoring Rule to score quantile predictions. Smaller values are better.
 The quantile score is closely related to the interval score (see wis()) and
 is the quantile equivalent that works with single quantiles instead of
 central prediction intervals.
@@ -55,7 +58,10 @@ $$
 See the SI of Bracher et al. (2021) for more details.
 quantile_score() returns the average quantile score across the quantile
 levels provided. For a set of quantile levels that form pairwise central
-prediction intervals, the quantile score is equivalent to the interval score."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"><meta name="robots" content="noindex"></head><body>
+prediction intervals, the quantile score is equivalent to the interval score
+for the default weighting (weigh = TRUE). With weigh = FALSE, the two
+can differ when the quantile levels 0 and 1 are present (see wis() for
+details)."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -120,7 +126,10 @@ $$
 See the SI of Bracher et al. (2021) for more details.</p>
 <p><code>quantile_score()</code> returns the average quantile score across the quantile
 levels provided. For a set of quantile levels that form pairwise central
-prediction intervals, the quantile score is equivalent to the interval score.</p>
+prediction intervals, the quantile score is equivalent to the interval score
+for the default weighting (<code>weigh = TRUE</code>). With <code>weigh = FALSE</code>, the two
+can differ when the quantile levels 0 and 1 are present (see <code><a href="wis.html">wis()</a></code> for
+details).</p>
     </div>
 
     <div class="section level2">

@@ -23,7 +23,11 @@ quantile of that prediction interval: \$\$ \text{WIS}\_\alpha(F, y) =
 `quantile_score()` returns the average quantile score across the
 quantile levels provided. For a set of quantile levels that form
 pairwise central prediction intervals, the quantile score is equivalent
-to the interval score.
+to the interval score for the default weighting (`weigh = TRUE`). With
+`weigh = FALSE`, the two can differ when the quantile levels 0 and 1 are
+present (see
+[`wis()`](https://epiforecasts.io/scoringutils/dev/reference/wis.md) for
+details).
 
 ## Usage
 

@@ -2,6 +2,48 @@
 
 ## scoringutils (development version)
 
+- Fixed `as_forecast_<type>()` functions silently creating forecast
+  objects with duplicate column names when asked to rename a column onto
+  a name that already exists in the data (e.g. `predicted = "prob"`
+  while a stale `predicted` column is present). This produced corrupted
+  objects that passed validation and were scored on the wrong column.
+  The constructors now error with a clear message, and
+  [`assert_forecast_generic()`](https://epiforecasts.io/scoringutils/dev/reference/assert_forecast_generic.md)
+  rejects data with duplicate column names
+  ([\#1199](https://github.com/epiforecasts/scoringutils/issues/1199)).
+- Fixed
+  [`assert_forecast()`](https://epiforecasts.io/scoringutils/dev/reference/assert_forecast.md)
+  for nominal and ordinal forecasts: the error message for incomplete
+  forecasts named the first *complete* forecast instead of the first
+  incomplete one (and `NA` when all forecasts were incomplete), and the
+  methods visibly returned the forecast object instead of
+  `invisible(NULL)` as documented and as all other forecast types do
+  ([\#1195](https://github.com/epiforecasts/scoringutils/issues/1195)).
+- Fixed
+  [`as_forecast_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_quantile.md)
+  for sample-based forecasts producing silently wrong quantiles or
+  erroring when `probs` was not symmetric around 0.5 (e.g. `probs = 0.4`
+  or `probs = c(0.1, 0.2)`). Quantiles are now computed at exactly the
+  requested `probs` (deduplicated), and out-of-range `probs` produce a
+  clear assertion error
+  ([\#1196](https://github.com/epiforecasts/scoringutils/issues/1196)).
+- Fixed
+  [`interval_coverage()`](https://epiforecasts.io/scoringutils/dev/reference/interval_coverage.md)
+  erroring on quantile levels generated with
+  [`seq()`](https://rdrr.io/r/base/seq.html)
+  (e.g. `seq(0.05, 0.95, 0.05)`) because the required quantile levels
+  were matched with an exact floating point comparison. Quantile levels
+  are now rounded to 10 decimal places before matching, consistent with
+  the rest of the package. Also fixed
+  [`wis()`](https://epiforecasts.io/scoringutils/dev/reference/wis.md),
+  [`interval_score()`](https://epiforecasts.io/scoringutils/dev/reference/interval_score.md)
+  and `quantile_score(weigh = FALSE)` returning `NaN` for forecasts that
+  include the quantile levels 0 and 1 (which form a 100% prediction
+  interval where alpha = 0). Scores are now finite when the observation
+  falls inside the interval, restoring the identity between the WIS and
+  the mean of the quantile scores; the unweighted scores return `Inf`
+  when the observation falls outside a 100% prediction interval
+  ([\#1202](https://github.com/epiforecasts/scoringutils/issues/1202)).
 - [`get_pairwise_comparisons()`](https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.md),
   and therefore
   [`add_relative_skill()`](https://epiforecasts.io/scoringutils/dev/reference/add_relative_skill.md),
@@ -87,6 +129,13 @@
   the [git
   history](https://github.com/epiforecasts/scoringutils/tree/d0cd8e2/vignettes)
   ([\#1158](https://github.com/epiforecasts/scoringutils/issues/1158)).
+- Added a more descriptive explanation of the use of energy and
+  variogram scores in the vignette “Scoring multivariate forecasts”,
+  including an extended description of use for pooling over
+  single-origin forecast horizon and a multi-model comparison. Added a
+  note explaining where these scores cannot be applied to quantile
+  forecasts
+  ([\#1193](https://github.com/epiforecasts/scoringutils/issues/1193)).
 
 ## scoringutils 2.2.0
 

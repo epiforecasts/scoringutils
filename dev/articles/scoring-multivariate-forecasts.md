@@ -226,6 +226,13 @@ In the following, let’s assume that our samples were draws from a
 multivariate distribution all along (we just treated them as independent
 for the univariate case).
 
+> **Note on the demonstration.** The forecasts used in this vignette are
+> for demonstration only and do not represent joint draws of a
+> multivariate distribution. This means the dependence structure scored
+> by multivariate scoring is more an artefact of how the data were
+> prepared than a property of the original forecasts. (See
+> `create-example-data.R` in the `inst/` folder for detail.)
+
 To tell `scoringutils` that we want to treat these as a multivariate
 forecast, we need to specify the columns that are pooled together to
 form a single multivariate forecast. We do this via the `joint_across`
@@ -327,7 +334,7 @@ score(
   example_multiv,
   metrics = list(
     energy_score = energy_score_multivariate,
-    variogram_score = purrr::partial(
+    variogram_score = purrr::partial( # nolint: namespace_linter.
       variogram_score_multivariate, p = 1
     )
   )
@@ -339,6 +346,42 @@ score(
 #>           <num>           <num>        <int>
 #> 1:     54795.73     20111809605            1
 ```
+
+A set of multivariate targets can be pooled to account for different
+correlation structures. If, at any point, you want to score the same
+forecast using different groupings, you’d have create a new separate
+forecast object with a different grouping and score that new forecast
+object. For example, to pool across horizons, we bring `target_end_date`
+along with `horizon`, because the two both vary within a trajectory.
+
+``` r
+
+example_cases <- na.omit(
+  example_sample_continuous[
+    target_type == "Cases" &
+      model == "EuroCOVIDhub-ensemble"
+  ]
+)
+
+example_traj <- as_forecast_multivariate_sample(
+  data = example_cases,
+  joint_across = c("horizon", "target_end_date")
+)
+
+head(score(example_traj), 3)
+#>    location location_name target_type forecast_date                 model
+#>      <char>        <char>      <char>        <Date>                <char>
+#> 1:       DE       Germany       Cases    2021-05-03 EuroCOVIDhub-ensemble
+#> 2:       DE       Germany       Cases    2021-05-10 EuroCOVIDhub-ensemble
+#> 3:       DE       Germany       Cases    2021-05-17 EuroCOVIDhub-ensemble
+#>    energy_score variogram_score .mv_group_id
+#>           <num>           <num>        <int>
+#> 1:     62512.17       40013.423            1
+#> 2:     45118.99        6119.925            2
+#> 3:     16761.77       12371.387            3
+```
+
+Each single score now covers one whole trajectory over three horizons.
 
 ## Multivariate point forecasts
 
@@ -370,6 +413,110 @@ score(example_mv_point)
 #> 1:        51406.03            1
 ```
 
-If, at any point, you want to score the same forecast using different
-groupings, you’d have create a new separate forecast object with a
-different grouping and score that new forecast object.
+## Multivariate quantile forecasts
+
+Both the energy score and the variogram score need samples drawn from
+the joint predictive distribution. We cannot use the same multivariate
+scoring for quantile forecasts as they do not describe the relationship
+between targets in this way. It is tempting to line the quantile levels
+up across targets and treat them as samples (for instance by passing
+`sample_id = "quantile_level"` to
+[`as_forecast_multivariate_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_multivariate_sample.md)).
+`scoringutils` will warn you about the leftover `quantile_level` column,
+but it will still return a score. However that score is not the one you
+want, as in this case, every quantile forecast ends up scored as though
+it had predicted perfect dependence (regardless of what the underlying
+model actually predicted).
+
+## Comparing the energy and variogram scores
+
+The energy and variogram scores are complementary to each other. The
+energy score summarises overall accuracy across all the pooled targets
+at once, a multivariate generalisation of the CRPS. The variogram score
+instead looks only at the differences between the specific targets that
+were pooled together to compare the size of the observed difference
+against the size of predicted differences. It is pairwise on whatever
+dimension `joint_across` specified.
+
+For example, when pooling across forecast horizon, the variogram
+compares the differences between weeks and is therefore sensitive to the
+shape of the trajectory. But because it uses only differences between
+targets, it is insensitive to any bias that shifts the overall
+trajectory away from the observed data.
+
+We can see this comparison between the two scores, comparing two models’
+forecasts of 1-3 week ahead cases in Germany as above. The dashed line
+shows the observed trajectory, with cases falling after the first week.
+
+``` r
+
+library(ggplot2)
+library(data.table)
+#> 
+#> Attaching package: 'data.table'
+#> The following object is masked from 'package:base':
+#> 
+#>     %notin%
+
+cases_de <- as.data.table(example_sample_continuous)[
+  target_type == "Cases" &
+    location == "DE" &
+    forecast_date == "2021-05-03" &
+    model %in% c("EuroCOVIDhub-ensemble", "epiforecasts-EpiNow2")
+]
+
+band <- cases_de[, .(
+  median = median(predicted),
+  lower = quantile(predicted, 0.25),
+  upper = quantile(predicted, 0.75)
+), by = .(model, target_end_date)]
+
+observed <- unique(cases_de[, .(target_end_date, observed)])
+
+ggplot(band, aes(target_end_date, median, colour = model, fill = model)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2, colour = NA) +
+  geom_line() +
+  geom_line(
+    data = observed, aes(target_end_date, observed),
+    inherit.aes = FALSE, linetype = "dashed"
+  ) +
+  geom_point(
+    data = observed, aes(target_end_date, observed),
+    inherit.aes = FALSE
+  ) +
+  labs(x = "Target date", y = "Weekly cases", colour = "Model", fill = "Model") +
+  theme_scoringutils() +
+  theme(legend.position = "bottom")
+```
+
+![Median forecasts with 50% intervals for two models over three weekly
+horizons in Germany, alongside the observed trajectory as a dashed line.
+The ensemble stays roughly flat near the first observed value while
+EpiNow2 rises away from it, and the observed cases fall
+steeply.](scoring-multivariate-forecasts_files/figure-html/unnamed-chunk-11-1.png)
+
+We pool the three horizons into a single multivariate forecast for each
+model, then score both.
+
+``` r
+
+cases_mv <- as_forecast_multivariate_sample(
+  data = na.omit(cases_de),
+  joint_across = c("horizon", "target_end_date")
+)
+score(cases_mv)[, c("model", "energy_score", "variogram_score")]
+#>                    model energy_score variogram_score
+#>                   <char>        <num>           <num>
+#> 1: EuroCOVIDhub-ensemble     62512.17        40013.42
+#> 2:  epiforecasts-EpiNow2    123346.17        30397.39
+```
+
+The two scores disagree about which model performed better. The energy
+score prefers the ensemble, whose level stays close to the observed
+cases, while the variogram score prefers EpiNow2. The observed cases
+move sharply from week to week, and EpiNow2 predicts changes of a
+similar size, whereas the near-flat ensemble predicts changes that are
+too small. Note that EpiNow2 wins on the variogram score even though it
+has the wrong direction of the change. The energy score rewards getting
+the overall level right; the variogram score rewards getting the size of
+the joint movement right.

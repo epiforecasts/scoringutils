@@ -283,6 +283,15 @@ instead samples from a joint multivariate predictive distribution.</p>
 <p>In the following, let’s assume that our samples were draws from a
 multivariate distribution all along (we just treated them as independent
 for the univariate case).</p>
+<blockquote>
+<p><strong>Note on the demonstration.</strong> The forecasts used in
+this vignette are for demonstration only and do not represent joint
+draws of a multivariate distribution. This means the dependence
+structure scored by multivariate scoring is more an artefact of how the
+data were prepared than a property of the original forecasts. (See
+<code>create-example-data.R</code> in the <code>inst/</code> folder for
+detail.)</p>
+</blockquote>
 <p>To tell <code>scoringutils</code> that we want to treat these as a
 multivariate forecast, we need to specify the columns that are pooled
 together to form a single multivariate forecast. We do this via the
@@ -372,7 +381,7 @@ documentation. For example, to use <code>p = 1</code>:</p>
 <span>  <span class="va">example_multiv</span>,</span>
 <span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    energy_score <span class="op">=</span> <span class="va">energy_score_multivariate</span>,</span>
-<span>    variogram_score <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">partial</a></span><span class="op">(</span></span>
+<span>    variogram_score <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">partial</a></span><span class="op">(</span> <span class="co"># nolint: namespace_linter.</span></span>
 <span>      <span class="va">variogram_score_multivariate</span>, p <span class="op">=</span> <span class="fl">1</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
@@ -383,6 +392,39 @@ documentation. For example, to use <code>p = 1</code>:</p>
 <span><span class="co">#&gt;    energy_score variogram_score .mv_group_id</span></span>
 <span><span class="co">#&gt;           &lt;num&gt;           &lt;num&gt;        &lt;int&gt;</span></span>
 <span><span class="co">#&gt; 1:     54795.73     20111809605            1</span></span></code></pre></div>
+<p>A set of multivariate targets can be pooled to account for different
+correlation structures. If, at any point, you want to score the same
+forecast using different groupings, you’d have create a new separate
+forecast object with a different grouping and score that new forecast
+object. For example, to pool across horizons, we bring
+<code>target_end_date</code> along with <code>horizon</code>, because
+the two both vary within a trajectory.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">example_cases</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span></span>
+<span>  <span class="va">example_sample_continuous</span><span class="op">[</span></span>
+<span>    <span class="va">target_type</span> <span class="op">==</span> <span class="st">"Cases"</span> <span class="op">&amp;</span></span>
+<span>      <span class="va">model</span> <span class="op">==</span> <span class="st">"EuroCOVIDhub-ensemble"</span></span>
+<span>  <span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">example_traj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_forecast_multivariate_sample.html">as_forecast_multivariate_sample</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">example_cases</span>,</span>
+<span>  joint_across <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"horizon"</span>, <span class="st">"target_end_date"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">example_traj</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    location location_name target_type forecast_date                 model</span></span>
+<span><span class="co">#&gt;      &lt;char&gt;        &lt;char&gt;      &lt;char&gt;        &lt;Date&gt;                &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:       DE       Germany       Cases    2021-05-03 EuroCOVIDhub-ensemble</span></span>
+<span><span class="co">#&gt; 2:       DE       Germany       Cases    2021-05-10 EuroCOVIDhub-ensemble</span></span>
+<span><span class="co">#&gt; 3:       DE       Germany       Cases    2021-05-17 EuroCOVIDhub-ensemble</span></span>
+<span><span class="co">#&gt;    energy_score variogram_score .mv_group_id</span></span>
+<span><span class="co">#&gt;           &lt;num&gt;           &lt;num&gt;        &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1:     62512.17       40013.423            1</span></span>
+<span><span class="co">#&gt; 2:     45118.99        6119.925            2</span></span>
+<span><span class="co">#&gt; 3:     16761.77       12371.387            3</span></span></code></pre></div>
+<p>Each single score now covers one whole trajectory over three
+horizons.</p>
 </div>
 <div class="section level2">
 <h2 id="multivariate-point-forecasts">Multivariate point forecasts<a class="anchor" aria-label="anchor" href="#multivariate-point-forecasts"></a>
@@ -391,7 +433,7 @@ documentation. For example, to use <code>p = 1</code>:</p>
 using the variogram score via
 <code><a href="../reference/as_forecast_multivariate_point.html">as_forecast_multivariate_point()</a></code>. This treats each point
 forecast as a single-sample ensemble.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_point_multi</span> <span class="op">&lt;-</span> <span class="va">example_point</span><span class="op">[</span></span>
 <span>  <span class="va">target_type</span> <span class="op">==</span> <span class="st">"Cases"</span> <span class="op">&amp;</span></span>
 <span>    <span class="va">forecast_date</span> <span class="op">==</span> <span class="st">"2021-05-03"</span> <span class="op">&amp;</span></span>
@@ -411,9 +453,103 @@ forecast as a single-sample ensemble.</p>
 <span><span class="co">#&gt;    variogram_score .mv_group_id</span></span>
 <span><span class="co">#&gt;              &lt;num&gt;        &lt;int&gt;</span></span>
 <span><span class="co">#&gt; 1:        51406.03            1</span></span></code></pre></div>
-<p>If, at any point, you want to score the same forecast using different
-groupings, you’d have create a new separate forecast object with a
-different grouping and score that new forecast object.</p>
+</div>
+<div class="section level2">
+<h2 id="multivariate-quantile-forecasts">Multivariate quantile forecasts<a class="anchor" aria-label="anchor" href="#multivariate-quantile-forecasts"></a>
+</h2>
+<p>Both the energy score and the variogram score need samples drawn from
+the joint predictive distribution. We cannot use the same multivariate
+scoring for quantile forecasts as they do not describe the relationship
+between targets in this way. It is tempting to line the quantile levels
+up across targets and treat them as samples (for instance by passing
+<code>sample_id = "quantile_level"</code> to
+<code><a href="../reference/as_forecast_multivariate_sample.html">as_forecast_multivariate_sample()</a></code>).
+<code>scoringutils</code> will warn you about the leftover
+<code>quantile_level</code> column, but it will still return a score.
+However that score is not the one you want, as in this case, every
+quantile forecast ends up scored as though it had predicted perfect
+dependence (regardless of what the underlying model actually
+predicted).</p>
+</div>
+<div class="section level2">
+<h2 id="comparing-the-energy-and-variogram-scores">Comparing the energy and variogram scores<a class="anchor" aria-label="anchor" href="#comparing-the-energy-and-variogram-scores"></a>
+</h2>
+<p>The energy and variogram scores are complementary to each other. The
+energy score summarises overall accuracy across all the pooled targets
+at once, a multivariate generalisation of the CRPS. The variogram score
+instead looks only at the differences between the specific targets that
+were pooled together to compare the size of the observed difference
+against the size of predicted differences. It is pairwise on whatever
+dimension <code>joint_across</code> specified.</p>
+<p>For example, when pooling across forecast horizon, the variogram
+compares the differences between weeks and is therefore sensitive to the
+shape of the trajectory. But because it uses only differences between
+targets, it is insensitive to any bias that shifts the overall
+trajectory away from the observed data.</p>
+<p>We can see this comparison between the two scores, comparing two
+models’ forecasts of 1-3 week ahead cases in Germany as above. The
+dashed line shows the observed trajectory, with cases falling after the
+first week.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'data.table'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     %notin%</span></span>
+<span></span>
+<span><span class="va">cases_de</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">example_sample_continuous</span><span class="op">)</span><span class="op">[</span></span>
+<span>  <span class="va">target_type</span> <span class="op">==</span> <span class="st">"Cases"</span> <span class="op">&amp;</span></span>
+<span>    <span class="va">location</span> <span class="op">==</span> <span class="st">"DE"</span> <span class="op">&amp;</span></span>
+<span>    <span class="va">forecast_date</span> <span class="op">==</span> <span class="st">"2021-05-03"</span> <span class="op">&amp;</span></span>
+<span>    <span class="va">model</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EuroCOVIDhub-ensemble"</span>, <span class="st">"epiforecasts-EpiNow2"</span><span class="op">)</span></span>
+<span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">band</span> <span class="op">&lt;-</span> <span class="va">cases_de</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span></span>
+<span>  median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">predicted</span><span class="op">)</span>,</span>
+<span>  lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">predicted</span>, <span class="fl">0.25</span><span class="op">)</span>,</span>
+<span>  upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">predicted</span>, <span class="fl">0.75</span><span class="op">)</span></span>
+<span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">model</span>, <span class="va">target_end_date</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">cases_de</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">target_end_date</span>, <span class="va">observed</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">band</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">target_end_date</span>, <span class="va">median</span>, colour <span class="op">=</span> <span class="va">model</span>, fill <span class="op">=</span> <span class="va">model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">lower</span>, ymax <span class="op">=</span> <span class="va">upper</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, colour <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">observed</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">target_end_date</span>, <span class="va">observed</span><span class="op">)</span>,</span>
+<span>    inherit.aes <span class="op">=</span> <span class="cn">FALSE</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">observed</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">target_end_date</span>, <span class="va">observed</span><span class="op">)</span>,</span>
+<span>    inherit.aes <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Target date"</span>, y <span class="op">=</span> <span class="st">"Weekly cases"</span>, colour <span class="op">=</span> <span class="st">"Model"</span>, fill <span class="op">=</span> <span class="st">"Model"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_scoringutils.html">theme_scoringutils</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="scoring-multivariate-forecasts_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="Median forecasts with 50% intervals for two models over three weekly horizons in Germany, alongside the observed trajectory as a dashed line. The ensemble stays roughly flat near the first observed value while EpiNow2 rises away from it, and the observed cases fall steeply." width="672"></p>
+<p>We pool the three horizons into a single multivariate forecast for
+each model, then score both.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cases_mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_forecast_multivariate_sample.html">as_forecast_multivariate_sample</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">cases_de</span><span class="op">)</span>,</span>
+<span>  joint_across <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"horizon"</span>, <span class="st">"target_end_date"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/score.html">score</a></span><span class="op">(</span><span class="va">cases_mv</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model"</span>, <span class="st">"energy_score"</span>, <span class="st">"variogram_score"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;                    model energy_score variogram_score</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;        &lt;num&gt;           &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: EuroCOVIDhub-ensemble     62512.17        40013.42</span></span>
+<span><span class="co">#&gt; 2:  epiforecasts-EpiNow2    123346.17        30397.39</span></span></code></pre></div>
+<p>The two scores disagree about which model performed better. The
+energy score prefers the ensemble, whose level stays close to the
+observed cases, while the variogram score prefers EpiNow2. The observed
+cases move sharply from week to week, and EpiNow2 predicts changes of a
+similar size, whereas the near-flat ensemble predicts changes that are
+too small. Note that EpiNow2 wins on the variogram score even though it
+has the wrong direction of the change. The energy score rewards getting
+the overall level right; the variogram score rewards getting the size of
+the joint movement right.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
