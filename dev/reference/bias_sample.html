@@ -93,7 +93,7 @@ fraction of predictive samples strictly smaller than \(x_t\) plus half
 the fraction equal to \(x_t\).</p>
 <p>For integer valued forecasts, Bias is measured as</p>
 <p>$$
-B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t + 1))
+B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t - 1))
 $$</p>
 <p>to adjust for the integer nature of the forecasts.</p>
 <p>In both cases, Bias can assume values between

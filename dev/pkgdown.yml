@@ -5,7 +5,7 @@ articles:
   handling-missing-forecasts: handling-missing-forecasts.html
   scoring-multivariate-forecasts: scoring-multivariate-forecasts.html
   scoring-rules: scoring-rules.html
-last_built: 2026-09-10T20:23Z
+last_built: 2026-09-10T20:26Z
 urls:
   reference: https://epiforecasts.io/scoringutils/reference
   article: https://epiforecasts.io/scoringutils/articles

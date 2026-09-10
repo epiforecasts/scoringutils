@@ -405,6 +405,9 @@
 - [`ensure_mv_grouping()`](https://epiforecasts.io/scoringutils/dev/reference/ensure_mv_grouping.md)
   : Ensure multivariate grouping is set
 
+- [`ensure_sample_matrix()`](https://epiforecasts.io/scoringutils/dev/reference/ensure_sample_matrix.md)
+  : Ensure that predicted samples are a matrix
+
 - [`forecast_types`](https://epiforecasts.io/scoringutils/dev/reference/forecast_types.md)
   : Documentation template for forecast types
 

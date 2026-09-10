@@ -2,6 +2,30 @@
 
 ## scoringutils (development version)
 
+- Fixed the sample-based metrics
+  [`bias_sample()`](https://epiforecasts.io/scoringutils/dev/reference/bias_sample.md),
+  [`ae_median_sample()`](https://epiforecasts.io/scoringutils/dev/reference/ae_median_sample.md),
+  [`se_mean_sample()`](https://epiforecasts.io/scoringutils/dev/reference/se_mean_sample.md)
+  and
+  [`mad_sample()`](https://epiforecasts.io/scoringutils/dev/reference/mad_sample.md)
+  mishandling the documented vector input for a single observation (a
+  scalar `observed` with `predicted` given as a vector of samples).
+  [`ae_median_sample()`](https://epiforecasts.io/scoringutils/dev/reference/ae_median_sample.md)
+  and
+  [`se_mean_sample()`](https://epiforecasts.io/scoringutils/dev/reference/se_mean_sample.md)
+  silently treated the samples as separate one-sample forecasts and
+  returned wrong results, while
+  [`bias_sample()`](https://epiforecasts.io/scoringutils/dev/reference/bias_sample.md)
+  and
+  [`mad_sample()`](https://epiforecasts.io/scoringutils/dev/reference/mad_sample.md)
+  errored. All sample metrics now treat this input as one forecast with
+  N samples, consistent with
+  [`crps_sample()`](https://epiforecasts.io/scoringutils/dev/reference/crps_sample.md).
+  Also corrected the integer bias formula in the
+  [`bias_sample()`](https://epiforecasts.io/scoringutils/dev/reference/bias_sample.md)
+  documentation, which stated P_t(x_t + 1) instead of P_t(x_t - 1) (the
+  code was correct)
+  ([\#1197](https://github.com/epiforecasts/scoringutils/issues/1197)).
 - [`summarise_scores()`](https://epiforecasts.io/scoringutils/dev/reference/summarise_scores.md)
   now errors when `by` contains a metric column
   (e.g. `by = c("model", "wis")`). Previously, such calls silently
