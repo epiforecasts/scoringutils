@@ -31,7 +31,8 @@ summarize_scores(scores, by = "model", fun = mean, ...)
 - by:
 
   Character vector with column names to summarise scores by. Default is
-  "model", i.e. scores are summarised by the "model" column.
+  "model", i.e. scores are summarised by the "model" column. `by` must
+  not contain any of the score (metric) columns themselves.
 
 - fun:
 

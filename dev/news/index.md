@@ -2,6 +2,14 @@
 
 ## scoringutils (development version)
 
+- [`summarise_scores()`](https://epiforecasts.io/scoringutils/dev/reference/summarise_scores.md)
+  now errors when `by` contains a metric column
+  (e.g. `by = c("model", "wis")`). Previously, such calls silently
+  returned an unsummarised table with duplicate column names, because
+  the score column was used both as a grouping column and as a column to
+  summarise. This complements the fix for the empty-metrics case in
+  [\#1179](https://github.com/epiforecasts/scoringutils/issues/1179)
+  ([\#1204](https://github.com/epiforecasts/scoringutils/issues/1204)).
 - Fixed
   [`bias_quantile()`](https://epiforecasts.io/scoringutils/dev/reference/bias_quantile.md)
   returning wrong values when quantile levels were passed unsorted:
