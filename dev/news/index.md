@@ -2,6 +2,27 @@
 
 ## scoringutils (development version)
 
+- [`get_pairwise_comparisons()`](https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.md),
+  and therefore
+  [`add_relative_skill()`](https://epiforecasts.io/scoringutils/dev/reference/add_relative_skill.md),
+  is now substantially faster and uses much less memory. Scores are
+  pivoted once into a forecast unit by comparator matrix instead of
+  being merged separately for every pair of comparators. Results are
+  unchanged. Scores with more than one row per forecast unit and
+  comparator now produce an informative error instead of silently
+  comparing duplicated rows
+  ([\#1221](https://github.com/epiforecasts/scoringutils/issues/1221),
+  thanks to [@annakrystalli](https://github.com/annakrystalli) for the
+  analysis and prototype).
+- [`add_relative_skill()`](https://epiforecasts.io/scoringutils/dev/reference/add_relative_skill.md)
+  no longer runs a statistical test for each pair of comparators by
+  default (`test_type = NULL`), as it does not return the resulting
+  p-values. This removes unnecessary computation and spurious warnings
+  from [`wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html) when
+  scores are tied. Relative skill scores are unchanged. A test can still
+  be requested via the new `test_type` argument
+  ([\#1222](https://github.com/epiforecasts/scoringutils/issues/1222),
+  thanks to [@annakrystalli](https://github.com/annakrystalli)).
 - Fixed several validation and messaging issues
   ([\#1211](https://github.com/epiforecasts/scoringutils/issues/1211)):
   [`as_forecast_sample()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_sample.md),

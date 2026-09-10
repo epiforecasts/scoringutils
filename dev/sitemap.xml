@@ -54,6 +54,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/check_try.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/clean_forecast.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/compare_forecasts.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/compare_scores.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/crps_sample.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/document_assert_functions.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/document_check_functions.html</loc></url>
@@ -121,6 +122,7 @@
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/pairwise_comparison_one_group.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/permutation_test.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/pit_histogram_sample.html</loc></url>
+<url><loc>https://epiforecasts.io/scoringutils/dev/reference/pivot_scores.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/plot_correlations.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/plot_discrimination.html</loc></url>
 <url><loc>https://epiforecasts.io/scoringutils/dev/reference/plot_forecast_counts.html</loc></url>

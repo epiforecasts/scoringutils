@@ -7,10 +7,14 @@ multiple models involved. It gets called from
 splits the data into arbitrary subgroups specified by the user (e.g. if
 pairwise comparison should be done separately for different forecast
 targets) and then the actual pairwise comparison for that subgroup is
-managed from `pairwise_comparison_one_group()`. In order to actually do
-the comparison between two models over a subset of common forecasts it
-calls
-[`compare_forecasts()`](https://epiforecasts.io/scoringutils/dev/reference/compare_forecasts.md).
+managed from `pairwise_comparison_one_group()`.
+
+Internally, the scores are pivoted once into a matrix with one row per
+forecast unit (excluding the `compare` column) and one column per
+comparator (see
+[`pivot_scores()`](https://epiforecasts.io/scoringutils/dev/reference/pivot_scores.md)).
+The set of overlapping forecasts for any pair of comparators is then
+simply the set of rows for which both columns are non-missing.
 
 ## Usage
 

@@ -10,16 +10,22 @@ multiple models involved. It gets called from get_pairwise_comparisons().
 get_pairwise_comparisons() splits the data into arbitrary subgroups
 specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
-that subgroup is managed from pairwise_comparison_one_group(). In order to
-actually do the comparison between two models over a subset of common
-forecasts it calls compare_forecasts()."><meta property="og:description" content="This function does the pairwise comparison for one set of forecasts, but
+that subgroup is managed from pairwise_comparison_one_group().
+Internally, the scores are pivoted once into a matrix with one row per
+forecast unit (excluding the compare column) and one column per
+comparator (see pivot_scores()). The set of overlapping forecasts for
+any pair of comparators is then simply the set of rows for which both
+columns are non-missing."><meta property="og:description" content="This function does the pairwise comparison for one set of forecasts, but
 multiple models involved. It gets called from get_pairwise_comparisons().
 get_pairwise_comparisons() splits the data into arbitrary subgroups
 specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
-that subgroup is managed from pairwise_comparison_one_group(). In order to
-actually do the comparison between two models over a subset of common
-forecasts it calls compare_forecasts()."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"><meta name="robots" content="noindex"></head><body>
+that subgroup is managed from pairwise_comparison_one_group().
+Internally, the scores are pivoted once into a matrix with one row per
+forecast unit (excluding the compare column) and one column per
+comparator (see pivot_scores()). The set of overlapping forecasts for
+any pair of comparators is then simply the set of rows for which both
+columns are non-missing."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -64,9 +70,12 @@ multiple models involved. It gets called from <code><a href="get_pairwise_compar
 <code><a href="get_pairwise_comparisons.html">get_pairwise_comparisons()</a></code> splits the data into arbitrary subgroups
 specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
-that subgroup is managed from <code>pairwise_comparison_one_group()</code>. In order to
-actually do the comparison between two models over a subset of common
-forecasts it calls <code><a href="compare_forecasts.html">compare_forecasts()</a></code>.</p>
+that subgroup is managed from <code>pairwise_comparison_one_group()</code>.</p>
+<p>Internally, the scores are pivoted once into a matrix with one row per
+forecast unit (excluding the <code>compare</code> column) and one column per
+comparator (see <code><a href="pivot_scores.html">pivot_scores()</a></code>). The set of overlapping forecasts for
+any pair of comparators is then simply the set of rows for which both
+columns are non-missing.</p>
     </div>
 
     <div class="section level2">

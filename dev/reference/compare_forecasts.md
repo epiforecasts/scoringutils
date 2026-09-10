@@ -1,16 +1,15 @@
 # Compare a subset of common forecasts
 
 This function compares two comparators based on the subset of forecasts
-for which both comparators have made a prediction. It gets called from
-[`pairwise_comparison_one_group()`](https://epiforecasts.io/scoringutils/dev/reference/pairwise_comparison_one_group.md),
-which handles the comparison of multiple comparators on a single set of
-forecasts (there are no subsets of forecasts to be distinguished).
+for which both comparators have made a prediction. The overlapping
+forecasts are found by merging the scores of the two comparators on the
+forecast unit. The actual comparison is then done by
+[`compare_scores()`](https://epiforecasts.io/scoringutils/dev/reference/compare_scores.md).
+
 [`pairwise_comparison_one_group()`](https://epiforecasts.io/scoringutils/dev/reference/pairwise_comparison_one_group.md)
-in turn gets called from from
-[`get_pairwise_comparisons()`](https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.md)
-which can handle pairwise comparisons for a set of forecasts with
-multiple subsets, e.g. pairwise comparisons for one set of forecasts,
-but done separately for two different forecast targets.
+does not call this function; it aligns all comparators at once via
+[`pivot_scores()`](https://epiforecasts.io/scoringutils/dev/reference/pivot_scores.md).
+`compare_forecasts()` is kept as a reference implementation for testing.
 
 ## Usage
 

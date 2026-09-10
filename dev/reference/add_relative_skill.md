@@ -16,6 +16,7 @@ add_relative_skill(
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
+  test_type = NULL,
   ...
 )
 ```
@@ -56,8 +57,26 @@ add_relative_skill(
   By default (`NULL`), relative skill will not be scaled with respect to
   a baseline model.
 
+- test_type:
+
+  Character, either "non_parametric", "permutation", or `NULL` (the
+  default). Determines which kind of test is run for the pairwise
+  comparisons. As p-values are not returned by `add_relative_skill()`,
+  no test is run by default. See
+  [`compare_forecasts()`](https://epiforecasts.io/scoringutils/dev/reference/compare_forecasts.md)
+  for more information.
+
 - ...:
 
   Additional arguments for the comparison between two models. See
   [`compare_forecasts()`](https://epiforecasts.io/scoringutils/dev/reference/compare_forecasts.md)
   for more information.
+
+## Details
+
+Unlike
+[`get_pairwise_comparisons()`](https://epiforecasts.io/scoringutils/dev/reference/get_pairwise_comparisons.md),
+this function does not return p-values. By default no statistical test
+is therefore run for the pairwise comparisons (`test_type = NULL`),
+which avoids unnecessary computation. Relative skill scores do not
+depend on `test_type`.

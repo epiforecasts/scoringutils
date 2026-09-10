@@ -383,6 +383,9 @@
 - [`compare_forecasts()`](https://epiforecasts.io/scoringutils/dev/reference/compare_forecasts.md)
   : Compare a subset of common forecasts
 
+- [`compare_scores()`](https://epiforecasts.io/scoringutils/dev/reference/compare_scores.md)
+  : Compare two aligned vectors of scores
+
 - [`document_assert_functions`](https://epiforecasts.io/scoringutils/dev/reference/document_assert_functions.md)
   : Documentation template for assert functions
 
@@ -446,6 +449,9 @@
 
 - [`permutation_test()`](https://epiforecasts.io/scoringutils/dev/reference/permutation_test.md)
   : Simple permutation test
+
+- [`pivot_scores()`](https://epiforecasts.io/scoringutils/dev/reference/pivot_scores.md)
+  : Pivot scores into a forecast unit by comparator matrix
 
 - [`quantile_to_interval()`](https://epiforecasts.io/scoringutils/dev/reference/quantile_to_interval.md)
   [`quantile_to_interval_dataframe()`](https://epiforecasts.io/scoringutils/dev/reference/quantile_to_interval.md)
