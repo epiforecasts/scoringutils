@@ -27,6 +27,23 @@ assert_input_sample <- function(observed, predicted) {
 }
 
 
+#' @title Ensure that predicted samples are a matrix
+#' @description
+#' Converts a vector of predictive samples (allowed as input when there is
+#' only a single observation) into a 1xN matrix so that downstream
+#' row-wise operations work as expected. Matrix input is returned unchanged.
+#' @param predicted A vector of size N (predictive samples for a single
+#'   observation) or an nxN matrix of predictive samples.
+#' @returns An nxN matrix of predictive samples.
+#' @keywords internal
+ensure_sample_matrix <- function(predicted) {
+  if (is.null(dim(predicted))) {
+    dim(predicted) <- c(1, length(predicted))
+  }
+  return(predicted)
+}
+
+
 #' @title Determine bias of forecasts
 #'
 #' @description
@@ -51,7 +68,7 @@ assert_input_sample <- function(observed, predicted) {
 #' For integer valued forecasts, Bias is measured as
 #'
 #' \deqn{
-#' B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t + 1))
+#' B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t - 1))
 #' }
 #'
 #' to adjust for the integer nature of the forecasts.
@@ -89,6 +106,7 @@ assert_input_sample <- function(observed, predicted) {
 bias_sample <- function(observed, predicted) {
 
   assert_input_sample(observed, predicted)
+  predicted <- ensure_sample_matrix(predicted)
   prediction_type <- get_type(predicted)
 
   # empirical cdf
@@ -141,8 +159,9 @@ bias_sample <- function(observed, predicted) {
 #' @export
 ae_median_sample <- function(observed, predicted) {
   assert_input_sample(observed, predicted)
+  predicted <- ensure_sample_matrix(predicted)
   median_predictions <- apply(
-    as.matrix(predicted), MARGIN = 1, FUN = median # this is row-wise
+    predicted, MARGIN = 1, FUN = median # this is row-wise
   )
   ae_median <- abs(observed - median_predictions)
   return(ae_median)
@@ -171,7 +190,8 @@ ae_median_sample <- function(observed, predicted) {
 
 se_mean_sample <- function(observed, predicted) {
   assert_input_sample(observed, predicted)
-  mean_predictions <- rowMeans(as.matrix(predicted))
+  predicted <- ensure_sample_matrix(predicted)
+  mean_predictions <- rowMeans(predicted)
   se_mean <- (observed - mean_predictions)^2
 
   return(se_mean)
@@ -225,7 +245,7 @@ logs_sample <- function(observed, predicted, ...) {
       )
     )
   }
-  scoringRules::logs_sample(
+  scoringRules::logs_sample( # nolint: namespace_linter.
     y = observed,
     dat = predicted,
     ...
@@ -257,7 +277,7 @@ logs_sample <- function(observed, predicted, ...) {
 dss_sample <- function(observed, predicted, ...) {
   assert_input_sample(observed, predicted)
 
-  scoringRules::dss_sample(
+  scoringRules::dss_sample( # nolint: namespace_linter.
     y = observed,
     dat = predicted,
     ...
@@ -308,19 +328,16 @@ dss_sample <- function(observed, predicted, ...) {
 crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
   assert_input_sample(observed, predicted)
 
-  crps <- scoringRules::crps_sample(
+  crps <- scoringRules::crps_sample( # nolint: namespace_linter.
     y = observed,
     dat = predicted,
     ...
   )
 
   if (separate_results) {
-    if (is.null(dim(predicted))) {
-      ## if `predicted` is a vector convert to matrix
-      dim(predicted) <- c(1, length(predicted))
-    }
+    predicted <- ensure_sample_matrix(predicted)
     medians <- apply(predicted, 1, median)
-    dispersion <- scoringRules::crps_sample(
+    dispersion <- scoringRules::crps_sample( # nolint: namespace_linter.
       y = medians,
       dat = predicted,
       ...
@@ -411,7 +428,9 @@ underprediction_sample <- function(observed, predicted, ...) {
 #' @keywords metric
 mad_sample <- function(observed = NULL, predicted, ...) {
 
-  assert_input_sample(rep(NA_real_, nrow(predicted)), predicted)
+  n <- if (is.matrix(predicted)) nrow(predicted) else 1
+  assert_input_sample(rep(NA_real_, n), predicted)
+  predicted <- ensure_sample_matrix(predicted)
 
   sharpness <- apply(predicted, MARGIN = 1, mad, ...)
   return(sharpness)
@@ -544,9 +563,7 @@ pit_histogram_sample <- function(observed,
     n_replicates, null.ok = (integers != "random"),
     .var.name = paste("n_replicates with `integers` = ", integers)
   )
-  if (is.vector(predicted)) {
-    predicted <- matrix(predicted, nrow = 1)
-  }
+  predicted <- ensure_sample_matrix(predicted)
 
   if (integers != "random" && !is.null(n_replicates)) {
     cli_warn("`n_replicates` is ignored when `integers` is not `random`")

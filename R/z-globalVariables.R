@@ -6,6 +6,7 @@ globalVariables(c(
   "..forecast_unit",
   "..index",
   "..probs",
+  "..quantile_level",
   "..samplecols",
   "..type",
   ".BY",

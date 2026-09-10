@@ -54,7 +54,7 @@ as_forecast_sample.default <- function(data,
 
 #' @export
 #' @rdname assert_forecast
-#' @importFrom checkmate assert_subset
+#' @importFrom checkmate assert_subset assert_numeric
 #' @keywords validate-forecast-object
 assert_forecast.forecast_sample <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
@@ -62,6 +62,8 @@ assert_forecast.forecast_sample <- function(
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_subset("sample_id", colnames(forecast))
   assert_forecast_type(forecast, actual = "sample", desired = forecast_type)
+  assert_numeric(forecast$observed, .var.name = "observed")
+  assert_numeric(forecast$predicted, .var.name = "predicted")
   return(invisible(NULL))
 }
 
@@ -103,17 +105,15 @@ as_forecast_quantile.forecast_sample <- function(
   ...
 ) {
   forecast <- as.data.table(data)
-  assert_numeric(probs, min.len = 1)
+  assert_numeric(probs, min.len = 1, lower = 0, upper = 1, any.missing = FALSE)
   reserved_columns <- c("predicted", "sample_id")
   by <- setdiff(colnames(forecast), reserved_columns)
 
-  quantile_level <- unique(
-    round(c(probs, 1 - probs), digits = 10)
-  )
+  quantile_level <- unique(round(probs, digits = 10))
 
   forecast <-
     forecast[, .(quantile_level = quantile_level,
-                 predicted = quantile(x = predicted, probs = ..probs,
+                 predicted = quantile(x = predicted, probs = ..quantile_level,
                                       type = ..type, na.rm = TRUE)),
              by = by]
 

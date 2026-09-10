@@ -61,9 +61,9 @@ as_forecast_quantile.default <- function(data,
     cli_warn(
       "The {.code quantile_level} column in your data
       seems to have a rounding issue
-      (run {.code diff(sort(unique(data$quantile_level)))} to see this.
+      (run {.code diff(sort(unique(data$quantile_level)))} to see this).
       As {.code scoringutils} does not support arbitrarily fine quantile level
-      increments, we're going to run {.code round(x, digits = 10)} on
+      increments, we're going to run {.code round(x, digits = 9)} on
       the {.code quantile_level} column."
     )
     data$quantile_level <- round(data$quantile_level, digits = 9)
@@ -77,7 +77,7 @@ as_forecast_quantile.default <- function(data,
 
 #' @export
 #' @rdname assert_forecast
-#' @importFrom checkmate assert_subset
+#' @importFrom checkmate assert_subset assert_numeric
 #' @keywords validate-forecast-object
 assert_forecast.forecast_quantile <- function(
   forecast, forecast_type = NULL, verbose = TRUE, ...
@@ -86,6 +86,8 @@ assert_forecast.forecast_quantile <- function(
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "quantile", desired = forecast_type)
   assert_numeric(forecast$quantile_level, lower = 0, upper = 1)
+  assert_numeric(forecast$observed, .var.name = "observed")
+  assert_numeric(forecast$predicted, .var.name = "predicted")
   return(invisible(NULL))
 }
 
@@ -232,7 +234,7 @@ get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
   assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast <- as.data.table(forecast)
-  present_quantiles <- unique(c(0, forecast$quantile_level, 1))
+  present_quantiles <- sort(unique(c(0, forecast$quantile_level, 1)))
   present_quantiles <- round(present_quantiles, 10)
 
   if (!is.null(breaks)) {
@@ -244,14 +246,22 @@ get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
   }
   ## avoid rounding errors
   quantiles <- round(quantiles, 10)
-  diffs <- round(diff(quantiles), 10)
 
   if (length(setdiff(quantiles, present_quantiles)) > 0) {
-    cli_warn(
-      "Some requested quantiles are missing in the forecast. ",
-      "The PIT histogram will be based on the quantiles present in the forecast."
-    )
+    cli_warn(c(
+      "Some requested quantiles are missing in the forecast.",
+      i = "The PIT histogram will be based on the quantiles present in the
+      forecast."
+    ))
+    # fall back to the quantiles present in the forecast: keep the requested
+    # quantiles that are present; if none are (except 0 and 1), use all
+    # present quantiles
+    quantiles <- quantiles[quantiles %in% present_quantiles]
+    if (length(quantiles) <= 2) {
+      quantiles <- present_quantiles
+    }
   }
+  diffs <- round(diff(quantiles), 10)
 
   forecast <- forecast[quantile_level %in% quantiles]
   forecast[, quantile_coverage := (observed <= predicted)]
