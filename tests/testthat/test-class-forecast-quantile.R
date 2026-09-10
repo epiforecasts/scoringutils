@@ -148,6 +148,93 @@ test_that("as_forecast_quantiles works", {
   )
 })
 
+test_that("as_forecast_quantiles handles a single asymmetric prob", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  quantile <- as_forecast_quantile(samples, probs = 0.4)
+
+  expect_identical(nrow(quantile), 1L)
+  expect_identical(quantile$quantile_level, 0.4)
+  expect_identical(
+    quantile$predicted,
+    unname(quantile(1:100, probs = 0.4, type = 7))
+  )
+})
+
+test_that("as_forecast_quantiles handles multiple asymmetric probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  expect_no_condition(
+    quantile <- as_forecast_quantile(samples, probs = c(0.1, 0.2))
+  )
+  expect_identical(quantile$quantile_level, c(0.1, 0.2))
+  expect_identical(
+    quantile$predicted,
+    unname(quantile(1:100, probs = c(0.1, 0.2), type = 7))
+  )
+})
+
+test_that("as_forecast_quantiles deduplicates repeated probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  quantile <- as_forecast_quantile(samples, probs = c(0.5, 0.5))
+
+  expect_identical(nrow(quantile), 1L)
+  expect_identical(quantile$quantile_level, 0.5)
+  expect_identical(
+    quantile$predicted,
+    unname(quantile(1:100, probs = 0.5, type = 7))
+  )
+})
+
+test_that("as_forecast_quantiles errors on out-of-range probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  expect_error(
+    as_forecast_quantile(samples, probs = c(0.5, 1.5)),
+    "Assertion on 'probs' failed"
+  )
+})
+
+test_that("as_forecast_quantiles errors on missing values in probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  expect_error(
+    as_forecast_quantile(samples, probs = c(0.5, NA)),
+    "Assertion on 'probs' failed"
+  )
+})
+
 test_that("as_forecast_quantiles issue 557 fix", {
   out <- example_sample_discrete |>
     na.omit() |>
