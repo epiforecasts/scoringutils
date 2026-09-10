@@ -252,9 +252,7 @@ get_pairwise_comparisons <- function(
 #' forecast unit (excluding the `compare` column) and one column per
 #' comparator (see [.pivot_scores()]). The set of overlapping forecasts for
 #' any pair of comparators is then simply the set of rows for which both
-#' columns are non-missing. This avoids re-joining the scores for every pair
-#' of comparators and is considerably faster than calling
-#' [compare_forecasts()] for every pair, while giving identical results.
+#' columns are non-missing.
 #' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
 #' @importFrom data.table setnames
@@ -417,7 +415,8 @@ pairwise_comparison_one_group <- function(scores,
   forecast_unit <- get_forecast_unit(scores)
   merge_by <- setdiff(forecast_unit, compare)
 
-  # remove exact duplicates once here, instead of inside every pairwise merge
+  # drop exact duplicate rows before checking for genuine
+  # forecast-unit duplicates
   scores <- unique(as.data.table(scores))
   if (anyDuplicated(scores, by = forecast_unit) > 0) {
     #nolint start: object_usage_linter
@@ -518,10 +517,9 @@ pairwise_comparison_one_group <- function(scores,
 #' are found by merging the scores of the two comparators on the forecast
 #' unit. The actual comparison is then done by [.compare_scores()].
 #'
-#' [pairwise_comparison_one_group()] no longer calls this function for every
-#' pair of comparators (it aligns the scores of all comparators at once using
-#' [.pivot_scores()] instead), but it is kept as a simple reference
-#' implementation of the comparison between two comparators.
+#' [pairwise_comparison_one_group()] does not call this function; it aligns
+#' all comparators at once via [.pivot_scores()]. [compare_forecasts()] is
+#' kept as a reference implementation for testing.
 #' @inheritParams get_pairwise_comparisons
 #' @param name_comparator1 Character, name of the first comparator
 #' @param name_comparator2 Character, name of the comparator to compare against

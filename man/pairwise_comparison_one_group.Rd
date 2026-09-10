@@ -60,8 +60,6 @@ Internally, the scores are pivoted once into a matrix with one row per
 forecast unit (excluding the \code{compare} column) and one column per
 comparator (see \code{\link[=.pivot_scores]{.pivot_scores()}}). The set of overlapping forecasts for
 any pair of comparators is then simply the set of rows for which both
-columns are non-missing. This avoids re-joining the scores for every pair
-of comparators and is considerably faster than calling
-\code{\link[=compare_forecasts]{compare_forecasts()}} for every pair, while giving identical results.
+columns are non-missing.
 }
 \keyword{internal}

@@ -53,10 +53,9 @@ which both comparators have made a prediction. The overlapping forecasts
 are found by merging the scores of the two comparators on the forecast
 unit. The actual comparison is then done by \code{\link[=.compare_scores]{.compare_scores()}}.
 
-\code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}} no longer calls this function for every
-pair of comparators (it aligns the scores of all comparators at once using
-\code{\link[=.pivot_scores]{.pivot_scores()}} instead), but it is kept as a simple reference
-implementation of the comparison between two comparators.
+\code{\link[=pairwise_comparison_one_group]{pairwise_comparison_one_group()}} does not call this function; it aligns
+all comparators at once via \code{\link[=.pivot_scores]{.pivot_scores()}}. \code{\link[=compare_forecasts]{compare_forecasts()}} is
+kept as a reference implementation for testing.
 }
 \author{
 Johannes Bracher, \email{johannes.bracher@kit.edu}
