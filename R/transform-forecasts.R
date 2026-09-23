@@ -55,7 +55,7 @@
 #'   be one additional column, `scale', present which will be set to "natural"
 #'   for the untransformed forecasts.
 #'
-#' @importFrom data.table ':=' is.data.table copy
+#' @importFrom data.table ":=" is.data.table copy
 #' @importFrom cli cli_abort cli_warn
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
 #' @export

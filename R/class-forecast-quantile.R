@@ -131,7 +131,7 @@ as_forecast_point.forecast_quantile <- function(data, ...) {
 
 
 #' @importFrom stats na.omit
-#' @importFrom data.table `:=` as.data.table rbindlist %like% setattr copy
+#' @importFrom data.table ":=" as.data.table rbindlist %like% setattr copy
 #' @rdname score
 #' @export
 score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), ...) {
@@ -226,7 +226,7 @@ get_metrics.forecast_quantile <- function(x, select = NULL, exclude = NULL, ...)
 
 #' @rdname get_pit_histogram
 #' @importFrom stats na.omit
-#' @importFrom data.table `:=` as.data.table
+#' @importFrom data.table ":=" as.data.table
 #' @export
 get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
                                                 breaks = NULL, by, ...) {

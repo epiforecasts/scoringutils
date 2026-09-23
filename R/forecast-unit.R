@@ -21,7 +21,7 @@
 #' @importFrom cli cli_warn
 #' @returns A data.table with only those columns kept that are relevant to
 #'   scoring or denote the unit of a single forecast as specified by the user.
-#' @importFrom data.table ':=' is.data.table copy
+#' @importFrom data.table ":=" is.data.table copy
 #' @importFrom checkmate assert_character assert_subset
 #' @keywords as_forecast
 #' @examples

@@ -76,7 +76,7 @@ as_forecast_generic <- function(data,
 #'   warnings will be created.
 #' @return
 #' Returns `NULL` invisibly.
-#' @importFrom data.table ':=' is.data.table
+#' @importFrom data.table ":=" is.data.table
 #' @importFrom checkmate assert_data_frame
 #' @export
 #' @keywords validate-forecast-object
@@ -123,7 +123,7 @@ assert_forecast.default <- function(
 #' be validated.
 #' @inheritParams assert_forecast
 #' @returns returns the input
-#' @importFrom data.table ':=' is.data.table
+#' @importFrom data.table ":=" is.data.table
 #' @importFrom checkmate assert_data_table assert_subset test_subset
 #' @importFrom cli cli_abort cli_inform cli_warn
 #' @keywords internal_input_check
