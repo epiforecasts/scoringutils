@@ -64,7 +64,7 @@ will predict pairwise differences that do not match the
 observations, resulting in a higher score.
 
 The score is computed using
-\code{\link[scoringRules:scores_sample_multiv]{scoringRules::vs_sample()}}.
+\code{\link[scoringRules:vs_sample]{scoringRules::vs_sample()}}.
 }
 \references{
 Scheuerer, M. and Hamill, T.M. (2015). Variogram-Based

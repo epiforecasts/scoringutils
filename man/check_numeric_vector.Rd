@@ -10,7 +10,7 @@ check_numeric_vector(x, ...)
 \item{x}{input to check}
 
 \item{...}{
-  Arguments passed on to \code{\link[checkmate:checkNumeric]{checkmate::check_numeric}}
+  Arguments passed on to \code{\link[checkmate:check_numeric]{checkmate::check_numeric}}
   \describe{
     \item{\code{lower}}{[\code{numeric(1)}]\cr
 Lower value all elements of \code{x} must be greater than or equal to.}
@@ -45,6 +45,17 @@ Set to \code{TRUE} to enable strict type checking.}
     \item{\code{null.ok}}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, \code{x} may also be \code{NULL}.
 In this case only a type check of \code{x} is performed, all additional checks are disabled.}
+    \item{\code{.var.name}}{[\code{character(1)}]\cr
+Name of the checked object to print in assertions. Defaults to
+the heuristic implemented in \code{\link[checkmate]{vname}}.}
+    \item{\code{add}}{[\code{AssertCollection}]\cr
+Collection to store assertion messages. See \code{\link[checkmate]{AssertCollection}}.}
+    \item{\code{info}}{[\code{character(1)}]\cr
+Extra information to be included in the message for the testthat reporter.
+See \code{\link[testthat]{expect_that}}.}
+    \item{\code{label}}{[\code{character(1)}]\cr
+Name of the checked object to print in messages. Defaults to
+the heuristic implemented in \code{\link[checkmate]{vname}}.}
   }}
 }
 \value{

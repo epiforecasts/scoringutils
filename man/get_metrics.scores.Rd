@@ -46,16 +46,16 @@ order does not matter).
 }
 }
 \seealso{
-Other get_metrics functions: 
-\code{\link{get_metrics}()},
-\code{\link{get_metrics.forecast_binary}()},
-\code{\link{get_metrics.forecast_multivariate_point}()},
-\code{\link{get_metrics.forecast_multivariate_sample}()},
-\code{\link{get_metrics.forecast_nominal}()},
-\code{\link{get_metrics.forecast_ordinal}()},
-\code{\link{get_metrics.forecast_point}()},
-\code{\link{get_metrics.forecast_quantile}()},
-\code{\link{get_metrics.forecast_sample}()}
+Other get_metrics functions:
+\code{\link[=get_metrics]{get_metrics()}},
+\code{\link[=get_metrics.forecast_binary]{get_metrics.forecast_binary()}},
+\code{\link[=get_metrics.forecast_multivariate_point]{get_metrics.forecast_multivariate_point()}},
+\code{\link[=get_metrics.forecast_multivariate_sample]{get_metrics.forecast_multivariate_sample()}},
+\code{\link[=get_metrics.forecast_nominal]{get_metrics.forecast_nominal()}},
+\code{\link[=get_metrics.forecast_ordinal]{get_metrics.forecast_ordinal()}},
+\code{\link[=get_metrics.forecast_point]{get_metrics.forecast_point()}},
+\code{\link[=get_metrics.forecast_quantile]{get_metrics.forecast_quantile()}},
+\code{\link[=get_metrics.forecast_sample]{get_metrics.forecast_sample()}}
 }
 \concept{get_metrics functions}
 \keyword{handle-metrics}

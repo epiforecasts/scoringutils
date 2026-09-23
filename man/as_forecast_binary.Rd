@@ -108,14 +108,14 @@ as_forecast_binary(
 )
 }
 \seealso{
-Other functions to create forecast objects: 
-\code{\link{as_forecast_multivariate_point}()},
-\code{\link{as_forecast_multivariate_sample}()},
-\code{\link{as_forecast_nominal}()},
-\code{\link{as_forecast_ordinal}()},
-\code{\link{as_forecast_point}()},
-\code{\link{as_forecast_quantile}()},
-\code{\link{as_forecast_sample}()}
+Other functions to create forecast objects:
+\code{\link[=as_forecast_multivariate_point]{as_forecast_multivariate_point()}},
+\code{\link[=as_forecast_multivariate_sample]{as_forecast_multivariate_sample()}},
+\code{\link[=as_forecast_nominal]{as_forecast_nominal()}},
+\code{\link[=as_forecast_ordinal]{as_forecast_ordinal()}},
+\code{\link[=as_forecast_point]{as_forecast_point()}},
+\code{\link[=as_forecast_quantile]{as_forecast_quantile()}},
+\code{\link[=as_forecast_sample]{as_forecast_sample()}}
 }
 \concept{functions to create forecast objects}
 \keyword{as_forecast}
