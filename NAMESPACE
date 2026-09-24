@@ -257,6 +257,7 @@ importFrom(scoringRules,
 )
 importFrom(stats,
   as.formula,
+  ave,
   cor,
   mad,
   median,
