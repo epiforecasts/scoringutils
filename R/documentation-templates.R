@@ -26,7 +26,7 @@
 #' @param predicted (optional) Name of the column in `data` that contains the
 #'   predicted values. This column will be renamed to "predicted".
 #' @inheritSection forecast_types Forecast unit
-#' @keywords as_forecast
+#' @keywords internal
 #' @name as_forecast_doc_template
 NULL
 

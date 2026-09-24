@@ -276,7 +276,7 @@ score_multivariate_apply <- function(
 #' Helper function to set the grouping of a forecast.
 #' @inheritParams as_forecast_doc_template
 #' @inheritParams as_forecast_multivariate_sample
-#' @importFrom data.table ':=' is.data.table copy setkeyv key
+#' @importFrom data.table ":=" is.data.table copy setkeyv key
 #' @importFrom checkmate assert_character assert_subset
 #' @importFrom cli cli_abort
 #' @return

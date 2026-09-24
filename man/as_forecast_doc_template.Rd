@@ -62,4 +62,4 @@ while making sure that all necessary, 'protected columns' like "predicted"
 or "observed" are retained.
 }
 
-\keyword{as_forecast}
+\keyword{internal}

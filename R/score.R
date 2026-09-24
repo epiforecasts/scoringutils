@@ -56,7 +56,7 @@
 #' `metrics` with the names of the metrics used for scoring. See
 #' [summarise_scores()]) for information on how to summarise
 #' scores.
-#' @importFrom data.table ':=' as.data.table
+#' @importFrom data.table ":=" as.data.table
 #' @importFrom stats na.omit
 #' @keywords scoring
 #' @examples

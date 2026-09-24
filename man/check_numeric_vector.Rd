@@ -10,7 +10,7 @@ check_numeric_vector(x, ...)
 \item{x}{input to check}
 
 \item{...}{
-  Arguments passed on to \code{\link[checkmate:checkNumeric]{checkmate::check_numeric}}
+  Arguments passed on to \code{\link[checkmate:check_numeric]{checkmate::check_numeric}}
   \describe{
     \item{\code{lower}}{[\code{numeric(1)}]\cr
 Lower value all elements of \code{x} must be greater than or equal to.}

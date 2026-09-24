@@ -15,7 +15,7 @@ Carlo samples. Alternatively, if n = 1, \code{predicted} can just be a vector
 of size n.}
 
 \item{...}{Additional arguments passed to
-\link[scoringRules:scores_sample_univ]{dss_sample()} from the scoringRules package.}
+\link[scoringRules:dss_sample]{dss_sample()} from the scoringRules package.}
 }
 \value{
 Vector with scores.

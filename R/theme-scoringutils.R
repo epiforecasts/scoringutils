@@ -3,7 +3,7 @@
 #' @description
 #' A theme for ggplot2 plots used in `scoringutils`.
 #' @returns A ggplot2 theme
-#' @importFrom ggplot2 theme theme_minimal element_line `%+replace%`
+#' @importFrom ggplot2 theme theme_minimal element_line "%+replace%"
 #' @keywords plotting
 #' @export
 theme_scoringutils <- function() {

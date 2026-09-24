@@ -201,7 +201,7 @@ get_metrics.forecast_sample <- function(x, select = NULL, exclude = NULL, ...) {
 
 
 #' @rdname get_pit_histogram
-#' @importFrom data.table `:=` as.data.table dcast
+#' @importFrom data.table ":=" as.data.table dcast
 #' @importFrom checkmate assert_int assert_numeric
 #' @inheritParams pit_histogram_sample
 #' @seealso [pit_histogram_sample()]

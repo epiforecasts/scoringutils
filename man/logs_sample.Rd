@@ -15,7 +15,7 @@ Carlo samples. Alternatively, if n = 1, \code{predicted} can just be a vector
 of size n.}
 
 \item{...}{Additional arguments passed to
-\link[scoringRules:scores_sample_univ]{logs_sample()} from the scoringRules package.}
+\link[scoringRules:logs_sample]{logs_sample()} from the scoringRules package.}
 }
 \value{
 Vector with scores.
@@ -58,8 +58,8 @@ Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 Forecasts with scoringRules, \url{https://www.jstatsoft.org/article/view/v090i12}
 }
 \seealso{
-Other log score functions: 
-\code{\link{logs_categorical}()},
+Other log score functions:
+\code{\link[=logs_categorical]{logs_categorical()}},
 \code{\link{scoring-functions-binary}}
 }
 \concept{log score functions}
