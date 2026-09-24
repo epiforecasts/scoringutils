@@ -30,6 +30,9 @@ Useful links:
 
 Authors:
 
+- Nikos Bosse <nikosbosse@gmail.com>
+  ([ORCID](https://orcid.org/0000-0002-7750-5280))
+
 - Sam Abbott <contact@samabbott.co.uk>
   ([ORCID](https://orcid.org/0000-0001-8057-8037))
 

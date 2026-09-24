@@ -32,11 +32,6 @@
 
   Create a `forecast` object for binary forecasts
 
-- [`as_forecast_doc_template`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_doc_template.md)
-  :
-
-  General information on creating a `forecast` object
-
 - [`as_forecast_generic()`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_generic.md)
   :
 
@@ -359,6 +354,11 @@
 
 - [`apply_metrics()`](https://epiforecasts.io/scoringutils/dev/reference/apply_metrics.md)
   : Apply a list of functions to a data table of forecasts
+
+- [`as_forecast_doc_template`](https://epiforecasts.io/scoringutils/dev/reference/as_forecast_doc_template.md)
+  :
+
+  General information on creating a `forecast` object
 
 - [`as_scores()`](https://epiforecasts.io/scoringutils/dev/reference/as_scores.md)
   :
