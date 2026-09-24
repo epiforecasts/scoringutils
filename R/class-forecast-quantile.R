@@ -131,7 +131,7 @@ as_forecast_point.forecast_quantile <- function(data, ...) {
 
 
 #' @importFrom stats na.omit
-#' @importFrom data.table ":=" as.data.table rbindlist %like% setattr copy
+#' @importFrom data.table ":=" as.data.table rbindlist "%like%" setattr copy
 #' @rdname score
 #' @export
 score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), ...) {
