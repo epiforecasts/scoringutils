@@ -53,7 +53,7 @@ get_duplicate_forecasts <- function(
     tmp <- new_forecast(data, paste0("forecast_", type))
     type_cols <- get_forecast_type_ids(tmp)
   } else {
-    lifecycle::deprecate_warn(
+    deprecate_warn(
       "2.3.0",
       I(paste(
         "Calling `get_duplicate_forecasts()` on a data.frame without",
