@@ -58,7 +58,7 @@ Imports:
     cli,
     data.table (>= 1.17.0),
     ggplot2 (>= 3.4.0),
-    lifecycle,
+    lifecycle (>= 1.0.2),
     methods,
     purrr,
     scoringRules (>= 1.1.3),
