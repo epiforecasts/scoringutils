@@ -79,7 +79,7 @@ get_metrics(ex)
 #>     variogram_score_multivariate(observed = observed, predicted = predicted, 
 #>         mv_group_id = mv_group_id, w = NULL, w_vs = w_vs, p = p)
 #> }
-#> <bytecode: 0x5637a9353720>
+#> <bytecode: 0x55f1a9644f78>
 #> <environment: namespace:scoringutils>
 #> 
 ```
