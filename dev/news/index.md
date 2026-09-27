@@ -1076,7 +1076,8 @@ breaking changes.
 #### Package data updated
 
 - Package data is now based on forecasts submitted to the European
-  Forecast Hub (<https://covid19forecasthub.eu/>).
+  Forecast Hub
+  (<https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive>).
 - All example data files were renamed to begin with `example_`.
 - A new data set, `summary_metrics` was included that contains a summary
   of the metrics implemented in `scoringutils`.
