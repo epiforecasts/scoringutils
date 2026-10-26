@@ -2,6 +2,10 @@
 
 ## scoringutils (development version)
 
+## scoringutils 2.3.0
+
+CRAN release: 2026-09-27
+
 This release adds tools for handling missing forecasts
 ([`filter_scores()`](https://epiforecasts.io/scoringutils/dev/reference/filter_scores.md),
 [`impute_missing_scores()`](https://epiforecasts.io/scoringutils/dev/reference/impute_missing_scores.md)),
