@@ -144,71 +144,11 @@ transform_forecasts.forecast <- function(forecast,
                                          append = TRUE,
                                          label = "log",
                                          ...) {
-  original_forecast <- clean_forecast(forecast, copy = TRUE)
-  assert_function(fun)
-  assert_logical(append, len = 1)
-  assert_character(label, len = 1)
-
-  forecast_type <- get_forecast_type(original_forecast)
-  scale_col_present <- ("scale" %in% colnames(original_forecast))
-
-  if (scale_col_present) {
-    if (!("natural" %in% original_forecast$scale)) {
-      cli_abort(
-        c(
-          `!` = "If a column 'scale' is present, entries with
-          scale =='natural' are required for the transformation."
-        )
-      )
-    }
-    if (append && (label %in% original_forecast$scale)) {
-      cli_warn(
-        c(
-          i = "Appending new transformations with label
-          '{label}' even though that entry is already present
-          in column 'scale'."
-        )
-      )
-    }
-  }
-
-  if (append) {
-    if (scale_col_present) {
-      transformed_forecast <- copy(
-        original_forecast
-      )[scale == "natural"]
-    } else {
-      transformed_forecast <- copy(original_forecast)
-      original_forecast[, scale := "natural"]
-    }
-    transformed_forecast[, predicted := fun(predicted, ...)]
-    transformed_forecast[, observed := fun(observed, ...)]
-    transformed_forecast[, scale := label]
-    out <- rbind(original_forecast, transformed_forecast)
-
-    fn_name <- paste0("as_forecast_", forecast_type)
-    fn <- get(fn_name)
-    out <- suppressWarnings(suppressMessages(
-      fn(data = out)
-    ))
-    return(out[])
-  }
-
-  if (scale_col_present) {
-    original_forecast[
-      scale == "natural",
-      predicted := fun(predicted, ...)
-    ]
-    original_forecast[
-      scale == "natural",
-      observed := fun(observed, ...)
-    ]
-    original_forecast[scale == "natural", scale := label]
-  } else {
-    original_forecast[, predicted := fun(predicted, ...)]
-    original_forecast[, observed := fun(observed, ...)]
-  }
-  return(original_forecast[])
+  out <- transform_forecast_data(forecast, fun, append, label, ...)
+  fn <- get(paste0("as_forecast_", get_forecast_type(forecast)))
+  suppressWarnings(suppressMessages(
+    fn(data = out)
+  ))
 }
 
 
@@ -221,18 +161,13 @@ transform_forecasts.forecast_multivariate_sample <- function(
     append = TRUE,
     label = "log",
     ...) {
-  out <- transform_forecasts.forecast(
-    forecast, fun, append, label, ...
-  )
-  if (!append) return(out)
+  out <- transform_forecast_data(forecast, fun, append, label, ...)
   joint_across <- setdiff(
     get_forecast_unit(forecast),
     get_grouping(forecast)
   )
-  out <- as.data.table(out)
   out[, .mv_group_id := NULL]
-  forecast_type <- get_forecast_type(forecast)
-  fn <- get(paste0("as_forecast_", forecast_type))
+  fn <- get(paste0("as_forecast_", get_forecast_type(forecast)))
   suppressWarnings(suppressMessages(
     fn(data = out, joint_across = joint_across)
   ))
@@ -254,6 +189,74 @@ transform_forecasts.forecast_multivariate_point <- function(
   )
 }
 # nolint end
+
+
+#' @title Apply a transformation to the data of a forecast object
+#'
+#' @description
+#' Internal helper for the [transform_forecasts()] methods. It validates the
+#' forecast object once and then applies the transformation to a plain
+#' `data.table` copy of it. Working on a plain `data.table` avoids
+#' `[.forecast`, which re-validates the whole forecast object after every
+#' `:=` update. The caller is responsible for turning the result back into
+#' a forecast object (which validates it once more).
+#'
+#' @inheritParams transform_forecasts
+#' @returns A plain `data.table` with the transformed (and, if
+#'   `append = TRUE`, the original) forecasts.
+#' @importFrom data.table as.data.table
+#' @keywords internal
+transform_forecast_data <- function(forecast, fun, append, label, ...) {
+  data <- as.data.table(clean_forecast(forecast, copy = TRUE))
+  assert_function(fun)
+  assert_logical(append, len = 1)
+  assert_character(label, len = 1)
+
+  scale_col_present <- ("scale" %in% colnames(data))
+
+  if (scale_col_present) {
+    if (!("natural" %in% data$scale)) {
+      cli_abort(
+        c(
+          `!` = "If a column 'scale' is present, entries with
+          scale =='natural' are required for the transformation."
+        )
+      )
+    }
+    if (append && (label %in% data$scale)) {
+      cli_warn(
+        c(
+          i = "Appending new transformations with label
+          '{label}' even though that entry is already present
+          in column 'scale'."
+        )
+      )
+    }
+  }
+
+  if (append) {
+    if (scale_col_present) {
+      transformed <- data[scale == "natural"]
+    } else {
+      transformed <- copy(data)
+      data[, scale := "natural"]
+    }
+    transformed[, predicted := fun(predicted, ...)]
+    transformed[, observed := fun(observed, ...)]
+    transformed[, scale := label]
+    return(rbind(data, transformed))
+  }
+
+  if (scale_col_present) {
+    data[scale == "natural", predicted := fun(predicted, ...)]
+    data[scale == "natural", observed := fun(observed, ...)]
+    data[scale == "natural", scale := label]
+  } else {
+    data[, predicted := fun(predicted, ...)]
+    data[, observed := fun(observed, ...)]
+  }
+  return(data[])
+}
 
 
 #' @title Log transformation with an additive shift

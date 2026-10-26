@@ -60,6 +60,46 @@ test_that("transform_forecasts() outputs an object of class forecast_*", {
   expect_s3_class(transformed, "forecast_binary")
 })
 
+test_that("transform_forecasts() validates the forecast only twice", {
+  # once for the input and once for the output, not after every internal `:=`
+  # update (#1236)
+  counter <- new.env()
+  assert_forecast_generic_orig <- assert_forecast_generic
+  local_mocked_bindings(
+    assert_forecast_generic = function(...) {
+      counter$n <- counter$n + 1
+      assert_forecast_generic_orig(...)
+    }
+  )
+  add_one <- function(x) x + 1
+  forecast <- na.omit(example_quantile)
+  counter$n <- 0
+  transform_forecasts(forecast, fun = add_one)
+  expect_identical(counter$n, 2)
+
+  counter$n <- 0
+  transform_forecasts(forecast, fun = add_one, append = FALSE)
+  expect_identical(counter$n, 2)
+})
+
+test_that("transform_forecasts() does not modify its input", {
+  add_one <- function(x) x + 1
+  forecast <- data.table::copy(na.omit(example_quantile))
+  original <- data.table::copy(forecast)
+  transform_forecasts(forecast, fun = add_one)
+  transform_forecasts(forecast, fun = add_one, append = FALSE)
+  expect_identical(as.data.table(forecast), as.data.table(original))
+})
+
+test_that("transform_forecasts() errors if the result is not a valid forecast", {
+  expect_error(
+    transform_forecasts(
+      na.omit(example_quantile), fun = as.character, append = FALSE
+    ),
+    "Must be of type 'numeric'"
+  )
+})
+
 test_that("transform_forecasts() errors on non-forecast objects", {
   expect_error(
     transform_forecasts(data.frame(x = 1)),
