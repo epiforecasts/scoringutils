@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="scoringutils: Utilities for Scoring and Assessing Predictions — scoringutils-package"><meta name="description" content="
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="scoringutils: Utilities for Scoring and Assessing Predictions — scoringutils-package"><meta name="description" content="
 Facilitate the evaluation of forecasts in a convenient framework based on data.table. It allows user to to check their forecasts and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package mostly focuses on the evaluation of probabilistic forecasts and allows evaluating several different forecast types and input formats. Find more information about the package in the Vignettes as well as in the accompanying paper, doi:10.48550/arXiv.2205.07090
 ."><meta property="og:description" content="
 Facilitate the evaluation of forecasts in a convenient framework based on data.table. It allows user to to check their forecasts and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package mostly focuses on the evaluation of probabilistic forecasts and allows evaluating several different forecast types and input formats. Find more information about the package in the Vignettes as well as in the accompanying paper, doi:10.48550/arXiv.2205.07090
@@ -17,7 +17,7 @@ Facilitate the evaluation of forecasts in a convenient framework based on data.t
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,8 +29,7 @@ Facilitate the evaluation of forecasts in a convenient framework based on data.t
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
-    <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/handling-missing-forecasts.html">Handling missing forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
@@ -45,7 +44,7 @@ Facilitate the evaluation of forecasts in a convenient framework based on data.t
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>scoringutils: Utilities for Scoring and Assessing Predictions</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/v2.2.0/R/scoringutils.R" class="external-link"><code>R/scoringutils.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/scoringutils.R" class="external-link"><code>R/scoringutils.R</code></a></small>
       <div class="d-none name"><code>scoringutils-package.Rd</code></div>
     </div>
 
@@ -67,7 +66,8 @@ Facilitate the evaluation of forecasts in a convenient framework based on data.t
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p><strong>Maintainer</strong>: Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a> (<a href="https://orcid.org/0000-0002-7750-5280" class="external-link">ORCID</a>)</p>
-<p>Authors:</p><ul><li><p>Sam Abbott <a href="mailto:contact@samabbott.co.uk">contact@samabbott.co.uk</a> (<a href="https://orcid.org/0000-0001-8057-8037" class="external-link">ORCID</a>)</p></li>
+<p>Authors:</p><ul><li><p>Nikos Bosse <a href="mailto:nikosbosse@gmail.com">nikosbosse@gmail.com</a> (<a href="https://orcid.org/0000-0002-7750-5280" class="external-link">ORCID</a>)</p></li>
+<li><p>Sam Abbott <a href="mailto:contact@samabbott.co.uk">contact@samabbott.co.uk</a> (<a href="https://orcid.org/0000-0001-8057-8037" class="external-link">ORCID</a>)</p></li>
 <li><p>Hugo Gruson <a href="mailto:hugo.gruson+R@normalesup.org">hugo.gruson+R@normalesup.org</a> (<a href="https://orcid.org/0000-0002-4094-1476" class="external-link">ORCID</a>)</p></li>
 <li><p>Sebastian Funk <a href="mailto:sebastian.funk@lshtm.ac.uk">sebastian.funk@lshtm.ac.uk</a></p></li>
 </ul><p>Other contributors:</p><ul><li><p>Johannes Bracher <a href="mailto:johannes.bracher@kit.edu">johannes.bracher@kit.edu</a> (<a href="https://orcid.org/0000-0002-3777-1410" class="external-link">ORCID</a>) [contributor]</p></li>
@@ -85,7 +85,7 @@ Facilitate the evaluation of forecasts in a convenient framework based on data.t
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer></div>

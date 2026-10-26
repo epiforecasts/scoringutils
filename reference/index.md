@@ -32,11 +32,6 @@
 
   Create a `forecast` object for binary forecasts
 
-- [`as_forecast_doc_template`](https://epiforecasts.io/scoringutils/reference/as_forecast_doc_template.md)
-  :
-
-  General information on creating a `forecast` object
-
 - [`as_forecast_generic()`](https://epiforecasts.io/scoringutils/reference/as_forecast_generic.md)
   :
 
@@ -77,6 +72,9 @@
 
   Create a `forecast` object for sample-based forecasts
 
+- [`get_forecast_type_ids()`](https://epiforecasts.io/scoringutils/reference/get_forecast_type_ids.md)
+  : Get type-specific ID columns for a forecast
+
 - [`set_forecast_unit()`](https://epiforecasts.io/scoringutils/reference/set_forecast_unit.md)
   : Set unit of a single forecast manually
 
@@ -101,6 +99,8 @@
   : Count number of available forecasts
 - [`print(`*`<forecast>`*`)`](https://epiforecasts.io/scoringutils/reference/print.forecast.md)
   : Print information about a forecast object
+- [`print(`*`<scores>`*`)`](https://epiforecasts.io/scoringutils/reference/print.scores.md)
+  : Print a scores object
 - [`get_duplicate_forecasts()`](https://epiforecasts.io/scoringutils/reference/get_duplicate_forecasts.md)
   : Find duplicate forecasts
 - [`get_forecast_unit()`](https://epiforecasts.io/scoringutils/reference/get_forecast_unit.md)
@@ -180,6 +180,25 @@
   : Get names of the metrics that were used for scoring
 - [`select_metrics()`](https://epiforecasts.io/scoringutils/reference/select_metrics.md)
   : Select metrics from a list of functions
+
+## Post-process scores
+
+- [`filter_scores()`](https://epiforecasts.io/scoringutils/reference/filter_scores.md)
+  : Filter scores
+- [`filter_to_include()`](https://epiforecasts.io/scoringutils/reference/filter_to_include.md)
+  : Filter to targets covered by named compare values
+- [`filter_to_intersection()`](https://epiforecasts.io/scoringutils/reference/filter_to_intersection.md)
+  : Filter to target combinations meeting a coverage threshold
+- [`impute_mean_score()`](https://epiforecasts.io/scoringutils/reference/impute_mean_score.md)
+  : Impute with mean observed score
+- [`impute_missing_scores()`](https://epiforecasts.io/scoringutils/reference/impute_missing_scores.md)
+  : Impute missing scores
+- [`impute_model_score()`](https://epiforecasts.io/scoringutils/reference/impute_model_score.md)
+  : Impute with a reference model's scores
+- [`impute_na_score()`](https://epiforecasts.io/scoringutils/reference/impute_na_score.md)
+  : Impute with NA values
+- [`impute_worst_score()`](https://epiforecasts.io/scoringutils/reference/impute_worst_score.md)
+  : Impute with worst (maximum) observed score
 
 ## Evaluate forecasts
 
@@ -263,6 +282,8 @@
 
 - [`plot_correlations()`](https://epiforecasts.io/scoringutils/reference/plot_correlations.md)
   : Plot correlation between metrics
+- [`plot_discrimination()`](https://epiforecasts.io/scoringutils/reference/plot_discrimination.md)
+  : Plot discrimination for binary forecasts
 - [`plot_forecast_counts()`](https://epiforecasts.io/scoringutils/reference/plot_forecast_counts.md)
   : Visualise the number of available forecasts
 - [`plot_heatmap()`](https://epiforecasts.io/scoringutils/reference/plot_heatmap.md)
@@ -306,34 +327,26 @@
   : Assert that inputs are correct for quantile-based forecast
 - [`assert_input_sample()`](https://epiforecasts.io/scoringutils/reference/assert_input_sample.md)
   : Assert that inputs are correct for sample-based forecast
-- [`check_columns_present()`](https://epiforecasts.io/scoringutils/reference/check_columns_present.md)
-  : Check column names are present in a data.frame
 - [`check_dims_ok_scalar()`](https://epiforecasts.io/scoringutils/reference/check_dims_ok_scalar.md)
   : Check Inputs Have Matching Dimensions
 - [`check_duplicates()`](https://epiforecasts.io/scoringutils/reference/check_duplicates.md)
   : Check that there are no duplicate forecasts
 - [`check_input_binary()`](https://epiforecasts.io/scoringutils/reference/check_input_binary.md)
   : Check that inputs are correct for binary forecast
-- [`check_input_interval()`](https://epiforecasts.io/scoringutils/reference/check_input_interval.md)
-  : Check that inputs are correct for interval-based forecast
 - [`check_input_point()`](https://epiforecasts.io/scoringutils/reference/check_input_point.md)
   : Check that inputs are correct for point forecast
-- [`check_input_quantile()`](https://epiforecasts.io/scoringutils/reference/check_input_quantile.md)
-  : Check that inputs are correct for quantile-based forecast
-- [`check_input_sample()`](https://epiforecasts.io/scoringutils/reference/check_input_sample.md)
-  : Check that inputs are correct for sample-based forecast
 - [`check_number_per_forecast()`](https://epiforecasts.io/scoringutils/reference/check_number_per_forecast.md)
   : Check that all forecasts have the same number of rows
 - [`check_numeric_vector()`](https://epiforecasts.io/scoringutils/reference/check_numeric_vector.md)
   : Check whether an input is an atomic vector of mode 'numeric'
+- [`check_observed_constant()`](https://epiforecasts.io/scoringutils/reference/check_observed_constant.md)
+  : Check that observed values are constant within each forecast unit
 - [`check_try()`](https://epiforecasts.io/scoringutils/reference/check_try.md)
   : Helper function to convert assert statements into checks
 - [`get_forecast_type()`](https://epiforecasts.io/scoringutils/reference/get_forecast_type.md)
   : Get forecast type from forecast object
 - [`get_type()`](https://epiforecasts.io/scoringutils/reference/get_type.md)
   : Get type of a vector or matrix of observed values or predictions
-- [`test_columns_present()`](https://epiforecasts.io/scoringutils/reference/test_columns_present.md)
-  : Test whether all column names are present in a data.frame
 - [`validate_metrics()`](https://epiforecasts.io/scoringutils/reference/validate_metrics.md)
   : Validate metrics
 
@@ -341,6 +354,11 @@
 
 - [`apply_metrics()`](https://epiforecasts.io/scoringutils/reference/apply_metrics.md)
   : Apply a list of functions to a data table of forecasts
+
+- [`as_forecast_doc_template`](https://epiforecasts.io/scoringutils/reference/as_forecast_doc_template.md)
+  :
+
+  General information on creating a `forecast` object
 
 - [`as_scores()`](https://epiforecasts.io/scoringutils/reference/as_scores.md)
   :
@@ -352,14 +370,23 @@
 
   Validate an object of class `scores`
 
+- [`assert_strategy()`](https://epiforecasts.io/scoringutils/reference/assert_strategy.md)
+  : Assert that a strategy has the expected signature
+
 - [`bias_quantile_single_vector()`](https://epiforecasts.io/scoringutils/reference/bias_quantile_single_vector.md)
   : Compute bias for a single vector of quantile predictions
+
+- [`build_missing_grid()`](https://epiforecasts.io/scoringutils/reference/build_missing_grid.md)
+  : Build grid of missing model-target combinations
 
 - [`clean_forecast()`](https://epiforecasts.io/scoringutils/reference/clean_forecast.md)
   : Clean forecast object
 
 - [`compare_forecasts()`](https://epiforecasts.io/scoringutils/reference/compare_forecasts.md)
   : Compare a subset of common forecasts
+
+- [`compare_scores()`](https://epiforecasts.io/scoringutils/reference/compare_scores.md)
+  : Compare two aligned vectors of scores
 
 - [`document_assert_functions`](https://epiforecasts.io/scoringutils/reference/document_assert_functions.md)
   : Documentation template for assert functions
@@ -377,6 +404,9 @@
 
 - [`ensure_mv_grouping()`](https://epiforecasts.io/scoringutils/reference/ensure_mv_grouping.md)
   : Ensure multivariate grouping is set
+
+- [`ensure_sample_matrix()`](https://epiforecasts.io/scoringutils/reference/ensure_sample_matrix.md)
+  : Ensure that predicted samples are a matrix
 
 - [`forecast_types`](https://epiforecasts.io/scoringutils/reference/forecast_types.md)
   : Documentation template for forecast types
@@ -424,6 +454,12 @@
 
 - [`permutation_test()`](https://epiforecasts.io/scoringutils/reference/permutation_test.md)
   : Simple permutation test
+
+- [`pivot_scores()`](https://epiforecasts.io/scoringutils/reference/pivot_scores.md)
+  : Pivot scores into a forecast unit by comparator matrix
+
+- [`prepare_forecast_for_scoring()`](https://epiforecasts.io/scoringutils/reference/prepare_forecast_for_scoring.md)
+  : Prepare a forecast object for scoring
 
 - [`quantile_to_interval()`](https://epiforecasts.io/scoringutils/reference/quantile_to_interval.md)
   [`quantile_to_interval_dataframe()`](https://epiforecasts.io/scoringutils/reference/quantile_to_interval.md)

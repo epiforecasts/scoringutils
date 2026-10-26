@@ -49,6 +49,7 @@ A data.table with columns as specified in `by` and an additional column
 ## Examples
 
 ``` r
+
 example_quantile |>
   as_forecast_quantile() |>
   get_forecast_counts(by = c("model", "target_type"))

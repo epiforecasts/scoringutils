@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Package index"><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Package index"><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,8 +25,7 @@
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
-    <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/handling-missing-forecasts.html">Handling missing forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
@@ -143,13 +142,6 @@
 
         <dt>
 
-          <code><a href="as_forecast_doc_template.html">as_forecast_doc_template</a></code>
-
-        </dt>
-        <dd>General information on creating a <code>forecast</code> object</dd>
-
-        <dt>
-
           <code><a href="as_forecast_generic.html">as_forecast_generic()</a></code>
 
         </dt>
@@ -206,6 +198,13 @@
 
         <dt>
 
+          <code><a href="get_forecast_type_ids.html">get_forecast_type_ids()</a></code>
+
+        </dt>
+        <dd>Get type-specific ID columns for a forecast</dd>
+
+        <dt>
+
           <code><a href="set_forecast_unit.html">set_forecast_unit()</a></code>
 
         </dt>
@@ -256,6 +255,13 @@
 
         </dt>
         <dd>Print information about a forecast object</dd>
+
+        <dt>
+
+          <code><a href="print.scores.html">print(<i>&lt;scores&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a scores object</dd>
 
         <dt>
 
@@ -442,6 +448,71 @@
 
         </dt>
         <dd>Select metrics from a list of functions</dd>
+      </dl></div><div class="section level2">
+      <h2 id="post-process-scores">Post-process scores<a class="anchor" aria-label="anchor" href="#post-process-scores"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="filter_scores.html">filter_scores()</a></code>
+
+        </dt>
+        <dd>Filter scores</dd>
+
+        <dt>
+
+          <code><a href="filter_to_include.html">filter_to_include()</a></code>
+
+        </dt>
+        <dd>Filter to targets covered by named compare values</dd>
+
+        <dt>
+
+          <code><a href="filter_to_intersection.html">filter_to_intersection()</a></code>
+
+        </dt>
+        <dd>Filter to target combinations meeting a coverage threshold</dd>
+
+        <dt>
+
+          <code><a href="impute_mean_score.html">impute_mean_score()</a></code>
+
+        </dt>
+        <dd>Impute with mean observed score</dd>
+
+        <dt>
+
+          <code><a href="impute_missing_scores.html">impute_missing_scores()</a></code>
+
+        </dt>
+        <dd>Impute missing scores</dd>
+
+        <dt>
+
+          <code><a href="impute_model_score.html">impute_model_score()</a></code>
+
+        </dt>
+        <dd>Impute with a reference model's scores</dd>
+
+        <dt>
+
+          <code><a href="impute_na_score.html">impute_na_score()</a></code>
+
+        </dt>
+        <dd>Impute with NA values</dd>
+
+        <dt>
+
+          <code><a href="impute_worst_score.html">impute_worst_score()</a></code>
+
+        </dt>
+        <dd>Impute with worst (maximum) observed score</dd>
       </dl></div><div class="section level2">
       <h2 id="evaluate-forecasts">Evaluate forecasts<a class="anchor" aria-label="anchor" href="#evaluate-forecasts"></a></h2>
 
@@ -668,6 +739,13 @@
 
         <dt>
 
+          <code><a href="plot_discrimination.html">plot_discrimination()</a></code>
+
+        </dt>
+        <dd>Plot discrimination for binary forecasts</dd>
+
+        <dt>
+
           <code><a href="plot_forecast_counts.html">plot_forecast_counts()</a></code>
 
         </dt>
@@ -815,13 +893,6 @@
 
         <dt>
 
-          <code><a href="check_columns_present.html">check_columns_present()</a></code>
-
-        </dt>
-        <dd>Check column names are present in a data.frame</dd>
-
-        <dt>
-
           <code><a href="check_dims_ok_scalar.html">check_dims_ok_scalar()</a></code>
 
         </dt>
@@ -843,31 +914,10 @@
 
         <dt>
 
-          <code><a href="check_input_interval.html">check_input_interval()</a></code>
-
-        </dt>
-        <dd>Check that inputs are correct for interval-based forecast</dd>
-
-        <dt>
-
           <code><a href="check_input_point.html">check_input_point()</a></code>
 
         </dt>
         <dd>Check that inputs are correct for point forecast</dd>
-
-        <dt>
-
-          <code><a href="check_input_quantile.html">check_input_quantile()</a></code>
-
-        </dt>
-        <dd>Check that inputs are correct for quantile-based forecast</dd>
-
-        <dt>
-
-          <code><a href="check_input_sample.html">check_input_sample()</a></code>
-
-        </dt>
-        <dd>Check that inputs are correct for sample-based forecast</dd>
 
         <dt>
 
@@ -882,6 +932,13 @@
 
         </dt>
         <dd>Check whether an input is an atomic vector of mode 'numeric'</dd>
+
+        <dt>
+
+          <code><a href="check_observed_constant.html">check_observed_constant()</a></code>
+
+        </dt>
+        <dd>Check that observed values are constant within each forecast unit</dd>
 
         <dt>
 
@@ -903,13 +960,6 @@
 
         </dt>
         <dd>Get type of a vector or matrix of observed values or predictions</dd>
-
-        <dt>
-
-          <code><a href="test_columns_present.html">test_columns_present()</a></code>
-
-        </dt>
-        <dd>Test whether all column names are present in a data.frame</dd>
 
         <dt>
 
@@ -936,6 +986,13 @@
 
         <dt>
 
+          <code><a href="as_forecast_doc_template.html">as_forecast_doc_template</a></code>
+
+        </dt>
+        <dd>General information on creating a <code>forecast</code> object</dd>
+
+        <dt>
+
           <code><a href="as_scores.html">as_scores()</a></code>
 
         </dt>
@@ -950,10 +1007,24 @@
 
         <dt>
 
+          <code><a href="assert_strategy.html">assert_strategy()</a></code>
+
+        </dt>
+        <dd>Assert that a strategy has the expected signature</dd>
+
+        <dt>
+
           <code><a href="bias_quantile_single_vector.html">bias_quantile_single_vector()</a></code>
 
         </dt>
         <dd>Compute bias for a single vector of quantile predictions</dd>
+
+        <dt>
+
+          <code><a href="build_missing_grid.html">build_missing_grid()</a></code>
+
+        </dt>
+        <dd>Build grid of missing model-target combinations</dd>
 
         <dt>
 
@@ -968,6 +1039,13 @@
 
         </dt>
         <dd>Compare a subset of common forecasts</dd>
+
+        <dt>
+
+          <code><a href="compare_scores.html">compare_scores()</a></code>
+
+        </dt>
+        <dd>Compare two aligned vectors of scores</dd>
 
         <dt>
 
@@ -1003,6 +1081,13 @@
 
         </dt>
         <dd>Ensure multivariate grouping is set</dd>
+
+        <dt>
+
+          <code><a href="ensure_sample_matrix.html">ensure_sample_matrix()</a></code>
+
+        </dt>
+        <dd>Ensure that predicted samples are a matrix</dd>
 
         <dt>
 
@@ -1104,6 +1189,20 @@
 
         <dt>
 
+          <code><a href="pivot_scores.html">pivot_scores()</a></code>
+
+        </dt>
+        <dd>Pivot scores into a forecast unit by comparator matrix</dd>
+
+        <dt>
+
+          <code><a href="prepare_forecast_for_scoring.html">prepare_forecast_for_scoring()</a></code>
+
+        </dt>
+        <dd>Prepare a forecast object for scoring</dd>
+
+        <dt>
+
           <code><a href="quantile_to_interval.html">quantile_to_interval()</a></code> <code><a href="quantile_to_interval.html">quantile_to_interval_dataframe()</a></code> <code><a href="quantile_to_interval.html">quantile_to_interval_numeric()</a></code>
 
         </dt>
@@ -1153,7 +1252,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer></div>

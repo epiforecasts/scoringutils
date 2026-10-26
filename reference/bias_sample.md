@@ -43,7 +43,7 @@ equal to \\x_t\\.
 
 For integer valued forecasts, Bias is measured as
 
-\$\$ B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t + 1)) \$\$
+\$\$ B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t - 1)) \$\$
 
 to adjust for the integer nature of the forecasts.
 
@@ -69,6 +69,7 @@ e1006785.
 ## Examples
 
 ``` r
+
 ## integer valued forecasts
 observed <- rpois(30, lambda = 1:30)
 predicted <- replicate(200, rpois(n = 30, lambda = 1:30))

@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get default metrics for sample-based forecasts — get_metrics.forecast_sample"><meta name="description" content='For sample-based forecasts, the default scoring rules are:
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get default metrics for sample-based forecasts — get_metrics.forecast_sample"><meta name="description" content='For sample-based forecasts, the default scoring rules are:
 "crps" = crps_sample()
 "overprediction" = overprediction_sample()
 "underprediction" = underprediction_sample()
@@ -37,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,8 +49,7 @@
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
-    <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/handling-missing-forecasts.html">Handling missing forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
@@ -65,7 +64,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Get default metrics for sample-based forecasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/v2.2.0/R/class-forecast-sample.R" class="external-link"><code>R/class-forecast-sample.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/class-forecast-sample.R" class="external-link"><code>R/class-forecast-sample.R</code></a></small>
       <div class="d-none name"><code>get_metrics.forecast_sample.Rd</code></div>
     </div>
 
@@ -138,6 +137,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (observed, predicted) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_sample(observed, predicted)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     predicted &lt;- ensure_sample_matrix(predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     prediction_type &lt;- get_type(predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     n_pred &lt;- ncol(predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (prediction_type == "continuous") {</span>
@@ -154,7 +154,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(res)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a4ef79800&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bd57224c8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dss</span>
@@ -163,7 +163,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_sample(observed, predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     scoringRules::dss_sample(y = observed, dat = predicted, ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a486be150&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bd62cc7d8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $crps</span>
@@ -173,9 +173,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     crps &lt;- scoringRules::crps_sample(y = observed, dat = predicted, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (separate_results) {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         if (is.null(dim(predicted))) {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             dim(predicted) &lt;- c(1, length(predicted))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         predicted &lt;- ensure_sample_matrix(predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         medians &lt;- apply(predicted, 1, median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         dispersion &lt;- scoringRules::crps_sample(y = medians, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             dat = predicted, ...)</span>
@@ -191,7 +189,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         return(crps)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a4ca04cf8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bd81aefe8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overprediction</span>
@@ -201,7 +199,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$overprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a4c85ff90&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bd84d5dc0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $underprediction</span>
@@ -211,7 +209,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$underprediction)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a4c85f468&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bd84d90c8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
@@ -221,7 +219,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(crps$dispersion)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a4c862770&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bd84d85a0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
@@ -236,30 +234,31 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>     scoringRules::logs_sample(y = observed, dat = predicted, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a4c861c48&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bdee50558&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ae_median</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (observed, predicted) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_sample(observed, predicted)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     median_predictions &lt;- apply(as.matrix(predicted), MARGIN = 1, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         FUN = median)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     predicted &lt;- ensure_sample_matrix(predicted)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     median_predictions &lt;- apply(predicted, MARGIN = 1, FUN = median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ae_median &lt;- abs(observed - median_predictions)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(ae_median)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a4695a448&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bd6e2a258&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $se_mean</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (observed, predicted) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assert_input_sample(observed, predicted)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     mean_predictions &lt;- rowMeans(as.matrix(predicted))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     predicted &lt;- ensure_sample_matrix(predicted)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mean_predictions &lt;- rowMeans(predicted)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     se_mean &lt;- (observed - mean_predictions)^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     return(se_mean)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x559a4c863c80&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555bdee52130&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:scoringutils&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
@@ -273,7 +272,7 @@ If <code>select</code> is not <code>NULL</code>, this argument is ignored.</p></
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer></div>

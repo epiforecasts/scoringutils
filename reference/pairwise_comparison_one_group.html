@@ -5,21 +5,27 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Do pairwise comparison for one set of forecasts — pairwise_comparison_one_group"><meta name="description" content="This function does the pairwise comparison for one set of forecasts, but
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Do pairwise comparison for one set of forecasts — pairwise_comparison_one_group"><meta name="description" content="This function does the pairwise comparison for one set of forecasts, but
 multiple models involved. It gets called from get_pairwise_comparisons().
 get_pairwise_comparisons() splits the data into arbitrary subgroups
 specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
-that subgroup is managed from pairwise_comparison_one_group(). In order to
-actually do the comparison between two models over a subset of common
-forecasts it calls compare_forecasts()."><meta property="og:description" content="This function does the pairwise comparison for one set of forecasts, but
+that subgroup is managed from pairwise_comparison_one_group().
+Internally, the scores are pivoted once into a matrix with one row per
+forecast unit (excluding the compare column) and one column per
+comparator (see pivot_scores()). The set of overlapping forecasts for
+any pair of comparators is then simply the set of rows for which both
+columns are non-missing."><meta property="og:description" content="This function does the pairwise comparison for one set of forecasts, but
 multiple models involved. It gets called from get_pairwise_comparisons().
 get_pairwise_comparisons() splits the data into arbitrary subgroups
 specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
-that subgroup is managed from pairwise_comparison_one_group(). In order to
-actually do the comparison between two models over a subset of common
-forecasts it calls compare_forecasts()."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"></head><body>
+that subgroup is managed from pairwise_comparison_one_group().
+Internally, the scores are pivoted once into a matrix with one row per
+forecast unit (excluding the compare column) and one column per
+comparator (see pivot_scores()). The set of overlapping forecasts for
+any pair of comparators is then simply the set of rows for which both
+columns are non-missing."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -27,7 +33,7 @@ forecasts it calls compare_forecasts()."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,8 +45,7 @@ forecasts it calls compare_forecasts()."><meta property="og:image" content="http
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
-    <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/handling-missing-forecasts.html">Handling missing forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
@@ -55,7 +60,7 @@ forecasts it calls compare_forecasts()."><meta property="og:image" content="http
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Do pairwise comparison for one set of forecasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/v2.2.0/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/pairwise-comparisons.R" class="external-link"><code>R/pairwise-comparisons.R</code></a></small>
       <div class="d-none name"><code>pairwise_comparison_one_group.Rd</code></div>
     </div>
 
@@ -65,9 +70,12 @@ multiple models involved. It gets called from <code><a href="get_pairwise_compar
 <code><a href="get_pairwise_comparisons.html">get_pairwise_comparisons()</a></code> splits the data into arbitrary subgroups
 specified by the user (e.g. if pairwise comparison should be done separately
 for different forecast targets) and then the actual pairwise comparison for
-that subgroup is managed from <code>pairwise_comparison_one_group()</code>. In order to
-actually do the comparison between two models over a subset of common
-forecasts it calls <code><a href="compare_forecasts.html">compare_forecasts()</a></code>.</p>
+that subgroup is managed from <code>pairwise_comparison_one_group()</code>.</p>
+<p>Internally, the scores are pivoted once into a matrix with one row per
+forecast unit (excluding the <code>compare</code> column) and one column per
+comparator (see <code><a href="pivot_scores.html">pivot_scores()</a></code>). The set of overlapping forecasts for
+any pair of comparators is then simply the set of rows for which both
+columns are non-missing.</p>
     </div>
 
     <div class="section level2">
@@ -143,7 +151,7 @@ then the scaled relative skill is reported as well
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer></div>

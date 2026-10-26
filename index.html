@@ -13,8 +13,8 @@
     }
   };
 </script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Utilities for Scoring and Assessing Predictions">
 <meta name="description" content="Facilitate the evaluation of forecasts in a convenient framework based on data.table. It allows user to to check their forecasts and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package mostly focuses on the evaluation of probabilistic forecasts and allows evaluating several different forecast types and input formats. Find more information about the package in the Vignettes as well as in the accompanying paper, &lt;doi:10.48550/arXiv.2205.07090&gt;.">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,8 +43,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/Deprecated-functions.html">Deprecated functions</a></li>
-    <li><a class="dropdown-item" href="articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+<li><a class="dropdown-item" href="articles/handling-missing-forecasts.html">Handling missing forecasts</a></li>
     <li><a class="dropdown-item" href="articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul>
@@ -78,13 +77,13 @@
 <h2 id="utilities-for-scoring-and-assessing-predictions">Utilities for Scoring and Assessing Predictions<a class="anchor" aria-label="anchor" href="#utilities-for-scoring-and-assessing-predictions"></a>
 </h2>
 <p>The <code>scoringutils</code> package facilitates the process of evaluating forecasts in R, using a convenient and flexible <code>data.table</code>-based framework. It provides broad functionality to check the input data and diagnose issues, to visualise forecasts and missing data, to transform data before scoring, to handle missing forecasts, to aggregate scores, and to visualise the results of the evaluation. The package is easily extendable, meaning that users can supply their own scoring rules or extend existing classes to handle new types of forecasts.</p>
-<p>The package underwent a major re-write. The most comprehensive documentation for the updated package is the <a href="https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link" class="external-link">revised version</a> of our <a href="https://doi.org/10.48550/arXiv.2205.07090" class="external-link">original</a> <code>scoringutils</code> paper.</p>
-<p>Another good starting point are the vignettes <!-- vignettes on [Getting started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),  --> <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>.</p>
+<p>A good starting point are the vignettes <!-- vignettes on [Getting started](https://epiforecasts.io/scoringutils/articles/scoringutils.html),  --> <a href="https://epiforecasts.io/scoringutils/articles/metric-details.html">Details on the metrics implemented</a> and <a href="https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html">Scoring forecasts directly</a>. We also have several related manuscripts</p>
 <!-- > Nikos I. Bosse, Hugo Gruson, Anne Cori, Edwin van Leeuwen, Sebastian Funk and Sam Abbott (2022). _`Evaluating Forecasts with scoringutils in R`_. arXiv:2205.07090 <https://doi.org/10.48550/arXiv.2205.07090> -->
-<p>For further details on the specific issue of transforming forecasts for scoring see:</p>
+<p>and</p>
 <blockquote>
 <p>Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes Bracher* and Sebastian Funk* (*: equal contribution) (2023). <em><code>Scoring epidemiological forecasts on transformed scales</code></em>, PLoS Comput Biol 19(8): e1011393 <a href="https://doi.org/10.1371/journal.pcbi.1011393" class="external-link uri">https://doi.org/10.1371/journal.pcbi.1011393</a></p>
 </blockquote>
+<p>for specific details on transforming forecasts for scoring.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -243,16 +242,16 @@
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<p>All contributions to this project are gratefully acknowledged using the <a href="https://github.com/ropensci/allcontributors" class="external-link"><code>allcontributors</code> package</a> following the <a href="https://allcontributors.org" class="external-link">all-contributors</a> specification. Contributions of any kind are welcome!</p>
+<p>All contributions to this project are gratefully acknowledged using the <a href="https://github.com/ropensci/allcontributors" class="external-link"><code>allcontributors</code> package</a> following the <a href="https://allcontributors.org" class="external-link">allcontributors</a> specification. Contributions of any kind are welcome!</p>
 <div class="section level3">
 <h3 id="code">Code<a class="anchor" aria-label="anchor" href="#code"></a>
 </h3>
-<p><a href="https://github.com/epiforecasts/scoringutils/commits?author=nikosbosse" class="external-link">nikosbosse</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=seabbs" class="external-link">seabbs</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=sbfnk" class="external-link">sbfnk</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=jamesmbaazam" class="external-link">jamesmbaazam</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=Bisaloo" class="external-link">Bisaloo</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=actions-user" class="external-link">actions-user</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=toshiakiasakura" class="external-link">toshiakiasakura</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=MichaelChirico" class="external-link">MichaelChirico</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=jcken95" class="external-link">jcken95</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=athowes" class="external-link">athowes</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=nickreich" class="external-link">nickreich</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=damonbayer" class="external-link">damonbayer</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=seabbs-bot" class="external-link">seabbs-bot</a></p>
+<p><a href="https://github.com/epiforecasts/scoringutils/commits?author=nikosbosse" class="external-link">nikosbosse</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=seabbs" class="external-link">seabbs</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=sbfnk" class="external-link">sbfnk</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=jamesmbaazam" class="external-link">jamesmbaazam</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=Bisaloo" class="external-link">Bisaloo</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=actions-user" class="external-link">actions-user</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=toshiakiasakura" class="external-link">toshiakiasakura</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=MichaelChirico" class="external-link">MichaelChirico</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=jcken95" class="external-link">jcken95</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=athowes" class="external-link">athowes</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=nickreich" class="external-link">nickreich</a>, <a href="https://github.com/epiforecasts/scoringutils/commits?author=damonbayer" class="external-link">damonbayer</a></p>
 </div>
 <div class="section level3">
 <h3 id="issue-authors">Issue Authors<a class="anchor" aria-label="anchor" href="#issue-authors"></a>
 </h3>
-<p><a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ADavideMagno" class="external-link">DavideMagno</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ambojan" class="external-link">mbojan</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajhellewell14" class="external-link">jhellewell14</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adshemetov" class="external-link">dshemetov</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aelray1" class="external-link">elray1</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajonathonmellor" class="external-link">jonathonmellor</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adylanhmorris" class="external-link">dylanhmorris</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aannakrystalli" class="external-link">annakrystalli</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen" class="external-link">robchallen</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand" class="external-link">teunbrand</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah" class="external-link">RokGrah</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Azsusswein" class="external-link">zsusswein</a></p>
+<p><a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ADavideMagno" class="external-link">DavideMagno</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ambojan" class="external-link">mbojan</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajhellewell14" class="external-link">jhellewell14</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adshemetov" class="external-link">dshemetov</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aelray1" class="external-link">elray1</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ajonathonmellor" class="external-link">jonathonmellor</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Adylanhmorris" class="external-link">dylanhmorris</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Aannakrystalli" class="external-link">annakrystalli</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen" class="external-link">robchallen</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand" class="external-link">teunbrand</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah" class="external-link">RokGrah</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Azsusswein" class="external-link">zsusswein</a>, <a href="https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Akaitejohnson" class="external-link">kaitejohnson</a></p>
 </div>
 <div class="section level3">
 <h3 id="issue-contributors">Issue Contributors<a class="anchor" aria-label="anchor" href="#issue-contributors"></a>
@@ -320,7 +319,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer>

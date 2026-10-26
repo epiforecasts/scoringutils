@@ -60,12 +60,14 @@ get_metrics(example_nominal)
 #>     if (n == 1) {
 #>         predicted <- matrix(predicted, nrow = 1)
 #>     }
+#>     predicted <- predicted[, order(as.numeric(predicted_label)), 
+#>         drop = FALSE]
 #>     observed_indices <- as.numeric(observed)
 #>     pred_for_observed <- predicted[cbind(1:n, observed_indices)]
 #>     logs <- -log(pred_for_observed)
 #>     return(logs)
 #> }
-#> <bytecode: 0x559a4f3839e8>
+#> <bytecode: 0x555bd5e05b30>
 #> <environment: namespace:scoringutils>
 #> 
 ```

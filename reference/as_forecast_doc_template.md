@@ -17,8 +17,8 @@ other, unneeded columns. See section "Forecast Unit" below for details).
 - data:
 
   A data.frame (or similar) with predicted and observed values. See the
-  details section of for additional information on the required input
-  format.
+  "Target format" section in Details for additional information on the
+  required input format.
 
 - forecast_unit:
 

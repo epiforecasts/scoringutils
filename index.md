@@ -23,19 +23,13 @@ and to visualise the results of the evaluation. The package is easily
 extendable, meaning that users can supply their own scoring rules or
 extend existing classes to handle new types of forecasts.
 
-The package underwent a major re-write. The most comprehensive
-documentation for the updated package is the [revised
-version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
-of our [original](https://doi.org/10.48550/arXiv.2205.07090)
-`scoringutils` paper.
-
-Another good starting point are the vignettes [Details on the metrics
+A good starting point are the vignettes [Details on the metrics
 implemented](https://epiforecasts.io/scoringutils/articles/metric-details.html)
 and [Scoring forecasts
 directly](https://epiforecasts.io/scoringutils/articles/scoring-forecasts-directly.html).
+We also have several related manuscripts
 
-For further details on the specific issue of transforming forecasts for
-scoring see:
+and
 
 > Nikos I. Bosse, Sam Abbott, Anne Cori, Edwin van Leeuwen, Johannes
 > Bracher\* and Sebastian Funk\* (\*: equal contribution) (2023).
@@ -43,17 +37,21 @@ scoring see:
 > Comput Biol 19(8): e1011393
 > <https://doi.org/10.1371/journal.pcbi.1011393>
 
+for specific details on transforming forecasts for scoring.
+
 ## Installation
 
 Install the CRAN version of this package using
 
 ``` r
+
 install.packages("scoringutils")
 ```
 
 Install the unstable development version from GitHub using
 
 ``` r
+
 remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
 ```
 
@@ -94,6 +92,7 @@ Before scoring, input data needs to be validated and transformed into a
 forecast object using one of the `as_forecast_<type>()` functions.
 
 ``` r
+
 forecast_quantile <- example_quantile |>
   as_forecast_quantile(
     forecast_unit = c(
@@ -145,6 +144,7 @@ Forecasts can be scored by calling
 a validated forecast object.
 
 ``` r
+
 scores <- forecast_quantile |> 
   score()
 ```
@@ -165,6 +165,7 @@ stick to the mean as a primary summary function, as other functions can
 lead to improper scores.
 
 ``` r
+
 scores |> 
   summarise_scores(by = c("model", "target_type")) |>
   summarise_scores(by = c("model", "target_type"), fun = signif, digits = 3)
@@ -260,7 +261,7 @@ Health.
 
 All contributions to this project are gratefully acknowledged using the
 [`allcontributors` package](https://github.com/ropensci/allcontributors)
-following the [all-contributors](https://allcontributors.org)
+following the [allcontributors](https://allcontributors.org)
 specification. Contributions of any kind are welcome!
 
 ### Code
@@ -276,8 +277,7 @@ specification. Contributions of any kind are welcome!
 [jcken95](https://github.com/epiforecasts/scoringutils/commits?author=jcken95),
 [athowes](https://github.com/epiforecasts/scoringutils/commits?author=athowes),
 [nickreich](https://github.com/epiforecasts/scoringutils/commits?author=nickreich),
-[damonbayer](https://github.com/epiforecasts/scoringutils/commits?author=damonbayer),
-[seabbs-bot](https://github.com/epiforecasts/scoringutils/commits?author=seabbs-bot)
+[damonbayer](https://github.com/epiforecasts/scoringutils/commits?author=damonbayer)
 
 ### Issue Authors
 
@@ -292,7 +292,8 @@ specification. Contributions of any kind are welcome!
 [robchallen](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Arobchallen),
 [teunbrand](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Ateunbrand),
 [RokGrah](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3ARokGrah),
-[zsusswein](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Azsusswein)
+[zsusswein](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Azsusswein),
+[kaitejohnson](https://github.com/epiforecasts/scoringutils/issues?q=is%3Aissue+author%3Akaitejohnson)
 
 ### Issue Contributors
 

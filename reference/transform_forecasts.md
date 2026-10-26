@@ -139,6 +139,7 @@ Nikos Bosse <nikosbosse@gmail.com>
 ## Examples
 
 ``` r
+
 # transform forecasts using the natural logarithm
 # negative values need to be handled (here by replacing them with 0)
 example_quantile[, observed := ifelse(observed < 0, 0, observed)] |>

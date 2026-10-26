@@ -5,11 +5,23 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Find duplicate forecasts — get_duplicate_forecasts"><meta name="description" content="Internal helper function to identify duplicate forecasts, i.e.
-instances where there is more than one forecast for the same prediction
-target."><meta property="og:description" content="Internal helper function to identify duplicate forecasts, i.e.
-instances where there is more than one forecast for the same prediction
-target."><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Find duplicate forecasts — get_duplicate_forecasts"><meta name="description" content='Identify duplicate forecasts, i.e. instances where there is more than
+one forecast for the same prediction target.
+Uses get_forecast_type_ids() to determine the type-specific columns
+(beyond the forecast unit) that identify a unique row. For forecast
+objects the type is detected automatically. For plain data.frames
+you should pass type (e.g. "quantile", "sample") so that the
+correct columns are used. Calling on a plain data.frame without
+type is deprecated; it falls back to column-name detection but
+this behaviour will be removed in a future version.'><meta property="og:description" content='Identify duplicate forecasts, i.e. instances where there is more than
+one forecast for the same prediction target.
+Uses get_forecast_type_ids() to determine the type-specific columns
+(beyond the forecast unit) that identify a unique row. For forecast
+objects the type is detected automatically. For plain data.frames
+you should pass type (e.g. "quantile", "sample") so that the
+correct columns are used. Calling on a plain data.frame without
+type is deprecated; it falls back to column-name detection but
+this behaviour will be removed in a future version.'><meta property="og:image" content="https://epiforecasts.io/scoringutils/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +29,7 @@ target."><meta property="og:image" content="https://epiforecasts.io/scoringutils
 
     <a class="navbar-brand me-2" href="../index.html">scoringutils</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,8 +41,7 @@ target."><meta property="og:image" content="https://epiforecasts.io/scoringutils
 <li class="nav-item"><a class="external-link nav-link" href="https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf">scoringutils paper</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Deprecated-functions.html">Deprecated functions</a></li>
-    <li><a class="dropdown-item" href="../articles/Deprecated-visualisations.html">Deprecated Visualisations</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/handling-missing-forecasts.html">Handling missing forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-multivariate-forecasts.html">Scoring multivariate forecasts</a></li>
     <li><a class="dropdown-item" href="../articles/scoring-rules.html">Scoring rules in `scoringutils`</a></li>
   </ul></li>
@@ -45,19 +56,30 @@ target."><meta property="og:image" content="https://epiforecasts.io/scoringutils
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Find duplicate forecasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/v2.2.0/R/get-duplicate-forecasts.R" class="external-link"><code>R/get-duplicate-forecasts.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/epiforecasts/scoringutils/blob/main/R/get-duplicate-forecasts.R" class="external-link"><code>R/get-duplicate-forecasts.R</code></a></small>
       <div class="d-none name"><code>get_duplicate_forecasts.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p>Internal helper function to identify duplicate forecasts, i.e.
-instances where there is more than one forecast for the same prediction
-target.</p>
+    <p>Identify duplicate forecasts, i.e. instances where there is more than
+one forecast for the same prediction target.</p>
+<p>Uses <code><a href="get_forecast_type_ids.html">get_forecast_type_ids()</a></code> to determine the type-specific columns
+(beyond the forecast unit) that identify a unique row. For <code>forecast</code>
+objects the type is detected automatically. For plain <code>data.frame</code>s
+you should pass <code>type</code> (e.g. <code>"quantile"</code>, <code>"sample"</code>) so that the
+correct columns are used. Calling on a plain <code>data.frame</code> without
+<code>type</code> is deprecated; it falls back to column-name detection but
+this behaviour will be removed in a future version.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_duplicate_forecasts</span><span class="op">(</span><span class="va">data</span>, forecast_unit <span class="op">=</span> <span class="cn">NULL</span>, counts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_duplicate_forecasts</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  forecast_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  counts <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -66,7 +88,7 @@ target.</p>
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data.frame (or similar) with predicted and observed values.
-See the details section of for additional information
+See the "Target format" section in Details for additional information
 on the required input format.</p></dd>
 
 
@@ -79,20 +101,31 @@ assumed to form the unit of a single forecast. If specified, all columns
 that are not part of the forecast unit (or required columns) will be removed.</p></dd>
 
 
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
+<dd><p>Character string naming the forecast type, corresponding
+to the class suffix after <code>forecast_</code> (e.g. <code>"quantile"</code> for
+class <code>forecast_quantile</code>, <code>"sample"</code> for <code>forecast_sample</code>).
+Used to determine type-specific ID columns when <code>data</code> is not
+already a <code>forecast</code> object. Ignored when <code>data</code> already
+inherits from <code>forecast</code>.</p></dd>
+
+
 <dt id="arg-counts">counts<a class="anchor" aria-label="anchor" href="#arg-counts"></a></dt>
-<dd><p>Should the output show the number of duplicates per forecast
-unit instead of the individual duplicated rows? Default is <code>FALSE</code>.</p></dd>
+<dd><p>Should the output show the number of duplicates per
+forecast unit instead of the individual duplicated rows?
+Default is <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.frame with all rows for which a duplicate forecast was found</p>
+    <p>A data.frame with all rows for which a duplicate forecast
+was found</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">example_quantile</span>, <span class="va">example_quantile</span><span class="op">[</span><span class="fl">1000</span><span class="op">:</span><span class="fl">1010</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">get_duplicate_forecasts</span><span class="op">(</span><span class="va">example</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_duplicate_forecasts</span><span class="op">(</span><span class="va">example</span>, type <span class="op">=</span> <span class="st">"quantile"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     location target_end_date target_type observed location_name forecast_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;char&gt;          &lt;Date&gt;      &lt;char&gt;    &lt;num&gt;        &lt;char&gt;        &lt;Date&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:       DE      2021-05-22      Deaths     1285       Germany    2021-05-17</span>
@@ -156,7 +189,7 @@ unit instead of the individual duplicated rows? Default is <code>FALSE</code>.</
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer></div>

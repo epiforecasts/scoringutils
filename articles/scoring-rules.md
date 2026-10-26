@@ -71,6 +71,7 @@ predictive task do not align, misleading results ensue. Consider the
 following example:
 
 ``` r
+
 set.seed(123)
 n <- 1000
 observed <- rnorm(n, 5, 4)^2
@@ -174,6 +175,7 @@ penalises overconfidence and underconfidence in probability space the
 same. Consider the following example:
 
 ``` r
+
 n <- 1e6
 p_true <- 0.7
 observed <- factor(rbinom(n = n, size = 1, prob = p_true), levels = c(0, 1))
@@ -207,6 +209,7 @@ The log score penalises overconfidence more strongly than
 underconfidence (in probability space). Consider the following example:
 
 ``` r
+
 abs(mean(logs_binary(observed, p_true)) - mean(logs_binary(observed, p_over)))
 #> [1] 0.07169954
 abs(mean(logs_binary(observed, p_true)) - mean(logs_binary(observed, p_under)))
