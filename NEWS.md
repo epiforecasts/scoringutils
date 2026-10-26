@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- `transform_forecasts()` is faster: it now validates the forecast object twice (input and output) instead of after every internal update to it. On a forecast hub-sized example, it takes about half as long as before. With `append = FALSE`, a transformation that produces an invalid forecast now errors, as it already did with `append = TRUE`, instead of returning the invalid forecast with validation warnings (#1236).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.
