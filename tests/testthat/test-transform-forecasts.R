@@ -80,6 +80,12 @@ test_that("transform_forecasts() validates the forecast only twice", {
   counter$n <- 0
   transform_forecasts(forecast, fun = add_one, append = FALSE)
   expect_identical(counter$n, 2)
+
+  for (append in c(TRUE, FALSE)) {
+    counter$n <- 0
+    transform_forecasts(example_multivariate_sample, fun = add_one, append = append)
+    expect_identical(counter$n, 2)
+  }
 })
 
 test_that("transform_forecasts() does not modify its input", {
@@ -89,6 +95,37 @@ test_that("transform_forecasts() does not modify its input", {
   transform_forecasts(forecast, fun = add_one)
   transform_forecasts(forecast, fun = add_one, append = FALSE)
   expect_identical(as.data.table(forecast), as.data.table(original))
+
+  # with an existing 'scale' column
+  transformed <- transform_forecasts(forecast, fun = add_one)
+  transformed_original <- data.table::copy(transformed)
+  transform_forecasts(transformed, fun = add_one, label = "sqrt")
+  transform_forecasts(transformed, fun = add_one, label = "sqrt", append = FALSE)
+  expect_identical(
+    as.data.table(transformed), as.data.table(transformed_original)
+  )
+})
+
+test_that("transform_forecasts() errors if `label` is reused with append = FALSE", {
+  transformed <- transform_forecasts(
+    na.omit(example_quantile), fun = function(x) x + 1
+  )
+  expect_error(
+    transform_forecasts(transformed, fun = sqrt, append = FALSE),
+    "Can't transform with label 'log'"
+  )
+})
+
+test_that("transform_forecasts() keeps the grouping of multivariate forecasts with append = FALSE", {
+  # every forecast unit column is constant within groups here, so the grouping
+  # can't be inferred from the data (only from `.mv_group_id`)
+  mv <- as_forecast_multivariate_sample(
+    na.omit(example_sample_continuous)[location == "DE"],
+    joint_across = c("location", "location_name")
+  )
+  transformed <- transform_forecasts(mv, fun = function(x) x + 1, append = FALSE)
+  expect_s3_class(transformed, "forecast_multivariate_sample")
+  expect_identical(transformed$.mv_group_id, mv$.mv_group_id)
 })
 
 test_that("transform_forecasts() errors if the result is not a valid forecast", {

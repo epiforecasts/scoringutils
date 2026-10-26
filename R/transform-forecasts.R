@@ -44,7 +44,9 @@
 #'   has the value passed to the argument `label`).
 #'
 #' @param label A string for the newly created 'scale' column to denote the
-#'   newly transformed values. Only relevant if `append = TRUE`.
+#'   newly transformed values. Only relevant if `append = TRUE` or if the
+#'   forecast already has a 'scale' column. In the latter case, `label` must
+#'   not already be present in that column.
 #'
 #' @param ... Additional parameters to pass to the function you supplied. For
 #'   the default option of [log_shift()] this could be the `offset` argument.
@@ -162,12 +164,17 @@ transform_forecasts.forecast_multivariate_sample <- function(
     label = "log",
     ...) {
   out <- transform_forecast_data(forecast, fun, append, label, ...)
+  fn <- get(paste0("as_forecast_", get_forecast_type(forecast)))
+  # without appending, the rows (and therefore the groups) are unchanged and
+  # the existing `.mv_group_id` can be kept
+  if (!append) {
+    return(suppressWarnings(suppressMessages(fn(data = out))))
+  }
   joint_across <- setdiff(
     get_forecast_unit(forecast),
     get_grouping(forecast)
   )
   out[, .mv_group_id := NULL]
-  fn <- get(paste0("as_forecast_", get_forecast_type(forecast)))
   suppressWarnings(suppressMessages(
     fn(data = out, joint_across = joint_across)
   ))
@@ -207,7 +214,8 @@ transform_forecasts.forecast_multivariate_point <- function(
 #' @importFrom data.table as.data.table
 #' @keywords internal
 transform_forecast_data <- function(forecast, fun, append, label, ...) {
-  data <- as.data.table(clean_forecast(forecast, copy = TRUE))
+  # as.data.table() copies, so the input is not modified
+  data <- as.data.table(clean_forecast(forecast))
   assert_function(fun)
   assert_logical(append, len = 1)
   assert_character(label, len = 1)
@@ -220,6 +228,17 @@ transform_forecast_data <- function(forecast, fun, append, label, ...) {
         c(
           `!` = "If a column 'scale' is present, entries with
           scale =='natural' are required for the transformation."
+        )
+      )
+    }
+    if (!append && (label %in% data$scale)) {
+      cli_abort(
+        c(
+          `!` = "Can't transform with label '{label}': that entry is
+          already present in column 'scale'.",
+          i = "With {.code append = FALSE}, the 'natural' entries are
+          replaced by the transformed ones. Choose a different
+          {.arg label}."
         )
       )
     }
