@@ -28,7 +28,9 @@ column, 'scale', gets created that denotes which rows or untransformed
 has the value passed to the argument \code{label}).}
 
 \item{label}{A string for the newly created 'scale' column to denote the
-newly transformed values. Only relevant if \code{append = TRUE}.}
+newly transformed values. Only relevant if \code{append = TRUE} or if the
+forecast already has a 'scale' column. In the latter case, \code{label} must
+not already be present in that column.}
 
 \item{...}{Additional parameters to pass to the function you supplied. For
 the default option of \code{\link[=log_shift]{log_shift()}} this could be the \code{offset} argument.}
