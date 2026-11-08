@@ -438,7 +438,7 @@ See `?quantile_score` and @bracherEvaluatingEpidemicForecasts2021 for more detai
 
 All scoring rules discussed so far evaluate one target at a time. A multivariate forecast instead specifies a joint predictive distribution for several targets, for example case numbers in several locations or age groups, or at several forecast horizons. Scoring the components of such a forecast separately ignores the dependence between them. Multivariate scoring rules evaluate the joint forecast as a whole.
 
-In `scoringutils`, multivariate forecasts are created with `as_forecast_multivariate_sample()` or `as_forecast_multivariate_point()`, where the `joint_across` argument specifies which forecasts are pooled into a single multivariate forecast. The default metrics for multivariate sample-based forecasts are the energy score and the variogram score. For multivariate point forecasts, the default is the variogram score. See a list of the default metrics for multivariate sample-based forecasts by calling `get_metrics(example_multivariate_sample)`. See `vignette("scoring-multivariate-forecasts")` for a worked example.
+In `scoringutils`, multivariate forecasts are created with `as_forecast_multivariate_sample()` or `as_forecast_multivariate_point()`, where `joint_across` names the column(s) (e.g. location) across which forecasts are pooled into a single multivariate forecast. The default metrics for multivariate sample-based forecasts are the energy score and the variogram score (see `get_metrics(example_multivariate_sample)`). For multivariate point forecasts, the default is the variogram score. Quantile-based forecasts do not encode the dependence between targets and therefore cannot be scored with these multivariate scores. See `vignette("scoring-multivariate-forecasts")` for a worked example.
 
 In the following, $\mathbf{y} = (y_1, \dots, y_d)$ denotes the vector of observed values for the $d$ targets of a multivariate forecast, and $\mathbf{X} = (X_1, \dots, X_d)$ and $\mathbf{X}'$ denote independent random vectors drawn from the multivariate predictive distribution $F$.
 
@@ -450,7 +450,7 @@ In the following, $\mathbf{y} = (y_1, \dots, y_d)$ denotes the vector of observe
 
 The energy score [@gneitingStrictlyProperScoring2007; @gneitingAssessingProbabilisticForecasts2008] is a multivariate generalisation of the CRPS. It is defined as
 $$\text{ES}(F, \mathbf{y}) = \mathbb{E}_F \|\mathbf{X} - \mathbf{y}\| - \frac{1}{2} \mathbb{E}_F \|\mathbf{X} - \mathbf{X}'\|,$$
-where $\|\cdot\|$ is the Euclidean norm. For a single target ($d = 1$), the energy score equals the CRPS. The energy score is strictly proper, but it has been found to discriminate poorly between forecasts that differ only in their dependence structure [@scheuererVariogramBasedProper2015].
+where $\|\cdot\|$ is the Euclidean norm. For a single target ($d = 1$), the energy score equals the CRPS. The energy score is strictly proper (relative to distributions with finite first moment), but it has been found to discriminate poorly between forecasts that differ only in their dependence structure [@scheuererVariogramBasedProper2015].
 
 `scoringutils` computes the energy score using `scoringRules::es_sample()`. See `?energy_score_multivariate()` for more information.
 
