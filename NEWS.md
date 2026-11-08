@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Internal changes
+
+- Removed the internal helpers `check_input_binary()` and `check_input_point()`. Forecast validation now calls `check_try(assert_input_<type>())` directly, so new forecast types only need an `assert_input_<type>()` function (#939).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.
