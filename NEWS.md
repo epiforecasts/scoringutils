@@ -1,6 +1,6 @@
 # scoringutils (development version)
 
-- `as_forecast_point()` gained a `quantile_level` argument when converting a `forecast_quantile` object, so that a quantile other than the median can be used as the point forecast, e.g. `as_forecast_point(data, quantile_level = 0.75)`. The default remains `0.5` (#880).
+- `as_forecast_point()` gained a `quantile_level` argument when converting a `forecast_quantile` object, so that a quantile other than the median can be used as the point forecast, e.g. `as_forecast_point(data, quantile_level = 0.75)`. The default remains `0.5` (#880, #1243).
 
 # scoringutils 2.3.0
 
