@@ -1,6 +1,6 @@
 # scoringutils (development version)
 
-- `get_pairwise_comparisons()` now has explicit arguments `test_type`, `one_sided` and `n_permutations` instead of passing them on via `...`. Their values are now validated up front, so e.g. an invalid `one_sided` or `n_permutations` now errors rather than being silently ignored when no permutation test is run. Calls that passed these arguments by name are unaffected (#769, #1249).
+- Breaking change: `get_pairwise_comparisons()` now has explicit arguments `test_type`, `one_sided` and `n_permutations` instead of passing them on via `...`. Their values are now validated up front, so e.g. an invalid `one_sided` or `n_permutations` now errors rather than being silently ignored when no permutation test is run. Calls that passed these arguments by name are unaffected, but calls that passed them positionally after `baseline` now bind them in the new argument order (`test_type`, `one_sided`, `n_permutations`). The documentation of `one_sided` now states that it only affects the permutation test and which direction the one-sided test checks (#769, #1249).
 
 # scoringutils 2.3.0
 

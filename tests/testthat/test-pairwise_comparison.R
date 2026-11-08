@@ -543,7 +543,6 @@ test_that("add_relative_skill() can compute relative measures", {
   )
 })
 
-# test more esoteric options to make at least sure they don't produce an error
 test_that("permutation_tests work as expected", {
   expect_no_condition(
     get_pairwise_comparisons(
@@ -553,6 +552,45 @@ test_that("permutation_tests work as expected", {
       n_permutations = 50
     )
   )
+
+  # `test_type` and `n_permutations` are passed on (#769)
+  pairwise_np <- get_pairwise_comparisons(scores_quantile)
+  set.seed(123)
+  pairwise_perm <- get_pairwise_comparisons(
+    scores_quantile, test_type = "permutation", n_permutations = 50
+  )
+  pairwise_none <- get_pairwise_comparisons(scores_quantile, test_type = NULL)
+  expect_identical(
+    pairwise_np$mean_scores_ratio, pairwise_perm$mean_scores_ratio
+  )
+  expect_false(identical(pairwise_np$pval, pairwise_perm$pval))
+  # with 50 permutations, p-values are multiples of 1 / 51
+  pvals <- pairwise_perm[model != compare_against, pval]
+  expect_equal(pvals * 51, round(pvals * 51))
+  expect_true(all(is.na(pairwise_none[model != compare_against, pval])))
+
+  # `one_sided` is passed on (#769): model "b" is tested first and is better
+  # than "a" on every forecast. The two-sided test rejects (p = 1 / 51 unless
+  # a permutation swaps none or all of the 20 pairs), whereas the one-sided
+  # test of "b" being worse gives p = 1 for any permutation.
+  scores_ab <- new_scores(
+    data.table::data.table(
+      model = rep(c("b", "a"), each = 20),
+      target = rep(1:20, times = 2),
+      wis = rep(c(1, 2), each = 20)
+    ),
+    metrics = "wis"
+  )
+  pval_ab <- function(one_sided) {
+    res <- get_pairwise_comparisons(
+      scores_ab, metric = "wis", test_type = "permutation",
+      one_sided = one_sided, n_permutations = 50
+    )
+    unique(res[model != compare_against, pval])
+  }
+  set.seed(123)
+  expect_identical(pval_ab(one_sided = FALSE), 1 / 51)
+  expect_identical(pval_ab(one_sided = TRUE), 1)
 })
 
 
@@ -561,7 +599,7 @@ test_that("get_pairwise_comparisons() validates the test arguments (#769)", {
   # silently ignored unless a permutation test was run
   expect_error(
     get_pairwise_comparisons(scores_quantile, test_type = "t_test"),
-    "should be one of"
+    "non_parametric"
   )
   expect_error(
     get_pairwise_comparisons(scores_quantile, one_sided = "yes"),
@@ -579,24 +617,6 @@ test_that("get_pairwise_comparisons() validates the test arguments (#769)", {
     get_pairwise_comparisons(scores_quantile, alternative = "less"),
     "unused argument"
   )
-})
-
-test_that("get_pairwise_comparisons() passes the test arguments on (#769)", {
-  pairwise_np <- get_pairwise_comparisons(scores_quantile)
-  set.seed(123)
-  pairwise_perm <- get_pairwise_comparisons(
-    scores_quantile, test_type = "permutation", n_permutations = 50
-  )
-  pairwise_none <- get_pairwise_comparisons(scores_quantile, test_type = NULL)
-
-  expect_identical(
-    pairwise_np$mean_scores_ratio, pairwise_perm$mean_scores_ratio
-  )
-  expect_false(identical(pairwise_np$pval, pairwise_perm$pval))
-  # with 50 permutations, p-values are multiples of 1 / 51
-  pvals <- pairwise_perm[model != compare_against, pval]
-  expect_equal(pvals * 51, round(pvals * 51))
-  expect_true(all(is.na(pairwise_none[model != compare_against, pval])))
 })
 
 

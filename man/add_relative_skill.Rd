@@ -44,8 +44,9 @@ pairwise comparisons. As p-values are not returned by
 \code{add_relative_skill()}, no test is run by default. See
 \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}} for more information.}
 
-\item{...}{Additional arguments passed on to \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}},
-i.e. \code{one_sided} and \code{n_permutations}.}
+\item{...}{Additional arguments passed on to \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}
+(\code{one_sided} and \code{n_permutations}). These only affect p-values, which
+\code{add_relative_skill()} does not return, so they cannot change its output.}
 }
 \description{
 Adds a columns with relative skills computed by running

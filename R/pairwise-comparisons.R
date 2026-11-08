@@ -82,7 +82,12 @@
 #'   `NULL`, no test is conducted and p-values will be `NA`.
 #' @param one_sided Logical, default is `FALSE`. Whether to conduct a
 #'   one-sided instead of a two-sided test to determine significance in a
-#'   pairwise comparison. Only used if `test_type = "permutation"`.
+#'   pairwise comparison. Only used if `test_type = "permutation"`; the
+#'   Wilcoxon test is always two-sided. Each pair of comparators is tested
+#'   only once, with the alternative that the comparator that appears first in
+#'   `scores` has a higher (i.e. worse) mean score than the other one. The
+#'   resulting p-value is reported in both rows of the output that belong to
+#'   that pair, so a one-sided p-value refers to that direction only.
 #' @param n_permutations Numeric, the number of permutations for a
 #'   permutation test. Default is 999. Only used if
 #'   `test_type = "permutation"`.
@@ -501,7 +506,7 @@ compare_scores <- function(
   values_x,
   values_y,
   one_sided = FALSE,
-  test_type = c("non_parametric", "permutation", NULL),
+  test_type = c("non_parametric", "permutation"),
   n_permutations = 999
 ) {
   # calculate ratio to of average scores achieved by both comparator.
@@ -565,7 +570,7 @@ compare_forecasts <- function(scores,
                               name_comparator2,
                               metric,
                               one_sided = FALSE,
-                              test_type = c("non_parametric", "permutation", NULL),
+                              test_type = c("non_parametric", "permutation"),
                               n_permutations = 999) {
   scores <- as.data.table(scores)
 
@@ -703,8 +708,9 @@ permutation_test <- function(scores1,
 #'   pairwise comparisons. As p-values are not returned by
 #'   `add_relative_skill()`, no test is run by default. See
 #'   [get_pairwise_comparisons()] for more information.
-#' @param ... Additional arguments passed on to [get_pairwise_comparisons()],
-#'   i.e. `one_sided` and `n_permutations`.
+#' @param ... Additional arguments passed on to [get_pairwise_comparisons()]
+#'   (`one_sided` and `n_permutations`). These only affect p-values, which
+#'   `add_relative_skill()` does not return, so they cannot change its output.
 #' @export
 #' @keywords scoring
 add_relative_skill <- function(

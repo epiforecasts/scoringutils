@@ -11,7 +11,7 @@ compare_forecasts(
   name_comparator2,
   metric,
   one_sided = FALSE,
-  test_type = c("non_parametric", "permutation", NULL),
+  test_type = c("non_parametric", "permutation"),
   n_permutations = 999
 )
 }
@@ -34,7 +34,12 @@ a relative skill shall be computed. By default this is either "crps",
 
 \item{one_sided}{Logical, default is \code{FALSE}. Whether to conduct a
 one-sided instead of a two-sided test to determine significance in a
-pairwise comparison. Only used if \code{test_type = "permutation"}.}
+pairwise comparison. Only used if \code{test_type = "permutation"}; the
+Wilcoxon test is always two-sided. Each pair of comparators is tested
+only once, with the alternative that the comparator that appears first in
+\code{scores} has a higher (i.e. worse) mean score than the other one. The
+resulting p-value is reported in both rows of the output that belong to
+that pair, so a one-sided p-value refers to that direction only.}
 
 \item{test_type}{Character, either "non_parametric" (the default),
 "permutation", or \code{NULL}. Determines which test is used to compute
