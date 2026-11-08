@@ -19,7 +19,7 @@
 #'
 #' See the [example_point] data set for an example of point forecast data.
 #' @inheritSection forecast_types Forecast unit
-#' @param ... Unused
+#' @param ... Unused.
 #' @family functions to create forecast objects
 #' @returns A `forecast` object of class `forecast_multivariate_point`
 #' @export

@@ -7,7 +7,7 @@
 \method{print}{forecast}(x, ...)
 }
 \arguments{
-\item{x}{A forecast object}
+\item{x}{A forecast object.}
 
 \item{...}{Additional arguments for \code{\link[=print]{print()}}.}
 }

@@ -27,7 +27,7 @@
 #'
 #' See the [example_ordinal] data set for an example.
 #' @inheritSection forecast_types Forecast unit
-#' @param ... Unused
+#' @param ... Unused.
 #' @family functions to create forecast objects
 #' @returns A `forecast` object of class `forecast_ordinal`
 #' @export

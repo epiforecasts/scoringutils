@@ -24,9 +24,9 @@ elements for the pairwise comparison. For example, if this is set to
 "model" (the default), then elements of the "model" column will be
 compared.}
 
-\item{name_comparator1}{Character, name of the first comparator}
+\item{name_comparator1}{Character, name of the first comparator.}
 
-\item{name_comparator2}{Character, name of the comparator to compare against}
+\item{name_comparator2}{Character, name of the comparator to compare against.}
 
 \item{metric}{A string with the name of the metric for which
 a relative skill shall be computed. By default this is either "crps",

@@ -524,8 +524,8 @@ compare_scores <- function(
 #' all comparators at once via [pivot_scores()]. [compare_forecasts()] is
 #' kept as a reference implementation for testing.
 #' @inheritParams get_pairwise_comparisons
-#' @param name_comparator1 Character, name of the first comparator
-#' @param name_comparator2 Character, name of the comparator to compare against
+#' @param name_comparator1 Character, name of the first comparator.
+#' @param name_comparator2 Character, name of the comparator to compare against.
 #' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
 #'   instead of a two-sided test to determine significance in a pairwise
 #'   comparison.
@@ -615,7 +615,7 @@ geometric_mean <- function(x) {
 #' Used in [get_pairwise_comparisons()].
 #'
 #' @param scores1 Vector of scores to compare against another vector of scores.
-#' @param scores2 A second vector of scores to compare against the first
+#' @param scores2 A second vector of scores to compare against the first.
 #' @param n_permutation The number of replications to use for a permutation
 #' test. More replications yield more exact results, but require more
 #' computation.

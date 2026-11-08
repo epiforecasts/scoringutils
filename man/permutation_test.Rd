@@ -15,7 +15,7 @@ permutation_test(
 \arguments{
 \item{scores1}{Vector of scores to compare against another vector of scores.}
 
-\item{scores2}{A second vector of scores to compare against the first}
+\item{scores2}{A second vector of scores to compare against the first.}
 
 \item{n_permutation}{The number of replications to use for a permutation
 test. More replications yield more exact results, but require more

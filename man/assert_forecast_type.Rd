@@ -9,9 +9,9 @@ assert_forecast_type(data, actual = get_forecast_type(data), desired = NULL)
 \arguments{
 \item{data}{A forecast object.}
 
-\item{actual}{The actual forecast type of the data}
+\item{actual}{The actual forecast type of the data.}
 
-\item{desired}{The desired forecast type of the data}
+\item{desired}{The desired forecast type of the data.}
 }
 \value{
 Returns NULL invisibly if the assertion was successful and throws an

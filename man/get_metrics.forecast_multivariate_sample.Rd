@@ -16,7 +16,7 @@ observed values, see \code{\link[=as_forecast_binary]{as_forecast_binary()}}).}
 \item{exclude}{A character vector of scoring rules to exclude from the list.
 If \code{select} is not \code{NULL}, this argument is ignored.}
 
-\item{...}{unused}
+\item{...}{Unused.}
 }
 \description{
 For sample-based multivariate forecasts, the default scoring rules are:

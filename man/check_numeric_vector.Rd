@@ -7,7 +7,7 @@
 check_numeric_vector(x, ...)
 }
 \arguments{
-\item{x}{input to check}
+\item{x}{Input to check.}
 
 \item{...}{
   Arguments passed on to \code{\link[checkmate:check_numeric]{checkmate::check_numeric}}

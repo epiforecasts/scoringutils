@@ -20,7 +20,7 @@ ensure_data.table <- function(data) {
 #' @title Check whether an input is an atomic vector of mode 'numeric'
 #'
 #' @description Helper function to check whether an input is a numeric vector.
-#' @param x input to check
+#' @param x Input to check.
 #' @inheritDotParams checkmate::check_numeric -.var.name -add -info -label
 #' @importFrom checkmate check_atomic_vector check_numeric
 #' @inherit document_check_functions return
@@ -49,7 +49,7 @@ check_numeric_vector <- function(x, ...) {
 #' see whether assertions fail when checking inputs (i.e. to convert an
 #' `assert_*()` statement into a check). If the expression fails, the error
 #' message is returned. If the expression succeeds, `TRUE` is returned.
-#' @param expr an expression to be evaluated
+#' @param expr An expression to be evaluated.
 #' @importFrom checkmate assert assert_numeric check_matrix
 #' @inherit document_check_functions return
 #' @keywords internal_input_check

@@ -10,7 +10,7 @@ get_coverage(forecast, by = "model")
 \item{forecast}{A forecast object (a validated data.table with predicted and
 observed values).}
 
-\item{by}{character vector that denotes the level of grouping for which the
+\item{by}{Character vector that denotes the level of grouping for which the
 coverage values should be computed. By default (\code{"model"}), one coverage
 value per model will be returned.}
 }

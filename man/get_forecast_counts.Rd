@@ -14,18 +14,19 @@ get_forecast_counts(
 \item{forecast}{A forecast object (a validated data.table with predicted and
 observed values).}
 
-\item{by}{character vector or \code{NULL} (the default) that denotes the
+\item{by}{Character vector or \code{NULL} (the default) that denotes the
 categories over which the number of forecasts should be counted.
 By default this will be the unit of a single forecast (i.e.
 all available columns (apart from a few "protected" columns such as
 'predicted' and 'observed') plus "quantile_level" or "sample_id" where
 present).}
 
-\item{collapse}{character vector (default: \verb{c("quantile_level", "sample_id"})
-with names of categories for which the number of rows should be collapsed
-to one when counting. For example, a single forecast is usually represented
-by a set of several quantiles or samples and collapsing these to one makes
-sure that a single forecast only gets counted once. Setting
+\item{collapse}{Character vector
+(default: \code{c("quantile_level", "sample_id")}) with names of categories
+for which the number of rows should be collapsed to one when counting.
+For example, a single forecast is usually represented by a set of several
+quantiles or samples and collapsing these to one makes sure that a single
+forecast only gets counted once. Setting
 \code{collapse = c()} would mean that all quantiles / samples would be counted
 as individual forecasts.}
 }

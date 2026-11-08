@@ -8,9 +8,9 @@
 #' @param scores A data.frame of scores based on quantile forecasts as
 #' produced by [score()].
 #' @param y The variable from the scores you want to show on the y-Axis. The
-#'   default for this is "model"
+#'   default for this is "model".
 #' @param x The variable from the scores you want to show on the x-Axis. This
-#'   could be something like "horizon", or "location"
+#'   could be something like "horizon", or "location".
 #' @param metric String, the metric that determines the value and colour shown
 #'   in the tiles of the heatmap.
 #' @returns A ggplot object showing a heatmap of the desired metric

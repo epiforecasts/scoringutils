@@ -27,8 +27,8 @@ get_forecast_type <- function(forecast) {
 
 #' Assert that forecast type is as expected
 #' @param data A forecast object.
-#' @param actual The actual forecast type of the data
-#' @param desired The desired forecast type of the data
+#' @param actual The actual forecast type of the data.
+#' @param desired The desired forecast type of the data.
 #' @inherit document_assert_functions return
 #' @importFrom cli cli_abort
 #' @importFrom checkmate assert_character

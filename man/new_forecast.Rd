@@ -11,7 +11,7 @@ new_forecast(data, classname)
 See the "Target format" section in Details for additional information
 on the required input format.}
 
-\item{classname}{name of the class to be created}
+\item{classname}{Name of the class to be created.}
 }
 \value{
 An object of the class indicated by \code{classname}

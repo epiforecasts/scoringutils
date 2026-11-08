@@ -5,7 +5,7 @@
 #' @param scores A data.table or similar with scores as produced by [score()].
 #' @param metrics A character vector with the names of the scores
 #'   (i.e. the names of the scoring rules used for scoring).
-#' @param ... Additional arguments to [data.table::as.data.table()]
+#' @param ... Additional arguments to [data.table::as.data.table()].
 #' @keywords internal
 #' @importFrom data.table as.data.table setattr
 #' @returns An object of class `scores`
@@ -75,7 +75,7 @@ assert_scores <- function(scores) {
 #' @description
 #' Prints a `scores` object. Suppresses autoprinting during data.table
 #' `:=` operations by checking data.table's internal `shouldPrint()` flag.
-#' @param x A `scores` object
+#' @param x A `scores` object.
 #' @param ... Additional arguments for [print()].
 #' @returns Returns `x` invisibly.
 #' @export
@@ -122,7 +122,7 @@ print.scores <- function(x, ...) {
 #'   produced by [score()]).
 #' @param error Throw an error if there is no attribute called `metrics`?
 #'   Default is FALSE.
-#' @param ... unused
+#' @param ... Unused.
 #' @importFrom cli cli_abort cli_warn
 #' @importFrom checkmate assert_data_frame
 #' @return
