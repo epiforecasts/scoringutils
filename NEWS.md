@@ -1,6 +1,6 @@
 # scoringutils (development version)
 
-- The error for duplicate forecasts (raised by `as_forecast_<type>()` and `assert_forecast()`) now lists the first few duplicated forecast units, along with the number of duplicated rows for each, so the problem can be diagnosed without a separate call to `get_duplicate_forecasts()` (#1155).
+- The error for duplicate forecasts (raised by `as_forecast_<type>()` and `assert_forecast()`) now lists the first few duplicated forecast units, along with the number of duplicated rows for each, so the problem can be diagnosed without a separate call to `get_duplicate_forecasts()` (#1155, #1246).
 
 # scoringutils 2.3.0
 
