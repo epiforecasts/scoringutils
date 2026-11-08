@@ -2,7 +2,7 @@
 
 ## Internal changes
 
-- Added tests for the `w` and `w_vs` arguments of `variogram_score_multivariate()` and the `w_vs` argument of `variogram_score_multivariate_point()` (#1125).
+- Added tests for the `w` and `w_vs` arguments of `variogram_score_multivariate()` and the `w_vs` argument of `variogram_score_multivariate_point()` (#1125, #1245).
 
 # scoringutils 2.3.0
 
