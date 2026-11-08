@@ -8,6 +8,70 @@ test_that("as_forecast_point() works", {
   )
 })
 
+test_that("as_forecast_point.forecast_quantile() extracts the requested quantile", {
+  fq <- as_forecast_quantile(na.omit(example_quantile))
+  quantiles <- as.data.table(fq)
+
+  # default is the median
+  point <- as_forecast_point(fq)
+  expect_s3_class(point, "forecast_point")
+  expect_false("quantile_level" %in% colnames(point))
+  expect_identical(
+    point$predicted, quantiles[quantile_level == 0.5]$predicted
+  )
+
+  # a different quantile level can be requested
+  point_75 <- as_forecast_point(fq, quantile_level = 0.75)
+  expect_s3_class(point_75, "forecast_point")
+  expect_false("quantile_level" %in% colnames(point_75))
+  expect_identical(
+    point_75$predicted, quantiles[quantile_level == 0.75]$predicted
+  )
+  expect_identical(point_75$observed, point$observed)
+  expect_identical(nrow(point_75), nrow(point))
+})
+
+test_that("as_forecast_point.forecast_quantile() matches quantile levels that are not exactly representable", {
+  # seq() produces levels such as 0.15000000000000002 that are not exactly
+  # equal to the literal 0.15
+  quantile_levels <- seq(0.05, 0.95, 0.05)
+  data <- data.table(
+    model = "m",
+    id = rep(1:2, each = length(quantile_levels)),
+    quantile_level = rep(quantile_levels, 2),
+    observed = rep(c(5, 6), each = length(quantile_levels))
+  )
+  data[, predicted := observed + quantile_level]
+  fq <- as_forecast_quantile(data)
+
+  point_15 <- as_forecast_point(fq, quantile_level = 0.15)
+  expect_identical(point_15$predicted, c(5, 6) + quantile_levels[3])
+  point_70 <- as_forecast_point(fq, quantile_level = 0.7)
+  expect_identical(point_70$predicted, c(5, 6) + quantile_levels[14])
+})
+
+test_that("as_forecast_point.forecast_quantile() validates `quantile_level`", {
+  fq <- as_forecast_quantile(na.omit(example_quantile))
+  # quantile level not present in the data
+  expect_error(
+    as_forecast_point(fq, quantile_level = 0.33),
+    "`quantile_level` 0.33 is not present in the data"
+  )
+  # invalid inputs
+  expect_error(
+    as_forecast_point(fq, quantile_level = c(0.25, 0.75)),
+    "quantile_level"
+  )
+  expect_error(
+    as_forecast_point(fq, quantile_level = "0.5"),
+    "quantile_level"
+  )
+  expect_error(
+    as_forecast_point(fq, quantile_level = 1.5),
+    "quantile_level"
+  )
+})
+
 
 # ==============================================================================
 # is_forecast_point() # nolint: commented_code_linter
