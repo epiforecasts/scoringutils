@@ -678,14 +678,14 @@ permutation_test <- function(scores1,
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
 #'
-#' The input should be raw, unsummarised scores as produced by [score()], i.e.
-#' `add_relative_skill()` should be called before, not after,
+#' Relative skill should usually be computed from unsummarised scores, i.e.
+#' the output of [score()], rather than from the output of
 #' [summarise_scores()]. Summarising scores first can change the set of
 #' overlapping forecasts between two models and distort relative skill scores.
-#' To obtain relative skill at a different aggregation level (e.g. one score
-#' per model across all locations), change `by` rather than averaging relative
-#' skill scores with [summarise_scores()] afterwards: an average of relative
-#' skill scores is not itself a relative skill score.
+#' Averaging relative skill scores afterwards is usually not meaningful either:
+#' an average of relative skill scores is not itself a relative skill score.
+#' To obtain relative skill at a different level of aggregation (e.g. one
+#' score per model across all locations), adjust `by` instead.
 #'
 #' Unlike [get_pairwise_comparisons()], this function does not return
 #' p-values. By default no statistical test is therefore run for the
