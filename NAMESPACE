@@ -98,6 +98,7 @@ export(impute_model_score)
 export(impute_na_score)
 export(impute_worst_score)
 export(interval_coverage)
+export(iqr_sample)
 export(is_forecast)
 export(is_forecast_binary)
 export(is_forecast_multivariate_point)
@@ -127,6 +128,7 @@ export(plot_wis)
 export(quantile_score)
 export(rps_ordinal)
 export(score)
+export(sd_sample)
 export(se_mean_sample)
 export(select_metrics)
 export(summarise_scores)
@@ -256,6 +258,7 @@ importFrom(scoringRules,
   vs_sample
 )
 importFrom(stats,
+  IQR,
   as.formula,
   ave,
   cor,

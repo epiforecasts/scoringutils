@@ -54,4 +54,7 @@ Assessing the performance of real-time epidemic forecasts: A case study of
 Ebola in the Western Area region of Sierra Leone, 2014-15.
 PLoS Comput Biol 15(2): e1006785. \doi{10.1371/journal.pcbi.1006785}
 }
+\seealso{
+\code{\link[=sd_sample]{sd_sample()}} and \code{\link[=iqr_sample]{iqr_sample()}} for other measures of dispersion.
+}
 \keyword{metric}

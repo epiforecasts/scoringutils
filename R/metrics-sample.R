@@ -421,6 +421,7 @@ underprediction_sample <- function(observed, predicted, ...) {
 #' Ebola in the Western Area region of Sierra Leone, 2014-15.
 #' PLoS Comput Biol 15(2): e1006785. \doi{10.1371/journal.pcbi.1006785}
 #'
+#' @seealso [sd_sample()] and [iqr_sample()] for other measures of dispersion.
 #' @export
 #' @examples
 #' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
@@ -434,6 +435,72 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 
   sharpness <- apply(predicted, MARGIN = 1, mad, ...)
   return(sharpness)
+}
+
+
+#' @title Standard deviation of predictive samples
+#' @description
+#' Measure the dispersion (the lack of sharpness) of a sample-based forecast
+#' as the standard deviation of the predictive samples. Like [mad_sample()],
+#' this is a feature of the forecasts only and does not depend on the
+#' observed values. Unlike the median absolute deviation, the standard
+#' deviation is sensitive to outlying samples.
+#'
+#' `sd_sample()` is not part of the default metrics returned by
+#' [get_metrics()]. To use it in [score()], add it to the list of metrics,
+#' e.g. `c(get_metrics(forecast), list(sd = sd_sample))`.
+#'
+#' @inheritParams mad_sample
+#' @param ... Additional arguments passed to [sd()][stats::sd()].
+#' @importFrom stats sd
+#' @inheritSection illustration-input-metric-sample Input format
+#' @returns Vector with the standard deviation of the predictive samples (one
+#'   value per row of `predicted`).
+#' @seealso [mad_sample()], [iqr_sample()]
+#' @export
+#' @examples
+#' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' sd_sample(predicted = predicted)
+#' @keywords metric
+sd_sample <- function(observed = NULL, predicted, ...) {
+  n <- if (is.matrix(predicted)) nrow(predicted) else 1
+  assert_input_sample(rep(NA_real_, n), predicted)
+  predicted <- ensure_sample_matrix(predicted)
+
+  apply(predicted, MARGIN = 1, sd, ...)
+}
+
+
+#' @title Interquartile range of predictive samples
+#' @description
+#' Measure the dispersion (the lack of sharpness) of a sample-based forecast
+#' as the interquartile range (the difference between the 75% and the 25%
+#' quantile) of the predictive samples. Like [mad_sample()], this is a
+#' feature of the forecasts only and does not depend on the observed values.
+#'
+#' `iqr_sample()` is not part of the default metrics returned by
+#' [get_metrics()]. To use it in [score()], add it to the list of metrics,
+#' e.g. `c(get_metrics(forecast), list(iqr = iqr_sample))`.
+#'
+#' @inheritParams mad_sample
+#' @param ... Additional arguments passed to [IQR()][stats::IQR()], e.g.
+#'   `type` to choose the quantile algorithm.
+#' @importFrom stats IQR
+#' @inheritSection illustration-input-metric-sample Input format
+#' @returns Vector with the interquartile range of the predictive samples (one
+#'   value per row of `predicted`).
+#' @seealso [mad_sample()], [sd_sample()]
+#' @export
+#' @examples
+#' predicted <- replicate(200, rpois(n = 30, lambda = 1:30))
+#' iqr_sample(predicted = predicted)
+#' @keywords metric
+iqr_sample <- function(observed = NULL, predicted, ...) {
+  n <- if (is.matrix(predicted)) nrow(predicted) else 1
+  assert_input_sample(rep(NA_real_, n), predicted)
+  predicted <- ensure_sample_matrix(predicted)
+
+  apply(predicted, MARGIN = 1, IQR, ...)
 }
 
 
