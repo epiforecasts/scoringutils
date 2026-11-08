@@ -81,8 +81,8 @@
 #'   "permutation" uses a permutation test (see [permutation_test()]). If
 #'   `NULL`, no test is conducted and p-values will be `NA`.
 #' @param one_sided Logical, default is `FALSE`. Whether to conduct a
-#'   one-sided instead of a two-sided permutation test. Only used if
-#'   `test_type = "permutation"`.
+#'   one-sided instead of a two-sided test to determine significance in a
+#'   pairwise comparison. Only used if `test_type = "permutation"`.
 #' @param n_permutations Numeric, the number of permutations for a
 #'   permutation test. Default is 999. Only used if
 #'   `test_type = "permutation"`.

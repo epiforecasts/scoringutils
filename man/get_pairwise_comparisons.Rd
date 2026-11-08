@@ -46,8 +46,8 @@ p-values: "non_parametric" uses a paired Wilcoxon signed-rank test,
 \code{NULL}, no test is conducted and p-values will be \code{NA}.}
 
 \item{one_sided}{Logical, default is \code{FALSE}. Whether to conduct a
-one-sided instead of a two-sided permutation test. Only used if
-\code{test_type = "permutation"}.}
+one-sided instead of a two-sided test to determine significance in a
+pairwise comparison. Only used if \code{test_type = "permutation"}.}
 
 \item{n_permutations}{Numeric, the number of permutations for a
 permutation test. Default is 999. Only used if

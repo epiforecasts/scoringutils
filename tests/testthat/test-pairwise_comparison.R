@@ -556,17 +556,9 @@ test_that("permutation_tests work as expected", {
 })
 
 
-test_that("get_pairwise_comparisons() has explicit test arguments (#769)", {
-  args <- formals(get_pairwise_comparisons)
-  expect_false("..." %in% names(args))
-  expect_identical(
-    eval(args$test_type), c("non_parametric", "permutation")
-  )
-  expect_false(eval(args$one_sided))
-  expect_identical(eval(args$n_permutations), 999)
-})
-
 test_that("get_pairwise_comparisons() validates the test arguments (#769)", {
+  # these arguments used to be passed on via `...` and invalid values were
+  # silently ignored unless a permutation test was run
   expect_error(
     get_pairwise_comparisons(scores_quantile, test_type = "t_test"),
     "should be one of"

@@ -19,8 +19,8 @@ compare_scores(
 with \code{values_x}.}
 
 \item{one_sided}{Logical, default is \code{FALSE}. Whether to conduct a
-one-sided instead of a two-sided permutation test. Only used if
-\code{test_type = "permutation"}.}
+one-sided instead of a two-sided test to determine significance in a
+pairwise comparison. Only used if \code{test_type = "permutation"}.}
 
 \item{test_type}{Character, either "non_parametric" (the default),
 "permutation", or \code{NULL}. Determines which test is used to compute
