@@ -126,6 +126,7 @@ assert_forecast.default <- function(
 #' @importFrom data.table ":=" is.data.table
 #' @importFrom checkmate assert_data_table assert_subset test_subset
 #' @importFrom cli cli_abort cli_inform cli_warn
+#' @importFrom stats complete.cases
 #' @keywords internal_input_check
 assert_forecast_generic <- function(data, verbose = TRUE) {
   # check that data is a data.table and that the columns look fine
@@ -166,7 +167,7 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
 
   # check whether there are any NA values
   if (anyNA(data)) {
-    n_na_rows <- nrow(data) - nrow(na.omit(data))
+    n_na_rows <- sum(!complete.cases(data))
     if (n_na_rows == nrow(data)) {
       cli_abort(
         c(
@@ -185,7 +186,7 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
         c(
           i = "{n_na_rows} row{?s} containing NA values may be removed.
         This is fine if not unexpected.",
-          " " = "Number of NA values per column: {na_info}."
+          " " = "NA values per column: {na_info}."
         )
       )
     }
