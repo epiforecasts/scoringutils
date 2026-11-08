@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Documentation
+
+- Revised the "Scoring rules in `scoringutils`" vignette: removed the author field, replaced the Google Drive link with a link to the `scoringutils` paper on arXiv, added an overview of the forecast types covered to the introduction, pointed to the `get_metrics()` documentation for the default metrics of each forecast type, added references on proper scoring rules and on scoring forecasts on transformed scales, and fixed a broken citation, mislabelled section text and stray whitespace (#785).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.

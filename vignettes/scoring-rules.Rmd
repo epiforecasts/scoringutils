@@ -1,6 +1,5 @@
 ---
 title: "Scoring rules in `scoringutils`"
-author: "Nikos Bosse"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -23,26 +22,33 @@ library(data.table)
 
 # Introduction
 
-This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the package works, have a look at the [revised version](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link) of our `scoringutils` paper.
+This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the package works, have a look at the [`scoringutils` paper](https://doi.org/10.48550/arXiv.2205.07090).
 
 We can distinguish two types of forecasts: point forecasts and probabilistic forecasts. A point forecast is a single number representing a single outcome. A probabilistic forecast is a full predictive probability distribution over multiple possible outcomes. In contrast to point forecasts, probabilistic forecasts incorporate uncertainty about different possible outcomes.
 
+Probabilistic forecasts can take different forms, and the appropriate scoring rules depend on the form. This vignette covers the following:
+
+- **Binary forecasts**: the observed outcome can only be one of two values (e.g. 0 or 1) and the forecast is the probability that the outcome will be 1.
+- **Sample-based forecasts**: the predictive distribution for a continuous or discrete outcome is represented by a set of samples drawn from it (e.g. the output of a simulation model).
+- **Quantile-based forecasts**: the predictive distribution is represented by a set of predictive quantiles (e.g. the 0.05, 0.25, 0.5, 0.75 and 0.95 quantiles).
+
+`scoringutils` also supports nominal and ordinal forecasts for categorical outcomes, as well as multivariate forecasts (see `vignette("scoring-multivariate-forecasts")`). See `?as_forecast_binary`, `?as_forecast_sample`, `?as_forecast_quantile` etc. for details on the expected input formats.
+
 Scoring rules are functions that take a forecast and an observation as input and return a single numeric value. For point forecasts, they take the form $S(\hat{y}, y)$, where $\hat{y}$ is the forecast and $y$ is the observation. For probabilistic forecasts, they usually take the form $S(F, y)$, where $F$ is the cumulative density function (CDF) of the predictive distribution and $y$ is the observation. By convention, scoring rules are usually negatively oriented, meaning that smaller values are better (the best possible score is usually zero). In that sense, the score can be understood as a penalty.
 
-Many scoring rules for probabilistic forecasts are so-called (strictly) proper scoring rules. Essentially, this means that they cannot be "cheated": A forecaster evaluated by a strictly proper scoring rule is always incentivised to report her honest best belief about the future and cannot, in expectation, improve her score by reporting something else. A more formal definition is the following: Let $G$ be the true, unobserved data-generating distribution. A scoring rule is said to be proper, if under $G$ and for an ideal forecast $F = G$, there is no forecast $F' \neq F$ that in expectation receives a better score than $F$. A scoring rule is considered strictly proper if, under $G$, no other forecast $F'$ in expectation receives a score that is better than or the same as that of $F$.
+Many scoring rules for probabilistic forecasts are so-called (strictly) proper scoring rules. Essentially, this means that they cannot be "cheated": A forecaster evaluated by a strictly proper scoring rule is always incentivised to report her honest best belief about the future and cannot, in expectation, improve her score by reporting something else [@gneitingStrictlyProperScoring2007]. A more formal definition is the following: Let $G$ be the true, unobserved data-generating distribution. A scoring rule is said to be proper, if under $G$ and for an ideal forecast $F = G$, there is no forecast $F' \neq F$ that in expectation receives a better score than $F$. A scoring rule is considered strictly proper if, under $G$, no other forecast $F'$ in expectation receives a score that is better than or the same as that of $F$.
 
 ---
 
 # Metrics for point forecasts
 
-See a list of the default metrics for point forecasts by calling `get_metrics(example_point)`.
+The default metrics for point forecasts are listed in the documentation of `get_metrics.forecast_point()`. You can also obtain them by calling `get_metrics(example_point)`.
 
 This is an overview of the input and output formats for point forecasts:
 
 ```{r, echo=FALSE, out.width="100%", fig.cap="Input and output formats: metrics for point."}
 knitr::include_graphics(file.path("scoring-rules", "input-point.png"))
 ```
-
 
 ## A note of caution
 
@@ -65,8 +71,6 @@ mean((observed - predicted_mu)^2)
 mean((observed - predicted_not_mu)^2)
 ```
 
-
-
 ## Absolute error
 
 **Observation**: $y$, a real number
@@ -88,6 +92,7 @@ The absolute error is only an appropriate rule if $\hat{y}$ corresponds to the m
 The squared error is the squared difference between the predicted and the observed values.
 
 $$\text{se} = (y - \hat{y})^2$$
+
 The squared error is only an appropriate rule if $\hat{y}$ corresponds to the mean of the forecaster's predictive distribution. Otherwise, results will be misleading (see @gneitingMakingEvaluatingPoint2011).
 
 ## Absolute percentage error
@@ -106,14 +111,13 @@ The absolute percentage error is only an appropriate rule if $\hat{y}$ correspon
 
 # Binary forecasts
 
-See a list of the default metrics for point forecasts by calling `?get_metrics(example_binary)`.
+The default metrics for binary forecasts are listed in the documentation of `get_metrics.forecast_binary()`. You can also obtain them by calling `get_metrics(example_binary)`.
 
-This is an overview of the input and output formats for point forecasts:
+This is an overview of the input and output formats for binary forecasts:
 
 ```{r, echo=FALSE, out.width="100%", fig.cap="Input and output formats: metrics for binary forecasts."}
 knitr::include_graphics(file.path("scoring-rules", "input-binary.png"))
 ```
-
 
 ## Brier score
 
@@ -147,7 +151,6 @@ abs(mean(brier_score(observed, p_true)) - mean(brier_score(observed, p_under)))
 
 See `?brier_score()` for more information.
 
-
 ## Logarithmic score
 
 **Observation**: $y$, either 0 or 1
@@ -173,19 +176,17 @@ abs(mean(logs_binary(observed, p_true)) - mean(logs_binary(observed, p_under)))
 
 See `?logs_binary()` for more information.
 
-
 ---
 
 # Sample-based forecasts
 
-See a list of the default metrics for sample-based forecasts by calling `get_metrics(example_sample_continuous)`.
+The default metrics for sample-based forecasts are listed in the documentation of `get_metrics.forecast_sample()`. You can also obtain them by calling `get_metrics(example_sample_continuous)`.
 
-This is an overview of the input and output formats for quantile forecasts:
+This is an overview of the input and output formats for sample-based forecasts:
 
 ```{r, echo=FALSE, out.width="100%", fig.cap="Input and output formats: metrics for sample-based forecasts."}
 knitr::include_graphics(file.path("scoring-rules", "input-sample.png"))
 ```
-
 
 ## CRPS
 
@@ -201,11 +202,9 @@ For discrete forecasts, for example count data, the ranked probability score (RP
 $$ \text{RPS}(P, y) = \sum_{x = 0}^\infty (P(x) - 1(x \geq y))^2, $$
 where $P$ is the cumulative probability mass function (PMF) of the predictive distribution.
 
-
-The CRPS can be understood as a generalisation of the absolute error to predictive distributions [@gneitingStrictlyProperScoring2007]. It can also be understood as the integral over the Brier score for the binary probability forecasts implied by the CDF for all possible observed values. The CRPS is also related to the Cramér-distance between two distributions and equals the special case where one of the distributions is concentrated in a single point (see e.g. @zielEnergyDistanceEnsemble2021). The CRPS is a global scoring rule, meaning that the entire predictive distribution is taken into account when determining the quality of the forecast.
+The CRPS can be understood as a generalisation of the absolute error to predictive distributions [@gneitingStrictlyProperScoring2007]. It can also be understood as the integral over the Brier score for the binary probability forecasts implied by the CDF for all possible observed values. The CRPS is also related to the Cramér-distance between two distributions and equals the special case where one of the distributions is concentrated in a single point (see e.g. @zielEnergyDistanceEnsemble2021). The CRPS is a global scoring rule, meaning that the entire predictive distribution is taken into account when determining the quality of the forecast. Like the absolute error, the CRPS scales with the order of magnitude of the forecast target. When targets of very different magnitudes are evaluated together (e.g. case counts that grow exponentially or that differ between locations), it can be useful to transform forecasts and observations (e.g. using the natural logarithm) before scoring them [@bosseScoringEpidemiologicalForecasts2023]. The same applies to the WIS (see below).
 
 `scoringutils` re-exports the `crps_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. See `?crps_sample()` for more information.
-
 
 ### Overprediction, underprediction and dispersion
 
@@ -246,12 +245,11 @@ For discrete forecasts, the log score can be computed as
 $$ \text{log score}(F, y) = -\log p_y, $$
 where $p_y$ is the probability assigned to the observed outcome $y$ by the forecast $F$.
 
-The logarithmic scoring rule can produce large penalties when the observed value takes on values for which $f(y)$ (or $p_y$) is close to zero. It is therefore considered to be sensitive to outlier forecasts. This may be desirable in some applications, but it also means that scores can easily be dominated by a few extreme values. The logarithmic scoring rule is a local scoring rule, meaning that the score only depends on the probability that was assigned to the actual outcome. This is often regarded as a desirable property for example in the context of Bayesian inference \citep{winklerScoringRulesEvaluation1996}. It implies for example, that the ranking between forecasters would be invariant under monotone transformations of the predictive distribution and the target.
+The logarithmic scoring rule can produce large penalties when the observed value takes on values for which $f(y)$ (or $p_y$) is close to zero. It is therefore considered to be sensitive to outlier forecasts. This may be desirable in some applications, but it also means that scores can easily be dominated by a few extreme values. The logarithmic scoring rule is a local scoring rule, meaning that the score only depends on the probability that was assigned to the actual outcome. This is often regarded as a desirable property for example in the context of Bayesian inference [@winklerScoringRulesEvaluation1996]. It implies for example, that the ranking between forecasters would be invariant under monotone transformations of the predictive distribution and the target.
 
 `scoringutils` re-exports the `logs_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. One implications of this is that it is currently not advisable to use the log score for discrete forecasts. The reason for this is that `scoringRules::logs_sample()` estimates a predictive density from the samples, which can be problematic for discrete forecasts.
 
 See `?logs_sample()` for more information.
-
 
 ## Dawid-Sebastiani score
 
@@ -273,9 +271,9 @@ $$\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot \log \sig
 
 Dispersion (also called sharpness) is the ability to produce narrow forecasts. It is a feature of the forecasts only and does not depend on the observations. Dispersion is therefore only of interest conditional on calibration: a very precise forecast is not useful if it is clearly wrong.
 
-One way to measure sharpness (as suggested by @funkAssessingPerformanceRealtime2019) is the normalised median absolute deviation about the median (MADN) ). It is computed as
+One way to measure sharpness (as suggested by @funkAssessingPerformanceRealtime2019) is the normalised median absolute deviation about the median (MADN). It is computed as
   $$ S(F) = \frac{1}{0.675} \cdot \text{median}(|F - \text{median(F)}|). $$
-If the forecast $F$ follows a normal distribution, then sharpness will equal the standard deviation of $F$.For more details, see `?mad_sample()`.
+If the forecast $F$ follows a normal distribution, then sharpness will equal the standard deviation of $F$. For more details, see `?mad_sample()`.
 
 ## Bias
 
@@ -283,11 +281,9 @@ If the forecast $F$ follows a normal distribution, then sharpness will equal the
 
 **Forecast**: A continuous ($F$) or discrete ($P$) forecast.
 
-
 Bias is a measure of the tendency of a forecaster to over- or underpredict. For *continuous* forecasts, the `scoringutils` implementation calculates bias as
 $$B(F, y) = 1 - 2 \cdot F (y), $$
 where $F(y)$ is the empirical cumulative distribution function of the forecast evaluated at the observed value $y$. To handle ties appropriately (which can occur when predictions equal observations for example due to rounding), the implementation uses mid-ranks: $F(y)$ is computed as the proportion of predictions strictly less than $y$ plus half the proportion of predictions equal to $y$.
-
 
 For *discrete* forecasts, we calculate bias as
 $$B(P, y) = 1 - (P(y) + P(y + 1)). $$
@@ -317,7 +313,7 @@ See section [A note of caution] or @gneitingMakingEvaluatingPoint2011 for a disc
 
 # Quantile-based forecasts
 
-See a list of the default metrics for quantile-based forecasts by calling `get_metrics(example_quantile)`.
+The default metrics for quantile-based forecasts are listed in the documentation of `get_metrics.forecast_quantile()`. You can also obtain them by calling `get_metrics(example_quantile)`.
 
 This is an overview of the input and output formats for quantile forecasts:
 
@@ -402,7 +398,6 @@ The absolute error of the median is the absolute difference between the median o
 $$\text{ae}_\text{median} = |\text{median}(F) - y|$$
 See section [A note of caution] or @gneitingMakingEvaluatingPoint2011 for a discussion on the correspondence between the absolute error and the median.
 
-
 ## Quantile score
 
 **Observation**: $y$, a real number
@@ -431,11 +426,9 @@ $$\text{WIS}_\alpha(F, y) = \frac{\text{QS}_{\alpha/2}(F, y) + \text{QS}_{1 - \a
 
 See `?quantile_score` and @bracherEvaluatingEpidemicForecasts2021 for more details.
 
-
 ---
 
 # Additional metrics
-
 
 ## Quantile coverage
 
