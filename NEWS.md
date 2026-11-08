@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Internal changes
+
+- Added tests for the `w` and `w_vs` arguments of `variogram_score_multivariate()` and the `w_vs` argument of `variogram_score_multivariate_point()` (#1125).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.
