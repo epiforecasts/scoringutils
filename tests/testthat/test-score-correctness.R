@@ -171,6 +171,26 @@ test_that("score() returns correct scores for continuous sample forecasts", {
   )
 })
 
+test_that("score() returns correct scores for sample forecasts with ties", {
+  # The example data contain no samples equal to the observation, so the tie
+  # term of the continuous bias is checked on a small hand-made forecast.
+  forecast <- as_forecast_sample(data.table(
+    model = "m",
+    id = rep(1:2, each = 8),
+    observed = rep(c(2.5, 3.5), each = 8),
+    predicted = c(
+      0.5, 1.5, 2.5, 2.5, 3.5, 4.5, 2.5, 5.5,
+      1.5, 3.5, 3.5, 4.5, 6.5, 7.5, 2.5, 8.5
+    ),
+    sample_id = rep(1:8, 2)
+  ))
+  reference <- forecast_data(forecast)[
+    , reference_sample(observed, predicted, integer_valued = FALSE),
+    by = c("model", "id")
+  ]
+  expect_scores_match_reference(score(forecast), reference, c("model", "id"))
+})
+
 test_that("score() returns correct scores for discrete sample forecasts", {
   forecast_unit <- get_forecast_unit(example_sample_discrete)
   reference <- forecast_data(example_sample_discrete)[
@@ -246,23 +266,47 @@ test_that("score() returns correct scores for multivariate sample forecasts", {
 # Regression snapshot ==========================================================
 # ============================================================================ #
 
-test_that("summarised scores of the example data have not changed", {
-  scores <- list(
-    quantile = scores_quantile,
-    sample_continuous = scores_sample_continuous,
-    sample_discrete = scores_sample_discrete,
-    binary = scores_binary,
-    point = scores_point,
-    nominal = scores_nominal,
-    ordinal = score(example_ordinal),
-    multivariate_sample = score(example_multivariate_sample)
+# Scores are summarised by model and target type. Non-finite scores (e.g. an
+# infinite log score) are dropped before averaging, as they would otherwise
+# mask all other values in their group. Values are rounded to 6 significant
+# digits to be robust to floating point differences across platforms. Rows are
+# sorted so that the snapshot does not depend on the row order of the scores.
+summarise_example_scores <- function(scores) {
+  summary <- summarise_scores(
+    scores,
+    by = c("model", "target_type"),
+    fun = function(x) mean(x[is.finite(x)])
   )
-  summarised <- lapply(scores, function(x) {
-    x <- summarise_scores(x, by = "model")
-    x <- as.data.frame(x[order(x$model), ])
-    numeric_cols <- vapply(x, is.numeric, logical(1))
-    x[numeric_cols] <- lapply(x[numeric_cols], signif, digits = 6)
-    x
-  })
-  expect_snapshot_value(summarised, style = "json2", tolerance = 1e-6)
+  metrics <- get_metrics(summary)
+  summary[, (metrics) := lapply(.SD, signif, digits = 6), .SDcols = metrics]
+  setorderv(summary, c("model", "target_type"))
+  as.data.frame(summary)
+}
+
+test_that("summarised scores for example_quantile have not changed", {
+  expect_snapshot(summarise_example_scores(scores_quantile))
+})
+
+test_that("summarised scores for example_sample_continuous have not changed", {
+  expect_snapshot(summarise_example_scores(scores_sample_continuous))
+})
+
+test_that("summarised scores for example_sample_discrete have not changed", {
+  expect_snapshot(summarise_example_scores(scores_sample_discrete))
+})
+
+test_that("summarised scores for example_point have not changed", {
+  expect_snapshot(summarise_example_scores(scores_point))
+})
+
+test_that("summarised scores for example_binary have not changed", {
+  expect_snapshot(summarise_example_scores(scores_binary))
+})
+
+test_that("summarised scores for example_nominal have not changed", {
+  expect_snapshot(summarise_example_scores(scores_nominal))
+})
+
+test_that("summarised scores for example_ordinal have not changed", {
+  expect_snapshot(summarise_example_scores(score(example_ordinal)))
 })
