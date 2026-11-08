@@ -97,6 +97,7 @@ assert_forecast.forecast_quantile <- function(
   if (verbose) {
     crossing <- get_crossing_quantiles(forecast)
     if (nrow(crossing) > 0) {
+      #nolint start: object_usage_linter
       n_crossing <- uniqueN(crossing, by = get_forecast_unit(crossing))
       cli_warn(
         c(
@@ -107,6 +108,7 @@ assert_forecast.forecast_quantile <- function(
           identify them."
         )
       )
+      #nolint end
     }
   }
   return(invisible(NULL))

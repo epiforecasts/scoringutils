@@ -88,13 +88,8 @@ test_that("score() hints at get_crossing_quantiles() when metrics fail", {
     predicted = c(6, 5, 4)
   )
   fc <- suppressWarnings(as_forecast_quantile(crossing))
-  warnings <- character()
-  scores <- withCallingHandlers(
-    score(fc, metrics = get_metrics(fc, select = c("wis", "bias"))),
-    warning = function(w) {
-      warnings <<- c(warnings, conditionMessage(w))
-      invokeRestart("muffleWarning")
-    }
+  warnings <- capture_warnings(
+    scores <- score(fc, metrics = get_metrics(fc, select = c("wis", "bias")))
   )
   expect_length(warnings, 2)
   expect_match(warnings, "get_crossing_quantiles()", fixed = TRUE)
