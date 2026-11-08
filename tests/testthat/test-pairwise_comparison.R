@@ -556,6 +556,58 @@ test_that("permutation_tests work as expected", {
 })
 
 
+test_that("get_pairwise_comparisons() has explicit test arguments (#769)", {
+  args <- formals(get_pairwise_comparisons)
+  expect_false("..." %in% names(args))
+  expect_identical(
+    eval(args$test_type), c("non_parametric", "permutation")
+  )
+  expect_false(eval(args$one_sided))
+  expect_identical(eval(args$n_permutations), 999)
+})
+
+test_that("get_pairwise_comparisons() validates the test arguments (#769)", {
+  expect_error(
+    get_pairwise_comparisons(scores_quantile, test_type = "t_test"),
+    "should be one of"
+  )
+  expect_error(
+    get_pairwise_comparisons(scores_quantile, one_sided = "yes"),
+    "Assertion on 'one_sided' failed"
+  )
+  expect_error(
+    get_pairwise_comparisons(scores_quantile, n_permutations = 0),
+    "Assertion on 'n_permutations' failed"
+  )
+  expect_error(
+    add_relative_skill(scores_quantile, n_permutations = 2.5),
+    "Assertion on 'n_permutations' failed"
+  )
+  expect_error(
+    get_pairwise_comparisons(scores_quantile, alternative = "less"),
+    "unused argument"
+  )
+})
+
+test_that("get_pairwise_comparisons() passes the test arguments on (#769)", {
+  pairwise_np <- get_pairwise_comparisons(scores_quantile)
+  set.seed(123)
+  pairwise_perm <- get_pairwise_comparisons(
+    scores_quantile, test_type = "permutation", n_permutations = 50
+  )
+  pairwise_none <- get_pairwise_comparisons(scores_quantile, test_type = NULL)
+
+  expect_identical(
+    pairwise_np$mean_scores_ratio, pairwise_perm$mean_scores_ratio
+  )
+  expect_false(identical(pairwise_np$pval, pairwise_perm$pval))
+  # with 50 permutations, p-values are multiples of 1 / 51
+  pvals <- pairwise_perm[model != compare_against, pval]
+  expect_equal(pvals * 51, round(pvals * 51))
+  expect_true(all(is.na(pairwise_none[model != compare_against, pval])))
+})
+
+
 # ==============================================================================
 # plot_pairwise_comparison() # nolint: commented_code_linter
 # ==============================================================================

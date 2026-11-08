@@ -75,8 +75,17 @@
 #'   given, then a scaled relative skill with respect to the baseline will be
 #'   returned. By default (`NULL`), relative skill will not be scaled with
 #'   respect to a baseline model.
-#' @param ... Additional arguments for the comparison between two models. See
-#'   [compare_forecasts()] for more information.
+#' @param test_type Character, either "non_parametric" (the default),
+#'   "permutation", or `NULL`. Determines which test is used to compute
+#'   p-values: "non_parametric" uses a paired Wilcoxon signed-rank test,
+#'   "permutation" uses a permutation test (see [permutation_test()]). If
+#'   `NULL`, no test is conducted and p-values will be `NA`.
+#' @param one_sided Logical, default is `FALSE`. Whether to conduct a
+#'   one-sided instead of a two-sided permutation test. Only used if
+#'   `test_type = "permutation"`.
+#' @param n_permutations Numeric, the number of permutations for a
+#'   permutation test. Default is 999. Only used if
+#'   `test_type = "permutation"`.
 #' @inheritParams summarise_scores
 #' @returns A data.table with the results of pairwise comparisons
 #' containing the mean score ratios (`mean_scores_ratio`),
@@ -88,6 +97,7 @@
 #' @importFrom stats sd rbinom wilcox.test p.adjust
 #' @importFrom utils combn
 #' @importFrom checkmate assert_subset assert_character assert_disjunct check_subset
+#' @importFrom checkmate assert_flag assert_count
 #' @importFrom cli cli_abort cli_inform cli_warn
 #' @export
 #' @author Nikos Bosse \email{nikosbosse@@gmail.com}
@@ -118,10 +128,17 @@ get_pairwise_comparisons <- function(
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
-  ...
+  test_type = c("non_parametric", "permutation"),
+  one_sided = FALSE,
+  n_permutations = 999
 ) {
 
   # input checks ---------------------------------------------------------------
+  if (!is.null(test_type)) {
+    test_type <- match.arg(test_type)
+  }
+  assert_flag(one_sided)
+  assert_count(n_permutations, positive = TRUE)
   scores <- ensure_data.table(scores)
   # check that column in 'compare' is present
   assert_subset(compare, colnames(scores))
@@ -228,7 +245,9 @@ get_pairwise_comparisons <- function(
         baseline = baseline,
         compare = compare,
         by = by,
-        ...
+        test_type = test_type,
+        one_sided = one_sided,
+        n_permutations = n_permutations
       )
     }
   )
@@ -263,7 +282,9 @@ pairwise_comparison_one_group <- function(scores,
                                           baseline,
                                           compare = "model",
                                           by,
-                                          ...) {
+                                          test_type = c("non_parametric", "permutation"),
+                                          one_sided = FALSE,
+                                          n_permutations = 999) {
   if (!(compare %in% names(scores))) {
     cli_abort(
       "pairwise comparisons require a column as given by `compare`"
@@ -307,7 +328,12 @@ pairwise_comparison_one_group <- function(scores,
     if (!any(overlap)) {
       next
     }
-    comparison <- compare_scores(values_x[overlap], values_y[overlap], ...)
+    comparison <- compare_scores(
+      values_x[overlap], values_y[overlap],
+      one_sided = one_sided,
+      test_type = test_type,
+      n_permutations = n_permutations
+    )
     ratios[i] <- comparison$mean_scores_ratio
     pvals[i] <- comparison$pval
   }
@@ -467,7 +493,7 @@ pivot_scores <- function(scores, compare = "model", metric) {
 #' @param values_x Numeric vector of scores of the first comparator.
 #' @param values_y Numeric vector of scores of the second comparator, aligned
 #'   with `values_x`.
-#' @inheritParams compare_forecasts
+#' @inheritParams get_pairwise_comparisons
 #' @inherit compare_forecasts return
 #' @importFrom stats wilcox.test
 #' @keywords internal
@@ -526,14 +552,6 @@ compare_scores <- function(
 #' @inheritParams get_pairwise_comparisons
 #' @param name_comparator1 Character, name of the first comparator
 #' @param name_comparator2 Character, name of the comparator to compare against
-#' @param one_sided Boolean, default is `FALSE`, whether two conduct a one-sided
-#'   instead of a two-sided test to determine significance in a pairwise
-#'   comparison.
-#' @param test_type Character, either "non_parametric" (the default), "permutation",
-#'   or NULL. This determines which kind of test shall be conducted to determine
-#'   p-values. If NULL, no test will be conducted and p-values will be NA.
-#' @param n_permutations Numeric, the number of permutations for a
-#'   permutation test. Default is 999.
 #' @returns A list with mean score ratios and p-values for the comparison
 #' between two comparators
 #' @importFrom cli cli_abort
@@ -684,7 +702,9 @@ permutation_test <- function(scores1,
 #'   `NULL` (the default). Determines which kind of test is run for the
 #'   pairwise comparisons. As p-values are not returned by
 #'   `add_relative_skill()`, no test is run by default. See
-#'   [compare_forecasts()] for more information.
+#'   [get_pairwise_comparisons()] for more information.
+#' @param ... Additional arguments passed on to [get_pairwise_comparisons()],
+#'   i.e. `one_sided` and `n_permutations`.
 #' @export
 #' @keywords scoring
 add_relative_skill <- function(
