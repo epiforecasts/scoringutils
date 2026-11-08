@@ -245,7 +245,7 @@ get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
     quantiles <- seq(0, 1, 1 / num_bins)
   }
   ## avoid rounding errors
-  quantiles <- round(quantiles, 10)
+  quantiles <- sort(unique(round(quantiles, 10)))
 
   if (length(setdiff(quantiles, present_quantiles)) > 0) {
     cli_warn(c(
@@ -263,7 +263,6 @@ get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
   }
   diffs <- round(diff(quantiles), 10)
 
-  forecast <- forecast[quantile_level %in% quantiles]
   forecast[, quantile_coverage := (observed <= predicted)]
 
   quantile_coverage <-
@@ -276,7 +275,11 @@ get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
   pit_histogram <- quantile_coverage[
     order(quantile_level),
     .(
-      density = diff(c(0, quantile_coverage, 1)) / diffs,
+      # subset here rather than before computing the coverage, so that groups
+      # are kept even if no interior quantile is requested (e.g. one bin)
+      density = diff(
+        c(0, quantile_coverage[quantile_level %in% quantiles], 1)
+      ) / diffs,
       bin = bins,
       mid = mids
     ),

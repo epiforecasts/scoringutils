@@ -219,7 +219,7 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
   if (is.null(breaks)) {
     quantiles <- seq(0, 1, 1 / num_bins)
   } else {
-    quantiles <- unique(c(0, breaks, 1))
+    quantiles <- sort(unique(c(0, breaks, 1)))
   }
 
   forecast_wide <- dcast(

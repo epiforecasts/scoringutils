@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Bug fixes
+
+- `get_pit_histogram()` now sorts user-supplied `breaks`. Previously, unsorted breaks such as `breaks = c(0.5, 0.25)` produced a nonsensical bin `[0.5,0.25)` and, for quantile-based forecasts, negative densities. For quantile-based forecasts, `num_bins = 1` now returns a single bin `[0,1)` with density 1, matching the sample method, instead of an empty table (#1219).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.

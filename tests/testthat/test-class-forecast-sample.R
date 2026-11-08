@@ -93,3 +93,14 @@ test_that("get_pit_histogram.forecast_sample() works as expected", {
   expect_s3_class(pit_continuous, c("data.table", "data.frame"), exact = TRUE)
   expect_s3_class(pit_integer, c("data.table", "data.frame"), exact = TRUE)
 })
+
+test_that("get_pit_histogram.forecast_sample() sorts unsorted breaks", {
+  sorted <- get_pit_histogram(
+    example_sample_continuous, breaks = c(0.25, 0.5), by = "model"
+  )
+  unsorted <- get_pit_histogram(
+    example_sample_continuous, breaks = c(0.5, 0.25), by = "model"
+  )
+  expect_identical(unsorted, sorted)
+  expect_identical(unique(unsorted$bin), c("[0,0.25)", "[0.25,0.5)", "[0.5,1)"))
+})

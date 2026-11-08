@@ -579,3 +579,25 @@ test_that("get_pit_histogram.forecast_quantile() keeps requested quantiles that 
   integrals <- res[, sum(density * c(0.25, 0.25, 0.5)), by = "model"]$V1
   expect_equal(integrals, rep(1, n_models))
 })
+
+test_that("get_pit_histogram.forecast_quantile() sorts unsorted breaks", {
+  sorted <- get_pit_histogram(
+    example_quantile, breaks = c(0.25, 0.5), by = "model"
+  )
+  unsorted <- get_pit_histogram(
+    example_quantile, breaks = c(0.5, 0.25), by = "model"
+  )
+  expect_identical(unsorted, sorted)
+  expect_identical(unique(unsorted$bin), c("[0,0.25)", "[0.25,0.5)", "[0.5,1)"))
+  expect_true(all(unsorted$density >= 0))
+})
+
+test_that("get_pit_histogram.forecast_quantile() works with a single bin", {
+  n_models <- length(unique(na.omit(example_quantile)$model))
+  res <- get_pit_histogram(example_quantile, num_bins = 1, by = "model")
+  expect_identical(nrow(res), n_models)
+  expect_named(res, c("model", "density", "bin", "mid"))
+  expect_identical(unique(res$bin), "[0,1)")
+  expect_equal(res$density, rep(1, n_models))
+  expect_equal(res$mid, rep(0.5, n_models))
+})
