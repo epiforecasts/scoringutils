@@ -83,6 +83,11 @@ the corresponding predicted value.
 Quantile levels must be between 0 and 1.
 }
 
+Predicted values should not decrease with increasing quantile level. If
+they do (quantile crossing), a warning is issued and some metrics, e.g.
+\code{\link[=bias_quantile]{bias_quantile()}}, cannot be computed. Use \code{\link[=get_crossing_quantiles]{get_crossing_quantiles()}} to
+identify the affected forecasts.
+
 For convenience, we recommend an additional column \code{model} holding the name
 of the forecaster or model that produced a prediction, but this is not
 strictly necessary.

@@ -53,6 +53,18 @@ test_that("as_forecast_quantile() warns if there are different numbers of quanti
   expect_no_condition(w)
 })
 
+test_that("as_forecast_quantile() warns if quantiles cross", {
+  example <- na.omit(data.table::copy(example_quantile))
+  example[c(1, 24), predicted := 1e7]
+  expect_warning(
+    as_forecast_quantile(example),
+    "quantile crossing) in 2 forecasts",
+    fixed = TRUE
+  )
+  fc <- suppressWarnings(as_forecast_quantile(example))
+  expect_no_condition(assert_forecast(fc, verbose = FALSE))
+})
+
 test_that("as_forecast_quantile() function throws an error with duplicate forecasts", {
   example <- rbind(
     example_quantile,
