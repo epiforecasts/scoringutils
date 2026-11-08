@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Internal changes
+
+- Added tests that check the scores `score()` returns for every forecast type and default metric on the example data against reference implementations written directly from the definitions of the scoring rules, independently of scoringRules. A snapshot of the summarised scores of all example data sets additionally guards against unintended changes in scores (#986).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.
