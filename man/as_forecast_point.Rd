@@ -40,9 +40,9 @@ observed values. This column will be renamed to "observed".}
 predicted values. This column will be renamed to "predicted".}
 
 \item{quantile_level}{Numeric of length one between 0 and 1. Only used
-when converting a \code{forecast_quantile} object: the quantile level to
-extract as the point forecast. Must be present in the data. Defaults to
-\code{0.5} (the median).}
+when converting a \code{forecast_quantile} object (ignored for other inputs):
+the quantile level to extract as the point forecast. Must be present in
+the data. Defaults to \code{0.5} (the median).}
 }
 \value{
 A \code{forecast} object of class \code{forecast_point}

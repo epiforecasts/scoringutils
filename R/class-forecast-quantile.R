@@ -112,18 +112,33 @@ is_forecast_quantile <- function(x) {
 #' the quantile given by `quantile_level` (by default the median, i.e. the
 #' 0.5 quantile) is extracted and returned as the point forecast.
 #' @param quantile_level Numeric of length one between 0 and 1. Only used
-#'   when converting a `forecast_quantile` object: the quantile level to
-#'   extract as the point forecast. Must be present in the data. Defaults to
-#'   `0.5` (the median).
+#'   when converting a `forecast_quantile` object (ignored for other inputs):
+#'   the quantile level to extract as the point forecast. Must be present in
+#'   the data. Defaults to `0.5` (the median).
 #' @export
 #' @keywords as_forecast
-#' @importFrom checkmate assert_number assert_subset
+#' @importFrom checkmate assert_number
+#' @importFrom cli cli_abort
 as_forecast_point.forecast_quantile <- function(data,
                                                 quantile_level = 0.5,
                                                 ...) {
   assert_forecast(data, verbose = FALSE)
   assert_number(quantile_level, lower = 0, upper = 1)
-  assert_subset(quantile_level, unique(data$quantile_level))
+  # Compare rounded values to avoid floating point mismatches, e.g. between
+  # 0.15 and seq(0.05, 0.95, 0.05)[3]. A differently named variable avoids a
+  # clash with the `quantile_level` column inside data.table's `[`.
+  target_level <- round(quantile_level, 10)
+  present_levels <- sort(unique(data$quantile_level))
+  if (!target_level %in% round(present_levels, 10)) {
+    #nolint start: object_usage_linter
+    cli_abort(
+      c(
+        `!` = "`quantile_level` {quantile_level} is not present in the data.",
+        i = "Available quantile levels: {present_levels}."
+      )
+    )
+    #nolint end
+  }
 
   # At end of this function, the object will have be turned from a
   # forecast_quantile to a forecast_point and we don't want to validate it as a
@@ -131,10 +146,7 @@ as_forecast_point.forecast_quantile <- function(data,
   # at the end.
   data <- as.data.table(data)
 
-  # use a differently named variable to avoid a clash with the
-  # `quantile_level` column inside data.table's `[`
-  target_level <- quantile_level
-  forecast <- data[quantile_level == target_level]
+  forecast <- data[round(quantile_level, 10) == target_level]
   forecast[, "quantile_level" := NULL]
 
   point_forecast <- new_forecast(forecast, "forecast_point")

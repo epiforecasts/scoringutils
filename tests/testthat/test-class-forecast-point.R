@@ -31,25 +31,44 @@ test_that("as_forecast_point.forecast_quantile() extracts the requested quantile
   expect_identical(nrow(point_75), nrow(point))
 })
 
+test_that("as_forecast_point.forecast_quantile() matches quantile levels that are not exactly representable", {
+  # seq() produces levels such as 0.15000000000000002 that are not exactly
+  # equal to the literal 0.15
+  quantile_levels <- seq(0.05, 0.95, 0.05)
+  data <- data.table(
+    model = "m",
+    id = rep(1:2, each = length(quantile_levels)),
+    quantile_level = rep(quantile_levels, 2),
+    observed = rep(c(5, 6), each = length(quantile_levels))
+  )
+  data[, predicted := observed + quantile_level]
+  fq <- as_forecast_quantile(data)
+
+  point_15 <- as_forecast_point(fq, quantile_level = 0.15)
+  expect_identical(point_15$predicted, c(5, 6) + quantile_levels[3])
+  point_70 <- as_forecast_point(fq, quantile_level = 0.7)
+  expect_identical(point_70$predicted, c(5, 6) + quantile_levels[14])
+})
+
 test_that("as_forecast_point.forecast_quantile() validates `quantile_level`", {
   fq <- as_forecast_quantile(na.omit(example_quantile))
   # quantile level not present in the data
   expect_error(
     as_forecast_point(fq, quantile_level = 0.33),
-    "Must be a subset of"
+    "`quantile_level` 0.33 is not present in the data"
   )
   # invalid inputs
   expect_error(
     as_forecast_point(fq, quantile_level = c(0.25, 0.75)),
-    "Must have length 1"
+    "quantile_level"
   )
   expect_error(
     as_forecast_point(fq, quantile_level = "0.5"),
-    "Must be of type 'number'"
+    "quantile_level"
   )
   expect_error(
     as_forecast_point(fq, quantile_level = 1.5),
-    "Element 1 is not <= 1"
+    "quantile_level"
   )
 })
 
