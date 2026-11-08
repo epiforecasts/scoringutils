@@ -51,7 +51,7 @@ quantile_to_interval <- function(...) {
 #'   columns `lower` and `upper` that contain the lower and upper bounds of the
 #'   prediction interval, respectively.
 #' @param keep_quantile_col Keep the `quantile_level` column in the final
-#'   output after transformation (default is FALSE). This only works if
+#'   output after transformation (default is `FALSE`). This only works if
 #'   `format = "long"`. If `format = "wide"`, the `quantile_level` column will
 #'   always be dropped.
 #' @return
@@ -143,7 +143,7 @@ quantile_to_interval_numeric <- function(observed,
 #'
 #' @inheritParams as_forecast_quantile
 #' @param keep_quantile_col Keep the `quantile_level` column, default is `TRUE`.
-#' @returns A data.table in a long interval interval range format
+#' @returns A data.table in a long interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
 #' @keywords internal

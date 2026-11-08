@@ -33,7 +33,7 @@ columns \code{lower} and \code{upper} that contain the lower and upper bounds of
 prediction interval, respectively.}
 
 \item{keep_quantile_col}{Keep the \code{quantile_level} column in the final
-output after transformation (default is FALSE). This only works if
+output after transformation (default is \code{FALSE}). This only works if
 \code{format = "long"}. If \code{format = "wide"}, the \code{quantile_level} column will
 always be dropped.}
 

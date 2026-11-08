@@ -22,7 +22,7 @@ information, see \code{\link[=quantile]{quantile()}}.}
 \item{keep_quantile_col}{Keep the \code{quantile_level} column, default is \code{TRUE}.}
 }
 \value{
-A data.table in a long interval interval range format
+A data.table in a long interval range format
 }
 \description{
 Transform data from a format that is based on predictive samples to a format
