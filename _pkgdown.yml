@@ -27,7 +27,7 @@ navbar:
   components:
     paper:
       text: "scoringutils paper"
-      href: https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf
+      href: https://github.com/epiforecasts/scoringutils/blob/main/inst/manuscript/manuscript.pdf
 
 reference:
         - title: Package documentation
