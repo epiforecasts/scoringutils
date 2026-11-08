@@ -636,10 +636,14 @@ test_that("pivot_scores() errors with duplicated scores per forecast unit", {
   metrics <- get_metrics(scores)
   duplicated_scores <- rbind(scores, scores[1:5][, wis := wis + 1])
   duplicated_scores <- new_scores(duplicated_scores, metrics = metrics)
-  expect_error(
+  err <- expect_error(
     pivot_scores(duplicated_scores, compare = "model", metric = "wis"),
     "more than one score for the same forecast unit"
   )
+  # the hint points to collapsing duplicates at the forecast-unit level rather
+  # than to summarising scores in general (#1226)
+  expect_match(conditionMessage(err), "Remove duplicated")
+  expect_no_match(conditionMessage(err), "summarising the scores first")
   # exact duplicates are removed rather than causing an error
   exact_duplicates <- new_scores(rbind(scores, scores[1:5]), metrics = metrics)
   expect_no_error(

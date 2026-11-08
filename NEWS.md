@@ -1,6 +1,6 @@
 # scoringutils (development version)
 
-- Corrected the guidance on `add_relative_skill()` in the NEWS entry for scoringutils 2.0.0 and in the documentation of `add_relative_skill()` and `get_pairwise_comparisons()`: relative skill should be computed from unsummarised scores (the output of `score()`), with the level of aggregation set via `by`, rather than from summarised scores or by averaging relative skill scores afterwards (#1226, #1248).
+- Corrected the NEWS entry for 2.0.0 and the documentation of `add_relative_skill()` and `get_pairwise_comparisons()`: relative skill should be computed from unsummarised scores (the output of `score()`). `add_relative_skill()` gained an example of the recommended workflow, and the error for duplicated scores in pairwise comparisons no longer suggests summarising scores first (#1226, #1248).
 
 # scoringutils 2.3.0
 

@@ -10,10 +10,13 @@
 #' adding additional unrelated columns can unpredictably change results, as
 #' all present columns are taken into account when determining the set of
 #' overlapping forecasts between two models.
+#'
 #' Scores should usually not be summarised with [summarise_scores()] before
-#' doing pairwise comparisons: summarising scores can change the set of
-#' overlapping forecasts between two models and distort the results. Use the
-#' `by` argument instead to specify the level at which comparisons are made.
+#' doing pairwise comparisons, as this can change the set of overlapping
+#' forecasts between two models. For example, after summarising by model,
+#' mean scores are taken over each model's own set of forecasts rather than
+#' only over the forecasts both models made. Use the `by` argument instead to
+#' specify the level at which comparisons are made.
 #'
 #' The output of the pairwise comparisons is a set of mean score ratios,
 #' relative skill scores and p-values.
@@ -433,8 +436,8 @@ pivot_scores <- function(scores, compare = "model", metric) {
         `!` = "Found more than one score for the same forecast unit and
         element of {.var {compare}}.",
         i = "Pairwise comparisons require exactly one score per forecast unit
-        and comparator. Consider summarising the scores first using
-        {.fn summarise_scores}."
+        and comparator. Remove duplicated forecasts, or average them using
+        {.fn summarise_scores} with {.arg by} set to the forecast unit."
       )
     )
     #nolint end
@@ -682,10 +685,17 @@ permutation_test <- function(scores1,
 #' the output of [score()], rather than from the output of
 #' [summarise_scores()]. Summarising scores first can change the set of
 #' overlapping forecasts between two models and distort relative skill scores.
-#' Averaging relative skill scores afterwards is usually not meaningful either:
-#' an average of relative skill scores is not itself a relative skill score.
-#' To obtain relative skill at a different level of aggregation (e.g. one
-#' score per model across all locations), adjust `by` instead.
+#' For example, after summarising by model, mean scores are taken over each
+#' model's own set of forecasts rather than only over the forecasts both
+#' models made.
+#'
+#' To summarise scores afterwards with [summarise_scores()], include the
+#' column given in `compare` and all columns given in `by` in the `by`
+#' argument of [summarise_scores()], so that each group has a single relative
+#' skill value (see the examples). Averaging relative skill scores across
+#' those groups (e.g. across target types) does not give a relative skill
+#' score. To obtain relative skill at a coarser level of aggregation, change
+#' `by` in `add_relative_skill()` instead.
 #'
 #' Unlike [get_pairwise_comparisons()], this function does not return
 #' p-values. By default no statistical test is therefore run for the
@@ -700,6 +710,21 @@ permutation_test <- function(scores1,
 #'   [compare_forecasts()] for more information.
 #' @export
 #' @keywords scoring
+#' @examples
+#' \dontshow{
+#'   data.table::setDTthreads(2) # restricts number of cores used on CRAN
+#' }
+#' scores <- example_quantile |>
+#'   as_forecast_quantile() |>
+#'   score()
+#'
+#' # compute relative skill separately for every target type, then summarise
+#' # to one row per model and target type
+#' scores |>
+#'   add_relative_skill(
+#'     by = "target_type", baseline = "EuroCOVIDhub-baseline"
+#'   ) |>
+#'   summarise_scores(by = c("model", "target_type"))
 add_relative_skill <- function(
   scores,
   compare = "model",
