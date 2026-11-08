@@ -2,7 +2,7 @@
 
 ## Internal changes
 
-- Removed the internal helpers `check_input_binary()` and `check_input_point()`; forecast validation now calls `check_try(assert_input_<type>())` directly (#939).
+- Removed the internal helpers `check_input_binary()` and `check_input_point()`; forecast validation now calls `check_try(assert_input_<type>())` directly (#939, #1242).
 
 # scoringutils 2.3.0
 
