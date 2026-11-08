@@ -49,19 +49,81 @@ observation).
 Wrapper around the \code{\link[scoringRules:scores_sample_univ]{crps_sample()}}
 function from the
 \pkg{scoringRules} package. Can be used for continuous as well as integer
-valued forecasts
+valued forecasts.
 
-The Continuous ranked probability score (CRPS) can be interpreted as the sum
-of three components: overprediction,  underprediction and dispersion.
-"Dispersion" is defined as the CRPS of the median forecast $m$. If an
-observation $y$ is greater than $m$ then overprediction is defined as the
-CRPS of the forecast for $y$ minus the dispersion component, and
-underprediction is zero. If, on the other hand, $y<m$ then underprediction
-is defined as the CRPS of the forecast for $y$ minus the dispersion
-component, and overprediction is zero.
+The continuous ranked probability score (CRPS) of a predictive distribution
+with cumulative distribution function \eqn{F} for an observed value
+\eqn{y} is defined as
+\deqn{
+\textrm{CRPS}(F, y) = \int_{-\infty}^{\infty}
+\left(F(x) - \mathbf{1}(x \geq y)\right)^2 dx
+= \textrm{E}|X - y| - \frac{1}{2} \textrm{E}|X - X'|,
+}{
+CRPS(F, y) = integral of (F(x) - 1(x >= y))^2 dx
+= E|X - y| - 1/2 * E|X - X'|,
+}
+where \eqn{\mathbf{1}()}{1()} is the indicator function and \eqn{X}
+and \eqn{X'} are independent random variables with distribution
+\eqn{F}. Lower values are better. The CRPS is a generalisation of the
+absolute error to probabilistic forecasts and is expressed in the units of
+the observed values.
 
-The overprediction, underprediction and dispersion components correspond to
-those of the \code{\link[=wis]{wis()}}.
+In the sample-based version (with the default \code{method = "edf"} of
+\code{\link[scoringRules:crps_sample]{scoringRules::crps_sample()}}), \eqn{F} is replaced by the empirical
+distribution function of the \eqn{N} predictive samples
+\eqn{x_1, \dots, x_N}{x_1, ..., x_N}, which gives
+\deqn{
+\textrm{CRPS}(\hat{F}, y) = \frac{1}{N} \sum_{i = 1}^{N} |x_i - y| -
+\frac{1}{2 N^2} \sum_{i = 1}^{N} \sum_{j = 1}^{N} |x_i - x_j|.
+}{
+CRPS(F_hat, y) = 1/N * sum_i |x_i - y| -
+1 / (2 * N^2) * sum_i sum_j |x_i - x_j|.
+}
+Alternatively, \code{method = "kde"} can be passed via \code{...} to use a kernel
+density estimate of \eqn{F} instead. For integer-valued samples and
+observations, the CRPS computed from the empirical distribution function is
+equal to the ranked probability score (RPS).
+
+\strong{Decomposition into dispersion, overprediction and underprediction}
+
+The CRPS can be decomposed into three components: dispersion,
+overprediction and underprediction. "Dispersion" is defined as the CRPS of
+the forecast evaluated at its own median \eqn{m}, i.e.
+\eqn{\textrm{CRPS}(F, m)}{CRPS(F, m)}. For the default \code{method = "edf"},
+this is the smallest possible CRPS of the forecast, so all three components
+are non-negative, and dispersion only reflects the spread of the forecast.
+(If \code{method = "kde"} is passed via \code{...}, dispersion is still evaluated at
+the median of the samples rather than at the median of the smoothed
+distribution, so this need not hold exactly.) The remaining part of the
+score is attributed to overprediction or underprediction:
+\deqn{
+\textrm{overprediction} = \mathbf{1}(y < m)
+\left(\textrm{CRPS}(F, y) - \textrm{CRPS}(F, m)\right),
+}{
+overprediction = 1(y < m) * (CRPS(F, y) - CRPS(F, m)),
+}
+\deqn{
+\textrm{underprediction} = \mathbf{1}(y > m)
+\left(\textrm{CRPS}(F, y) - \textrm{CRPS}(F, m)\right).
+}{
+underprediction = 1(y > m) * (CRPS(F, y) - CRPS(F, m)).
+}
+If the observed value \eqn{y} is below the median \eqn{m}, the
+forecast was too high and the excess score counts as overprediction (and
+underprediction is zero); if \eqn{y} is above \eqn{m}, it counts as
+underprediction (and overprediction is zero). If \eqn{y = m}, both are
+zero.
+
+This mirrors the decomposition of the weighted interval score (see \code{\link[=wis]{wis()}})
+into dispersion, overprediction and underprediction proposed by Bracher et
+al. (2021), and the components correspond to those of the \code{\link[=wis]{wis()}}. Note
+that this is a decomposition of the score for a single forecast. It is
+different from decompositions of the \emph{mean} CRPS across many forecasts into
+miscalibration, discrimination and uncertainty components (see e.g.
+Arnold et al., 2023).
+
+See \code{vignette("scoring-rules", package = "scoringutils")} for more
+information on the CRPS.
 }
 \section{Input format}{
 \if{html}{
@@ -83,5 +145,13 @@ crps_sample(observed, predicted)
 \references{
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 Forecasts with scoringRules, \url{https://www.jstatsoft.org/article/view/v090i12}
+
+Evaluating epidemic forecasts in an interval format,
+Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich, 2021,
+\url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618}
+
+Decompositions of the mean continuous ranked probability score,
+Sebastian Arnold, Eva-Maria Walz, Johanna Ziegel and Tilmann Gneiting, 2023,
+\url{https://arxiv.org/abs/2311.14122}
 }
 \keyword{metric}

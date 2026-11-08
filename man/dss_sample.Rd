@@ -24,6 +24,30 @@ Vector with scores.
 Wrapper around the \code{\link[scoringRules:scores_sample_univ]{dss_sample()}}
 function from the
 \pkg{scoringRules} package.
+
+The Dawid-Sebastiani score (DSS) only depends on the mean \eqn{\mu}{mu}
+and the standard deviation \eqn{\sigma}{sigma} of the predictive
+distribution \eqn{F}. For an observed value \eqn{y} it is defined as
+\deqn{
+\textrm{DSS}(F, y) = \left(\frac{y - \mu}{\sigma}\right)^2 +
+2 \log \sigma.
+}{
+DSS(F, y) = ((y - mu) / sigma)^2 + 2 * log(sigma).
+}
+Lower values are better. The DSS is proper, but not strictly proper: two
+forecasts with the same mean and standard deviation receive the same score.
+
+In the sample-based version, \eqn{\mu}{mu} and \eqn{\sigma^2}{sigma^2}
+are replaced by the empirical mean and variance of the \eqn{N}
+predictive samples \eqn{x_1, \dots, x_N}{x_1, ..., x_N}, i.e.
+\eqn{\hat{\mu} = \frac{1}{N} \sum_{i = 1}^{N} x_i}{mu_hat = 1/N * sum_i x_i}
+and
+\eqn{\hat{\sigma}^2 = \frac{1}{N} \sum_{i = 1}^{N}
+(x_i - \hat{\mu})^2}{sigma_hat^2 = 1/N * sum_i (x_i - mu_hat)^2}.
+The DSS can be used for continuous as well as integer-valued forecasts.
+
+See \code{vignette("scoring-rules", package = "scoringutils")} for more
+information on the DSS.
 }
 \section{Input format}{
 \if{html}{
@@ -45,5 +69,9 @@ dss_sample(observed, predicted)
 \references{
 Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 Forecasts with scoringRules, \url{https://www.jstatsoft.org/article/view/v090i12}
+
+Tilmann Gneiting, Adrian E. Raftery, Strictly Proper Scoring Rules,
+Prediction, and Estimation, Journal of the American Statistical
+Association, 2007, \url{https://doi.org/10.1198/016214506000001437}
 }
 \keyword{metric}

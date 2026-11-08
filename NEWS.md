@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Documentation
+
+- Extended the documentation of `crps_sample()`, `logs_sample()` and `dss_sample()` with the formulas for each score and how they are computed from predictive samples. The documentation of the CRPS decomposition into dispersion, overprediction and underprediction now gives formulas, references Bracher et al. (2021) and Arnold et al. (2023), and no longer swaps over- and underprediction in its description. The scoring rules vignette now says that scoringutils provides wrappers around these scoringRules functions, rather than re-exporting them (#329, #872).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.

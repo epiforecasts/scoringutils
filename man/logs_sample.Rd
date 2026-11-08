@@ -25,8 +25,28 @@ This function is a wrapper around the
 \code{\link[scoringRules:scores_sample_univ]{logs_sample()}} function from the
 \pkg{scoringRules} package.
 
-The log score is the negative logarithm of the predictive density evaluated
-at the observed value.
+The log score is the negative logarithm of the predictive density
+\eqn{f} evaluated at the observed value \eqn{y}:
+\deqn{
+\textrm{LogS}(F, y) = -\log f(y).
+}{
+LogS(F, y) = -log(f(y)).
+}
+Lower values are better.
+
+In the sample-based version, the predictive density is not known and is
+approximated with a Gaussian kernel density estimate based on the
+\eqn{N} predictive samples \eqn{x_1, \dots, x_N}{x_1, ..., x_N}:
+\deqn{
+\hat{f}(y) = \frac{1}{N h} \sum_{i = 1}^{N}
+\varphi\left(\frac{y - x_i}{h}\right),
+}{
+f_hat(y) = 1 / (N * h) * sum_i phi((y - x_i) / h),
+}
+where \eqn{\varphi}{phi} is the density of the standard normal
+distribution and \eqn{h} is the bandwidth, which by default is chosen
+using \code{\link[stats:bw.nrd]{stats::bw.nrd()}} (it can be set via the \code{bw} argument passed on to
+\code{\link[scoringRules:logs_sample]{scoringRules::logs_sample()}}).
 
 The function should be used to score continuous predictions only.
 While the Log Score is in theory also applicable
@@ -35,6 +55,9 @@ uses a kernel density estimation, which is not well defined with
 integer-valued Monte Carlo Samples.
 See the scoringRules package for more details and alternatives, e.g.
 calculating scores for specific discrete probability distributions.
+
+See \code{vignette("scoring-rules", package = "scoringutils")} for more
+information on the log score.
 }
 \section{Input format}{
 \if{html}{
