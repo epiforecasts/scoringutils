@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- The error for duplicate forecasts (raised by `as_forecast_<type>()` and `assert_forecast()`) now lists the first few duplicated forecast units, along with the number of rows involved for each, so the problem can be diagnosed without a separate call to `get_duplicate_forecasts()` (#1155, #1246).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.

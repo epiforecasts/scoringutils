@@ -119,7 +119,9 @@ get_forecast_type_ids.default <- function(data) {
 #'
 #' @description
 #' Runs [get_duplicate_forecasts()] and returns a message if an issue is
-#' encountered
+#' encountered. The message lists the first few forecast units that have
+#' duplicates, together with the number of rows involved for each (the
+#' original rows included, across all quantile levels or samples).
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
@@ -128,9 +130,9 @@ check_duplicates <- function(data) {
 
   if (nrow(duplicates) > 0) {
     hint_args <- ""
+    fu <- get_forecast_unit(data)
     if (inherits(data, "forecast")) {
       forecast_type <- get_forecast_type(data)
-      fu <- get_forecast_unit(data)
       fu_str <- paste0(
         "c(\"", paste(fu, collapse = "\", \""), "\")"
       )
@@ -147,6 +149,24 @@ check_duplicates <- function(data) {
       "`get_duplicate_forecasts(data", hint_args, ")` ",
       "to identify duplicate rows"
     )
+    counts <- duplicates[, .(n_rows = .N), by = c(fu)]
+    shown <- head(counts, 5)
+    units <- do.call(
+      paste,
+      c(lapply(fu, function(col) paste0(col, " = ", shown[[col]])),
+        sep = ", ")
+    )
+    unit_lines <- paste0(
+      "\n  - ", units, " (", shown$n_rows, " rows)",
+      collapse = ""
+    )
+    n_more <- nrow(counts) - nrow(shown)
+    if (n_more > 0) {
+      unit_lines <- paste0(
+        unit_lines, "\n  ... and ", n_more, " more forecast unit(s)"
+      )
+    }
+    msg <- paste0(msg, ". Duplicated forecast units:", unit_lines)
     return(msg)
   }
   return(TRUE)

@@ -17,6 +17,8 @@ error message otherwise.
 }
 \description{
 Runs \code{\link[=get_duplicate_forecasts]{get_duplicate_forecasts()}} and returns a message if an issue is
-encountered
+encountered. The message lists the first few forecast units that have
+duplicates, together with the number of rows involved for each (the
+original rows included, across all quantile levels or samples).
 }
 \keyword{internal_input_check}

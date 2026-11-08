@@ -158,6 +158,70 @@ test_that("check_duplicates includes type and forecast_unit in message", {
 })
 
 
+test_that("check_duplicates lists the duplicated forecast units", {
+  fc <- as_forecast_point(example_point)
+  fc_dup <- rbind(fc[1000:1001], fc[1000:1001])
+  class(fc_dup) <- class(fc)
+
+  msg <- check_duplicates(fc_dup)
+  expect_match(msg, "Duplicated forecast units:", fixed = TRUE)
+  expect_match(
+    msg,
+    paste0(
+      "\n  - location = IT, target_end_date = 2021-07-17, ",
+      "target_type = Cases, location_name = Italy, ",
+      "forecast_date = 2021-06-28, model = EuroCOVIDhub-baseline, ",
+      "horizon = 3 (2 rows)"
+    ),
+    fixed = TRUE
+  )
+  expect_no_match(msg, "more forecast unit", fixed = TRUE)
+})
+
+
+test_that("check_duplicates shows at most five duplicated forecast units", {
+  fc <- as_forecast_point(example_point)
+  fc_dup <- rbind(fc[1000:1006], fc[1000:1006])
+  class(fc_dup) <- class(fc)
+
+  msg <- check_duplicates(fc_dup)
+  expect_length(gregexpr("\n  - ", msg, fixed = TRUE)[[1]], 5L)
+  expect_match(msg, "\n  ... and 2 more forecast unit(s)", fixed = TRUE)
+})
+
+
+test_that("check_duplicates counts all rows of a duplicated quantile forecast", {
+  fc <- na.omit(as_forecast_quantile(example_quantile))
+  fc_dup <- rbind(fc, fc[1:23])
+  class(fc_dup) <- class(fc)
+
+  msg <- check_duplicates(fc_dup)
+  expect_length(gregexpr("\n  - ", msg, fixed = TRUE)[[1]], 1L)
+  expect_match(
+    msg,
+    "model = EuroCOVIDhub-ensemble, horizon = 1 (46 rows)",
+    fixed = TRUE
+  )
+})
+
+
+test_that("check_duplicates groups correctly when data has a column `fu`", {
+  fc <- as_forecast_point(example_point)
+  fc[, fu := "a"]
+  fc_dup <- rbind(fc[1000:1002], fc[1000:1002])
+  class(fc_dup) <- class(fc)
+
+  msg <- check_duplicates(fc_dup)
+  expect_length(gregexpr("\n  - ", msg, fixed = TRUE)[[1]], 3L)
+  expect_match(
+    msg,
+    "\n  - location = IT, target_end_date = 2021-07-17, ",
+    fixed = TRUE
+  )
+  expect_match(msg, "horizon = 3, fu = a (2 rows)", fixed = TRUE)
+})
+
+
 test_that("check_duplicates returns TRUE when no duplicates", {
   fc <- as_forecast_binary(example_binary)
   expect_true(check_duplicates(fc))
