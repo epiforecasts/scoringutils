@@ -2,7 +2,7 @@
 
 ## Documentation
 
-- Revised the "Scoring rules in `scoringutils`" vignette: removed the author field, replaced the Google Drive link with a link to the `scoringutils` paper PDF in the package repository (plus a citation of the arXiv preprint), added an overview of the forecast types covered to the introduction, pointed to the `get_metrics()` documentation for the default metrics of each forecast type, added references on proper scoring rules and on scoring forecasts on transformed scales, and fixed a broken citation, mislabelled section text, a wrong subscript in the squared error formula, several typos and stray whitespace (#785, #1251).
+- Revised the "Scoring rules in `scoringutils`" vignette: link to the paper PDF in the repository instead of Google Drive, explain the forecast types covered, point to the `get_metrics()` documentation, add references, and fix typos and formula errors. The README and the pkgdown navbar now link to the same PDF (#785, #1251).
 
 # scoringutils 2.3.0
 

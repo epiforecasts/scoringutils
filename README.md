@@ -80,7 +80,7 @@ The expected input format is generally a `data.frame` (or similar) with
 required columns `observed`, and `predicted` that holds the forecasts
 and observed values. Exact requirements depend on the forecast type. For
 more information, have a look at the
-[paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link),
+[paper](https://github.com/epiforecasts/scoringutils/blob/main/inst/manuscript/manuscript.pdf),
 call `?as_forecast_binary`, `?as_forecast_quantile` etc., or have a look
 at the example data provided in the package (`example_binary`,
 `example_point`, `example_quantile`, `example_sample_continuous`,
@@ -148,7 +148,7 @@ scores <- forecast_quantile |>
 scoring rules. Every forecast type has a default list of metrics. You
 can easily add your own scoring functions, as long as they conform with
 the format for that forecast type. See the
-[paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link)
+[paper](https://github.com/epiforecasts/scoringutils/blob/main/inst/manuscript/manuscript.pdf)
 for more information.
 
 You can summarise scores using the function `summarise_scores()`. The
@@ -186,7 +186,7 @@ scores |>
 The following depicts the suggested workflow for evaluating forecasts
 with `scoringutils` (sections refer to the paper). Please find more
 information in the
-[paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link),
+[paper](https://github.com/epiforecasts/scoringutils/blob/main/inst/manuscript/manuscript.pdf),
 the function documentation and the vignettes.
 
 ![](./man/figures/workflow.png)

@@ -72,7 +72,7 @@ remotes::install_github("epiforecasts/scoringutils", dependencies = TRUE)
 
 ### Input formats and input validation
 
-The expected input format is generally a `data.frame` (or similar) with required columns `observed`, and `predicted` that holds the forecasts and observed values. Exact requirements depend on the forecast type. For more information, have a look at the [paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link), call `?as_forecast_binary`, `?as_forecast_quantile` etc., or have a look at the example data provided in the package (`example_binary`, `example_point`, `example_quantile`, `example_sample_continuous`, `example_sample_discrete`, `example_nominal`). 
+The expected input format is generally a `data.frame` (or similar) with required columns `observed`, and `predicted` that holds the forecasts and observed values. Exact requirements depend on the forecast type. For more information, have a look at the [paper](https://github.com/epiforecasts/scoringutils/blob/main/inst/manuscript/manuscript.pdf), call `?as_forecast_binary`, `?as_forecast_quantile` etc., or have a look at the example data provided in the package (`example_binary`, `example_point`, `example_quantile`, `example_sample_continuous`, `example_sample_discrete`, `example_nominal`). 
 
 Before scoring, input data needs to be validated and transformed into a forecast object using one of the `as_forecast_<type>()` functions. 
 
@@ -99,7 +99,7 @@ scores <- forecast_quantile |>
   score()
 ```
 
-`score()` takes an additional argument, `metrics`, with a list of scoring rules. Every forecast type has a default list of metrics. You can easily add your own scoring functions, as long as they conform with the format for that forecast type. See the [paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link) for more information. 
+`score()` takes an additional argument, `metrics`, with a list of scoring rules. Every forecast type has a default list of metrics. You can easily add your own scoring functions, as long as they conform with the format for that forecast type. See the [paper](https://github.com/epiforecasts/scoringutils/blob/main/inst/manuscript/manuscript.pdf) for more information. 
 
 You can summarise scores using the function `summarise_scores()`. The `by` argument is used to specify the desired level of summary. `fun` let's you specify any summary function, although it is recommended to stick to the mean as a primary summary function, as other functions can lead to improper scores. 
 
@@ -111,7 +111,7 @@ scores |>
 
 ## Package workflow
 
-The following depicts the suggested workflow for evaluating forecasts with `scoringutils` (sections refer to the paper). Please find more information in the [paper](https://drive.google.com/file/d/1URaMsXmHJ1twpLpMl1sl2HW4lPuUycoj/view?usp=drive_link), the function documentation and the vignettes. 
+The following depicts the suggested workflow for evaluating forecasts with `scoringutils` (sections refer to the paper). Please find more information in the [paper](https://github.com/epiforecasts/scoringutils/blob/main/inst/manuscript/manuscript.pdf), the function documentation and the vignettes. 
 
 ![](./man/figures/workflow.png)
 

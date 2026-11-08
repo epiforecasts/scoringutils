@@ -22,13 +22,13 @@ library(data.table)
 
 # Introduction
 
-This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the package works, have a look at the [`scoringutils` paper](https://raw.githubusercontent.com/epiforecasts/scoringutils/main/inst/manuscript/manuscript.pdf) [see also @bosseEvaluatingForecastsScoringutils2022].
+This vignette gives an overview of the default scoring rules made available through the `scoringutils` package. You can, of course, also use your own scoring rules, provided they follow the same format. If you want to obtain more detailed information about how the package works, have a look at the [`scoringutils` paper](https://github.com/epiforecasts/scoringutils/blob/main/inst/manuscript/manuscript.pdf).
 
 We can distinguish two types of forecasts: point forecasts and probabilistic forecasts. A point forecast is a single number representing a single outcome. A probabilistic forecast is a full predictive probability distribution over multiple possible outcomes. In contrast to point forecasts, probabilistic forecasts incorporate uncertainty about different possible outcomes.
 
 Probabilistic forecasts can take different forms, and the appropriate scoring rules depend on the form. This vignette covers the following:
 
-- **Binary forecasts**: the observed outcome can only be one of two values (e.g. 0 or 1) and the forecast is the probability that the outcome will be 1.
+- **Binary forecasts**: the observed outcome is a factor with two levels and the forecast is the probability of the second ("positive") level.
 - **Sample-based forecasts**: the predictive distribution for a continuous or discrete outcome is represented by a set of samples drawn from it (e.g. the output of a simulation model).
 - **Quantile-based forecasts**: the predictive distribution is represented by a set of predictive quantiles (e.g. the 0.05, 0.25, 0.5, 0.75 and 0.95 quantiles).
 
@@ -202,7 +202,7 @@ For discrete forecasts, for example count data, the ranked probability score (RP
 $$ \text{RPS}(P, y) = \sum_{x = 0}^\infty (P(x) - 1(x \geq y))^2, $$
 where $P$ is the cumulative probability mass function (PMF) of the predictive distribution.
 
-The CRPS can be understood as a generalisation of the absolute error to predictive distributions [@gneitingStrictlyProperScoring2007]. It can also be understood as the integral over the Brier score for the binary probability forecasts implied by the CDF for all possible observed values. The CRPS is also related to the Cramér-distance between two distributions and equals the special case where one of the distributions is concentrated in a single point (see e.g. @zielEnergyDistanceEnsemble2021). The CRPS is a global scoring rule, meaning that the entire predictive distribution is taken into account when determining the quality of the forecast. Like the absolute error, the CRPS scales with the order of magnitude of the forecast target. When targets of very different magnitudes are evaluated together (e.g. case counts that grow exponentially or that differ between locations), it can be useful to transform forecasts and observations (e.g. using the natural logarithm) before scoring them [@bosseScoringEpidemiologicalForecasts2023]. The same applies to the WIS (see below).
+The CRPS can be understood as a generalisation of the absolute error to predictive distributions [@gneitingStrictlyProperScoring2007]. It can also be understood as the integral over the Brier score for the binary probability forecasts implied by the CDF for all possible observed values. The CRPS is also related to the Cramér-distance between two distributions and equals the special case where one of the distributions is concentrated in a single point (see e.g. @zielEnergyDistanceEnsemble2021). The CRPS is a global scoring rule, meaning that the entire predictive distribution is taken into account when determining the quality of the forecast. Like the absolute error, the CRPS scales with the order of magnitude of the forecast target. When targets of very different magnitudes are evaluated together (e.g. case counts that grow exponentially or that differ between locations), it can be useful to transform forecasts and observations (e.g. using the natural logarithm) before scoring them [@bosseScoringEpidemiologicalForecasts2023]. See `?transform_forecasts` for how to do this in `scoringutils`. The same applies to the WIS (see below).
 
 `scoringutils` re-exports the `crps_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. See `?crps_sample()` for more information.
 
