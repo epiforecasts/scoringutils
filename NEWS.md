@@ -1,6 +1,6 @@
 # scoringutils (development version)
 
-- Forecast validation (e.g. in `as_forecast_<type>()` and `assert_forecast()`) now reports how many rows contain `NA` values and how many `NA` values each affected column has, instead of the generic message "Some rows containing NA values may be removed" (#537).
+- Forecast validation (e.g. in `as_forecast_<type>()` and `assert_forecast()`) now reports how many rows contain `NA` values and how many `NA` values each affected column has, instead of the generic message "Some rows containing NA values may be removed" (#537, #1241).
 
 # scoringutils 2.3.0
 
