@@ -3,6 +3,7 @@
 ## Internal changes
 
 - Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).
+- Fixed a test of `assert_input_interval()` that failed when the test suite was run more than once in the same R session, because the warning it checks for is only shown once per session (#718, #1247).
 
 # scoringutils 2.3.0
 
