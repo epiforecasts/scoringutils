@@ -119,7 +119,8 @@ get_forecast_type_ids.default <- function(data) {
 #'
 #' @description
 #' Runs [get_duplicate_forecasts()] and returns a message if an issue is
-#' encountered
+#' encountered. The message lists the first few forecast units that have
+#' duplicates, together with the number of duplicated rows.
 #' @inheritParams get_duplicate_forecasts
 #' @inherit document_check_functions return
 #' @keywords internal_input_check
@@ -147,6 +148,25 @@ check_duplicates <- function(data) {
       "`get_duplicate_forecasts(data", hint_args, ")` ",
       "to identify duplicate rows"
     )
+    counts <- get_duplicate_forecasts(data, counts = TRUE)
+    unit_cols <- setdiff(colnames(counts), "n_duplicates")
+    shown <- head(counts, 5)
+    units <- do.call(
+      paste,
+      c(lapply(unit_cols, function(col) paste0(col, " = ", shown[[col]])),
+        sep = ", ")
+    )
+    unit_lines <- paste0(
+      "\n  - ", units, " (", shown$n_duplicates, " duplicated rows)",
+      collapse = ""
+    )
+    n_more <- nrow(counts) - nrow(shown)
+    if (n_more > 0) {
+      unit_lines <- paste0(
+        unit_lines, "\n  ... and ", n_more, " more forecast unit(s)"
+      )
+    }
+    msg <- paste0(msg, ". Duplicated forecast units:", unit_lines)
     return(msg)
   }
   return(TRUE)
