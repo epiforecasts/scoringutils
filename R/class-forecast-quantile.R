@@ -231,21 +231,23 @@ get_metrics.forecast_quantile <- function(x, select = NULL, exclude = NULL, ...)
 get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
                                                 breaks = NULL, by, ...) {
   assert_number(num_bins, lower = 1, null.ok = TRUE)
-  assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
+  assert_numeric(
+    breaks, lower = 0, upper = 1, any.missing = FALSE, null.ok = TRUE
+  )
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast <- as.data.table(forecast)
   present_quantiles <- sort(unique(c(0, forecast$quantile_level, 1)))
   present_quantiles <- round(present_quantiles, 10)
 
   if (!is.null(breaks)) {
-    quantiles <- unique(c(0, breaks, 1))
+    quantiles <- c(0, breaks, 1)
   } else if (is.null(num_bins) || num_bins == "auto") {
     quantiles <- present_quantiles
   } else {
     quantiles <- seq(0, 1, 1 / num_bins)
   }
   ## avoid rounding errors
-  quantiles <- round(quantiles, 10)
+  quantiles <- sort(unique(round(quantiles, 10)))
 
   if (length(setdiff(quantiles, present_quantiles)) > 0) {
     cli_warn(c(
@@ -263,7 +265,6 @@ get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
   }
   diffs <- round(diff(quantiles), 10)
 
-  forecast <- forecast[quantile_level %in% quantiles]
   forecast[, quantile_coverage := (observed <= predicted)]
 
   quantile_coverage <-
@@ -276,7 +277,11 @@ get_pit_histogram.forecast_quantile <- function(forecast, num_bins = NULL,
   pit_histogram <- quantile_coverage[
     order(quantile_level),
     .(
-      density = diff(c(0, quantile_coverage, 1)) / diffs,
+      # subset here rather than before computing the coverage, so that groups
+      # are kept even if no interior quantile is requested (e.g. one bin)
+      density = diff(
+        c(0, quantile_coverage[quantile_level %in% quantiles], 1)
+      ) / diffs,
       bin = bins,
       mid = mids
     ),
