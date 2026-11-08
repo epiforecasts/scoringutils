@@ -26,13 +26,15 @@ quantiles, ordered by forecast unit and quantile level.
 Identify quantile forecasts in which the predicted values decrease with
 increasing quantile level (also called "quantile crossing"), e.g. where the
 0.1 quantile is larger than the 0.2 quantile. Such forecasts do not
-correspond to a valid predictive distribution. Some metrics, e.g.
-\code{\link[=bias_quantile]{bias_quantile()}}, cannot be computed for them.
+correspond to a valid predictive distribution. Interval-based metrics
+such as \code{\link[=wis]{wis()}} (and its components) and \code{\link[=bias_quantile]{bias_quantile()}} can fail for
+them, in which case \code{\link[=score]{score()}} drops the affected metric columns.
 
 The order of the rows does not matter: predictions are compared after
 sorting by quantile level within each forecast. Missing values in
-\code{predicted} or \code{quantile_level} are ignored. Equal predictions for
-different quantile levels are allowed.
+\code{predicted} or \code{quantile_level} are ignored (matching the behaviour of
+\code{\link[=bias_quantile]{bias_quantile()}} with \code{na.rm = TRUE}). Equal predictions for different
+quantile levels are allowed.
 }
 \examples{
 # no crossing quantiles in the example data

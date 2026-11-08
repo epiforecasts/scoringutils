@@ -33,7 +33,9 @@ assert_input_interval <- function(observed, lower, upper, interval_range) {
     cli_abort(
       c(
         `!` = "All values in `upper` need to be greater than or equal to
-        the corresponding values in `lower`"
+        the corresponding values in `lower`",
+        i = "For quantile forecasts, use {.fn get_crossing_quantiles} to
+        identify forecasts with crossing quantiles."
       )
     )
   }

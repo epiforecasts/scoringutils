@@ -53,4 +53,10 @@ test_that("get_crossing_quantiles() validates its input", {
     "Must be a subset of"
   )
   expect_error(get_crossing_quantiles("a"), "Must be of type 'data.frame'")
+  character_predicted <- copy(crossing_example)
+  character_predicted[, predicted := as.character(predicted)]
+  expect_error(
+    get_crossing_quantiles(character_predicted),
+    "Assertion on 'predicted' failed"
+  )
 })

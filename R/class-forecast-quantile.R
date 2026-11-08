@@ -13,9 +13,10 @@
 #'    Quantile levels must be between 0 and 1.
 #'
 #' Predicted values should not decrease with increasing quantile level. If
-#' they do (quantile crossing), a warning is issued and some metrics, e.g.
-#' [bias_quantile()], cannot be computed. Use [get_crossing_quantiles()] to
-#' identify the affected forecasts.
+#' they do (quantile crossing), a warning is issued. [score()] cannot compute
+#' [wis()] and its components (if the crossing inverts a central prediction
+#' interval) or [bias_quantile()] for these data and drops the corresponding
+#' columns. Use [get_crossing_quantiles()] to identify the affected forecasts.
 #'
 #' For convenience, we recommend an additional column `model` holding the name
 #' of the forecaster or model that produced a prediction, but this is not
@@ -96,13 +97,14 @@ assert_forecast.forecast_quantile <- function(
   if (verbose) {
     crossing <- get_crossing_quantiles(forecast)
     if (nrow(crossing) > 0) {
-      n_crossing <- nrow(unique(crossing, by = get_forecast_unit(crossing)))
+      n_crossing <- uniqueN(crossing, by = get_forecast_unit(crossing))
       cli_warn(
         c(
           `!` = "Predictions decrease with increasing quantile level
           (quantile crossing) in {n_crossing} forecast{?s}.",
-          i = "Some metrics, e.g. {.fn bias_quantile}, cannot be computed for
-          these forecasts. Use {.fn get_crossing_quantiles} to identify them."
+          i = "Metrics such as {.fn wis} and {.fn bias_quantile} may fail
+          when scoring these forecasts. Use {.fn get_crossing_quantiles} to
+          identify them."
         )
       )
     }
