@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+## New features
+
 - Added `get_crossing_quantiles()` to find quantile forecasts whose predictions decrease with increasing quantile level (quantile crossing). `as_forecast_quantile()` and `assert_forecast()` now warn when such forecasts are present, so the problem surfaces before `score()`, where `bias_quantile()` cannot be computed for them (#412, #895).
 
 # scoringutils 2.3.0

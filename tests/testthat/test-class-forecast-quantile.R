@@ -63,6 +63,16 @@ test_that("as_forecast_quantile() warns if quantiles cross", {
   )
   fc <- suppressWarnings(as_forecast_quantile(example))
   expect_no_condition(assert_forecast(fc, verbose = FALSE))
+
+  # ties across quantile levels and the shipped example data do not warn
+  ties <- data.frame(
+    model = "model1",
+    observed = 5,
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = c(3, 3, 4)
+  )
+  expect_no_warning(as_forecast_quantile(ties))
+  expect_no_warning(as_forecast_quantile(example_quantile))
 })
 
 test_that("as_forecast_quantile() function throws an error with duplicate forecasts", {

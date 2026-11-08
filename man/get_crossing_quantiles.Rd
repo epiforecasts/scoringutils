@@ -35,8 +35,16 @@ sorting by quantile level within each forecast. Missing values in
 different quantile levels are allowed.
 }
 \examples{
-example <- na.omit(data.table::copy(example_quantile))
-example[1, predicted := 1e6]
-get_crossing_quantiles(example)
+# no crossing quantiles in the example data
+get_crossing_quantiles(example_quantile)
+
+# the 0.5 quantile is larger than the 0.75 quantile
+df <- data.frame(
+  model = "model1",
+  observed = 5,
+  quantile_level = c(0.25, 0.5, 0.75),
+  predicted = c(3, 7, 4)
+)
+get_crossing_quantiles(df)
 }
 \keyword{diagnose-inputs}

@@ -962,6 +962,11 @@ test_that("bias_quantile(): predictions must be increasing", {
     bias_quantile(observed = 3, predicted, quantiles),
     "Predictions must not be decreasing with increasing quantile level"
   )
+  expect_error(
+    bias_quantile(observed = 3, predicted, quantiles),
+    "get_crossing_quantiles()",
+    fixed = TRUE
+  )
   expect_silent(bias_quantile(observed = 3, 1:4, quantiles))
 })
 
