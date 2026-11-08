@@ -19,15 +19,15 @@ forecast_data <- function(forecast) {
 # for each forecast. `by` are the columns that identify a forecast.
 expect_scores_match_reference <- function(scores, reference, by) {
   metrics <- setdiff(colnames(reference), by)
-  expect_setequal(get_metrics(scores), metrics)
-  expect_identical(nrow(scores), nrow(reference))
+  testthat::expect_setequal(get_metrics(scores), metrics)
+  testthat::expect_identical(nrow(scores), nrow(reference))
   combined <- merge(
     as.data.table(scores), reference,
     by = by, suffixes = c("", "_reference")
   )
-  expect_identical(nrow(combined), nrow(reference))
+  testthat::expect_identical(nrow(combined), nrow(reference))
   for (metric in metrics) {
-    expect_equal(
+    testthat::expect_equal(
       combined[[metric]], combined[[paste0(metric, "_reference")]],
       tolerance = 1e-8,
       label = metric, expected.label = paste(metric, "(reference)")
@@ -297,45 +297,66 @@ test_that("score() returns correct scores for multivariate sample forecasts", {
 # infinite log score) are dropped before averaging, as they would otherwise
 # mask all other values in their group. Note that a single near-degenerate
 # forecast (almost all samples zero) dominates the mean dss of the baseline
-# model for Cases. Values are rounded to 6 significant
-# digits to be robust to floating point differences across platforms. Rows are
-# sorted so that the snapshot does not depend on the row order of the scores.
+# model for Cases. Values are compared with a relative tolerance rather than
+# printed, so that floating point differences across platforms (e.g. a value
+# that rounds differently in the last printed digit) do not fail the snapshot.
+# Rows are sorted so that the snapshot does not depend on the row order of the
+# scores.
 summarise_example_scores <- function(scores) {
   summary <- summarise_scores(
     scores,
     by = c("model", "target_type"),
     fun = function(x) mean(x[is.finite(x)])
   )
-  metrics <- get_metrics(summary)
-  summary[, (metrics) := lapply(.SD, signif, digits = 6), .SDcols = metrics]
   setorderv(summary, c("model", "target_type"))
   as.data.frame(summary)
 }
 
 test_that("summarised scores for example_quantile have not changed", {
-  expect_snapshot(summarise_example_scores(scores_quantile))
+  expect_snapshot_value(
+    summarise_example_scores(scores_quantile),
+    style = "json2", tolerance = 1e-6
+  )
 })
 
 test_that("summarised scores for example_sample_continuous have not changed", {
-  expect_snapshot(summarise_example_scores(scores_sample_continuous))
+  expect_snapshot_value(
+    summarise_example_scores(scores_sample_continuous),
+    style = "json2", tolerance = 1e-6
+  )
 })
 
 test_that("summarised scores for example_sample_discrete have not changed", {
-  expect_snapshot(summarise_example_scores(scores_sample_discrete))
+  expect_snapshot_value(
+    summarise_example_scores(scores_sample_discrete),
+    style = "json2", tolerance = 1e-6
+  )
 })
 
 test_that("summarised scores for example_point have not changed", {
-  expect_snapshot(summarise_example_scores(scores_point))
+  expect_snapshot_value(
+    summarise_example_scores(scores_point),
+    style = "json2", tolerance = 1e-6
+  )
 })
 
 test_that("summarised scores for example_binary have not changed", {
-  expect_snapshot(summarise_example_scores(scores_binary))
+  expect_snapshot_value(
+    summarise_example_scores(scores_binary),
+    style = "json2", tolerance = 1e-6
+  )
 })
 
 test_that("summarised scores for example_nominal have not changed", {
-  expect_snapshot(summarise_example_scores(scores_nominal))
+  expect_snapshot_value(
+    summarise_example_scores(scores_nominal),
+    style = "json2", tolerance = 1e-6
+  )
 })
 
 test_that("summarised scores for example_ordinal have not changed", {
-  expect_snapshot(summarise_example_scores(score(example_ordinal)))
+  expect_snapshot_value(
+    summarise_example_scores(score(example_ordinal)),
+    style = "json2", tolerance = 1e-6
+  )
 })
