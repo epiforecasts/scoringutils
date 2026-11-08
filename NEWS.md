@@ -1,6 +1,8 @@
 # scoringutils (development version)
 
-- Added `sd_sample()` and `iqr_sample()`, which measure the dispersion of sample-based forecasts as the standard deviation and the interquartile range of the predictive samples. They complement `mad_sample()` and are not part of the default metrics. To use them, add them to the metrics passed to `score()`, e.g. `score(forecast, metrics = c(get_metrics(forecast), list(sd = sd_sample, iqr = iqr_sample)))` (#193).
+## New features
+
+- Added `sd_sample()` and `iqr_sample()`, which measure the dispersion of sample-based forecasts as the standard deviation and the interquartile range of the predictive samples. They complement `mad_sample()` and can be added to the metrics passed to `score()`; they are not part of the default metrics (#193).
 
 # scoringutils 2.3.0
 

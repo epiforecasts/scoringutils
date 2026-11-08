@@ -289,10 +289,10 @@ test_that("sd_sample() and iqr_sample() pass `...` on", {
   expect_identical(
     iqr_sample(predicted = predicted, type = 6), IQR(predicted, type = 6)
   )
-  expect_false(
-    iqr_sample(predicted = predicted, type = 6) ==
-      iqr_sample(predicted = predicted)
-  )
+  expect_false(isTRUE(all.equal(
+    iqr_sample(predicted = predicted, type = 6),
+    iqr_sample(predicted = predicted)
+  )))
 })
 
 test_that("sd_sample() and iqr_sample() validate their input", {
