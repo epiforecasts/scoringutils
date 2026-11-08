@@ -56,6 +56,15 @@ Relative skill will be calculated for the aggregation level specified in
 \code{by}.
 }
 \details{
+The input should be raw, unsummarised scores as produced by \code{\link[=score]{score()}}, i.e.
+\code{add_relative_skill()} should be called before, not after,
+\code{\link[=summarise_scores]{summarise_scores()}}. Summarising scores first can change the set of
+overlapping forecasts between two models and distort relative skill scores.
+To obtain relative skill at a different aggregation level (e.g. one score
+per model across all locations), change \code{by} rather than averaging relative
+skill scores with \code{\link[=summarise_scores]{summarise_scores()}} afterwards: an average of relative
+skill scores is not itself a relative skill score.
+
 Unlike \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}, this function does not return
 p-values. By default no statistical test is therefore run for the
 pairwise comparisons (\code{test_type = NULL}), which avoids unnecessary

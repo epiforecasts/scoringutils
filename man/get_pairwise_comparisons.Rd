@@ -57,6 +57,10 @@ The input should be a \code{scores} object as produced by \code{\link[=score]{sc
 adding additional unrelated columns can unpredictably change results, as
 all present columns are taken into account when determining the set of
 overlapping forecasts between two models.
+Scores should usually not be summarised with \code{\link[=summarise_scores]{summarise_scores()}} before
+doing pairwise comparisons: summarising scores can change the set of
+overlapping forecasts between two models and distort the results. Use the
+\code{by} argument instead to specify the level at which comparisons are made.
 
 The output of the pairwise comparisons is a set of mean score ratios,
 relative skill scores and p-values.
