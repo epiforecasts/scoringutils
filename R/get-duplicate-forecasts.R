@@ -129,9 +129,9 @@ check_duplicates <- function(data) {
 
   if (nrow(duplicates) > 0) {
     hint_args <- ""
+    fu <- get_forecast_unit(data)
     if (inherits(data, "forecast")) {
       forecast_type <- get_forecast_type(data)
-      fu <- get_forecast_unit(data)
       fu_str <- paste0(
         "c(\"", paste(fu, collapse = "\", \""), "\")"
       )
@@ -148,12 +148,11 @@ check_duplicates <- function(data) {
       "`get_duplicate_forecasts(data", hint_args, ")` ",
       "to identify duplicate rows"
     )
-    counts <- get_duplicate_forecasts(data, counts = TRUE)
-    unit_cols <- setdiff(colnames(counts), "n_duplicates")
+    counts <- duplicates[, .(n_duplicates = .N), by = fu]
     shown <- head(counts, 5)
     units <- do.call(
       paste,
-      c(lapply(unit_cols, function(col) paste0(col, " = ", shown[[col]])),
+      c(lapply(fu, function(col) paste0(col, " = ", shown[[col]])),
         sep = ", ")
     )
     unit_lines <- paste0(
