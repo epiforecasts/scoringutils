@@ -2,6 +2,16 @@
 
 ## scoringutils (development version)
 
+### Internal changes
+
+- Fixed a test of
+  [`assert_input_interval()`](https://epiforecasts.io/scoringutils/dev/reference/assert_input_interval.md)
+  that failed when the test suite was run more than once in the same R
+  session, because the warning it checks for is only shown once per
+  session
+  ([\#718](https://github.com/epiforecasts/scoringutils/issues/718),
+  [\#1247](https://github.com/epiforecasts/scoringutils/issues/1247)).
+
 ## scoringutils 2.3.0
 
 CRAN release: 2026-09-27
