@@ -2,7 +2,7 @@
 
 ## Documentation
 
-- Function argument documentation now consistently follows the tidyverse style guide: descriptions use sentence case and end with a full stop (#702).
+- Function argument documentation now consistently follows the tidyverse style guide: descriptions use sentence case and end with a full stop (#702, #1255).
 
 # scoringutils 2.3.0
 
