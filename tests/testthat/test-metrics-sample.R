@@ -262,7 +262,6 @@ test_that("mad_sample() works with a vector of samples", {
 test_that("sd_sample() and iqr_sample() compute row-wise sd and IQR", {
   predicted <- rbind(c(1, 2, 3, 4, 10), c(0, 0, 5, 5, 5))
 
-  expect_identical(sd_sample(predicted = predicted), apply(predicted, 1, sd))
   expect_identical(sd_sample(predicted = predicted), sqrt(c(12.5, 7.5)))
   expect_identical(iqr_sample(predicted = predicted), c(2, 5))
   # `observed` is ignored
@@ -285,14 +284,11 @@ test_that("sd_sample() and iqr_sample() pass `...` on", {
   expect_identical(
     iqr_sample(predicted = predicted, na.rm = TRUE), IQR(1:4)
   )
+  # unlike sd_sample(), iqr_sample() errors on missing samples by default
+  expect_error(iqr_sample(predicted = predicted), "missing values")
   predicted <- rbind(c(1, 2, 3, 4, 10))
-  expect_identical(
-    iqr_sample(predicted = predicted, type = 6), IQR(predicted, type = 6)
-  )
-  expect_false(isTRUE(all.equal(
-    iqr_sample(predicted = predicted, type = 6),
-    iqr_sample(predicted = predicted)
-  )))
+  expect_identical(iqr_sample(predicted = predicted), 2)
+  expect_identical(iqr_sample(predicted = predicted, type = 6), 5.5)
 })
 
 test_that("sd_sample() and iqr_sample() validate their input", {

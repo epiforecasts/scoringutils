@@ -455,7 +455,8 @@ mad_sample <- function(observed = NULL, predicted, ...) {
 #' @importFrom stats sd
 #' @inheritSection illustration-input-metric-sample Input format
 #' @returns Vector with the standard deviation of the predictive samples (one
-#'   value per row of `predicted`).
+#'   value per row of `predicted`). The standard deviation is `NA` for a row
+#'   with only one sample or with missing samples (unless `na.rm = TRUE`).
 #' @seealso [mad_sample()], [iqr_sample()]
 #' @export
 #' @examples
@@ -484,7 +485,9 @@ sd_sample <- function(observed = NULL, predicted, ...) {
 #'
 #' @inheritParams mad_sample
 #' @param ... Additional arguments passed to [IQR()][stats::IQR()], e.g.
-#'   `type` to choose the quantile algorithm.
+#'   `type` to choose the quantile algorithm. Unlike [sd_sample()] and
+#'   [mad_sample()], which return `NA`, `iqr_sample()` throws an error if a
+#'   row contains missing samples, unless `na.rm = TRUE` is passed.
 #' @importFrom stats IQR
 #' @inheritSection illustration-input-metric-sample Input format
 #' @returns Vector with the interquartile range of the predictive samples (one

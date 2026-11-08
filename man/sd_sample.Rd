@@ -20,7 +20,8 @@ of size n.}
 }
 \value{
 Vector with the standard deviation of the predictive samples (one
-value per row of \code{predicted}).
+value per row of \code{predicted}). The standard deviation is \code{NA} for a row
+with only one sample or with missing samples (unless \code{na.rm = TRUE}).
 }
 \description{
 Measure the dispersion (the lack of sharpness) of a sample-based forecast

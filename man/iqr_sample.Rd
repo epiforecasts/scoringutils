@@ -17,7 +17,9 @@ Carlo samples. Alternatively, if n = 1, \code{predicted} can just be a vector
 of size n.}
 
 \item{...}{Additional arguments passed to \link[stats:IQR]{IQR()}, e.g.
-\code{type} to choose the quantile algorithm.}
+\code{type} to choose the quantile algorithm. Unlike \code{\link[=sd_sample]{sd_sample()}} and
+\code{\link[=mad_sample]{mad_sample()}}, which return \code{NA}, \code{iqr_sample()} throws an error if a
+row contains missing samples, unless \code{na.rm = TRUE} is passed.}
 }
 \value{
 Vector with the interquartile range of the predictive samples (one
