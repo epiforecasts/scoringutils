@@ -200,7 +200,7 @@ test_that(
         ),
         joint_across = "location"
       ),
-      "Checking `forecast`"
+      "Checking `forecast`: Assertion on 'predicted' failed"
     )
   }
 )

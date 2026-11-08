@@ -19,7 +19,22 @@ test_that("assert_input_interval() works as expected", {
     "All values in `upper` need to be greater than or equal to the corresponding values in `lower`"
   )
 
-  # expect warning if interval range is < 1
+  # The warning for interval ranges < 1 is only shown once per session by
+  # design. With rlang's default verbosity, a repeated call must be silent,
+  # whether or not the warning was already shown earlier in the session.
+  old_options <- options(rlib_warning_verbosity = "default")
+  on.exit(options(old_options), add = TRUE)
+  suppressWarnings(assert_input_interval(observed, lower, upper, 0.5))
+  expect_no_warning(assert_input_interval(observed, lower, upper, 0.5))
+
+  # Force the warning to be shown every time to check its content. Without
+  # this, the test fails when the suite is run repeatedly in the same
+  # session (#718).
+  options(rlib_warning_verbosity = "verbose")
+  expect_warning(
+    assert_input_interval(observed, lower, upper, 0.5),
+    "Found interval ranges between 0 and 1. Are you sure that's right?"
+  )
   expect_warning(
     assert_input_interval(observed, lower, upper, 0.5),
     "Found interval ranges between 0 and 1. Are you sure that's right?"

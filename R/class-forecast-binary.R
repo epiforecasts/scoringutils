@@ -78,7 +78,9 @@ assert_forecast.forecast_binary <- function(
       )
     )
   }
-  input_check <- check_input_binary(forecast$observed, forecast$predicted)
+  input_check <- check_try(
+    assert_input_binary(forecast$observed, forecast$predicted)
+  )
   if (!isTRUE(input_check)) {
     cli_abort(
       c(
