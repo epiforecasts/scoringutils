@@ -2,7 +2,7 @@
 
 ## Bug fixes
 
-- `get_pit_histogram()` now sorts user-supplied `breaks`. Previously, unsorted breaks such as `breaks = c(0.5, 0.25)` produced a nonsensical bin `[0.5,0.25)` and, for quantile-based forecasts, negative densities. For quantile-based forecasts, `num_bins = 1` now returns a single bin `[0,1)` with density 1, matching the sample method, instead of an empty table (#1219).
+- `get_pit_histogram()` now sorts user-supplied `breaks`. Previously, unsorted breaks such as `breaks = c(0.5, 0.25)` produced a nonsensical bin `[0.5,0.25)` and, for quantile-based forecasts, negative densities. For quantile-based forecasts, `num_bins = 1` now returns a single bin `[0,1)` with density 1, matching the sample method, instead of an empty table (#1219, #1244).
 
 # scoringutils 2.3.0
 
