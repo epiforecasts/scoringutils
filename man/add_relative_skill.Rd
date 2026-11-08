@@ -42,10 +42,11 @@ respect to a baseline model.}
 \code{NULL} (the default). Determines which kind of test is run for the
 pairwise comparisons. As p-values are not returned by
 \code{add_relative_skill()}, no test is run by default. See
-\code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
+\code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}} for more information.}
 
-\item{...}{Additional arguments for the comparison between two models. See
-\code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
+\item{...}{Additional arguments passed on to \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}
+(\code{one_sided} and \code{n_permutations}). These only affect p-values, which
+\code{add_relative_skill()} does not return, so they cannot change its output.}
 }
 \description{
 Adds a columns with relative skills computed by running

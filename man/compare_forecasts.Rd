@@ -11,7 +11,7 @@ compare_forecasts(
   name_comparator2,
   metric,
   one_sided = FALSE,
-  test_type = c("non_parametric", "permutation", NULL),
+  test_type = c("non_parametric", "permutation"),
   n_permutations = 999
 )
 }
@@ -32,16 +32,24 @@ compared.}
 a relative skill shall be computed. By default this is either "crps",
 "wis" or "brier_score" if any of these are available.}
 
-\item{one_sided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
-instead of a two-sided test to determine significance in a pairwise
-comparison.}
+\item{one_sided}{Logical, default is \code{FALSE}. Whether to conduct a
+one-sided instead of a two-sided test to determine significance in a
+pairwise comparison. Only used if \code{test_type = "permutation"}; the
+Wilcoxon test is always two-sided. Each pair of comparators is tested
+only once, with the alternative that the comparator that appears first in
+\code{scores} has a higher (i.e. worse) mean score than the other one. The
+resulting p-value is reported in both rows of the output that belong to
+that pair, so a one-sided p-value refers to that direction only.}
 
-\item{test_type}{Character, either "non_parametric" (the default), "permutation",
-or NULL. This determines which kind of test shall be conducted to determine
-p-values. If NULL, no test will be conducted and p-values will be NA.}
+\item{test_type}{Character, either "non_parametric" (the default),
+"permutation", or \code{NULL}. Determines which test is used to compute
+p-values: "non_parametric" uses a paired Wilcoxon signed-rank test,
+"permutation" uses a permutation test (see \code{\link[=permutation_test]{permutation_test()}}). If
+\code{NULL}, no test is conducted and p-values will be \code{NA}.}
 
 \item{n_permutations}{Numeric, the number of permutations for a
-permutation test. Default is 999.}
+permutation test. Default is 999. Only used if
+\code{test_type = "permutation"}.}
 }
 \value{
 A list with mean score ratios and p-values for the comparison

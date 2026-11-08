@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- Breaking change: `get_pairwise_comparisons()` now has explicit arguments `test_type`, `one_sided` and `n_permutations` instead of passing them on via `...`. Their values are now validated up front, so e.g. an invalid `one_sided` or `n_permutations` now errors rather than being silently ignored when no permutation test is run. Calls that passed these arguments by name are unaffected, but calls that passed them positionally after `baseline` now bind them in the new argument order (`test_type`, `one_sided`, `n_permutations`). The documentation of `one_sided` now states that it only affects the permutation test and which direction the one-sided test checks (#769, #1249).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.
