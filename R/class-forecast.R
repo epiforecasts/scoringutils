@@ -166,7 +166,8 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
 
   # check whether there are any NA values
   if (anyNA(data)) {
-    if (nrow(na.omit(data)) == 0) {
+    n_na_rows <- nrow(data) - nrow(na.omit(data))
+    if (n_na_rows == nrow(data)) {
       cli_abort(
         c(
           `!` = "After removing rows with NA values in the data, no forecasts
@@ -175,10 +176,16 @@ assert_forecast_generic <- function(data, verbose = TRUE) {
       )
     }
     if (verbose) {
+      na_per_column <- vapply(data, function(x) sum(is.na(x)), integer(1))
+      na_per_column <- na_per_column[na_per_column > 0]
+      na_info <- paste0( # nolint: object_usage_linter.
+        "`", names(na_per_column), "` (", na_per_column, ")"
+      )
       cli_inform(
         c(
-          i = "Some rows containing NA values may be removed.
-        This is fine if not unexpected."
+          i = "{n_na_rows} row{?s} containing NA values may be removed.
+        This is fine if not unexpected.",
+          " " = "Number of NA values per column: {na_info}."
         )
       )
     }

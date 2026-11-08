@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- Forecast validation (e.g. in `as_forecast_<type>()` and `assert_forecast()`) now reports how many rows contain `NA` values and how many `NA` values each affected column has, instead of the generic message "Some rows containing NA values may be removed" (#537).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.

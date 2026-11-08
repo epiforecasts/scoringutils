@@ -521,3 +521,31 @@ test_that("removing NA rows from data works as expected", {
     attributes
   )
 })
+
+test_that("validation reports the number of NA rows and NAs per column", {
+  dat <- na.omit(example_quantile)[1:46]
+  dat[1:23, observed := NA]
+  dat[30, predicted := NA]
+  expect_message(
+    as_forecast_quantile(dat),
+    "24 rows containing NA values may be removed"
+  )
+  expect_message(
+    as_forecast_quantile(dat),
+    "`observed` (23) and `predicted` (1)",
+    fixed = TRUE
+  )
+
+  dat <- na.omit(example_binary)[1:5]
+  dat[1, observed := NA]
+  expect_message(
+    as_forecast_binary(dat),
+    "1 row containing NA values may be removed"
+  )
+  expect_message(
+    as_forecast_binary(dat),
+    "Number of NA values per column: `observed` (1).",
+    fixed = TRUE
+  )
+  expect_no_message(as_forecast_binary(dat[-1]))
+})
