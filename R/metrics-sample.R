@@ -212,7 +212,7 @@ se_mean_sample <- function(observed, predicted) {
 #' }{
 #' LogS(F, y) = -log(f(y)).
 #' }
-#' Lower values are better.
+#' Smaller values are better.
 #'
 #' In the sample-based version, the predictive density is not known and is
 #' approximated with a Gaussian kernel density estimate based on the
@@ -291,7 +291,7 @@ logs_sample <- function(observed, predicted, ...) {
 #' }{
 #' DSS(F, y) = ((y - mu) / sigma)^2 + 2 * log(sigma).
 #' }
-#' Lower values are better. The DSS is proper, but not strictly proper: two
+#' Smaller values are better. The DSS is proper, but not strictly proper: two
 #' forecasts with the same mean and standard deviation receive the same score.
 #'
 #' In the sample-based version, \eqn{\mu}{mu} and \eqn{\sigma^2}{sigma^2}
@@ -356,7 +356,7 @@ dss_sample <- function(observed, predicted, ...) {
 #' }
 #' where \eqn{\mathbf{1}()}{1()} is the indicator function and \eqn{X}
 #' and \eqn{X'} are independent random variables with distribution
-#' \eqn{F}. Lower values are better. The CRPS is a generalisation of the
+#' \eqn{F}. Smaller values are better. The CRPS is a generalisation of the
 #' absolute error to probabilistic forecasts and is expressed in the units of
 #' the observed values.
 #'
@@ -376,18 +376,18 @@ dss_sample <- function(observed, predicted, ...) {
 #' observations, the CRPS computed from the empirical distribution function is
 #' equal to the ranked probability score (RPS).
 #'
-#' **Decomposition into dispersion, overprediction and underprediction**
+#' See `vignette("scoring-rules", package = "scoringutils")` for more
+#' information on the CRPS.
 #'
+#' @section Decomposition into dispersion, overprediction and underprediction:
 #' The CRPS can be decomposed into three components: dispersion,
 #' overprediction and underprediction. "Dispersion" is defined as the CRPS of
 #' the forecast evaluated at its own median \eqn{m}, i.e.
 #' \eqn{\textrm{CRPS}(F, m)}{CRPS(F, m)}. For the default `method = "edf"`,
 #' this is the smallest possible CRPS of the forecast, so all three components
-#' are non-negative, and dispersion only reflects the spread of the forecast.
-#' (If `method = "kde"` is passed via `...`, dispersion is still evaluated at
-#' the median of the samples rather than at the median of the smoothed
-#' distribution, so this need not hold exactly.) The remaining part of the
-#' score is attributed to overprediction or underprediction:
+#' are non-negative and dispersion only reflects the spread of the forecast.
+#' The remaining part of the score is attributed to overprediction or
+#' underprediction:
 #' \deqn{
 #' \textrm{overprediction} = \mathbf{1}(y < m)
 #' \left(\textrm{CRPS}(F, y) - \textrm{CRPS}(F, m)\right),
@@ -408,14 +408,10 @@ dss_sample <- function(observed, predicted, ...) {
 #'
 #' This mirrors the decomposition of the weighted interval score (see [wis()])
 #' into dispersion, overprediction and underprediction proposed by Bracher et
-#' al. (2021), and the components correspond to those of the [wis()]. Note
-#' that this is a decomposition of the score for a single forecast. It is
-#' different from decompositions of the *mean* CRPS across many forecasts into
-#' miscalibration, discrimination and uncertainty components (see e.g.
-#' Arnold et al., 2023).
-#'
-#' See `vignette("scoring-rules", package = "scoringutils")` for more
-#' information on the CRPS.
+#' al. (2021). Note that this is a decomposition of the score for a single
+#' forecast. It is different from decompositions of the *mean* CRPS across
+#' many forecasts into miscalibration, discrimination and uncertainty
+#' components (see e.g. Arnold et al., 2023).
 #'
 #' @inheritParams logs_sample
 #' @param separate_results Logical. If `TRUE` (default is `FALSE`), then the
@@ -423,8 +419,11 @@ dss_sample <- function(observed, predicted, ...) {
 #'   over- and under-prediction) get returned as separate elements of a list.
 #'   If you want a `data.frame` instead, simply call [as.data.frame()] on the
 #'   output.
-#' @param ... Additional arguments passed to
-#' [crps_sample()][scoringRules::crps_sample()] from the scoringRules package.
+#' @param ... Additional arguments passed on to
+#'   [crps_sample()][scoringRules::crps_sample()] from the scoringRules
+#'   package (e.g. `method`). For `dispersion_sample()`,
+#'   `overprediction_sample()` and `underprediction_sample()`, they are passed
+#'   on via `crps_sample()`.
 #' @inheritSection illustration-input-metric-sample Input format
 #' @returns Vector with scores.
 #' @importFrom scoringRules crps_sample
@@ -482,9 +481,6 @@ crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
 #' @return
 #' `dispersion_sample()`: a numeric vector with dispersion values (one per
 #' observation).
-#' @param ... Additional arguments passed on to `crps_sample()` from functions
-#'   `overprediction_sample()`, `underprediction_sample()` and
-#' `dispersion_sample()`.
 #' @export
 #' @rdname crps_sample
 #' @keywords metric

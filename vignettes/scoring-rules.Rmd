@@ -209,7 +209,7 @@ The CRPS can be understood as a generalisation of the absolute error to predicti
 
 ### Overprediction, underprediction and dispersion
 
-The CRPS can be interpreted as a sum of a dispersion, an overprediction and an underprediction component.
+The CRPS can be interpreted as a sum of a dispersion, an overprediction and an underprediction component. This mirrors the decomposition of the WIS [@bracherEvaluatingEpidemicForecasts2021].
 If $m$ is the median forecast then the dispersion component is
 $$\text{CRPS}(F, m),$$
 the overprediction component is

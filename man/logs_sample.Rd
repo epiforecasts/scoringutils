@@ -32,7 +32,7 @@ The log score is the negative logarithm of the predictive density
 }{
 LogS(F, y) = -log(f(y)).
 }
-Lower values are better.
+Smaller values are better.
 
 In the sample-based version, the predictive density is not known and is
 approximated with a Gaussian kernel density estimate based on the

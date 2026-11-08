@@ -34,7 +34,7 @@ distribution \eqn{F}. For an observed value \eqn{y} it is defined as
 }{
 DSS(F, y) = ((y - mu) / sigma)^2 + 2 * log(sigma).
 }
-Lower values are better. The DSS is proper, but not strictly proper: two
+Smaller values are better. The DSS is proper, but not strictly proper: two
 forecasts with the same mean and standard deviation receive the same score.
 
 In the sample-based version, \eqn{\mu}{mu} and \eqn{\sigma^2}{sigma^2}

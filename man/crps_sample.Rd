@@ -29,9 +29,11 @@ over- and under-prediction) get returned as separate elements of a list.
 If you want a \code{data.frame} instead, simply call \code{\link[=as.data.frame]{as.data.frame()}} on the
 output.}
 
-\item{...}{Additional arguments passed on to \code{crps_sample()} from functions
-\code{overprediction_sample()}, \code{underprediction_sample()} and
-\code{dispersion_sample()}.}
+\item{...}{Additional arguments passed on to
+\link[scoringRules:crps_sample]{crps_sample()} from the scoringRules
+package (e.g. \code{method}). For \code{dispersion_sample()},
+\code{overprediction_sample()} and \code{underprediction_sample()}, they are passed
+on via \code{crps_sample()}.}
 }
 \value{
 Vector with scores.
@@ -64,7 +66,7 @@ CRPS(F, y) = integral of (F(x) - 1(x >= y))^2 dx
 }
 where \eqn{\mathbf{1}()}{1()} is the indicator function and \eqn{X}
 and \eqn{X'} are independent random variables with distribution
-\eqn{F}. Lower values are better. The CRPS is a generalisation of the
+\eqn{F}. Smaller values are better. The CRPS is a generalisation of the
 absolute error to probabilistic forecasts and is expressed in the units of
 the observed values.
 
@@ -84,18 +86,19 @@ density estimate of \eqn{F} instead. For integer-valued samples and
 observations, the CRPS computed from the empirical distribution function is
 equal to the ranked probability score (RPS).
 
-\strong{Decomposition into dispersion, overprediction and underprediction}
+See \code{vignette("scoring-rules", package = "scoringutils")} for more
+information on the CRPS.
+}
+\section{Decomposition into dispersion, overprediction and underprediction}{
 
 The CRPS can be decomposed into three components: dispersion,
 overprediction and underprediction. "Dispersion" is defined as the CRPS of
 the forecast evaluated at its own median \eqn{m}, i.e.
 \eqn{\textrm{CRPS}(F, m)}{CRPS(F, m)}. For the default \code{method = "edf"},
 this is the smallest possible CRPS of the forecast, so all three components
-are non-negative, and dispersion only reflects the spread of the forecast.
-(If \code{method = "kde"} is passed via \code{...}, dispersion is still evaluated at
-the median of the samples rather than at the median of the smoothed
-distribution, so this need not hold exactly.) The remaining part of the
-score is attributed to overprediction or underprediction:
+are non-negative and dispersion only reflects the spread of the forecast.
+The remaining part of the score is attributed to overprediction or
+underprediction:
 \deqn{
 \textrm{overprediction} = \mathbf{1}(y < m)
 \left(\textrm{CRPS}(F, y) - \textrm{CRPS}(F, m)\right),
@@ -116,15 +119,12 @@ zero.
 
 This mirrors the decomposition of the weighted interval score (see \code{\link[=wis]{wis()}})
 into dispersion, overprediction and underprediction proposed by Bracher et
-al. (2021), and the components correspond to those of the \code{\link[=wis]{wis()}}. Note
-that this is a decomposition of the score for a single forecast. It is
-different from decompositions of the \emph{mean} CRPS across many forecasts into
-miscalibration, discrimination and uncertainty components (see e.g.
-Arnold et al., 2023).
-
-See \code{vignette("scoring-rules", package = "scoringutils")} for more
-information on the CRPS.
+al. (2021). Note that this is a decomposition of the score for a single
+forecast. It is different from decompositions of the \emph{mean} CRPS across
+many forecasts into miscalibration, discrimination and uncertainty
+components (see e.g. Arnold et al., 2023).
 }
+
 \section{Input format}{
 \if{html}{
   \out{<div style="text-align: left">}

@@ -2,7 +2,7 @@
 
 ## Documentation
 
-- Extended the documentation of `crps_sample()`, `logs_sample()` and `dss_sample()` with the formulas for each score and how they are computed from predictive samples. The documentation of the CRPS decomposition into dispersion, overprediction and underprediction now gives formulas, references Bracher et al. (2021) and Arnold et al. (2023), and no longer swaps over- and underprediction in its description. The scoring rules vignette now says that scoringutils provides wrappers around these scoringRules functions, rather than re-exporting them (#329, #872, #1252).
+- Documented the formulas for `crps_sample()`, `logs_sample()` and `dss_sample()`, and corrected the description of the CRPS decomposition, which had over- and underprediction swapped. Added references for the decomposition (#329, #872, #1252).
 
 # scoringutils 2.3.0
 
