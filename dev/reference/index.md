@@ -331,10 +331,6 @@
   : Check Inputs Have Matching Dimensions
 - [`check_duplicates()`](https://epiforecasts.io/scoringutils/dev/reference/check_duplicates.md)
   : Check that there are no duplicate forecasts
-- [`check_input_binary()`](https://epiforecasts.io/scoringutils/dev/reference/check_input_binary.md)
-  : Check that inputs are correct for binary forecast
-- [`check_input_point()`](https://epiforecasts.io/scoringutils/dev/reference/check_input_point.md)
-  : Check that inputs are correct for point forecast
 - [`check_number_per_forecast()`](https://epiforecasts.io/scoringutils/dev/reference/check_number_per_forecast.md)
   : Check that all forecasts have the same number of rows
 - [`check_numeric_vector()`](https://epiforecasts.io/scoringutils/dev/reference/check_numeric_vector.md)

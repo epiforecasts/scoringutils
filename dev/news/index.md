@@ -4,6 +4,10 @@
 
 ### Internal changes
 
+- Removed the internal helpers `check_input_binary()` and
+  `check_input_point()`
+  ([\#939](https://github.com/epiforecasts/scoringutils/issues/939),
+  [\#1242](https://github.com/epiforecasts/scoringutils/issues/1242)).
 - Fixed a test of
   [`assert_input_interval()`](https://epiforecasts.io/scoringutils/dev/reference/assert_input_interval.md)
   that failed when the test suite was run more than once in the same R

@@ -47,7 +47,8 @@
 <h2 class="pkg-version" data-toc-text="development version" id="scoringutils-development-version">scoringutils (development version)<a class="anchor" aria-label="anchor" href="#scoringutils-development-version"></a></h2>
 <div class="section level3">
 <h3 id="internal-changes-development-version">Internal changes<a class="anchor" aria-label="anchor" href="#internal-changes-development-version"></a></h3>
-<ul><li>Fixed a test of <code><a href="../reference/assert_input_interval.html">assert_input_interval()</a></code> that failed when the test suite was run more than once in the same R session, because the warning it checks for is only shown once per session (<a href="https://github.com/epiforecasts/scoringutils/issues/718" class="external-link">#718</a>, <a href="https://github.com/epiforecasts/scoringutils/issues/1247" class="external-link">#1247</a>).</li>
+<ul><li>Removed the internal helpers <code>check_input_binary()</code> and <code>check_input_point()</code> (<a href="https://github.com/epiforecasts/scoringutils/issues/939" class="external-link">#939</a>, <a href="https://github.com/epiforecasts/scoringutils/issues/1242" class="external-link">#1242</a>).</li>
+<li>Fixed a test of <code><a href="../reference/assert_input_interval.html">assert_input_interval()</a></code> that failed when the test suite was run more than once in the same R session, because the warning it checks for is only shown once per session (<a href="https://github.com/epiforecasts/scoringutils/issues/718" class="external-link">#718</a>, <a href="https://github.com/epiforecasts/scoringutils/issues/1247" class="external-link">#1247</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
