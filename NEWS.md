@@ -2,7 +2,7 @@
 
 ## Internal changes
 
-- Added tests that check the scores `score()` returns for every forecast type and default metric against reference implementations written directly from the definitions of the scoring rules, independently of scoringRules. They use the example data and, for ties in the bias of continuous sample forecasts, a small hand-made forecast. Snapshots of the example data scores, summarised by model and target type and averaged over finite values, additionally guard against unintended changes in scores (#986, #1253).
+- Added tests that check `score()` output for every forecast type and default metric against reference implementations written from the scoring rule definitions, plus snapshot tests of the summarised example-data scores (#986, #1253).
 
 # scoringutils 2.3.0
 

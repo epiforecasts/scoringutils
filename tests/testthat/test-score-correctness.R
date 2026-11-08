@@ -3,9 +3,12 @@
 # The reference implementations below are written directly from the
 # definitions of the scoring rules in plain R. They deliberately do not call
 # scoringRules or any scoringutils metric function, so that they provide an
-# independent check of every default metric for every forecast type.
-# The snapshot test at the end additionally guards the summarised scores of all
-# example data sets against unintended changes.
+# independent check of every default metric for every forecast type. They do
+# share a few base R helpers with the package: `median()`, `mean()` and the
+# bandwidth rule `bw.nrd()` of the sample log score.
+# The snapshot tests at the end additionally guard the summarised scores of all
+# example data sets against unintended changes to the example data or to
+# `summarise_scores()`.
 
 # The non-missing rows of an example data set as a plain data.table
 forecast_data <- function(forecast) {
@@ -43,7 +46,7 @@ expect_scores_match_reference <- function(scores, reference, by) {
 reference_quantile <- function(observed, predicted, quantile_level) {
   y <- observed[1]
   tau <- round(quantile_level, 10)
-  median <- predicted[tau == 0.5]
+  med <- predicted[tau == 0.5]
   lower_tau <- sort(tau[tau < 0.5])
   lower <- predicted[match(lower_tau, tau)]
   upper <- predicted[match(round(1 - lower_tau, 10), tau)]
@@ -53,14 +56,14 @@ reference_quantile <- function(observed, predicted, quantile_level) {
 
   dispersion <- sum(alpha / 2 * (upper - lower)) / normalisation
   overprediction <-
-    (0.5 * max(median - y, 0) + sum(pmax(lower - y, 0))) / normalisation
+    (0.5 * max(med - y, 0) + sum(pmax(lower - y, 0))) / normalisation
   underprediction <-
-    (0.5 * max(y - median, 0) + sum(pmax(y - upper, 0))) / normalisation
+    (0.5 * max(y - med, 0) + sum(pmax(y - upper, 0))) / normalisation
 
   # bias: 1 - 2 * (quantile level of the innermost quantile beyond y)
-  bias <- if (y == median) {
+  bias <- if (y == med) {
     0
-  } else if (y < median) {
+  } else if (y < med) {
     1 - 2 * max(c(0, tau[predicted <= y]))
   } else {
     1 - 2 * min(c(1, tau[predicted >= y]))
@@ -80,7 +83,7 @@ reference_quantile <- function(observed, predicted, quantile_level) {
     bias = bias,
     interval_coverage_50 = covered(50),
     interval_coverage_90 = covered(90),
-    ae_median = abs(y - median)
+    ae_median = abs(y - med)
   )
 }
 
@@ -93,13 +96,13 @@ reference_crps <- function(y, x) {
 reference_sample <- function(observed, predicted, integer_valued) {
   y <- observed[1]
   x <- predicted
-  median <- median(x)
-  mean <- mean(x)
-  variance <- mean((x - mean)^2)
+  med <- median(x)
+  mu <- mean(x)
+  variance <- mean((x - mu)^2)
 
   crps <- reference_crps(y, x)
   # dispersion is the CRPS the forecast would get if y were its median
-  dispersion <- reference_crps(median, x)
+  dispersion <- reference_crps(med, x)
 
   bias <- if (integer_valued) {
     1 - (mean(x <= y) + mean(x <= y - 1))
@@ -109,16 +112,17 @@ reference_sample <- function(observed, predicted, integer_valued) {
 
   list(
     bias = bias,
-    dss = (y - mean)^2 / variance + log(variance),
+    dss = (y - mu)^2 / variance + log(variance),
     crps = crps,
-    overprediction = if (y < median) crps - dispersion else 0,
-    underprediction = if (y > median) crps - dispersion else 0,
+    overprediction = if (y < med) crps - dispersion else 0,
+    underprediction = if (y > med) crps - dispersion else 0,
     dispersion = dispersion,
     # Gaussian kernel density estimate with the bandwidth from stats::bw.nrd()
     log_score = -log(mean(dnorm(y, mean = x, sd = bw.nrd(x)))),
-    mad = mad(x),
-    ae_median = abs(y - median),
-    se_mean = (y - mean)^2
+    # median absolute deviation, scaled to be consistent for the normal sd
+    mad = 1.4826 * median(abs(x - med)),
+    ae_median = abs(y - med),
+    se_mean = (y - mu)^2
   )
 }
 
@@ -160,6 +164,26 @@ test_that("score() returns correct scores for quantile forecasts", {
   expect_scores_match_reference(scores_quantile, reference, forecast_unit)
 })
 
+test_that("score() returns correct scores for quantile forecasts with ties", {
+  # The example data contain no observation equal to the upper bound of an
+  # interval, so the closed upper bound of the interval coverage (and the
+  # bias for an observation equal to a quantile) is checked on a small
+  # hand-made forecast. The observations equal, in turn, every quantile.
+  predicted <- c(1, 2, 4, 7, 11)
+  forecast <- as_forecast_quantile(data.table(
+    model = "m",
+    id = rep(1:5, each = 5),
+    observed = rep(predicted, each = 5),
+    predicted = rep(predicted, 5),
+    quantile_level = rep(c(0.05, 0.25, 0.5, 0.75, 0.95), 5)
+  ))
+  reference <- forecast_data(forecast)[
+    , reference_quantile(observed, predicted, quantile_level),
+    by = c("model", "id")
+  ]
+  expect_scores_match_reference(score(forecast), reference, c("model", "id"))
+})
+
 test_that("score() returns correct scores for continuous sample forecasts", {
   forecast_unit <- get_forecast_unit(example_sample_continuous)
   reference <- forecast_data(example_sample_continuous)[
@@ -171,7 +195,7 @@ test_that("score() returns correct scores for continuous sample forecasts", {
   )
 })
 
-test_that("score() returns correct scores for sample forecasts with ties", {
+test_that("score() is correct for continuous samples tied to the observation", {
   # The example data contain no samples equal to the observation, so the tie
   # term of the continuous bias is checked on a small hand-made forecast.
   forecast <- as_forecast_sample(data.table(
@@ -266,9 +290,14 @@ test_that("score() returns correct scores for multivariate sample forecasts", {
 # Regression snapshot ==========================================================
 # ============================================================================ #
 
+# These snapshots mostly overlap with the per-forecast checks above. They are
+# kept as a cheap guard against unintended changes to the example data or to
+# `summarise_scores()`, which the checks above would silently follow.
 # Scores are summarised by model and target type. Non-finite scores (e.g. an
 # infinite log score) are dropped before averaging, as they would otherwise
-# mask all other values in their group. Values are rounded to 6 significant
+# mask all other values in their group. Note that a single near-degenerate
+# forecast (almost all samples zero) dominates the mean dss of the baseline
+# model for Cases. Values are rounded to 6 significant
 # digits to be robust to floating point differences across platforms. Rows are
 # sorted so that the snapshot does not depend on the row order of the scores.
 summarise_example_scores <- function(scores) {
