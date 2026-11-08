@@ -56,9 +56,41 @@ Relative skill will be calculated for the aggregation level specified in
 \code{by}.
 }
 \details{
+Relative skill should usually be computed from unsummarised scores, i.e.
+the output of \code{\link[=score]{score()}}, rather than from the output of
+\code{\link[=summarise_scores]{summarise_scores()}}. Summarising scores first can change the set of
+overlapping forecasts between two models and distort relative skill scores.
+For example, after summarising by model, mean scores are taken over each
+model's own set of forecasts rather than only over the forecasts both
+models made.
+
+To summarise scores afterwards with \code{\link[=summarise_scores]{summarise_scores()}}, include the
+column given in \code{compare} and all columns given in \code{by} in the \code{by}
+argument of \code{\link[=summarise_scores]{summarise_scores()}}, so that each group has a single relative
+skill value (see the examples). Averaging relative skill scores across
+those groups (e.g. across target types) does not give a relative skill
+score. To obtain relative skill at a coarser level of aggregation, change
+\code{by} in \code{add_relative_skill()} instead.
+
 Unlike \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}, this function does not return
 p-values. By default no statistical test is therefore run for the
 pairwise comparisons (\code{test_type = NULL}), which avoids unnecessary
 computation. Relative skill scores do not depend on \code{test_type}.
+}
+\examples{
+\dontshow{
+  data.table::setDTthreads(2) # restricts number of cores used on CRAN
+}
+scores <- example_quantile |>
+  as_forecast_quantile() |>
+  score()
+
+# compute relative skill separately for every target type, then summarise
+# to one row per model and target type
+scores |>
+  add_relative_skill(
+    by = "target_type", baseline = "EuroCOVIDhub-baseline"
+  ) |>
+  summarise_scores(by = c("model", "target_type"))
 }
 \keyword{scoring}

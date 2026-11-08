@@ -1,5 +1,7 @@
 # scoringutils (development version)
 
+- Corrected the NEWS entry for 2.0.0 and the documentation of `add_relative_skill()` and `get_pairwise_comparisons()`: relative skill should be computed from unsummarised scores (the output of `score()`). `add_relative_skill()` gained an example of the recommended workflow, and the error for duplicated scores in pairwise comparisons no longer suggests summarising scores first (#1226, #1248).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.
@@ -154,7 +156,7 @@ of our [original](https://doi.org/10.48550/arXiv.2205.07090) `scoringutils` pape
 - Users can test whether an object is of class `forecast_*()` using the function `is_forecast()`. Users can also test for a specific `forecast_*` class using the appropriate `is_forecast.forecast_*` method. For example, to check whether an object is of class `forecast_quantile`, you would use you would use `scoringutils:::is_forecast.forecast_quantile()`.
 
 ### Pairwise comparisons and relative skill
-- The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_relative_skill()`, was introduced that takes summarised scores as an input and adds columns with relative skill scores and scaled relative skill scores.
+- The functionality for computing pairwise comparisons was now split from `summarise_scores()`. Instead of doing pairwise comparisons as part of summarising scores, a new function, `add_relative_skill()`, was introduced that takes unsummarised scores (the output of `score()`) as an input and adds columns with relative skill scores and scaled relative skill scores.
 - The function `pairwise_comparison()` was renamed to `get_pairwise_comparisons()`, in line with other `get_`-functions. Analogously, `plot_pairwise_comparison()` was renamed to `plot_pairwise_comparisons()`.
 - Output columns for pairwise comparisons have been renamed to contain the name of the metric used for comparing.
 - Replaced warnings with errors in `get_pairwise_comparison` to avoid returning `NULL`
