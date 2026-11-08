@@ -111,10 +111,10 @@ is_forecast_quantile <- function(x) {
 #' When converting a `forecast_quantile` object into a `forecast_point` object,
 #' the quantile given by `quantile_level` (by default the median, i.e. the
 #' 0.5 quantile) is extracted and returned as the point forecast.
-#' @param quantile_level Numeric value between 0 and 1. Only used when
-#'   converting a `forecast_quantile` object: the quantile level to extract as
-#'   the point forecast. Must be present in the data. Defaults to `0.5`
-#'   (the median).
+#' @param quantile_level Numeric of length one between 0 and 1. Only used
+#'   when converting a `forecast_quantile` object: the quantile level to
+#'   extract as the point forecast. Must be present in the data. Defaults to
+#'   `0.5` (the median).
 #' @export
 #' @keywords as_forecast
 #' @importFrom checkmate assert_number assert_subset

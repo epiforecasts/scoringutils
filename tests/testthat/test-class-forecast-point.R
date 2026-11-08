@@ -28,6 +28,7 @@ test_that("as_forecast_point.forecast_quantile() extracts the requested quantile
     point_75$predicted, quantiles[quantile_level == 0.75]$predicted
   )
   expect_identical(point_75$observed, point$observed)
+  expect_identical(nrow(point_75), nrow(point))
 })
 
 test_that("as_forecast_point.forecast_quantile() validates `quantile_level`", {
@@ -35,15 +36,21 @@ test_that("as_forecast_point.forecast_quantile() validates `quantile_level`", {
   # quantile level not present in the data
   expect_error(
     as_forecast_point(fq, quantile_level = 0.33),
-    "quantile_level"
+    "Must be a subset of"
   )
   # invalid inputs
   expect_error(
     as_forecast_point(fq, quantile_level = c(0.25, 0.75)),
-    "quantile_level"
+    "Must have length 1"
   )
-  expect_error(as_forecast_point(fq, quantile_level = "0.5"), "quantile_level")
-  expect_error(as_forecast_point(fq, quantile_level = 1.5), "quantile_level")
+  expect_error(
+    as_forecast_point(fq, quantile_level = "0.5"),
+    "Must be of type 'number'"
+  )
+  expect_error(
+    as_forecast_point(fq, quantile_level = 1.5),
+    "Element 1 is not <= 1"
+  )
 })
 
 
