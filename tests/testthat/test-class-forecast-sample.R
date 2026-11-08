@@ -104,3 +104,24 @@ test_that("get_pit_histogram.forecast_sample() sorts unsorted breaks", {
   expect_identical(unsorted, sorted)
   expect_identical(unique(unsorted$bin), c("[0,0.25)", "[0.25,0.5)", "[0.5,1)"))
 })
+
+test_that("get_pit_histogram.forecast_sample() sorts unsorted breaks for integer forecasts", {
+  sorted <- get_pit_histogram(
+    example_sample_discrete, breaks = c(0.25, 0.5), by = "model",
+    integers = "nonrandom"
+  )
+  unsorted <- get_pit_histogram(
+    example_sample_discrete, breaks = c(0.5, 0.25), by = "model",
+    integers = "nonrandom"
+  )
+  expect_identical(unsorted, sorted)
+})
+
+test_that("get_pit_histogram.forecast_sample() errors on NA breaks", {
+  expect_error(
+    get_pit_histogram(
+      example_sample_continuous, breaks = c(0.5, NA), by = "model"
+    ),
+    "missing values"
+  )
+})

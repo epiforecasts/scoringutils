@@ -212,7 +212,9 @@ get_pit_histogram.forecast_sample <- function(forecast, num_bins = 10,
                                               ), n_replicates = NULL, ...) {
   integers <- match.arg(integers)
   assert_int(num_bins, lower = 1, null.ok = FALSE)
-  assert_numeric(breaks, lower = 0, upper = 1, null.ok = TRUE)
+  assert_numeric(
+    breaks, lower = 0, upper = 1, any.missing = FALSE, null.ok = TRUE
+  )
   forecast <- clean_forecast(forecast, copy = TRUE, na.omit = TRUE)
   forecast <- as.data.table(forecast)
 
