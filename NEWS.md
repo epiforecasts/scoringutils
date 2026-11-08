@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Documentation
+
+- Documented the formulas for `crps_sample()`, `logs_sample()` and `dss_sample()`, and corrected the description of the CRPS decomposition, which had over- and underprediction swapped. Added references for the decomposition (#329, #872, #1252).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.

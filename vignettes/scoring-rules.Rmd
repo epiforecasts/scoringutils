@@ -204,12 +204,12 @@ where $P$ is the cumulative probability mass function (PMF) of the predictive di
 
 The CRPS can be understood as a generalisation of the absolute error to predictive distributions [@gneitingStrictlyProperScoring2007]. It can also be understood as the integral over the Brier score for the binary probability forecasts implied by the CDF for all possible observed values. The CRPS is also related to the Cramér-distance between two distributions and equals the special case where one of the distributions is concentrated in a single point (see e.g. @zielEnergyDistanceEnsemble2021). The CRPS is a global scoring rule, meaning that the entire predictive distribution is taken into account when determining the quality of the forecast.
 
-`scoringutils` re-exports the `crps_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. See `?crps_sample()` for more information.
+`scoringutils` provides a wrapper around the `crps_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. See `?crps_sample()` for more information.
 
 
 ### Overprediction, underprediction and dispersion
 
-The CRPS can be interpreted as a sum of a dispersion, an overprediction and an underprediction component.
+The CRPS can be interpreted as a sum of a dispersion, an overprediction and an underprediction component. This mirrors the decomposition of the WIS [@bracherEvaluatingEpidemicForecasts2021].
 If $m$ is the median forecast then the dispersion component is
 $$\text{CRPS}(F, m),$$
 the overprediction component is
@@ -248,7 +248,7 @@ where $p_y$ is the probability assigned to the observed outcome $y$ by the forec
 
 The logarithmic scoring rule can produce large penalties when the observed value takes on values for which $f(y)$ (or $p_y$) is close to zero. It is therefore considered to be sensitive to outlier forecasts. This may be desirable in some applications, but it also means that scores can easily be dominated by a few extreme values. The logarithmic scoring rule is a local scoring rule, meaning that the score only depends on the probability that was assigned to the actual outcome. This is often regarded as a desirable property for example in the context of Bayesian inference \citep{winklerScoringRulesEvaluation1996}. It implies for example, that the ranking between forecasters would be invariant under monotone transformations of the predictive distribution and the target.
 
-`scoringutils` re-exports the `logs_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. One implications of this is that it is currently not advisable to use the log score for discrete forecasts. The reason for this is that `scoringRules::logs_sample()` estimates a predictive density from the samples, which can be problematic for discrete forecasts.
+`scoringutils` provides a wrapper around the `logs_sample()` function from the `scoringRules` package, which assumes that the forecast is represented by a set of samples from the predictive distribution. One implications of this is that it is currently not advisable to use the log score for discrete forecasts. The reason for this is that `scoringRules::logs_sample()` estimates a predictive density from the samples, which can be problematic for discrete forecasts.
 
 See `?logs_sample()` for more information.
 
@@ -263,7 +263,7 @@ The Dawid-Sebastiani score is a proper scoring rule that only relies on the firs
 
 $$\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot \log \sigma.$$
 
-`scoringutils` re-exports the implementation of the DSS from the `scoringRules` package. It assumes that the forecast is represented by a set of samples drawn from the predictive distribution. See `?dss_sample()` for more information.
+`scoringutils` provides a wrapper around the implementation of the DSS from the `scoringRules` package. It assumes that the forecast is represented by a set of samples drawn from the predictive distribution. See `?dss_sample()` for more information.
 
 ## Dispersion - Median Absolute Deviation (MAD)
 

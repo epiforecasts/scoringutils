@@ -205,8 +205,28 @@ se_mean_sample <- function(observed, predicted) {
 #' [`logs_sample()`][scoringRules::scores_sample_univ] function from the
 #' \pkg{scoringRules} package.
 #'
-#' The log score is the negative logarithm of the predictive density evaluated
-#' at the observed value.
+#' The log score is the negative logarithm of the predictive density
+#' \eqn{f} evaluated at the observed value \eqn{y}:
+#' \deqn{
+#' \textrm{LogS}(F, y) = -\log f(y).
+#' }{
+#' LogS(F, y) = -log(f(y)).
+#' }
+#' Smaller values are better.
+#'
+#' In the sample-based version, the predictive density is not known and is
+#' approximated with a Gaussian kernel density estimate based on the
+#' \eqn{N} predictive samples \eqn{x_1, \dots, x_N}{x_1, ..., x_N}:
+#' \deqn{
+#' \hat{f}(y) = \frac{1}{N h} \sum_{i = 1}^{N}
+#' \varphi\left(\frac{y - x_i}{h}\right),
+#' }{
+#' f_hat(y) = 1 / (N * h) * sum_i phi((y - x_i) / h),
+#' }
+#' where \eqn{\varphi}{phi} is the density of the standard normal
+#' distribution and \eqn{h} is the bandwidth, which by default is chosen
+#' using [stats::bw.nrd()] (it can be set via the `bw` argument passed on to
+#' [scoringRules::logs_sample()]).
 #'
 #' The function should be used to score continuous predictions only.
 #' While the Log Score is in theory also applicable
@@ -215,6 +235,9 @@ se_mean_sample <- function(observed, predicted) {
 #' integer-valued Monte Carlo Samples.
 #' See the scoringRules package for more details and alternatives, e.g.
 #' calculating scores for specific discrete probability distributions.
+#'
+#' See `vignette("scoring-rules", package = "scoringutils")` for more
+#' information on the log score.
 #' @inheritParams ae_median_sample
 #' @param ... Additional arguments passed to
 #' [logs_sample()][scoringRules::logs_sample()] from the scoringRules package.
@@ -258,6 +281,30 @@ logs_sample <- function(observed, predicted, ...) {
 #' Wrapper around the [`dss_sample()`][scoringRules::scores_sample_univ]
 #' function from the
 #' \pkg{scoringRules} package.
+#'
+#' The Dawid-Sebastiani score (DSS) only depends on the mean \eqn{\mu}{mu}
+#' and the standard deviation \eqn{\sigma}{sigma} of the predictive
+#' distribution \eqn{F}. For an observed value \eqn{y} it is defined as
+#' \deqn{
+#' \textrm{DSS}(F, y) = \left(\frac{y - \mu}{\sigma}\right)^2 +
+#' 2 \log \sigma.
+#' }{
+#' DSS(F, y) = ((y - mu) / sigma)^2 + 2 * log(sigma).
+#' }
+#' Smaller values are better. The DSS is proper, but not strictly proper: two
+#' forecasts with the same mean and standard deviation receive the same score.
+#'
+#' In the sample-based version, \eqn{\mu}{mu} and \eqn{\sigma^2}{sigma^2}
+#' are replaced by the empirical mean and variance of the \eqn{N}
+#' predictive samples \eqn{x_1, \dots, x_N}{x_1, ..., x_N}, i.e.
+#' \eqn{\hat{\mu} = \frac{1}{N} \sum_{i = 1}^{N} x_i}{mu_hat = 1/N * sum_i x_i}
+#' and
+#' \eqn{\hat{\sigma}^2 = \frac{1}{N} \sum_{i = 1}^{N}
+#' (x_i - \hat{\mu})^2}{sigma_hat^2 = 1/N * sum_i (x_i - mu_hat)^2}.
+#' The DSS can be used for continuous as well as integer-valued forecasts.
+#'
+#' See `vignette("scoring-rules", package = "scoringutils")` for more
+#' information on the DSS.
 #' @inheritParams logs_sample
 #' @param ... Additional arguments passed to
 #' [dss_sample()][scoringRules::dss_sample()] from the scoringRules package.
@@ -272,6 +319,10 @@ logs_sample <- function(observed, predicted, ...) {
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
+#'
+#' Tilmann Gneiting, Adrian E. Raftery, Strictly Proper Scoring Rules,
+#' Prediction, and Estimation, Journal of the American Statistical
+#' Association, 2007, <https://doi.org/10.1198/016214506000001437>
 #' @keywords metric
 
 dss_sample <- function(observed, predicted, ...) {
@@ -290,19 +341,77 @@ dss_sample <- function(observed, predicted, ...) {
 #' Wrapper around the [`crps_sample()`][scoringRules::scores_sample_univ]
 #' function from the
 #' \pkg{scoringRules} package. Can be used for continuous as well as integer
-#' valued forecasts
+#' valued forecasts.
 #'
-#' The Continuous ranked probability score (CRPS) can be interpreted as the sum
-#' of three components: overprediction,  underprediction and dispersion.
-#' "Dispersion" is defined as the CRPS of the median forecast $m$. If an
-#' observation $y$ is greater than $m$ then overprediction is defined as the
-#' CRPS of the forecast for $y$ minus the dispersion component, and
-#' underprediction is zero. If, on the other hand, $y<m$ then underprediction
-#' is defined as the CRPS of the forecast for $y$ minus the dispersion
-#' component, and overprediction is zero.
+#' The continuous ranked probability score (CRPS) of a predictive distribution
+#' with cumulative distribution function \eqn{F} for an observed value
+#' \eqn{y} is defined as
+#' \deqn{
+#' \textrm{CRPS}(F, y) = \int_{-\infty}^{\infty}
+#' \left(F(x) - \mathbf{1}(x \geq y)\right)^2 dx
+#' = \textrm{E}|X - y| - \frac{1}{2} \textrm{E}|X - X'|,
+#' }{
+#' CRPS(F, y) = integral of (F(x) - 1(x >= y))^2 dx
+#' = E|X - y| - 1/2 * E|X - X'|,
+#' }
+#' where \eqn{\mathbf{1}()}{1()} is the indicator function and \eqn{X}
+#' and \eqn{X'} are independent random variables with distribution
+#' \eqn{F}. Smaller values are better. The CRPS is a generalisation of the
+#' absolute error to probabilistic forecasts and is expressed in the units of
+#' the observed values.
 #'
-#' The overprediction, underprediction and dispersion components correspond to
-#' those of the [wis()].
+#' In the sample-based version (with the default `method = "edf"` of
+#' [scoringRules::crps_sample()]), \eqn{F} is replaced by the empirical
+#' distribution function of the \eqn{N} predictive samples
+#' \eqn{x_1, \dots, x_N}{x_1, ..., x_N}, which gives
+#' \deqn{
+#' \textrm{CRPS}(\hat{F}, y) = \frac{1}{N} \sum_{i = 1}^{N} |x_i - y| -
+#' \frac{1}{2 N^2} \sum_{i = 1}^{N} \sum_{j = 1}^{N} |x_i - x_j|.
+#' }{
+#' CRPS(F_hat, y) = 1/N * sum_i |x_i - y| -
+#' 1 / (2 * N^2) * sum_i sum_j |x_i - x_j|.
+#' }
+#' Alternatively, `method = "kde"` can be passed via `...` to use a kernel
+#' density estimate of \eqn{F} instead. For integer-valued samples and
+#' observations, the CRPS computed from the empirical distribution function is
+#' equal to the ranked probability score (RPS).
+#'
+#' See `vignette("scoring-rules", package = "scoringutils")` for more
+#' information on the CRPS.
+#'
+#' @section Decomposition into dispersion, overprediction and underprediction:
+#' The CRPS can be decomposed into three components: dispersion,
+#' overprediction and underprediction. "Dispersion" is defined as the CRPS of
+#' the forecast evaluated at its own median \eqn{m}, i.e.
+#' \eqn{\textrm{CRPS}(F, m)}{CRPS(F, m)}. For the default `method = "edf"`,
+#' this is the smallest possible CRPS of the forecast, so all three components
+#' are non-negative and dispersion only reflects the spread of the forecast.
+#' The remaining part of the score is attributed to overprediction or
+#' underprediction:
+#' \deqn{
+#' \textrm{overprediction} = \mathbf{1}(y < m)
+#' \left(\textrm{CRPS}(F, y) - \textrm{CRPS}(F, m)\right),
+#' }{
+#' overprediction = 1(y < m) * (CRPS(F, y) - CRPS(F, m)),
+#' }
+#' \deqn{
+#' \textrm{underprediction} = \mathbf{1}(y > m)
+#' \left(\textrm{CRPS}(F, y) - \textrm{CRPS}(F, m)\right).
+#' }{
+#' underprediction = 1(y > m) * (CRPS(F, y) - CRPS(F, m)).
+#' }
+#' If the observed value \eqn{y} is below the median \eqn{m}, the
+#' forecast was too high and the excess score counts as overprediction (and
+#' underprediction is zero); if \eqn{y} is above \eqn{m}, it counts as
+#' underprediction (and overprediction is zero). If \eqn{y = m}, both are
+#' zero.
+#'
+#' This mirrors the decomposition of the weighted interval score (see [wis()])
+#' into dispersion, overprediction and underprediction proposed by Bracher et
+#' al. (2021). Note that this is a decomposition of the score for a single
+#' forecast. It is different from decompositions of the *mean* CRPS across
+#' many forecasts into miscalibration, discrimination and uncertainty
+#' components (see e.g. Arnold et al., 2023).
 #'
 #' @inheritParams logs_sample
 #' @param separate_results Logical. If `TRUE` (default is `FALSE`), then the
@@ -310,8 +419,11 @@ dss_sample <- function(observed, predicted, ...) {
 #'   over- and under-prediction) get returned as separate elements of a list.
 #'   If you want a `data.frame` instead, simply call [as.data.frame()] on the
 #'   output.
-#' @param ... Additional arguments passed to
-#' [crps_sample()][scoringRules::crps_sample()] from the scoringRules package.
+#' @param ... Additional arguments passed on to
+#'   [crps_sample()][scoringRules::crps_sample()] from the scoringRules
+#'   package (e.g. `method`). For `dispersion_sample()`,
+#'   `overprediction_sample()` and `underprediction_sample()`, they are passed
+#'   on via `crps_sample()`.
 #' @inheritSection illustration-input-metric-sample Input format
 #' @returns Vector with scores.
 #' @importFrom scoringRules crps_sample
@@ -323,6 +435,14 @@ dss_sample <- function(observed, predicted, ...) {
 #' @references
 #' Alexander Jordan, Fabian Krüger, Sebastian Lerch, Evaluating Probabilistic
 #' Forecasts with scoringRules, <https://www.jstatsoft.org/article/view/v090i12>
+#'
+#' Evaluating epidemic forecasts in an interval format,
+#' Johannes Bracher, Evan L. Ray, Tilmann Gneiting and Nicholas G. Reich, 2021,
+#' <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008618>
+#'
+#' Decompositions of the mean continuous ranked probability score,
+#' Sebastian Arnold, Eva-Maria Walz, Johanna Ziegel and Tilmann Gneiting, 2023,
+#' <https://arxiv.org/abs/2311.14122>
 #' @keywords metric
 
 crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
@@ -361,9 +481,6 @@ crps_sample <- function(observed, predicted, separate_results = FALSE, ...) {
 #' @return
 #' `dispersion_sample()`: a numeric vector with dispersion values (one per
 #' observation).
-#' @param ... Additional arguments passed on to `crps_sample()` from functions
-#'   `overprediction_sample()`, `underprediction_sample()` and
-#' `dispersion_sample()`.
 #' @export
 #' @rdname crps_sample
 #' @keywords metric
