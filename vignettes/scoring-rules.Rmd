@@ -275,7 +275,7 @@ Dispersion (also called sharpness) is the ability to produce narrow forecasts. I
 
 One way to measure sharpness (as suggested by @funkAssessingPerformanceRealtime2019) is the normalised median absolute deviation about the median (MADN) ). It is computed as
   $$ S(F) = \frac{1}{0.675} \cdot \text{median}(|F - \text{median(F)}|). $$
-If the forecast $F$ follows a normal distribution, then sharpness will equal the standard deviation of $F$.For more details, see `?mad_sample()`.
+If the forecast $F$ follows a normal distribution, then sharpness will equal the standard deviation of $F$. For more details, see `?mad_sample()`. Alternative measures of dispersion are the standard deviation (`sd_sample()`) and the interquartile range (`iqr_sample()`) of the predictive samples. They are not part of the default metrics, but can be added to the list of metrics passed to `score()`.
 
 ## Bias
 

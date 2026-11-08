@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## New features
+
+- Added `sd_sample()` and `iqr_sample()`, which measure the dispersion of sample-based forecasts as the standard deviation and the interquartile range of the predictive samples. They complement `mad_sample()` and can be added to the metrics passed to `score()`; they are not part of the default metrics (#193, #1240).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.

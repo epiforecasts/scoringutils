@@ -258,6 +258,70 @@ test_that("mad_sample() works with a vector of samples", {
   expect_equal(dispersion, mad(c(0, 2, 4))) # nolint: expect_identical_linter
 })
 
+# `sd_sample()` and `iqr_sample()` ============================================
+test_that("sd_sample() and iqr_sample() compute row-wise sd and IQR", {
+  predicted <- rbind(c(1, 2, 3, 4, 10), c(0, 0, 5, 5, 5))
+
+  expect_identical(sd_sample(predicted = predicted), sqrt(c(12.5, 7.5)))
+  expect_identical(iqr_sample(predicted = predicted), c(2, 5))
+  # `observed` is ignored
+  expect_identical(
+    sd_sample(observed = 1:2, predicted = predicted),
+    sd_sample(predicted = predicted)
+  )
+  expect_identical(
+    iqr_sample(observed = 1:2, predicted = predicted),
+    iqr_sample(predicted = predicted)
+  )
+})
+
+test_that("sd_sample() and iqr_sample() pass `...` on", {
+  predicted <- rbind(c(1, 2, 3, 4, NA))
+  expect_identical(sd_sample(predicted = predicted), NA_real_)
+  expect_identical(
+    sd_sample(predicted = predicted, na.rm = TRUE), sd(1:4)
+  )
+  expect_identical(
+    iqr_sample(predicted = predicted, na.rm = TRUE), IQR(1:4)
+  )
+  # unlike sd_sample(), iqr_sample() errors on missing samples by default
+  expect_error(iqr_sample(predicted = predicted), "missing values")
+  predicted <- rbind(c(1, 2, 3, 4, 10))
+  expect_identical(iqr_sample(predicted = predicted), 2)
+  expect_identical(iqr_sample(predicted = predicted, type = 6), 5.5)
+})
+
+test_that("sd_sample() and iqr_sample() validate their input", {
+  expect_error(sd_sample(), "predicted")
+  expect_error(iqr_sample(), "predicted")
+  expect_error(sd_sample(predicted = "a"), "predicted")
+  expect_error(iqr_sample(predicted = list(1, 2)), "predicted")
+})
+
+test_that("sd_sample() and iqr_sample() can be used in score()", {
+  metrics <- c(
+    get_metrics(example_sample_continuous),
+    list(sd = sd_sample, iqr = iqr_sample)
+  )
+  scores <- suppressMessages(
+    score(example_sample_continuous, metrics = metrics)
+  )
+  expect_true(all(c("sd", "iqr") %in% names(scores)))
+
+  forecast <- as_forecast_sample(data.table(
+    model = rep(c("a", "b"), each = 5),
+    observed = 3,
+    predicted = c(1, 2, 3, 4, 10, 0, 0, 5, 5, 5),
+    sample_id = rep(1:5, 2)
+  ))
+  scores <- score(forecast, metrics = list(sd = sd_sample, iqr = iqr_sample))
+  expect_equal(scores$sd, sqrt(c(12.5, 7.5))) # nolint: expect_identical_linter
+  expect_identical(scores$iqr, c(2, 5))
+  # sd and iqr are not part of the default metrics
+  default_metrics <- names(get_metrics(example_sample_continuous))
+  expect_false(any(c("sd", "iqr") %in% default_metrics))
+})
+
 # vector input =================================================================
 test_that("sample metrics give identical results for vector and 1-row matrix", {
   observed <- 2.3
@@ -279,6 +343,14 @@ test_that("sample metrics give identical results for vector and 1-row matrix", {
   expect_identical(
     mad_sample(predicted = predicted),
     mad_sample(predicted = predicted_matrix)
+  )
+  expect_identical(
+    sd_sample(predicted = predicted),
+    sd_sample(predicted = predicted_matrix)
+  )
+  expect_identical(
+    iqr_sample(predicted = predicted),
+    iqr_sample(predicted = predicted_matrix)
   )
 })
 
