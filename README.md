@@ -96,8 +96,9 @@ forecast_quantile <- example_quantile |>
       "location", "forecast_date", "target_end_date", "target_type", "model", "horizon"
     )
   )
-#> ℹ Some rows containing NA values may be removed. This is fine if not
-#>   unexpected.
+#> ℹ 144 rows containing NA values may be removed. This is fine if not unexpected.
+#>   NA values per column: `quantile_level` (144), `predicted` (144),
+#>   `forecast_date` (144), `model` (144), and `horizon` (144).
 
 print(forecast_quantile, 2)
 #> Forecast type: quantile
