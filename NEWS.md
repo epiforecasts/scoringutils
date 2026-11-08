@@ -2,7 +2,7 @@
 
 ## Documentation
 
-- The "Scoring rules" vignette now has a section on multivariate forecasts, describing the energy score and the variogram score (#1046).
+- The "Scoring rules" vignette now has a section on multivariate forecasts, describing the energy score and the variogram score (#1046, #1250).
 
 # scoringutils 2.3.0
 
