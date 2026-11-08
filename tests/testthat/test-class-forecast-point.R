@@ -8,6 +8,44 @@ test_that("as_forecast_point() works", {
   )
 })
 
+test_that("as_forecast_point.forecast_quantile() extracts the requested quantile", {
+  fq <- as_forecast_quantile(na.omit(example_quantile))
+  quantiles <- as.data.table(fq)
+
+  # default is the median
+  point <- as_forecast_point(fq)
+  expect_s3_class(point, "forecast_point")
+  expect_false("quantile_level" %in% colnames(point))
+  expect_identical(
+    point$predicted, quantiles[quantile_level == 0.5]$predicted
+  )
+
+  # a different quantile level can be requested
+  point_75 <- as_forecast_point(fq, quantile_level = 0.75)
+  expect_s3_class(point_75, "forecast_point")
+  expect_false("quantile_level" %in% colnames(point_75))
+  expect_identical(
+    point_75$predicted, quantiles[quantile_level == 0.75]$predicted
+  )
+  expect_identical(point_75$observed, point$observed)
+})
+
+test_that("as_forecast_point.forecast_quantile() validates `quantile_level`", {
+  fq <- as_forecast_quantile(na.omit(example_quantile))
+  # quantile level not present in the data
+  expect_error(
+    as_forecast_point(fq, quantile_level = 0.33),
+    "quantile_level"
+  )
+  # invalid inputs
+  expect_error(
+    as_forecast_point(fq, quantile_level = c(0.25, 0.75)),
+    "quantile_level"
+  )
+  expect_error(as_forecast_point(fq, quantile_level = "0.5"), "quantile_level")
+  expect_error(as_forecast_point(fq, quantile_level = 1.5), "quantile_level")
+})
+
 
 # ==============================================================================
 # is_forecast_point() # nolint: commented_code_linter
