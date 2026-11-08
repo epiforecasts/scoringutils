@@ -278,6 +278,49 @@ test_that(
       unname(vs_su_p1), c(vs_sr_p1_1, vs_sr_p1_2),
       tolerance = 1e-6
     )
+
+    # sample weights w and pairwise weights w_vs are passed through
+    w <- runif(m)
+    w <- w / sum(w)
+    w_vs <- outer(1:d, 1:d, function(i, j) 1 / (1 + abs(i - j)))
+
+    vs_su_w <- variogram_score_multivariate(
+      observed = c(obs1, obs2),
+      predicted = rbind(fc1, fc2),
+      mv_group_id = c(rep(1, d), rep(2, d)),
+      w = w
+    )
+    vs_sr_w <- c(
+      scoringRules::vs_sample(y = obs1, dat = fc1, w = w),
+      scoringRules::vs_sample(y = obs2, dat = fc2, w = w)
+    )
+    expect_equal(unname(vs_su_w), vs_sr_w, tolerance = 1e-6)
+    expect_false(isTRUE(all.equal(vs_su_w, vs_su)))
+
+    vs_su_wvs <- variogram_score_multivariate(
+      observed = c(obs1, obs2),
+      predicted = rbind(fc1, fc2),
+      mv_group_id = c(rep(1, d), rep(2, d)),
+      w_vs = w_vs
+    )
+    vs_sr_wvs <- c(
+      scoringRules::vs_sample(y = obs1, dat = fc1, w_vs = w_vs),
+      scoringRules::vs_sample(y = obs2, dat = fc2, w_vs = w_vs)
+    )
+    expect_equal(unname(vs_su_wvs), vs_sr_wvs, tolerance = 1e-6)
+    expect_false(isTRUE(all.equal(vs_su_wvs, vs_su)))
+
+    vs_su_both <- variogram_score_multivariate(
+      observed = c(obs1, obs2),
+      predicted = rbind(fc1, fc2),
+      mv_group_id = c(rep(1, d), rep(2, d)),
+      w = w, w_vs = w_vs
+    )
+    vs_sr_both <- c(
+      scoringRules::vs_sample(y = obs1, dat = fc1, w = w, w_vs = w_vs),
+      scoringRules::vs_sample(y = obs2, dat = fc2, w = w, w_vs = w_vs)
+    )
+    expect_equal(unname(vs_su_both), vs_sr_both, tolerance = 1e-6)
   }
 )
 

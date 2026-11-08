@@ -108,6 +108,40 @@ test_that(
 )
 
 test_that(
+  "variogram_score_multivariate_point() passes w_vs to scoringRules::vs_sample()",
+  {
+    set.seed(42)
+    d <- 4
+    obs1 <- rnorm(d)
+    pred1 <- rnorm(d)
+    obs2 <- rnorm(d)
+    pred2 <- rnorm(d)
+    observed <- c(obs1, obs2)
+    predicted <- matrix(c(pred1, pred2), ncol = 1)
+    mv_group_id <- c(rep(1, d), rep(2, d))
+    w_vs <- outer(1:d, 1:d, function(i, j) 1 / (1 + abs(i - j)))
+
+    vs_sr <- c(
+      scoringRules::vs_sample(
+        y = obs1, dat = matrix(pred1, ncol = 1), w_vs = w_vs
+      ),
+      scoringRules::vs_sample(
+        y = obs2, dat = matrix(pred2, ncol = 1), w_vs = w_vs
+      )
+    )
+    vs_su <- variogram_score_multivariate_point(
+      observed, predicted, mv_group_id, w_vs = w_vs
+    )
+    expect_equal(unname(vs_su), vs_sr, tolerance = 1e-6)
+
+    vs_unweighted <- variogram_score_multivariate_point(
+      observed, predicted, mv_group_id
+    )
+    expect_false(isTRUE(all.equal(vs_su, vs_unweighted)))
+  }
+)
+
+test_that(
   "score.forecast_multivariate_point() creates expected output",
   {
     mv_point <- make_mv_point()
