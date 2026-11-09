@@ -54,7 +54,9 @@ assert_forecast.forecast_point <- function(
   forecast <- assert_forecast_generic(forecast, verbose)
   assert_forecast_type(forecast, actual = "point", desired = forecast_type)
   #nolint start: object_usage_linter
-  input_check <- check_input_point(forecast$observed, forecast$predicted)
+  input_check <- check_try(
+    assert_input_point(forecast$observed, forecast$predicted)
+  )
   if (!isTRUE(input_check)) {
     cli_abort(
       c(

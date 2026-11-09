@@ -4,6 +4,11 @@
 
 - Function argument documentation now consistently follows the tidyverse style guide: descriptions use sentence case and end with a full stop (#702, #1255).
 
+## Internal changes
+
+- Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).
+- Fixed a test of `assert_input_interval()` that failed when the test suite was run more than once in the same R session, because the warning it checks for is only shown once per session (#718, #1247).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.

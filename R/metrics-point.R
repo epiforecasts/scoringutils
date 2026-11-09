@@ -14,16 +14,6 @@ assert_input_point <- function(observed, predicted) {
 }
 
 
-#' @title Check that inputs are correct for point forecast
-#' @inherit assert_input_point params description
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_input_point <- function(observed, predicted) {
-  result <- check_try(assert_input_point(observed, predicted))
-  return(result)
-}
-
-
 #' @title Assert Inputs Have Matching Dimensions
 #' @description
 #' Function assesses whether input dimensions match. In the
