@@ -31,6 +31,30 @@ test_that("get_crossing_quantiles() finds nothing in valid forecasts", {
   expect_identical(nrow(get_crossing_quantiles(valid)), 0L)
 })
 
+test_that("get_crossing_quantiles() works without forecast unit columns", {
+  # all rows then form a single forecast
+  single <- data.table(
+    observed = 5,
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = c(4, 6, 5)
+  )
+  expect_identical(get_crossing_quantiles(single), single)
+  single[, predicted := c(4, 5, 6)]
+  expect_identical(nrow(get_crossing_quantiles(single)), 0L)
+})
+
+test_that("get_crossing_quantiles() keeps rows with missing values", {
+  # rows with NA are ignored when looking for crossing quantiles, but they
+  # are returned with the rest of a crossing forecast
+  with_na <- data.table(
+    model = rep(c("a", "b"), each = 4),
+    observed = 5,
+    quantile_level = rep(c(0.1, 0.25, 0.5, 0.75), 2),
+    predicted = c(NA, 4, 6, 5, NA, 4, 5, 6)
+  )
+  expect_identical(get_crossing_quantiles(with_na), with_na[model == "a"])
+})
+
 test_that("get_crossing_quantiles() respects the forecast_unit argument", {
   data <- data.table(
     model = "a",

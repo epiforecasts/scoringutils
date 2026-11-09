@@ -22,7 +22,7 @@
 #'   quantiles, ordered by forecast unit and quantile level.
 #' @export
 #' @importFrom checkmate assert_data_frame assert_subset assert_numeric
-#' @importFrom data.table setorderv
+#' @importFrom data.table setorderv rleidv
 #' @keywords diagnose-inputs
 #' @examples
 #' # no crossing quantiles in the example data
@@ -50,15 +50,30 @@ get_crossing_quantiles <- function(data, forecast_unit = NULL) {
   # strip the forecast class so that `[.forecast` does not re-validate the
   # object on the modifications below
   data <- as.data.table(data)
-  data[,
-    scoringutils_InternalCrossingCheck := {
-      keep <- !is.na(predicted) & !is.na(quantile_level)
-      is.unsorted(predicted[keep][order(quantile_level[keep])])
-    },
-    by = forecast_unit
-  ]
-  out <- data[(scoringutils_InternalCrossingCheck)]
-  out[, scoringutils_InternalCrossingCheck := NULL]
+
+  # Sort the complete rows once and compare neighbouring rows, instead of
+  # sorting within every forecast. A forecast crosses if a prediction is
+  # smaller than the one before it within the same forecast.
+  complete <- !is.na(data$predicted) & !is.na(data$quantile_level)
+  sorted <- data[complete, c(forecast_unit, "quantile_level", "predicted"),
+                 with = FALSE]
+  setorderv(sorted, cols = c(forecast_unit, "quantile_level"))
+  if (length(forecast_unit) == 0) {
+    # without forecast unit columns, all rows form a single forecast
+    forecast_id <- rep(1L, nrow(sorted))
+  } else {
+    forecast_id <- rleidv(sorted, cols = forecast_unit)
+  }
+  decreasing <- which(diff(sorted$predicted) < 0 & diff(forecast_id) == 0)
+  if (length(decreasing) == 0) {
+    return(data[0])
+  }
+  if (length(forecast_unit) == 0) {
+    out <- data
+  } else {
+    crossing <- unique(sorted[decreasing + 1, forecast_unit, with = FALSE])
+    out <- data[crossing, on = forecast_unit, nomatch = NULL]
+  }
   setorderv(out, cols = c(forecast_unit, "quantile_level"))
   return(out[])
 }
