@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Bug fixes
+
+- Fixed `get_pairwise_comparisons()` and `add_relative_skill()` aborting entirely when any subgroup defined by `by` had fewer than two comparators, without saying which subgroup was the problem. Such subgroups are now skipped with a warning that names them, results are returned for the remaining subgroups, and `add_relative_skill()` fills `NA` for the skipped subgroups. If no subgroup has at least two comparators, the previous error is kept (#1209, #1214).
+
 ## Internal changes
 
 - Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).
