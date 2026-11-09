@@ -14,7 +14,8 @@ summarize_scores(scores, by = "model", fun = mean, ...)
 scores and an additional attribute \code{metrics} as produced by \code{\link[=score]{score()}}).}
 
 \item{by}{Character vector with column names to summarise scores by. Default
-is "model", i.e. scores are summarised by the "model" column.}
+is "model", i.e. scores are summarised by the "model" column.
+\code{by} must not contain any of the score (metric) columns themselves.}
 
 \item{fun}{A function used for summarising scores. Default is \code{\link[=mean]{mean()}}.}
 

@@ -1,11 +1,68 @@
 # scoringutils (development version)
 
-- Fixed `plot_correlations()` producing a misaligned heatmap (including a diagonal not equal to 1) when the correlations were computed with `get_correlations(scores, metrics = ...)` using a non-default metric order. `get_correlations()` now returns rows and columns in the requested `metrics` order, and `plot_correlations()` aligns rows explicitly via the `metric` column instead of relying on positional order (#1210).
-- Added `filter_scores()` and `impute_missing_scores()` for handling missing forecasts before summarisation. `filter_scores()` removes target combinations with insufficient model coverage, while `impute_missing_scores()` fills in missing scores using configurable strategies (worst, mean, NA, or reference model). Both use a strategy function pattern for extensibility. See `vignette("handling-missing-forecasts")` for details (#1122).
+## Bug fixes
+
+- Fixed `plot_correlations()` producing a misaligned heatmap (including a diagonal not equal to 1) when the correlations were computed with `get_correlations(scores, metrics = ...)` using a non-default metric order. `get_correlations()` now returns rows and columns in the requested `metrics` order, and `plot_correlations()` aligns rows explicitly via the `metric` column instead of relying on positional order (#1210, #1215).
+
+## Internal changes
+
+- Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).
+- Fixed a test of `assert_input_interval()` that failed when the test suite was run more than once in the same R session, because the warning it checks for is only shown once per session (#718, #1247).
+
+# scoringutils 2.3.0
+
+This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.
+
+## Breaking changes
+
+The following changes may cause code that ran with scoringutils 2.2.0 to fail or behave differently. Most of them turn input that previously gave wrong or corrupted results, often silently, into an error.
+
+- `as_forecast_<type>()` functions now error when asked to rename a column onto a name that already exists in the data, for example `as_forecast_binary(data, predicted = "prob")` when `data` also has a `predicted` column. Previously this silently created a forecast object with duplicate column names, which passed validation and was then scored on the wrong column. `assert_forecast()` now also rejects data with duplicate column names. To fix affected code, remove or rename the stale column before calling `as_forecast_<type>()` (#1199).
+- Forecast validation now errors when the same forecast unit has conflicting observed values. Previously, this passed validation for quantile, sample, nominal, ordinal and multivariate sample forecasts, and `score()` silently returned multiple, wrong score rows for a single forecast. This usually means that a column that distinguishes forecasts (e.g. the target type) is missing from the data, or was dropped via the `forecast_unit` argument. Check the forecast unit with `get_forecast_unit()` and add the missing column (#1201).
+- `summarise_scores()` now errors when `by` contains a metric column (e.g. `by = c("model", "wis")`). Previously, this silently returned an unsummarised table with duplicate column names. Remove the metric column from `by` (#1204).
+- `summarise_scores()` now errors with a clear message when there are no score columns to summarise (e.g. because every metric in `score()` warned and returned nothing). Previously, it returned a data.table with duplicate column names (#1179).
+- `get_pairwise_comparisons()` and `add_relative_skill()` now error when the scores contain more than one distinct score per forecast unit and comparator. Previously, such conflicting rows were silently included in the comparison. Exact duplicate rows are still dropped. Remove the conflicting rows, or summarise the scores to one row per forecast unit and comparator first (#1221).
+- `logs_categorical()` now errors when `predicted` has more or fewer columns than there are factor levels. Previously, this was only checked for a single observation. With several observations, extra columns were silently scored meaninglessly and missing columns gave an uninformative "subscript out of bounds" error. `score()` is unaffected. `rps_ordinal()`, which already errored on such input, now gives a clearer error (#1200).
+- `as_forecast_sample()`, `as_forecast_quantile()` and `as_forecast_multivariate_sample()` now error at validation time when `observed` or `predicted` are not numeric. Previously, the failure only surfaced later inside `score()`, as one warning per metric and an effectively empty scores table. Convert `observed` and `predicted` to numeric first (#1211).
+- `assert_forecast()` for nominal and ordinal forecasts now returns `invisible(NULL)`, as documented and as for all other forecast types. Previously, it visibly returned the forecast object. Code that used the return value should use the forecast object directly (#1195).
+- `get_duplicate_forecasts()` has a new `type` argument before `counts`. Code that passed `counts` by position must now name it, e.g. `get_duplicate_forecasts(data, counts = TRUE)` (#888).
+- scoringutils now requires data.table 1.17.0 or later (previously 1.16.0) (#935). It also newly depends on lifecycle (1.0.2 or later) (#888).
+
+## Deprecations
+
+- Calling `get_duplicate_forecasts()` on a plain data.frame without specifying `type` is deprecated and now warns. It falls back to guessing type-specific columns from their names. Pass `type` (e.g. `type = "quantile"`), or call it on a forecast object (#888).
+
+## New features
+
+- Added `filter_scores()` and `impute_missing_scores()` for handling missing forecasts before summarisation. `filter_scores()` removes target combinations with insufficient model coverage, while `impute_missing_scores()` fills in missing scores using configurable strategies (worst, mean, NA, or reference model). Both take a strategy function: `filter_to_intersection()` and `filter_to_include()` for filtering, and `impute_worst_score()`, `impute_mean_score()`, `impute_na_score()` and `impute_model_score()` for imputation. Custom strategies can be supplied too. See `vignette("handling-missing-forecasts")` for details (#1122).
 - Added `plot_discrimination()` to visualise the discrimination ability of binary forecasts by plotting the distribution of predicted probabilities, stratified by the observed outcome. The function requires a `forecast_binary` object (created with `as_forecast_binary()`) (#942).
-- Fixed `summarise_scores()` producing a data.table with duplicate column names when the input `scores` object had no score columns (e.g. because every metric in `score()` warned and returned nothing). `summarise_scores()` now matches metric columns by exact name rather than regex partial match, and errors with a clear message when there is nothing to summarise (#1179).
-- Added internal S3 generic `get_forecast_type_ids()` so each forecast type declares the columns (beyond the forecast unit) that identify a unique row. `get_duplicate_forecasts()` now uses this instead of hard-coded column names (#888).
+- Added `get_forecast_type_ids()`, an S3 generic that returns the columns (beyond the forecast unit) that identify a unique row for each forecast type. `get_duplicate_forecasts()` now uses it, and gains a `type` argument (e.g. `type = "quantile"`) for use on plain data.frames (#888).
+- `get_pairwise_comparisons()`, and therefore `add_relative_skill()`, is now substantially faster and uses much less memory. Scores are pivoted once into a forecast unit by comparator matrix instead of being merged separately for every pair of comparators. Results are unchanged (#1221, thanks to @annakrystalli for the analysis and prototype).
+- `add_relative_skill()` no longer runs a statistical test for each pair of comparators by default, as it does not return the resulting p-values. This removes unnecessary computation and spurious warnings from `wilcox.test()` when scores are tied. Relative skill scores are unchanged. `test_type` is now an explicit argument with default `NULL`, and a test can still be requested through it (#1222, thanks to @annakrystalli).
+
+## Bug fixes
+
+- Fixed `wis()`, `interval_score()` and `quantile_score(weigh = FALSE)` returning `NaN` for forecasts that include the quantile levels 0 and 1 (which form a 100% prediction interval). Scores are now finite when the observation falls inside the interval, restoring the identity between the WIS and the mean of the quantile scores. The unweighted scores are `Inf` when the observation falls outside a 100% prediction interval (#1202).
+- Fixed `interval_coverage()` erroring on quantile levels generated with `seq()` (e.g. `seq(0.05, 0.95, 0.05)`), because quantile levels were matched with an exact floating point comparison. They are now rounded to 10 decimal places before matching, consistent with the rest of the package (#1202).
+- Fixed `as_forecast_quantile()` for sample-based forecasts producing silently wrong quantiles, or erroring, when `probs` was not symmetric around 0.5 (e.g. `probs = 0.4` or `probs = c(0.1, 0.2)`). Quantiles are now computed at exactly the requested `probs` (deduplicated), and missing or out-of-range `probs` produce a clear error (#1196).
+- Fixed `summarise_scores()` also summarising columns whose names merely contain a metric name. Metric columns are now matched by exact name rather than by a regex partial match (#1179).
+- Fixed `bias_quantile()` returning wrong values when quantile levels were passed unsorted, because predictions and quantile levels became mispaired. Also fixed a crash when `na.rm = TRUE` removed all quantile levels on one side of the median. `bias_quantile()` now returns `NA` in this case, consistent with `na.rm = FALSE` (#1198).
+- Fixed `bias_sample()`, `ae_median_sample()`, `se_mean_sample()` and `mad_sample()` mishandling the documented input for a single observation (a scalar `observed` with a vector of samples as `predicted`): `ae_median_sample()` and `se_mean_sample()` silently returned wrong results, while `bias_sample()` and `mad_sample()` errored. All sample metrics now treat this input as one forecast with N samples, consistent with `crps_sample()`. Also corrected the integer bias formula in the `bias_sample()` documentation (the code was correct) (#1197).
+- Fixed `rps_ordinal()` and `logs_categorical()` returning wrong scores when called directly with a `predicted_label` that was not in the order of the factor levels. Scores are now invariant to how the columns of `predicted` are labelled. Forecasts scored via `score()` were unaffected (#1200).
+- `as_forecast_binary()`, `assert_forecast()`, `brier_score()`, `logs_binary()` and `score()` for binary forecasts now warn when the levels of `observed` are `c("1", "0")` or `c("TRUE", "FALSE")`. Predictions are interpreted as the probability of the second level, so with these levels they were silently read as the probability of "0" or "FALSE" (#763).
+- Fixed `get_pit_histogram()` for quantile-based forecasts: it now shows its full warning message and actually falls back to the quantiles present in the forecast when requested quantiles are missing, instead of returning an empty or incorrect result. The rounding warning in `as_forecast_quantile()` now correctly states that quantile levels are rounded to 9 digits (#1211).
+- Fixed forecast and scores objects printing spuriously when modified in place with `:=`, and added a `print.scores()` method. Subsetting a forecast object with `[` now validates the result regardless of its size (previously only subsets with more than 30 rows were checked), so invalid subsets of small forecast objects now warn (#935).
+- Fixed the error message of `assert_forecast()` for incomplete nominal and ordinal forecasts, which named the first *complete* forecast instead of the first incomplete one (#1195).
+
+## Documentation
+
+- Added a more descriptive explanation of the use of energy and variogram scores in the vignette "Scoring multivariate forecasts", including how to pool over forecast horizons from a single origin and a multi-model comparison. Added a note explaining where these scores cannot be applied to quantile forecasts (#1193).
 - Removed the deprecated vignettes `Deprecated-functions` and `Deprecated-visualisations`. The code for removed functions (`plot_predictions()`, `make_NA()`, `plot_ranges()`, `plot_score_table()`, `merge_pred_and_obs()`) can still be found in the [git history](https://github.com/epiforecasts/scoringutils/tree/d0cd8e2/vignettes) (#1158).
+
+## Internal changes
+
+- Added an internal helper `prepare_forecast_for_scoring()` that consolidates the input preparation steps previously duplicated across the `score()` methods: cleaning the forecast, validating the metrics and converting to a plain `data.table`, plus determining the forecast unit for the methods that need it (#941).
+- Updated the documentation to roxygen2 8.1.0 and fixed an R CMD check NOTE on R-devel (#1230).
 
 # scoringutils 2.2.0
 
@@ -343,7 +400,7 @@ the mean before returning an output.
 ### Package data updated
 
 - Package data is now based on forecasts submitted to the European Forecast Hub
-(https://covid19forecasthub.eu/).
+(https://github.com/european-modelling-hubs/covid19-forecast-hub-europe_archive).
 - All example data files were renamed to begin with `example_`.
 - A new data set, `summary_metrics` was included that contains a summary of the metrics implemented in `scoringutils`.
 

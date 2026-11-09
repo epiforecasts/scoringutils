@@ -53,8 +53,8 @@ predicted <- matrix(
 logs_categorical(observed, predicted, predicted_label)
 }
 \seealso{
-Other log score functions: 
-\code{\link{logs_sample}()},
+Other log score functions:
+\code{\link[=logs_sample]{logs_sample()}},
 \code{\link{scoring-functions-binary}}
 }
 \concept{log score functions}

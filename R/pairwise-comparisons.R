@@ -246,9 +246,13 @@ get_pairwise_comparisons <- function(
 #' [get_pairwise_comparisons()] splits the data into arbitrary subgroups
 #' specified by the user (e.g. if pairwise comparison should be done separately
 #' for different forecast targets) and then the actual pairwise comparison for
-#' that subgroup is managed from [pairwise_comparison_one_group()]. In order to
-#' actually do the comparison between two models over a subset of common
-#' forecasts it calls [compare_forecasts()].
+#' that subgroup is managed from [pairwise_comparison_one_group()].
+#'
+#' Internally, the scores are pivoted once into a matrix with one row per
+#' forecast unit (excluding the `compare` column) and one column per
+#' comparator (see [pivot_scores()]). The set of overlapping forecasts for
+#' any pair of comparators is then simply the set of rows for which both
+#' columns are non-missing.
 #' @inherit get_pairwise_comparisons params return
 #' @importFrom cli cli_abort
 #' @importFrom data.table setnames
@@ -285,16 +289,29 @@ pairwise_comparison_one_group <- function(scores,
   combinations <- as.data.table(t(combn(comparators, m = 2)))
   colnames(combinations) <- c("..compare", "compare_against")
 
-  combinations[, c("ratio", "pval") := compare_forecasts(
-    compare = compare,
-    scores = scores,
-    name_comparator1 = ..compare,
-    name_comparator2 = compare_against,
-    metric = metric,
-    ...
-  ),
-  by = seq_len(NROW(combinations))
-  ]
+  # pivot the scores once into a forecast unit x comparator matrix. For every
+  # pair of comparators the overlapping forecasts are the rows where both
+  # columns are non-missing.
+  score_matrix <- pivot_scores(scores, compare = compare, metric = metric)
+  idx1 <- match(as.character(combinations$..compare), colnames(score_matrix))
+  idx2 <- match(
+    as.character(combinations$compare_against), colnames(score_matrix)
+  )
+
+  ratios <- rep(NA_real_, nrow(combinations))
+  pvals <- rep(NA_real_, nrow(combinations))
+  for (i in seq_len(nrow(combinations))) {
+    values_x <- score_matrix[, idx1[i]]
+    values_y <- score_matrix[, idx2[i]]
+    overlap <- !is.na(values_x) & !is.na(values_y)
+    if (!any(overlap)) {
+      next
+    }
+    comparison <- compare_scores(values_x[overlap], values_y[overlap], ...)
+    ratios[i] <- comparison$mean_scores_ratio
+    pvals[i] <- comparison$pval
+  }
+  combinations[, `:=`(ratio = ratios, pval = pvals)]
 
   combinations <- combinations[order(ratio)]
   combinations[, adj_pval := p.adjust(pval)]
@@ -375,18 +392,137 @@ pairwise_comparison_one_group <- function(scores,
   return(out[])
 }
 
+#' @title Pivot scores into a forecast unit by comparator matrix
+#'
+#' @description
+#' Pivots a set of scores into a matrix with one row per forecast unit
+#' (excluding the `compare` column) and one column per comparator. Entries
+#' are the values of `metric` and are `NA` where a comparator did not
+#' provide a forecast for a given forecast unit.
+#'
+#' The function is used by [pairwise_comparison_one_group()] to align the
+#' scores of all comparators once, rather than once per pair of comparators.
+#' Exact duplicate rows are dropped silently; rows that share a forecast
+#' unit and comparator but are not otherwise identical raise an error, as
+#' the scores could then not be pivoted unambiguously.
+#' @inheritParams get_pairwise_comparisons
+#' @param metric A string with the name of the metric to pivot. Unlike in
+#'   [get_pairwise_comparisons()], there is no default: the caller must
+#'   supply a single metric present in `scores`.
+#' @returns A numeric matrix with one row per forecast unit and one column
+#'   per comparator. Column names are the comparators (as character).
+#' @importFrom data.table as.data.table dcast
+#' @importFrom stats as.formula
+#' @importFrom cli cli_abort
+#' @keywords internal
+pivot_scores <- function(scores, compare = "model", metric) {
+  forecast_unit <- get_forecast_unit(scores)
+  merge_by <- setdiff(forecast_unit, compare)
+
+  # drop exact duplicate rows before checking for genuine
+  # forecast-unit duplicates
+  scores <- unique(as.data.table(scores))
+  if (anyDuplicated(scores, by = forecast_unit) > 0) {
+    #nolint start: object_usage_linter
+    cli_abort(
+      c(
+        `!` = "Found more than one score for the same forecast unit and
+        element of {.var {compare}}.",
+        i = "Pairwise comparisons require exactly one score per forecast unit
+        and comparator. Consider summarising the scores first using
+        {.fn summarise_scores}."
+      )
+    )
+    #nolint end
+  }
+
+  # column names are wrapped in backticks so that non-syntactic names work
+  if (length(merge_by) == 0) {
+    lhs <- "."
+  } else {
+    lhs <- paste0("`", merge_by, "`", collapse = " + ")
+  }
+  pivot_formula <- as.formula(paste0(lhs, " ~ `", compare, "`"))
+  wide <- dcast(
+    scores[, c(merge_by, compare, metric), with = FALSE],
+    pivot_formula,
+    value.var = metric
+  )
+
+  # the first columns of the wide table are the columns in `merge_by` (or a
+  # single placeholder column if `merge_by` is empty)
+  value_cols <- setdiff(names(wide), c(merge_by, "."))
+  score_matrix <- as.matrix(wide[, value_cols, with = FALSE])
+  return(score_matrix)
+}
+
+#' @title Compare two aligned vectors of scores
+#'
+#' @description
+#' Computes the mean score ratio and, optionally, a p-value for two vectors
+#' of scores that have already been aligned, i.e. where `values_x[i]` and
+#' `values_y[i]` are the scores of two comparators for the same forecast
+#' unit. This is the shared computational core of
+#' [pairwise_comparison_one_group()] and [compare_forecasts()].
+#' @param values_x Numeric vector of scores of the first comparator.
+#' @param values_y Numeric vector of scores of the second comparator, aligned
+#'   with `values_x`.
+#' @inheritParams compare_forecasts
+#' @inherit compare_forecasts return
+#' @importFrom stats wilcox.test
+#' @keywords internal
+compare_scores <- function(
+  values_x,
+  values_y,
+  one_sided = FALSE,
+  test_type = c("non_parametric", "permutation", NULL),
+  n_permutations = 999
+) {
+  # calculate ratio to of average scores achieved by both comparator.
+  # this should be equivalent to theta_ij in Johannes Bracher's document.
+  # ratio < 1 --> comparator 1 is better.
+  # note we could also take mean(values_x) / mean(values_y), as it cancels out
+  ratio <- sum(values_x) / sum(values_y)
+
+  # If test_type is NULL, return NA for p-value
+  if (is.null(test_type)) {
+    pval <- NA_real_
+  } else {
+    # test whether the ratio is significantly different from one
+    # equivalently, one can test whether the difference between the two values
+    # is significantly different from zero.
+    test_type <- match.arg(test_type)
+    if (test_type == "permutation") {
+      # adapted from the surveillance package
+      pval <- permutation_test(values_x, values_y,
+        n_permutation = n_permutations,
+        one_sided = one_sided,
+        comparison_mode = "difference"
+      )
+    } else {
+      # this probably needs some more thought
+      # alternative: do a paired t-test on ranks?
+      pval <- wilcox.test(values_x, values_y, paired = TRUE)$p.value
+    }
+  }
+
+  return(list(
+    mean_scores_ratio = ratio,
+    pval = pval
+  ))
+}
+
 #' @title Compare a subset of common forecasts
 #'
 #' @description
-#' This function compares two comparators based on the subset of forecasts for which
-#' both comparators have made a prediction. It gets called
-#' from [pairwise_comparison_one_group()], which handles the
-#' comparison of multiple comparators on a single set of forecasts (there are no
-#' subsets of forecasts to be distinguished). [pairwise_comparison_one_group()]
-#' in turn gets called from from [get_pairwise_comparisons()] which can handle
-#' pairwise comparisons for a set of forecasts with multiple subsets, e.g.
-#' pairwise comparisons for one set of forecasts, but done separately for two
-#' different forecast targets.
+#' This function compares two comparators based on the subset of forecasts for
+#' which both comparators have made a prediction. The overlapping forecasts
+#' are found by merging the scores of the two comparators on the forecast
+#' unit. The actual comparison is then done by [compare_scores()].
+#'
+#' [pairwise_comparison_one_group()] does not call this function; it aligns
+#' all comparators at once via [pivot_scores()]. [compare_forecasts()] is
+#' kept as a reference implementation for testing.
 #' @inheritParams get_pairwise_comparisons
 #' @param name_comparator1 Character, name of the first comparator
 #' @param name_comparator2 Character, name of the comparator to compare against
@@ -440,37 +576,12 @@ compare_forecasts <- function(scores,
   values_x <- overlap[[paste0(metric, ".x")]]
   values_y <- overlap[[paste0(metric, ".y")]]
 
-  # calculate ratio to of average scores achieved by both comparator.
-  # this should be equivalent to theta_ij in Johannes Bracher's document.
-  # ratio < 1 --> comparator 1 is better.
-  # note we could also take mean(values_x) / mean(values_y), as it cancels out
-  ratio <- sum(values_x) / sum(values_y)
-
-  # If test_type is NULL, return NA for p-value
-  if (is.null(test_type)) {
-    pval <- NA_real_
-  } else {
-    # test whether the ratio is significantly different from one
-    # equivalently, one can test whether the difference between the two values
-    # is significantly different from zero.
-    test_type <- match.arg(test_type)
-    if (test_type == "permutation") {
-      # adapted from the surveillance package
-      pval <- permutation_test(values_x, values_y,
-        n_permutation = n_permutations,
-        one_sided = one_sided,
-        comparison_mode = "difference"
-      )
-    } else {
-      # this probably needs some more thought
-      # alternative: do a paired t-test on ranks?
-      pval <- wilcox.test(values_x, values_y, paired = TRUE)$p.value
-    }
-  }
-
-  return(list(
-    mean_scores_ratio = ratio,
-    pval = pval
+  return(compare_scores(
+    values_x = values_x,
+    values_y = values_y,
+    one_sided = one_sided,
+    test_type = test_type,
+    n_permutations = n_permutations
   ))
 }
 
@@ -563,7 +674,17 @@ permutation_test <- function(scores1,
 #' Relative skill will be calculated for the aggregation level specified in
 #' `by`.
 #'
+#' Unlike [get_pairwise_comparisons()], this function does not return
+#' p-values. By default no statistical test is therefore run for the
+#' pairwise comparisons (`test_type = NULL`), which avoids unnecessary
+#' computation. Relative skill scores do not depend on `test_type`.
+#'
 #' @inheritParams get_pairwise_comparisons
+#' @param test_type Character, either "non_parametric", "permutation", or
+#'   `NULL` (the default). Determines which kind of test is run for the
+#'   pairwise comparisons. As p-values are not returned by
+#'   `add_relative_skill()`, no test is run by default. See
+#'   [compare_forecasts()] for more information.
 #' @export
 #' @keywords scoring
 add_relative_skill <- function(
@@ -572,6 +693,7 @@ add_relative_skill <- function(
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
+  test_type = NULL,
   ...
 ) {
 
@@ -583,6 +705,7 @@ add_relative_skill <- function(
     baseline = baseline,
     compare = compare,
     by = by,
+    test_type = test_type,
     ...
   )
 

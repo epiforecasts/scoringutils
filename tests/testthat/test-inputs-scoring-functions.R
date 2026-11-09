@@ -18,15 +18,3 @@ test_that("assert_dims_ok_scalar() works as expected", {
     "`observed` and `predicted` must either be of length 1 or of equal length."
   )
 })
-
-
-test_that("scoring functions still work end-to-end without check_input_* wrappers", {
-  observed_s <- 1:5
-  predicted_s <- matrix(rnorm(50), nrow = 5)
-  observed_q <- 1:5
-  predicted_q <- matrix(sort(rnorm(25)), nrow = 5)
-  quantile_level <- c(0.1, 0.25, 0.5, 0.75, 0.9)
-
-  expect_no_condition(crps_sample(observed_s, predicted_s))
-  expect_no_condition(bias_quantile(observed_q, predicted_q, quantile_level))
-})

@@ -36,7 +36,7 @@ measures both calibration and sharpness of the forecast
 distribution.
 
 The score is computed using
-\code{\link[scoringRules:scores_sample_multiv]{scoringRules::es_sample()}}.
+\code{\link[scoringRules:es_sample]{scoringRules::es_sample()}}.
 }
 \references{
 Gneiting, T., Stanberry, L.I., Grimit, E.P., Held, L. and

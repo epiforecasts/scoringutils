@@ -69,7 +69,7 @@ assert_input_categorical <- function(
     )
     summed_predictions <- .rowSums(predicted, m = 1, n = N, na.rm = TRUE)
   } else {
-    assert_matrix(predicted, nrows = n)
+    assert_matrix(predicted, nrows = n, ncols = N)
     summed_predictions <- round(rowSums(predicted, na.rm = TRUE), 10) # avoid numeric errors
   }
   # Allow for numeric errors
@@ -130,6 +130,11 @@ logs_categorical <- function(observed, predicted, predicted_label) {
   if (n == 1) {
     predicted <- matrix(predicted, nrow = 1)
   }
+  # Reorder the predicted matrix columns to match the natural level order:
+  # column k of `predicted` holds probabilities for level
+  # `as.numeric(predicted_label)[k]`, so the inverse permutation given by
+  # `order()` puts the column for level k into position k
+  predicted <- predicted[, order(as.numeric(predicted_label)), drop = FALSE]
   observed_indices <- as.numeric(observed)
   pred_for_observed <- predicted[cbind(1:n, observed_indices)]
   logs <- -log(pred_for_observed)

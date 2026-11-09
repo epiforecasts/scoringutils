@@ -21,7 +21,7 @@ ensure_data.table <- function(data) {
 #'
 #' @description Helper function to check whether an input is a numeric vector.
 #' @param x input to check
-#' @inheritDotParams checkmate::check_numeric
+#' @inheritDotParams checkmate::check_numeric -.var.name -add -info -label
 #' @importFrom checkmate check_atomic_vector check_numeric
 #' @inherit document_check_functions return
 #' @keywords internal_input_check

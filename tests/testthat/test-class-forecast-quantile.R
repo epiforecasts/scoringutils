@@ -148,6 +148,93 @@ test_that("as_forecast_quantiles works", {
   )
 })
 
+test_that("as_forecast_quantiles handles a single asymmetric prob", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  quantile <- as_forecast_quantile(samples, probs = 0.4)
+
+  expect_identical(nrow(quantile), 1L)
+  expect_identical(quantile$quantile_level, 0.4)
+  expect_identical(
+    quantile$predicted,
+    unname(quantile(1:100, probs = 0.4, type = 7))
+  )
+})
+
+test_that("as_forecast_quantiles handles multiple asymmetric probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  expect_no_condition(
+    quantile <- as_forecast_quantile(samples, probs = c(0.1, 0.2))
+  )
+  expect_identical(quantile$quantile_level, c(0.1, 0.2))
+  expect_identical(
+    quantile$predicted,
+    unname(quantile(1:100, probs = c(0.1, 0.2), type = 7))
+  )
+})
+
+test_that("as_forecast_quantiles deduplicates repeated probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  quantile <- as_forecast_quantile(samples, probs = c(0.5, 0.5))
+
+  expect_identical(nrow(quantile), 1L)
+  expect_identical(quantile$quantile_level, 0.5)
+  expect_identical(
+    quantile$predicted,
+    unname(quantile(1:100, probs = 0.5, type = 7))
+  )
+})
+
+test_that("as_forecast_quantiles errors on out-of-range probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  expect_error(
+    as_forecast_quantile(samples, probs = c(0.5, 1.5)),
+    "Assertion on 'probs' failed"
+  )
+})
+
+test_that("as_forecast_quantiles errors on missing values in probs", {
+  samples <- data.table(
+    model = "model1",
+    observed = 50,
+    predicted = 1:100,
+    sample_id = 1:100
+  ) |>
+    as_forecast_sample()
+
+  expect_error(
+    as_forecast_quantile(samples, probs = c(0.5, NA)),
+    "Assertion on 'probs' failed"
+  )
+})
+
 test_that("as_forecast_quantiles issue 557 fix", {
   out <- example_sample_discrete |>
     na.omit() |>
@@ -190,8 +277,32 @@ test_that("as_forecast_quantile handles rounding issues correctly", {
     as_forecast_quantile(quantile_data),
     "rounding issue"
   )
+  # the warning should advertise the rounding that is actually applied
+  expect_warning(
+    as_forecast_quantile(quantile_data),
+    "digits = 9"
+  )
   expect_no_condition(
     score(quantile_forecast, metrics = c(wis = wis))
+  )
+})
+
+test_that("as_forecast_quantile() errors on non-numeric observed and predicted", {
+  df <- data.frame(
+    observed = as.character(c(1, 1)),
+    predicted = as.character(c(0.5, 1.5)),
+    quantile_level = c(0.25, 0.75),
+    model = "m1"
+  )
+  expect_error(
+    as_forecast_quantile(df),
+    "Must be of type 'numeric', not 'character'"
+  )
+
+  df$observed <- c(1, 1)
+  expect_error(
+    as_forecast_quantile(df),
+    "Must be of type 'numeric', not 'character'"
   )
 })
 
@@ -425,4 +536,46 @@ test_that("get_pit_histogram.forecast_quantile() works as expected", {
 
   # check printing works
   expect_output(print(pit_quantile))
+})
+
+test_that("get_pit_histogram.forecast_quantile() falls back to present quantiles", {
+  w <- capture_warnings(
+    res <- get_pit_histogram(example_quantile, num_bins = 7, by = "model")
+  )
+  # a single warning whose message includes both sentences
+  expect_length(w, 1)
+  expect_match(w, "Some requested quantiles are missing in the forecast")
+  expect_match(
+    w, "The PIT histogram will be based on the quantiles present in the forecast"
+  )
+
+  # none of the requested quantiles (except 0 and 1) are present, so the
+  # histogram should fall back to all quantiles present in the forecast
+  present <- sort(unique(na.omit(example_quantile)$quantile_level))
+  n_models <- length(unique(na.omit(example_quantile)$model))
+  expect_identical(nrow(res), n_models * (length(present) + 1L))
+
+  # densities integrate to one for every model
+  widths <- diff(c(0, present, 1))
+  integrals <- res[, sum(density * widths), by = "model"]$V1
+  expect_equal(integrals, rep(1, n_models))
+})
+
+test_that("get_pit_histogram.forecast_quantile() keeps requested quantiles that are present", {
+  w <- capture_warnings(
+    res <- get_pit_histogram(
+      example_quantile, breaks = c(0.25, 0.33, 0.5), by = "model"
+    )
+  )
+  # only the missing-quantiles warning, no recycling warnings
+  expect_length(w, 1)
+  expect_match(w, "Some requested quantiles are missing in the forecast")
+
+  # 0.33 is missing in the forecast and should be dropped from the bins
+  expect_identical(unique(res$bin), c("[0,0.25)", "[0.25,0.5)", "[0.5,1)"))
+
+  # densities integrate to one for every model
+  n_models <- length(unique(na.omit(example_quantile)$model))
+  integrals <- res[, sum(density * c(0.25, 0.25, 0.5)), by = "model"]$V1
+  expect_equal(integrals, rep(1, n_models))
 })

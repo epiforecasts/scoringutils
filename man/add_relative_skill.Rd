@@ -10,6 +10,7 @@ add_relative_skill(
   by = NULL,
   metric = intersect(c("wis", "crps", "brier_score"), names(scores)),
   baseline = NULL,
+  test_type = NULL,
   ...
 )
 }
@@ -37,6 +38,12 @@ given, then a scaled relative skill with respect to the baseline will be
 returned. By default (\code{NULL}), relative skill will not be scaled with
 respect to a baseline model.}
 
+\item{test_type}{Character, either "non_parametric", "permutation", or
+\code{NULL} (the default). Determines which kind of test is run for the
+pairwise comparisons. As p-values are not returned by
+\code{add_relative_skill()}, no test is run by default. See
+\code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
+
 \item{...}{Additional arguments for the comparison between two models. See
 \code{\link[=compare_forecasts]{compare_forecasts()}} for more information.}
 }
@@ -47,5 +54,11 @@ For more information on
 the computation of relative skill, see \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}.
 Relative skill will be calculated for the aggregation level specified in
 \code{by}.
+}
+\details{
+Unlike \code{\link[=get_pairwise_comparisons]{get_pairwise_comparisons()}}, this function does not return
+p-values. By default no statistical test is therefore run for the
+pairwise comparisons (\code{test_type = NULL}), which avoids unnecessary
+computation. Relative skill scores do not depend on \code{test_type}.
 }
 \keyword{scoring}
