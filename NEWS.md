@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## New features
+
+- Added `get_crossing_quantiles()` to find quantile forecasts whose predictions decrease with increasing quantile level (quantile crossing). `as_forecast_quantile()` and `assert_forecast()` now warn when such forecasts are present, so the problem surfaces before `score()`. There, `wis()` and its components (if the crossing inverts a central prediction interval) and `bias_quantile()` fail for such data, and their columns are dropped from the output. The corresponding error messages now point to `get_crossing_quantiles()` (#412, #895, #1254).
+
 ## Internal changes
 
 - Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).

@@ -502,7 +502,9 @@ bias_quantile_single_vector <- function(observed, predicted,
     cli_abort(
       c(
         `!` = "Predictions must not be decreasing with increasing
-        quantile level."
+        quantile level.",
+        i = "Use {.fn get_crossing_quantiles} to identify forecasts with
+        crossing quantiles."
       )
     )
   }

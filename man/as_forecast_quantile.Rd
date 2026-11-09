@@ -83,6 +83,12 @@ the corresponding predicted value.
 Quantile levels must be between 0 and 1.
 }
 
+Predicted values should not decrease with increasing quantile level. If
+they do (quantile crossing), a warning is issued. \code{\link[=score]{score()}} cannot compute
+\code{\link[=wis]{wis()}} and its components (if the crossing inverts a central prediction
+interval) or \code{\link[=bias_quantile]{bias_quantile()}} for these data and drops the corresponding
+columns. Use \code{\link[=get_crossing_quantiles]{get_crossing_quantiles()}} to identify the affected forecasts.
+
 For convenience, we recommend an additional column \code{model} holding the name
 of the forecaster or model that produced a prediction, but this is not
 strictly necessary.

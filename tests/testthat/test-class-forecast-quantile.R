@@ -53,6 +53,49 @@ test_that("as_forecast_quantile() warns if there are different numbers of quanti
   expect_no_condition(w)
 })
 
+test_that("as_forecast_quantile() warns if quantiles cross", {
+  crossing <- data.frame(
+    model = rep(c("a", "b", "c"), each = 3),
+    observed = 5,
+    quantile_level = rep(c(0.25, 0.5, 0.75), 3),
+    predicted = c(4, 6, 5, 7, 5, 6, 4, 5, 6)
+  )
+  expect_warning(
+    as_forecast_quantile(crossing),
+    "quantile crossing) in 2 forecasts",
+    fixed = TRUE
+  )
+  fc <- suppressWarnings(as_forecast_quantile(crossing))
+  expect_no_condition(assert_forecast(fc, verbose = FALSE))
+})
+
+test_that("as_forecast_quantile() does not warn about ties or valid data", {
+  ties <- data.frame(
+    model = "model1",
+    observed = 5,
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = c(3, 3, 4)
+  )
+  expect_no_warning(as_forecast_quantile(ties))
+  expect_no_warning(as_forecast_quantile(example_quantile))
+})
+
+test_that("score() hints at get_crossing_quantiles() when metrics fail", {
+  crossing <- data.frame(
+    model = "a",
+    observed = 5,
+    quantile_level = c(0.25, 0.5, 0.75),
+    predicted = c(6, 5, 4)
+  )
+  fc <- suppressWarnings(as_forecast_quantile(crossing))
+  warnings <- capture_warnings(
+    scores <- score(fc, metrics = get_metrics(fc, select = c("wis", "bias")))
+  )
+  expect_length(warnings, 2)
+  expect_match(warnings, "get_crossing_quantiles()", fixed = TRUE)
+  expect_false(any(c("wis", "bias") %in% colnames(scores)))
+})
+
 test_that("as_forecast_quantile() function throws an error with duplicate forecasts", {
   example <- rbind(
     example_quantile,
