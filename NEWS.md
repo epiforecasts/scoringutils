@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Bug fixes
+
+- Fixed `plot_correlations()` producing a misaligned heatmap (including a diagonal not equal to 1) when the correlations were computed with `get_correlations(scores, metrics = ...)` using a non-default metric order. `get_correlations()` now returns rows and columns in the requested `metrics` order, and `plot_correlations()` aligns rows explicitly via the `metric` column instead of relying on positional order (#1210, #1215).
+
 ## Internal changes
 
 - Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).
