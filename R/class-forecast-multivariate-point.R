@@ -70,8 +70,8 @@ assert_forecast.forecast_multivariate_point <- function(
   assert_subset(".mv_group_id", colnames(forecast))
   forecast <- assert_forecast_generic(forecast, verbose)
 
-  input_check <- check_input_point(
-    forecast$observed, forecast$predicted
+  input_check <- check_try(
+    assert_input_point(forecast$observed, forecast$predicted)
   )
   if (!isTRUE(input_check)) {
     cli_abort(

@@ -1,6 +1,11 @@
 # scoringutils (development version)
 
-- `transform_forecasts()` is faster: it now validates the forecast object twice (input and output) instead of after every internal update to it. On a forecast hub-sized example, it takes about half as long as before. With `append = FALSE`, a transformation that produces an invalid forecast now errors, as it already did with `append = TRUE`, instead of returning the invalid forecast with validation warnings (#1236).
+- `transform_forecasts()` is faster: it now validates the forecast object twice (input and output) instead of after every internal update to it. On a forecast hub-sized example, it takes about half as long as before. With `append = FALSE`, a transformation that produces an invalid forecast now errors, as it already did with `append = TRUE`, instead of returning the invalid forecast with validation warnings (#1236, #1238).
+
+## Internal changes
+
+- Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).
+- Fixed a test of `assert_input_interval()` that failed when the test suite was run more than once in the same R session, because the warning it checks for is only shown once per session (#718, #1247).
 
 # scoringutils 2.3.0
 
