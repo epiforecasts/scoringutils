@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Documentation
+
+- Function argument documentation now consistently follows the tidyverse style guide: descriptions use sentence case and end with a full stop (#702, #1255).
+
 ## Internal changes
 
 - Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).

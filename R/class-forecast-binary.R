@@ -19,7 +19,7 @@
 #'
 #' See the [example_binary] data set for an example.
 #' @inheritSection forecast_types Forecast unit
-#' @param ... Unused
+#' @param ... Unused.
 #' @returns A `forecast` object of class `forecast_binary`
 #' @family functions to create forecast objects
 #' @export
@@ -133,7 +133,7 @@ score.forecast_binary <- function(forecast, metrics = get_metrics(forecast), ...
 #'   `select` is `NULL` (the default), all possible scoring rules are returned.
 #' @param exclude A character vector of scoring rules to exclude from the list.
 #'   If `select` is not `NULL`, this argument is ignored.
-#' @param ... unused
+#' @param ... Unused.
 #' @returns A list of scoring functions.
 #' @export
 #' @family get_metrics functions

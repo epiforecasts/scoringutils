@@ -18,7 +18,9 @@ quantile_to_interval_dataframe(
 quantile_to_interval_numeric(observed, predicted, quantile_level, ...)
 }
 \arguments{
-\item{...}{Arguments}
+\item{...}{For \code{quantile_to_interval()}, arguments passed on to
+\code{quantile_to_interval_dataframe()} or \code{quantile_to_interval_numeric()}.
+Ignored otherwise.}
 
 \item{forecast}{A data.table with forecasts in a quantile-based format (see
 \code{\link[=as_forecast_quantile]{as_forecast_quantile()}}).}
@@ -30,8 +32,8 @@ the interval. If "wide", there will be a column \code{interval_range} and two
 columns \code{lower} and \code{upper} that contain the lower and upper bounds of the
 prediction interval, respectively.}
 
-\item{keep_quantile_col}{keep the \code{quantile_level} column in the final
-output after transformation (default is FALSE). This only works if
+\item{keep_quantile_col}{Keep the \code{quantile_level} column in the final
+output after transformation (default is \code{FALSE}). This only works if
 \code{format = "long"}. If \code{format = "wide"}, the \code{quantile_level} column will
 always be dropped.}
 

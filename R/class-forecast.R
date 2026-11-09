@@ -287,7 +287,7 @@ clean_forecast <- function(forecast, copy = FALSE, na.omit = FALSE) {
 #' - assigns a class
 #'
 #' @inheritParams as_forecast_doc_template
-#' @param classname name of the class to be created
+#' @param classname Name of the class to be created.
 #' @returns An object of the class indicated by `classname`
 #' @export
 #' @keywords internal
@@ -470,7 +470,7 @@ tail.forecast <- function(x, ...) {
 #' including "Forecast type", "Score columns",
 #' "Forecast unit".
 #'
-#' @param x A forecast object
+#' @param x A forecast object.
 #' @param ... Additional arguments for [print()].
 #' @returns Returns `x` invisibly.
 #' @importFrom cli cli_inform cli_warn col_blue cli_text

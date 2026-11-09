@@ -24,7 +24,9 @@
 #' be characterised by one or multiple prediction intervals, e.g. the lower
 #' and upper bounds of the 50% and 90% prediction intervals (corresponding to
 #' the 0.25 and 0.75 as well as the 0.05 and 0.095 quantiles).
-#' @param ... Arguments
+#' @param ... For `quantile_to_interval()`, arguments passed on to
+#'   `quantile_to_interval_dataframe()` or `quantile_to_interval_numeric()`.
+#'   Ignored otherwise.
 #' @returns A data.table with forecasts in an interval format.
 #' @keywords internal
 #' @importFrom cli cli_abort
@@ -48,8 +50,8 @@ quantile_to_interval <- function(...) {
 #'   the interval. If "wide", there will be a column `interval_range` and two
 #'   columns `lower` and `upper` that contain the lower and upper bounds of the
 #'   prediction interval, respectively.
-#' @param keep_quantile_col keep the `quantile_level` column in the final
-#'   output after transformation (default is FALSE). This only works if
+#' @param keep_quantile_col Keep the `quantile_level` column in the final
+#'   output after transformation (default is `FALSE`). This only works if
 #'   `format = "long"`. If `format = "wide"`, the `quantile_level` column will
 #'   always be dropped.
 #' @return
@@ -140,8 +142,8 @@ quantile_to_interval_numeric <- function(observed,
 #' based on interval ranges.
 #'
 #' @inheritParams as_forecast_quantile
-#' @param keep_quantile_col keep quantile_level column, default is TRUE
-#' @returns A data.table in a long interval interval range format
+#' @param keep_quantile_col Keep the `quantile_level` column, default is `TRUE`.
+#' @returns A data.table in a long interval range format
 #' @importFrom data.table as.data.table
 #' @importFrom stats quantile
 #' @keywords internal

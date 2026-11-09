@@ -40,9 +40,9 @@ assert_input_ordinal <- function(observed, predicted, predicted_label) {
 #' (best is zero, worst is N - 1 where N is the number of categories).
 #' @param observed A factor of length n with N levels holding the observed
 #'   values.
-#' @param predicted nxN matrix of predictive probabilities, n (number of rows)
-#'   being the number of observations and N (number of columns) the number of
-#'   possible outcomes.
+#' @param predicted An nxN matrix of predictive probabilities, n (number of
+#'   rows) being the number of observations and N (number of columns) the
+#'   number of possible outcomes.
 #' @param predicted_label A factor of length N, denoting the outcome that the
 #'   probabilities in `predicted` correspond to.
 #' @returns A numeric vector of size n with ranked probability scores

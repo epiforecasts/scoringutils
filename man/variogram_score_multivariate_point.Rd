@@ -13,7 +13,7 @@ variogram_score_multivariate_point(
 )
 }
 \arguments{
-\item{observed}{A vector with observed values of size n}
+\item{observed}{A vector with observed values of size n.}
 
 \item{predicted}{Numeric matrix with one column, where each row
 corresponds to a target within a multivariate group.}

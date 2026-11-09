@@ -21,7 +21,7 @@ as_forecast_sample(data, ...)
 See the "Target format" section in Details for additional information
 on the required input format.}
 
-\item{...}{Unused}
+\item{...}{Unused.}
 
 \item{forecast_unit}{(optional) Name of the columns in \code{data} (after
 any renaming of columns) that denote the unit of a

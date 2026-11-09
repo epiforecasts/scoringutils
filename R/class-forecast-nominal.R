@@ -27,7 +27,7 @@
 #'
 #' See the [example_nominal] data set for an example.
 #' @inheritSection forecast_types Forecast unit
-#' @param ... Unused
+#' @param ... Unused.
 #' @returns A `forecast` object of class `forecast_nominal`
 #' @family functions to create forecast objects
 #' @keywords as_forecast transform

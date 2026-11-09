@@ -39,7 +39,7 @@
 #' A data.table with columns as specified in `by` and additional
 #' columns for the coverage values described above
 #' @inheritParams score
-#' @param by character vector that denotes the level of grouping for which the
+#' @param by Character vector that denotes the level of grouping for which the
 #'   coverage values should be computed. By default (`"model"`), one coverage
 #'   value per model will be returned.
 #' @return

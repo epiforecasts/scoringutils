@@ -11,10 +11,10 @@ plot_heatmap(scores, y = "model", x, metric)
 produced by \code{\link[=score]{score()}}.}
 
 \item{y}{The variable from the scores you want to show on the y-Axis. The
-default for this is "model"}
+default for this is "model".}
 
 \item{x}{The variable from the scores you want to show on the x-Axis. This
-could be something like "horizon", or "location"}
+could be something like "horizon", or "location".}
 
 \item{metric}{String, the metric that determines the value and colour shown
 in the tiles of the heatmap.}

@@ -7,7 +7,7 @@
 \method{print}{scores}(x, ...)
 }
 \arguments{
-\item{x}{A \code{scores} object}
+\item{x}{A \code{scores} object.}
 
 \item{...}{Additional arguments for \code{\link[=print]{print()}}.}
 }

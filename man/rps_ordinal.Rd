@@ -10,9 +10,9 @@ rps_ordinal(observed, predicted, predicted_label)
 \item{observed}{A factor of length n with N levels holding the observed
 values.}
 
-\item{predicted}{nxN matrix of predictive probabilities, n (number of rows)
-being the number of observations and N (number of columns) the number of
-possible outcomes.}
+\item{predicted}{An nxN matrix of predictive probabilities, n (number of
+rows) being the number of observations and N (number of columns) the
+number of possible outcomes.}
 
 \item{predicted_label}{A factor of length N, denoting the outcome that the
 probabilities in \code{predicted} correspond to.}

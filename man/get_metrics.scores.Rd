@@ -13,7 +13,7 @@ produced by \code{\link[=score]{score()}}).}
 \item{error}{Throw an error if there is no attribute called \code{metrics}?
 Default is FALSE.}
 
-\item{...}{unused}
+\item{...}{Unused.}
 }
 \value{
 Character vector with the names of the scoring rules that were used

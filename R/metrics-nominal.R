@@ -100,9 +100,9 @@ assert_input_categorical <- function(
 #'
 #' @param observed Factor of length n with N levels holding the
 #'   observed values.
-#' @param predicted nxN matrix of predictive probabilities, n (number of rows)
-#'   being the number of observations and N (number of columns) the number of
-#'   possible outcomes.
+#' @param predicted An nxN matrix of predictive probabilities, n (number of
+#'   rows) being the number of observations and N (number of columns) the
+#'   number of possible outcomes.
 #' @param predicted_label Factor of length N, denoting the outcome
 #'   that the probabilities in `predicted` correspond to.
 #' @returns A numeric vector of size n with log scores

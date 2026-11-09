@@ -264,7 +264,7 @@ transform_forecasts.forecast_multivariate_point <- function(
 #'
 #' @details The output is computed as log(x + offset)
 #'
-#' @param x vector of input values to be transformed
+#' @param x Vector of input values to be transformed.
 #' @param offset Number to add to the input value before taking the natural
 #'   logarithm.
 #' @param base A positive number: the base with respect to which

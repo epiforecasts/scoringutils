@@ -7,7 +7,7 @@
 check_try(expr)
 }
 \arguments{
-\item{expr}{an expression to be evaluated}
+\item{expr}{An expression to be evaluated.}
 }
 \value{
 Returns TRUE if the check was successful and a string with an

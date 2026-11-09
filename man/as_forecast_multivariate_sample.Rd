@@ -22,7 +22,7 @@ as_forecast_multivariate_sample(data, ...)
 See the "Target format" section in Details for additional information
 on the required input format.}
 
-\item{...}{Unused}
+\item{...}{Unused.}
 
 \item{joint_across}{Character vector with columns names that define the
 variables which are forecasted jointly. Conceptually, several univariate

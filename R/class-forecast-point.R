@@ -13,7 +13,7 @@
 #' strictly necessary.
 #'
 #' See the [example_point] data set for an example.
-#' @param ... Unused
+#' @param ... Unused.
 #' @returns A `forecast` object of class `forecast_point`
 #' @family functions to create forecast objects
 #' @export
