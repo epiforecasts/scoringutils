@@ -4,6 +4,11 @@
 
 - Added `get_crossing_quantiles()` to find quantile forecasts whose predictions decrease with increasing quantile level (quantile crossing). `as_forecast_quantile()` and `assert_forecast()` now warn when such forecasts are present, so the problem surfaces before `score()`. There, `wis()` and its components (if the crossing inverts a central prediction interval) and `bias_quantile()` fail for such data, and their columns are dropped from the output. The corresponding error messages now point to `get_crossing_quantiles()` (#412, #895, #1254).
 
+## Internal changes
+
+- Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).
+- Fixed a test of `assert_input_interval()` that failed when the test suite was run more than once in the same R session, because the warning it checks for is only shown once per session (#718, #1247).
+
 # scoringutils 2.3.0
 
 This release adds tools for handling missing forecasts (`filter_scores()`, `impute_missing_scores()`), a new `plot_discrimination()` for binary forecasts, and a much faster `get_pairwise_comparisons()`. It also fixes a number of bugs, several of which silently produced wrong scores. Many of these fixes mean that invalid input which was previously accepted now raises an error. Please read the "Breaking changes" section below if you are upgrading.
