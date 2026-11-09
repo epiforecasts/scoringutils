@@ -17,6 +17,7 @@
 #'   probabilities, coloured by observed outcome level.
 #' @importFrom ggplot2 ggplot aes geom_density geom_histogram
 #'   after_stat labs .data
+#' @importFrom stats ave
 #' @export
 #' @examples
 #' library(ggplot2)

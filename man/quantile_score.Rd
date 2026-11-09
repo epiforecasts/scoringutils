@@ -63,7 +63,10 @@ See the SI of Bracher et al. (2021) for more details.
 
 \code{quantile_score()} returns the average quantile score across the quantile
 levels provided. For a set of quantile levels that form pairwise central
-prediction intervals, the quantile score is equivalent to the interval score.
+prediction intervals, the quantile score is equivalent to the interval score
+for the default weighting (\code{weigh = TRUE}). With \code{weigh = FALSE}, the two
+can differ when the quantile levels 0 and 1 are present (see \code{\link[=wis]{wis()}} for
+details).
 }
 \section{Input format}{
 \if{html}{

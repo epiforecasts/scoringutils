@@ -93,6 +93,21 @@ test_that("Input checking for nominal forecasts works", {
   expect_no_condition(
     assert_input_nominal(observed, predicted2, predicted_label)
   )
+
+  # n > 1 with wrong number of columns
+  predicted_wide <- matrix(
+    c(
+      0.2, 0.1, 0.4, 0.3,
+      0.1, 0.25, 0.25, 0.4,
+      0.25, 0.25, 0.25, 0.25
+    ),
+    nrow = 3,
+    byrow = TRUE
+  )
+  expect_error(
+    assert_input_nominal(observed, predicted_wide, predicted_label),
+    "Must have exactly 3 cols, but has 4 cols"
+  )
 })
 
 
@@ -138,4 +153,17 @@ test_that("logs_categorical() works as expected", {
     logs_categorical(observed2, predicted, predicted_label),
     c(NA, res_manual[-1])
   )
+})
+
+test_that("logs_categorical() is invariant to permutations of predicted_label", {
+  perm <- c(2, 3, 1)
+  predicted_label2 <- factor(factor_levels[perm], levels = factor_levels)
+  res <- logs_categorical(observed, predicted[, perm], predicted_label2)
+  expect_equal( # nolint: expect_identical_linter
+    res,
+    logs_categorical(observed, predicted, predicted_label)
+  )
+  # explicitly -log() of the probability assigned to the observed outcome
+  res_manual <- -log(c(predicted[1, 1], predicted[2, 2], predicted[3, 2]))
+  expect_equal(res, res_manual) # nolint: expect_identical_linter
 })

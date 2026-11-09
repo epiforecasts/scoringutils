@@ -54,7 +54,7 @@ test_that("get_duplicate_forecasts() warns without type on raw data", {
   raw <- as.data.frame(example_quantile)
   expect_warning(
     get_duplicate_forecasts(raw),
-    "deprecated"
+    "without specifying `type` was deprecated in scoringutils 2.3.0"
   )
 })
 

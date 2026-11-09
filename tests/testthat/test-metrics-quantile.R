@@ -619,6 +619,81 @@ test_that("Quantlie score and interval score yield the same result, weigh = TRUE
   }
 })
 
+test_that("wis works with quantile levels 0 and 1", {
+  predicted <- matrix(c(1, 3, 5, 7, 9), nrow = 1)
+  quantile_level <- c(0, 0.25, 0.5, 0.75, 1)
+
+  # observation inside the 100% interval
+  expect_equal( # nolint: expect_identical_linter
+    wis(5, predicted, quantile_level),
+    0.4
+  )
+  expect_equal( # nolint: expect_identical_linter
+    wis(5, predicted, quantile_level),
+    quantile_score(5, predicted, quantile_level)
+  )
+
+  # observation outside the 100% interval
+  expect_equal( # nolint: expect_identical_linter
+    wis(10, predicted, quantile_level),
+    quantile_score(10, predicted, quantile_level)
+  )
+
+  # components must be finite when the observation is inside the interval
+  separate <- wis(
+    5, predicted, quantile_level,
+    separate_results = TRUE
+  )
+  expect_equal(separate$overprediction, 0) # nolint: expect_identical_linter
+  expect_equal(separate$underprediction, 0) # nolint: expect_identical_linter
+})
+
+test_that("interval_score handles interval_range = 100", {
+  # weighted (alpha / 2 = 0): all components are zero
+  weighted <- interval_score(
+    observed = 5, lower = 1, upper = 9,
+    interval_range = 100, weigh = TRUE, separate_results = TRUE
+  )
+  expect_equal( # nolint: expect_identical_linter
+    weighted,
+    list(
+      interval_score = 0, dispersion = 0,
+      underprediction = 0, overprediction = 0
+    )
+  )
+
+  # unweighted, observation inside: dispersion only
+  expect_equal( # nolint: expect_identical_linter
+    interval_score(
+      observed = 5, lower = 1, upper = 9,
+      interval_range = 100, weigh = FALSE
+    ),
+    8
+  )
+
+  # unweighted, observation outside a 100% interval: infinite penalty
+  unweighted <- interval_score(
+    observed = 10, lower = 1, upper = 9,
+    interval_range = 100, weigh = FALSE, separate_results = TRUE
+  )
+  expect_identical(unweighted$underprediction, Inf)
+  expect_equal(unweighted$overprediction, 0) # nolint: expect_identical_linter
+})
+
+test_that("quantile_score(weigh = FALSE) handles quantile levels 0 and 1", {
+  predicted <- matrix(c(1, 9), nrow = 1)
+  # observation inside: zero penalty at levels 0 and 1, not NaN
+  expect_equal( # nolint: expect_identical_linter
+    quantile_score(5, predicted, c(0, 1), weigh = FALSE),
+    0
+  )
+  # observation outside a 100% prediction interval: infinite penalty
+  expect_identical(
+    quantile_score(10, predicted, c(0, 1), weigh = FALSE),
+    Inf
+  )
+})
+
 test_that("wis works with separate results", {
   wis <- wis(
     observed = y,
@@ -655,6 +730,29 @@ test_that("interval_coverage works", {
   expect_equal( # nolint: expect_identical_linter
     interval_coverage(observed, predicted, quantile_level, interval_range = 50),
     c(TRUE, FALSE, FALSE)
+  )
+})
+
+test_that("interval_coverage handles floating point quantile levels from seq()", {
+  # seq() produces quantile levels that are not exactly representable
+  # (e.g. 0.35 %in% seq(0.05, 0.95, 0.05) is FALSE), which must not
+  # trigger the missing-quantile error
+  quantile_level <- seq(0.05, 0.95, 0.05)
+  predicted <- t(vapply(
+    c(1, 0, 22),
+    function(x) x + qnorm(quantile_level),
+    numeric(length(quantile_level))
+  ))
+  expect_no_condition(
+    interval_coverage(observed, predicted, quantile_level, interval_range = 30)
+  )
+  expect_equal( # nolint: expect_identical_linter
+    interval_coverage(observed, predicted, quantile_level, interval_range = 30),
+    c(TRUE, FALSE, TRUE)
+  )
+  expect_equal( # nolint: expect_identical_linter
+    interval_coverage(observed, predicted, quantile_level, interval_range = 50),
+    c(TRUE, FALSE, TRUE)
   )
 })
 
@@ -748,6 +846,35 @@ test_that("bias_quantile() handles NA values", {
   expect_equal( # nolint: expect_identical_linter
     bias_quantile(observed = 2, predicted, quantiles, na.rm = FALSE),
     NA_real_
+  )
+})
+
+test_that("bias_quantile() is invariant to the order of quantile levels", {
+  expect_equal( # nolint: expect_identical_linter
+    bias_quantile(observed = 1.5, c(3, 1, 2), c(0.75, 0.25, 0.5)),
+    0.5
+  )
+  expect_equal(
+    bias_quantile(observed = 1.5, c(3, 1, 2), c(0.75, 0.25, 0.5)),
+    bias_quantile(observed = 1.5, c(1, 2, 3), c(0.25, 0.5, 0.75))
+  )
+})
+
+test_that("bias_quantile() returns NA when na.rm removes one side of the median", {
+  expect_equal( # nolint: expect_identical_linter
+    bias_quantile(observed = 2, c(NA, NA, 3), c(0.25, 0.5, 0.75), na.rm = TRUE),
+    NA_real_
+  )
+  expect_equal( # nolint: expect_identical_linter
+    suppressMessages(
+      bias_quantile(observed = 2, c(NA, 3), c(0.25, 0.75), na.rm = TRUE)
+    ),
+    NA_real_
+  )
+  # if the median itself survives NA removal, the forecast can still be scored
+  expect_equal( # nolint: expect_identical_linter
+    bias_quantile(observed = 1, c(NA, 2, 3), c(0.25, 0.5, 0.75), na.rm = TRUE),
+    1
   )
 })
 

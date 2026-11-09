@@ -24,6 +24,7 @@ forecast type. The function
 \code{predicted}
 \item checks the forecast type and forecast unit
 \item checks there are no duplicate forecasts
+\item checks that observed values are constant within each forecast unit
 \item if appropriate, checks the number of samples / quantiles is the same
 for all forecasts.
 }

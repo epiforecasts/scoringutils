@@ -120,10 +120,24 @@ test_that("rps_ordinal() works as expected", {
   expect_equal(res, result) # nolint: expect_identical_linter
 
   # works with changed order of levels
+  # column k of `predicted` holds probabilities for predicted_label2[k], so
+  # the columns in natural level order are given by the inverse permutation
+  # order(c(3, 1, 2)) = c(2, 3, 1)
   predicted_label2 <- factor(c("three", "one", "two"), levels = factor_levels, ordered = TRUE)
   expect_equal( # nolint: expect_identical_linter
     rps_ordinal(observed, predicted, predicted_label2),
-    scoringRules::rps_probs(as.numeric(observed), predicted[, c(3, 1, 2)])
+    scoringRules::rps_probs(as.numeric(observed), predicted[, order(c(3, 1, 2))])
+  )
+})
+
+test_that("rps_ordinal() is invariant to permutations of predicted_label", {
+  perm <- c(2, 3, 1)
+  predicted_label2 <- factor(
+    factor_levels[perm], levels = factor_levels, ordered = TRUE
+  )
+  expect_equal( # nolint: expect_identical_linter
+    rps_ordinal(observed, predicted[, perm], predicted_label2),
+    rps_ordinal(observed, predicted, predicted_label)
   )
 })
 

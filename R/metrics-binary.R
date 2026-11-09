@@ -49,16 +49,6 @@ assert_input_binary <- function(observed, predicted) {
 }
 
 
-#' @title Check that inputs are correct for binary forecast
-#' @inherit assert_input_binary params description
-#' @inherit document_check_functions return
-#' @keywords internal_input_check
-check_input_binary <- function(observed, predicted) {
-  result <- check_try(assert_input_binary(observed, predicted))
-  return(result)
-}
-
-
 #' Metrics for binary outcomes
 #'
 #' @details

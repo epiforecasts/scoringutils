@@ -87,9 +87,9 @@ brier_score(observed, predicted)
 logs_binary(observed, predicted)
 }
 \seealso{
-Other log score functions: 
-\code{\link{logs_categorical}()},
-\code{\link{logs_sample}()}
+Other log score functions:
+\code{\link[=logs_categorical]{logs_categorical()}},
+\code{\link[=logs_sample]{logs_sample()}}
 }
 \concept{log score functions}
 \keyword{metric}
