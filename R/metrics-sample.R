@@ -146,7 +146,7 @@ bias_sample <- function(observed, predicted) {
 #' @param predicted An nxN matrix of predictive samples, n (number of rows)
 #'   being the number of data points and N (number of columns) the number of
 #'   Monte Carlo samples. Alternatively, if n = 1, `predicted` can just be a
-#'   vector of size n.
+#'   vector of size N.
 #' @inheritSection illustration-input-metric-sample Input format
 #' @returns Numeric vector of length n with the absolute errors of the median.
 #' @seealso [ae_median_quantile()]

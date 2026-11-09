@@ -12,7 +12,7 @@ energy_score_multivariate(observed, predicted, mv_group_id, w = NULL)
 \item{predicted}{An nxN matrix of predictive samples, n (number of rows)
 being the number of data points and N (number of columns) the number of
 Monte Carlo samples. Alternatively, if n = 1, \code{predicted} can just be a
-vector of size n.}
+vector of size N.}
 
 \item{mv_group_id}{Numeric vector of length n with ids indicating the
 grouping of predicted values. Conceptually, each row of the \code{predicted}

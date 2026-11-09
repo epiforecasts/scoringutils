@@ -12,7 +12,7 @@ dss_sample(observed, predicted, ...)
 \item{predicted}{An nxN matrix of predictive samples, n (number of rows)
 being the number of data points and N (number of columns) the number of
 Monte Carlo samples. Alternatively, if n = 1, \code{predicted} can just be a
-vector of size n.}
+vector of size N.}
 
 \item{...}{Additional arguments passed to
 \link[scoringRules:dss_sample]{dss_sample()} from the scoringRules package.}
