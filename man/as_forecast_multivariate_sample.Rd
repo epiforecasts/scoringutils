@@ -74,7 +74,9 @@ with the following columns:
 \item \code{predicted}: Column of type \code{numeric} with predicted values. Predicted
 values represent random samples from the predictive distribution.
 \item \code{sample_id}: Column of any type with unique identifiers
-(unique within a single forecast) for each sample.
+(unique within a single forecast) for each sample. Samples with the same
+id are matched across the forecasts that are scored jointly, so these
+forecasts need to have the same sample ids.
 \item \code{mv_group_id}: Column of any type with unique identifiers
 (unique within a single forecast) for each multivariate group. This column
 is created automatically using the \code{forecast_unit} and the \code{joint_across}

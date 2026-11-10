@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Bug fixes
+
+- Fixed `score()` for multivariate sample forecasts depending on the order of rows. Samples from the forecasts that are scored jointly were matched by their position in the data rather than by `sample_id`, so the energy score and the variogram score were wrong unless every forecast was sorted by `sample_id` in the same way. Samples are now matched by `sample_id`, and `as_forecast_multivariate_sample()` and `assert_forecast()` error if forecasts that are scored jointly do not have the same sample ids (#1257, #1279).
+
 ## Internal changes
 
 - Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).

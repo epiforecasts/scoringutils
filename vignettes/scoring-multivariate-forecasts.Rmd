@@ -79,7 +79,7 @@ example_multiv <- as_forecast_multivariate_sample(
 example_multiv
 ```
 
-The column `.mv_group_id` is created automatically and represents an identifier for each multivariate forecast. `.mv_group_id` is 1 everywhere, because we only have a single multivariate forecast. When scoring this forecast using an appropriate multivariate scoring function, we will get a single score, even though we have 4 observations, one for each country. (Note that for the purposes of scoring, it doesn't matter that sample ids are still 1-40, repeated 4 times, instead of 1-160. `scoringutils` handles this appropriately.)
+The column `.mv_group_id` is created automatically and represents an identifier for each multivariate forecast. `.mv_group_id` is 1 everywhere, because we only have a single multivariate forecast. When scoring this forecast using an appropriate multivariate scoring function, we will get a single score, even though we have 4 observations, one for each country. (Note that sample ids are 1-40, repeated 4 times, rather than 1-160. Samples with the same `sample_id` are matched across the four countries to form one sample from the joint predictive distribution, so all forecasts that are scored jointly need to have the same sample ids.)
 
 ```{r}
 score(example_multiv)
