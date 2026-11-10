@@ -2,7 +2,7 @@
 
 ## Bug fixes
 
-- Fixed `logs_categorical()` (and therefore `score()` for nominal forecasts) returning the log score of the wrong category when the factor levels of `observed` and `predicted_label` were the same set in a different order. The observed outcome is now matched to the predicted probabilities by label (#1259, #PRNUM).
+- Fixed `logs_categorical()` (and therefore `score()` for nominal forecasts) returning the log score of the wrong category when the factor levels of `observed` and `predicted_label` were the same set in a different order. The observed outcome is now matched to the predicted probabilities by label (#1259, #1277).
 
 ## Internal changes
 
