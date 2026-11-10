@@ -804,7 +804,5 @@ test_that("get_pairwise_comparisons() errors if all scores are negative", {
 
   # scores of zero are allowed
   scores_zero <- data.table::copy(scores)[, wis := c(0, 1, 2, 1, 2, 3)]
-  expect_no_error(
-    suppressWarnings(get_pairwise_comparisons(scores_zero))
-  )
+  expect_no_error(get_pairwise_comparisons(scores_zero))
 })
