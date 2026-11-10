@@ -2,7 +2,7 @@
 
 ## Breaking changes
 
-- `get_pairwise_comparisons()` and `add_relative_skill()` now error if any value of the chosen metric is negative. Previously, they only errored if the metric had both positive and negative values. If all values were negative (as can happen for the log score or the Dawid-Sebastiani score), relative skill was computed from ratios of negative scores, which ranked the better model as worse (#1262, #PRNUM).
+- `get_pairwise_comparisons()` and `add_relative_skill()` now error if any value of the chosen metric is negative. Previously, they only errored if the metric had both positive and negative values. If all values were negative (as can happen for the log score or the Dawid-Sebastiani score), relative skill was computed from ratios of negative scores, which ranked the better model as worse (#1262, #1278).
 
 ## Internal changes
 
