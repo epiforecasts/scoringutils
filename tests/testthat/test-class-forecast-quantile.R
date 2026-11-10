@@ -579,3 +579,47 @@ test_that("get_pit_histogram.forecast_quantile() keeps requested quantiles that 
   integrals <- res[, sum(density * c(0.25, 0.25, 0.5)), by = "model"]$V1
   expect_equal(integrals, rep(1, n_models))
 })
+
+test_that("score() for quantile forecasts does not depend on the row order", {
+  set.seed(1)
+  ordered <- na.omit(as.data.table(example_quantile))
+  shuffled <- ordered[sample(.N)]
+  scores_ordered <- score(as_forecast_quantile(ordered))
+  scores_shuffled <- score(as_forecast_quantile(shuffled))
+  by <- get_forecast_unit(scores_ordered)
+  expect_equal( # nolint: expect_identical_linter
+    scores_shuffled[order(mget(by))],
+    scores_ordered[order(mget(by))],
+    ignore_attr = TRUE
+  )
+})
+
+test_that("score() gives the same scores if quantile levels differ between forecasts", {
+  full <- na.omit(as.data.table(example_quantile))
+  # one model does not provide the outermost quantile levels
+  reduced_model <- full$model == "EuroCOVIDhub-baseline"
+  mixed <- full[!(reduced_model & quantile_level %in% c(0.01, 0.99))]
+
+  # the warning about differing numbers of quantile levels is expected
+  scores_mixed <- score(suppressWarnings(as_forecast_quantile(mixed)))
+  scores_separate <- rbind(
+    score(as_forecast_quantile(mixed[model == "EuroCOVIDhub-baseline"])),
+    score(as_forecast_quantile(mixed[model != "EuroCOVIDhub-baseline"]))
+  )
+  by <- get_forecast_unit(scores_mixed)
+  expect_equal( # nolint: expect_identical_linter
+    scores_mixed[order(mget(by))],
+    scores_separate[order(mget(by))],
+    ignore_attr = TRUE
+  )
+})
+
+test_that("score() works if a column is called `scoringutils_id`", {
+  forecast <- na.omit(as.data.table(example_quantile))
+  renamed <- copy(forecast)
+  setnames(renamed, "model", "scoringutils_id")
+  scores <- score(as_forecast_quantile(forecast))
+  scores_renamed <- score(as_forecast_quantile(renamed))
+  expect_identical(scores_renamed$scoringutils_id, scores$model)
+  expect_identical(scores_renamed$wis, scores$wis)
+})

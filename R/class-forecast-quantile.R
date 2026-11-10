@@ -140,35 +140,59 @@ score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), .
   metrics <- prep$metrics
   forecast_unit <- prep$forecast_unit
 
-  # transpose the forecasts that belong to the same forecast unit
-  # make sure the quantiles and predictions are ordered in the same way
-  f_transposed <- forecast[, .(
-    predicted = list(predicted[order(quantile_level)]),
-    observed = unique(observed),
-    quantile_level = list(sort(quantile_level, na.last = TRUE)),
-    scoringutils_quantile_level = toString(sort(quantile_level, na.last = TRUE))
-  ), by = forecast_unit]
+  # Fast path: if all forecasts have the same quantile levels, `observed` and
+  # `predicted` can be built with a single sort.
+  # (the name of the temporary id column must not clash with existing columns)
+  id_col <- make.unique(c(colnames(forecast), "scoringutils_id"))
+  id_col <- id_col[length(id_col)]
+  forecast[, (id_col) := .GRP, by = forecast_unit]
+  setorderv(forecast, c(id_col, "quantile_level"))
+  quantile_level <- sort(unique(forecast$quantile_level))
+  n_levels <- length(quantile_level)
+  n_forecasts <- forecast[[id_col]][nrow(forecast)]
+  same_levels <- nrow(forecast) == n_forecasts * n_levels &&
+    all(forecast$quantile_level == quantile_level)
 
-  # split according to quantile_level lengths and do calculations for different
-  # quantile_level lengths separately. The function `wis()` assumes that all
-  # forecasts have the same quantile_levels
-  f_split <- split(f_transposed, f_transposed$scoringutils_quantile_level)
+  if (same_levels) {
+    first <- seq(1, nrow(forecast), by = n_levels)
+    split_result <- list(apply_metrics(
+      forecast[first, forecast_unit, with = FALSE], metrics,
+      forecast$observed[first],
+      matrix(forecast$predicted, ncol = n_levels, byrow = TRUE),
+      quantile_level
+    ))
+  } else {
+    forecast[, (id_col) := NULL]
+    # transpose the forecasts that belong to the same forecast unit
+    # make sure the quantiles and predictions are ordered in the same way
+    f_transposed <- forecast[, .(
+      predicted = list(predicted[order(quantile_level)]),
+      observed = unique(observed),
+      quantile_level = list(sort(quantile_level, na.last = TRUE)),
+      scoringutils_quantile_level = toString(sort(quantile_level, na.last = TRUE))
+    ), by = forecast_unit]
 
-  split_result <- lapply(f_split, function(df) {
-    # create a matrix out of the list of predicted values and quantile_levels
-    observed <- df$observed
-    predicted <- do.call(rbind, df$predicted)
-    quantile_level <- unlist(unique(df$quantile_level))
-    df[, c(
-      "observed", "predicted", "quantile_level", "scoringutils_quantile_level"
-    ) := NULL]
+    # split according to quantile_level lengths and do calculations for
+    # different quantile_level lengths separately. The function `wis()` assumes
+    # that all forecasts have the same quantile_levels
+    f_split <- split(f_transposed, f_transposed$scoringutils_quantile_level)
 
-    result <- apply_metrics(
-      df, metrics,
-      observed, predicted, quantile_level
-    )
-    return(result)
-  })
+    split_result <- lapply(f_split, function(df) {
+      # create a matrix out of the list of predicted values and quantile_levels
+      observed <- df$observed
+      predicted <- do.call(rbind, df$predicted)
+      quantile_level <- unlist(unique(df$quantile_level))
+      df[, c(
+        "observed", "predicted", "quantile_level", "scoringutils_quantile_level"
+      ) := NULL]
+
+      result <- apply_metrics(
+        df, metrics,
+        observed, predicted, quantile_level
+      )
+      return(result)
+    })
+  }
   scores <- rbindlist(split_result, fill = TRUE)
 
   scores <- as_scores(scores, metrics = names(metrics))
