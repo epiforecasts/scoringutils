@@ -146,9 +146,12 @@ test_that("transform_forecasts() works on multivariate point forecasts", {
 })
 
 test_that("score() preserves scale column for multivariate forecasts", {
+  # the example data contain a negative observation. Without `pmax()`, its
+  # square root would be `NaN` and the multivariate forecasts it belongs to
+  # would be incomplete on the sqrt scale
   transformed <- transform_forecasts(
     example_multivariate_sample,
-    fun = sqrt, label = "sqrt",
+    fun = function(x) sqrt(pmax(x, 0)), label = "sqrt",
     append = TRUE
   )
   scored <- score(transformed)

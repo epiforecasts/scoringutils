@@ -147,7 +147,9 @@ is_forecast_multivariate_sample <- function(x) {
 #' @export
 score.forecast_multivariate_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
   prep <- prepare_forecast_for_scoring(forecast, metrics)
-  forecast <- prep$forecast
+  forecast <- remove_incomplete_mv_groups(
+    prep$forecast, forecast, prep$forecast_unit
+  )
   metrics <- prep$metrics
   forecast_unit <- prep$forecast_unit
 
@@ -229,6 +231,73 @@ ensure_mv_grouping <- function(data, joint_across) {
     )
   }
   return(data)
+}
+
+
+#' Remove multivariate forecasts that are partly missing
+#'
+#' Shared helper used by score methods for multivariate forecast classes.
+#' Rows with `NA` values are removed before scoring. A multivariate forecast
+#' can only be scored if what is left of it is still complete: all forecast
+#' units that are scored jointly must still be present and (for sample-based
+#' forecasts) must still have the same sample ids. Multivariate forecasts for
+#' which this is not the case are removed entirely, with a warning.
+#' Multivariate forecasts that are missing entirely are not affected, as all of
+#' their rows have already been removed.
+#'
+#' @param forecast A data.table with the forecast after rows with `NA` values
+#'   have been removed.
+#' @param original The forecast object before rows with `NA` values were
+#'   removed.
+#' @param forecast_unit Character vector with the names of the columns that
+#'   define the forecast unit.
+#' @importFrom cli cli_abort cli_warn
+#' @return A data.table with the forecast, without incomplete multivariate
+#'   forecasts.
+#' @keywords internal
+remove_incomplete_mv_groups <- function(forecast, original, forecast_unit) {
+  unit_cols <- c(forecast_unit, ".mv_group_id")
+  count_units <- function(dt) {
+    unique(dt[, unit_cols, with = FALSE])[, .N, by = ".mv_group_id"]
+  }
+  has_samples <- "sample_id" %in% colnames(forecast)
+  status <- forecast[, .(
+    n_rows = .N,
+    n_samples = if (has_samples) length(unique(sample_id)) else 1L
+  ), by = ".mv_group_id"]
+  status <- merge(status, count_units(forecast), by = ".mv_group_id")
+  status <- merge(
+    status, count_units(as.data.table(original)),
+    by = ".mv_group_id", suffixes = c("_units", "_units_original")
+  )
+  # a multivariate forecast is complete if no forecast unit was lost and if
+  # every remaining sample id is available for every forecast unit
+  incomplete_groups <- status[
+    N_units < N_units_original | n_rows != N_units * n_samples
+  ]$.mv_group_id
+
+  if (length(incomplete_groups) == 0) {
+    return(forecast)
+  }
+  forecast <- forecast[!(.mv_group_id %in% incomplete_groups)]
+  if (nrow(forecast) == 0) {
+    cli_abort(
+      c(
+        `!` = "After removing multivariate forecasts that were partly missing,
+        no forecasts are left."
+      )
+    )
+  }
+  cli_warn(
+    c(
+      `!` = "Removed {length(incomplete_groups)} multivariate
+      forecast{?s} that {?was/were} partly missing
+      ({.var .mv_group_id}: {.val {incomplete_groups}}).",
+      i = "A multivariate forecast can only be scored if all forecasts that
+      are scored jointly are available, with the same samples."
+    )
+  )
+  return(forecast)
 }
 
 

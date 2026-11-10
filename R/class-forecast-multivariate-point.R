@@ -108,7 +108,9 @@ score.forecast_multivariate_point <- function(
   forecast, metrics = get_metrics(forecast), ...
 ) {
   prep <- prepare_forecast_for_scoring(forecast, metrics)
-  forecast <- prep$forecast
+  forecast <- remove_incomplete_mv_groups(
+    prep$forecast, forecast, prep$forecast_unit
+  )
   metrics <- prep$metrics
 
   observed <- forecast$observed

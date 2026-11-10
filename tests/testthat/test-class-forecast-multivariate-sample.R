@@ -483,3 +483,101 @@ test_that("assert_forecast() accepts correct forecast_type for multivariate samp
     )
   )
 })
+
+test_that("score() drops multivariate groups with missing values", {
+  set.seed(1)
+  n_samples <- 20
+  data <- data.table::CJ(
+    model = c("m1", "m2"), location = c("A", "B"), sample_id = seq_len(n_samples)
+  )
+  data[, predicted := rnorm(.N)]
+  data[, observed := 0.3]
+  scores_m2 <- score(
+    as_forecast_multivariate_sample(data[model == "m2"], joint_across = "location")
+  )
+
+  # a missing sample in one location, or a missing observation
+  missing_sample <- data.table::copy(data)
+  missing_sample[
+    model == "m1" & location == "B" & sample_id == 5, predicted := NA
+  ]
+  missing_observed <- data.table::copy(data)
+  missing_observed[model == "m1" & location == "B", observed := NA]
+
+  for (incomplete in list(missing_sample, missing_observed)) {
+    forecast <- suppressWarnings(suppressMessages(
+      as_forecast_multivariate_sample(incomplete, joint_across = "location")
+    ))
+    expect_warning(
+      scores <- score(forecast),
+      "Removed 1 multivariate forecast that was partly missing"
+    )
+    # only the complete group is scored, with both locations
+    expect_identical(scores$model, "m2")
+    expect_equal(scores$energy_score, scores_m2$energy_score) # nolint: expect_identical_linter
+    expect_equal(scores$variogram_score, scores_m2$variogram_score) # nolint: expect_identical_linter
+    expect_false("location" %in% colnames(scores))
+  }
+
+  # error if no complete group is left
+  expect_error(
+    suppressWarnings(score(suppressMessages(as_forecast_multivariate_sample(
+      missing_sample[model == "m1"], joint_across = "location"
+    )))),
+    "no forecasts"
+  )
+
+  # different samples missing in the two locations: the same number of
+  # samples is left, but they can no longer be matched
+  different_samples <- data.table::copy(data)
+  different_samples[
+    model == "m1" & location == "A" & sample_id == 2, predicted := NA
+  ]
+  different_samples[
+    model == "m1" & location == "B" & sample_id == 3, predicted := NA
+  ]
+  forecast <- suppressWarnings(suppressMessages(
+    as_forecast_multivariate_sample(different_samples, joint_across = "location")
+  ))
+  expect_warning(
+    scores <- score(forecast),
+    "Removed 1 multivariate forecast that was partly missing"
+  )
+  expect_identical(scores$model, "m2")
+})
+
+test_that("score() keeps multivariate forecasts that are complete without NA rows", {
+  set.seed(1)
+  n_samples <- 20
+  data <- data.table::CJ(
+    model = c("m1", "m2"), location = c("A", "B"), sample_id = seq_len(n_samples)
+  )
+  data[, predicted := rnorm(.N)]
+  data[, observed := 0.3]
+
+  # the same sample is missing in all locations: the forecast is still a
+  # complete multivariate forecast with one sample less
+  missing <- data.table::copy(data)
+  missing[model == "m1" & sample_id == 5, predicted := NA]
+  # (other warnings, e.g. about differing numbers of samples, are expected)
+  forecast <- suppressWarnings(suppressMessages(
+    as_forecast_multivariate_sample(missing, joint_across = "location")
+  ))
+  suppressWarnings(expect_no_warning(
+    scores <- score(forecast),
+    message = "partly missing"
+  ))
+  scores_reference <- suppressWarnings(score(as_forecast_multivariate_sample(
+    data[!(model == "m1" & sample_id == 5)], joint_across = "location"
+  )))
+  expect_equal(scores, scores_reference, ignore_attr = TRUE) # nolint: expect_identical_linter
+
+  # forecasts without any predictions are dropped without a warning
+  missing_entirely <- data.table::copy(data)
+  missing_entirely[model == "m1", predicted := NA]
+  forecast <- suppressMessages(
+    as_forecast_multivariate_sample(missing_entirely, joint_across = "location")
+  )
+  expect_no_warning(scores <- score(forecast))
+  expect_identical(scores$model, "m2")
+})
