@@ -117,9 +117,10 @@ assert_forecast.forecast_multivariate_sample <- function(
 
   # make sure that within every .mv_group_id, all forecast units have the same
   # sample ids. Samples are matched by `sample_id` to form joint samples.
-  # Every forecast unit of a group has the same number of unique sample ids
-  # (checked above), so the sample ids are the same if and only if the group
-  # as a whole has that number of unique sample ids.
+  # Sample ids are unique within a forecast unit (otherwise the check for
+  # duplicate forecasts fails) and every forecast unit of a group has the same
+  # number of samples (checked above). The sample ids are therefore the same
+  # if and only if the group as a whole has that number of unique sample ids.
   ids_per_group <- as.data.table(forecast)[, .(
     .scoringutils_N = length(unique(sample_id))
   ),
@@ -186,9 +187,8 @@ score.forecast_multivariate_sample <- function(forecast, metrics = get_metrics(f
   # transpose the forecasts that belong to the same forecast unit. Samples are
   # ordered by sample id, so that samples with the same id are matched across
   # the forecast units of a group
-  setorderv(forecast, "sample_id")
   f_transposed <- forecast[, .(
-    predicted = list(predicted),
+    predicted = list(predicted[order(sample_id)]),
     observed = unique(observed),
     .scoringutils_N = length(sample_id)
   ),

@@ -544,14 +544,44 @@ test_that("multivariate sample forecasts need the same sample ids within a group
   )
   expect_error(
     as_forecast_multivariate_sample(data, joint_across = "location"),
-    "must have the same sample ids"
+    "must have the same sample"
   )
-  # sample ids can differ between groups
-  data2 <- rbind(
-    data[, sample_id := rep(1:4, 2)],
-    data.table::copy(data)[, `:=`(model = "m2", sample_id = rep(11:14, 2))]
-  )
+  # sample ids can differ between groups, and can be of any type
+  same_ids <- data.table::copy(data)[, sample_id := rep(1:4, 2)]
+  other_ids <- data.table::copy(data)[
+    , `:=`(model = "m2", sample_id = rep(11:14, 2))
+  ]
   expect_no_error(
-    as_forecast_multivariate_sample(data2, joint_across = "location")
+    as_forecast_multivariate_sample(
+      rbind(same_ids, other_ids), joint_across = "location"
+    )
   )
+  character_ids <- data.table::copy(data)[
+    , sample_id := rep(c("a", "b", "c", "d"), 2)
+  ]
+  expect_no_error(
+    as_forecast_multivariate_sample(character_ids, joint_across = "location")
+  )
+  # only the group with differing sample ids is reported
+  expect_error(
+    as_forecast_multivariate_sample(
+      rbind(same_ids[, model := "m0"], data), joint_across = "location"
+    ),
+    "following group: 2"
+  )
+})
+
+test_that("score() keeps the order of multivariate forecasts", {
+  set.seed(1)
+  data <- data.table::data.table(
+    model = rep(c("m1", "m2"), each = 8),
+    location = rep(rep(c("A", "B"), each = 4), 2),
+    sample_id = c(rep(11:14, 2), rep(1:4, 2)),
+    predicted = rnorm(16),
+    observed = 0
+  )
+  scores <- score(
+    as_forecast_multivariate_sample(data, joint_across = "location")
+  )
+  expect_identical(scores$model, c("m1", "m2"))
 })
