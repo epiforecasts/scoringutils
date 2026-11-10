@@ -127,7 +127,7 @@ quantile_to_interval_numeric <- function(observed,
   # interval (the median is both bounds of the 0% interval).
   is_lower <- quantile_level <= 0.5
   is_upper <- quantile_level >= 0.5
-  if (!any(is_lower) || !any(is_upper)) {
+  if (!any(is_lower, na.rm = TRUE) || !any(is_upper, na.rm = TRUE)) {
     cli_abort(
       c(
         `!` = "No valid forecast intervals found.",
@@ -137,10 +137,20 @@ quantile_to_interval_numeric <- function(observed,
       )
     )
   }
-  range <- get_range_from_quantile(quantile_level)
-  interval_range <- sort(unique(range))
-  lower_col <- match(interval_range, ifelse(is_lower, range, NA))
-  upper_col <- match(interval_range, ifelse(is_upper, range, NA))
+  level_range <- get_range_from_quantile(quantile_level)
+  lower_range <- ifelse(is_lower, level_range, NA)
+  upper_range <- ifelse(is_upper, level_range, NA)
+  if (anyDuplicated(lower_range, incomparables = NA) > 0 ||
+        anyDuplicated(upper_range, incomparables = NA) > 0) {
+    cli_abort(
+      c(
+        `!` = "Quantile levels must be unique after rounding to 10 digits."
+      )
+    )
+  }
+  interval_range <- sort(unique(level_range))
+  lower_col <- match(interval_range, lower_range)
+  upper_col <- match(interval_range, upper_range)
   n_intervals <- length(interval_range)
 
   out <- data.table(

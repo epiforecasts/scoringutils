@@ -142,11 +142,14 @@ score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), .
 
   # Fast path: if all forecasts have the same quantile levels, `observed` and
   # `predicted` can be built with a single sort.
-  forecast[, scoringutils_id := .GRP, by = forecast_unit]
-  setorderv(forecast, c("scoringutils_id", "quantile_level"))
+  # (the name of the temporary id column must not clash with existing columns)
+  id_col <- make.unique(c(colnames(forecast), "scoringutils_id"))
+  id_col <- id_col[length(id_col)]
+  forecast[, (id_col) := .GRP, by = forecast_unit]
+  setorderv(forecast, c(id_col, "quantile_level"))
   quantile_level <- sort(unique(forecast$quantile_level))
   n_levels <- length(quantile_level)
-  n_forecasts <- forecast$scoringutils_id[nrow(forecast)]
+  n_forecasts <- forecast[[id_col]][nrow(forecast)]
   same_levels <- nrow(forecast) == n_forecasts * n_levels &&
     all(forecast$quantile_level == quantile_level)
 
@@ -159,7 +162,7 @@ score.forecast_quantile <- function(forecast, metrics = get_metrics(forecast), .
       quantile_level
     ))
   } else {
-    forecast[, scoringutils_id := NULL]
+    forecast[, (id_col) := NULL]
     # transpose the forecasts that belong to the same forecast unit
     # make sure the quantiles and predictions are ordered in the same way
     f_transposed <- forecast[, .(

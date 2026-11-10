@@ -451,6 +451,7 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
       )
     )
   }
+  assert_numeric(observed, any.missing = FALSE)
   # forecasts with missing values are handled one by one
   has_na <- rowSums(is.na(predicted)) > 0
   if (anyNA(quantile_level)) {
@@ -467,10 +468,9 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
   }
 
   # all other forecasts are handled together
-  assert_numeric(observed[!has_na], any.missing = FALSE, .var.name = "observed")
-  order <- order(quantile_level)
-  quantile_level <- quantile_level[order]
-  predicted <- predicted[!has_na, order, drop = FALSE]
+  level_order <- order(quantile_level)
+  quantile_level <- quantile_level[level_order]
+  predicted <- predicted[!has_na, level_order, drop = FALSE]
   observed <- observed[!has_na]
   if (N > 1 && any(predicted[, -1] < predicted[, -N])) {
     cli_abort(

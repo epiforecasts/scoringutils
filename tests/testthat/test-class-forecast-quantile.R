@@ -613,3 +613,13 @@ test_that("score() gives the same scores if quantile levels differ between forec
     ignore_attr = TRUE
   )
 })
+
+test_that("score() works if a column is called `scoringutils_id`", {
+  forecast <- na.omit(as.data.table(example_quantile))
+  renamed <- copy(forecast)
+  setnames(renamed, "model", "scoringutils_id")
+  scores <- score(as_forecast_quantile(forecast))
+  scores_renamed <- score(as_forecast_quantile(renamed))
+  expect_identical(scores_renamed$scoringutils_id, scores$model)
+  expect_identical(scores_renamed$wis, scores$wis)
+})

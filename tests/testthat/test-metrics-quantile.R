@@ -1094,17 +1094,22 @@ test_that("bias_quantile() scores many forecasts like each forecast on its own",
   levels <- list(
     with_median = c(0.9, 0.1, 0.5, 0.25, 0.75),
     without_median = c(0.1, 0.25, 0.75, 0.9),
+    asymmetric_without_median = c(0.1, 0.3, 0.6, 0.9),
     median_only = 0.5
   )
   for (quantile_level in levels) {
     N <- length(quantile_level)
-    predicted <- matrix(round(rnorm(n * N, 10, 3)), nrow = n)
+    # a small range of integers, so that there are ties between predictions
+    predicted <- matrix(sample(0:6, n * N, replace = TRUE), nrow = n)
     predicted <- matrix(t(apply(predicted, 1, sort)), nrow = n)
     predicted <- predicted[, rank(quantile_level), drop = FALSE]
     # observations below, above and inside the predictions, and on the median
-    observed <- round(rnorm(n, 10, 4))
+    observed <- sample(seq(0, 6, 0.5), n, replace = TRUE)
     observed[1:2] <- c(-100, 100)
     observed[3] <- predicted[3, ceiling(N / 2)]
+    # tied predictions around the median, with the observation on the median
+    predicted[4, ] <- 3
+    observed[4] <- 3
 
     expect_identical(
       suppressMessages(bias_quantile(observed, predicted, quantile_level)),
@@ -1146,8 +1151,42 @@ test_that("bias_quantile() errors for many forecasts if one is invalid", {
     bias_quantile(c(2, 2), rbind(1:3, c(1, 3, 2)), quantile_level),
     "Predictions must not be decreasing with increasing quantile level"
   )
+  # the same holds for forecasts with missing values, which are scored separately
+  expect_error(
+    bias_quantile(c(2, 2), rbind(c(3, 2, NA), 1:3), quantile_level),
+    "Predictions must not be decreasing with increasing quantile level"
+  )
   expect_error(
     bias_quantile(c(2, NA), rbind(1:3, 1:3), quantile_level),
-    "Assertion on 'observed' failed"
+    "Assertion on 'observed' failed: Contains missing values"
+  )
+  expect_error(
+    bias_quantile(c(2, NA), rbind(1:3, c(1, NA, 3)), quantile_level),
+    "Assertion on 'observed' failed: Contains missing values"
+  )
+})
+
+test_that("bias_quantile() is 0 for an observation on the median", {
+  quantile_level <- c(0.25, 0.5, 0.75)
+  # ties around the median
+  expect_identical(bias_quantile(5, c(5, 5, 5), quantile_level), 0)
+  expect_identical(
+    bias_quantile(c(5, 2), rbind(c(5, 5, 5), 1:3), quantile_level),
+    c(0, 0)
+  )
+  # forecast with a missing value
+  expect_identical(
+    bias_quantile(c(2, 2), rbind(c(NA, 2, 3), 1:3), quantile_level),
+    c(0, 0)
+  )
+})
+
+test_that("bias_quantile() interpolates the median for many forecasts", {
+  # the median is 2 + (0.5 - 0.3) / (0.6 - 0.3) * (5 - 2) = 4
+  quantile_level <- c(0.1, 0.3, 0.6, 0.9)
+  predicted <- rbind(c(1, 2, 5, 6), c(1, 2, 5, 6), c(1, 2, 5, 6))
+  expect_identical(
+    suppressMessages(bias_quantile(c(3, 4, 4.5), predicted, quantile_level)),
+    c(1 - 2 * 0.3, 0, 1 - 2 * 0.6)
   )
 })
