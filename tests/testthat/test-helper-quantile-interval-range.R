@@ -219,3 +219,32 @@ test_that("quantile_to_interval works - data.frame case", {
     "Input must be either a data.frame or a numeric vector."
   )
 })
+
+test_that("quantile_to_interval() matches lower and upper bounds by interval", {
+  # quantile levels in arbitrary order, with one incomplete interval (0.05)
+  quantile_level <- c(0.75, 0.05, 0.5, 0.25)
+  predicted <- rbind(c(7, 1, 5, 3), c(17, 11, 15, 13))
+  out <- quantile_to_interval(c(4, 14), predicted, quantile_level)
+  expect_identical(
+    out,
+    data.table(
+      forecast_id = rep(1:2, each = 3),
+      observed = rep(c(4, 14), each = 3),
+      interval_range = rep(c(0, 50, 90), times = 2),
+      lower = c(5, 3, 1, 15, 13, 11),
+      upper = c(5, 7, NA, 15, 17, NA),
+      key = c("forecast_id", "observed", "interval_range")
+    )
+  )
+})
+
+test_that("quantile_to_interval() errors without lower or upper bounds", {
+  expect_error(
+    quantile_to_interval(c(1, 2), cbind(1:2, 3:4), c(0.75, 0.9)),
+    "No valid forecast intervals found."
+  )
+  expect_error(
+    quantile_to_interval(c(1, 2), cbind(1:2, 3:4), c(0.1, 0.25)),
+    "No valid forecast intervals found."
+  )
+})

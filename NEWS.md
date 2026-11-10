@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Package updates
+
+- `score()` is now considerably faster for quantile-based forecasts (about five times faster for 120,000 forecasts with 23 quantile levels each). The inputs to the metrics are now created with a single sort if all forecasts have the same quantile levels, the internal reshaping into prediction intervals no longer uses `dcast()`, and `bias_quantile()` is vectorised over forecasts. Scores are unchanged (#1237, #PRNUM).
+
 ## Internal changes
 
 - Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).

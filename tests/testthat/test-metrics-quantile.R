@@ -1080,3 +1080,74 @@ test_that("quantile_score() works regardless of whether input is vector or matri
     quantile_score(observed, t(matrix(predicted)), quantile_level = alpha)
   )
 })
+
+test_that("bias_quantile() scores many forecasts like each forecast on its own", {
+  set.seed(123)
+  n <- 40
+  one_by_one <- function(observed, predicted, quantile_level, na.rm = TRUE) {
+    vapply(seq_along(observed), function(i) {
+      suppressMessages(
+        bias_quantile(observed[i], predicted[i, ], quantile_level, na.rm)
+      )
+    }, numeric(1))
+  }
+  levels <- list(
+    with_median = c(0.9, 0.1, 0.5, 0.25, 0.75),
+    without_median = c(0.1, 0.25, 0.75, 0.9),
+    median_only = 0.5
+  )
+  for (quantile_level in levels) {
+    N <- length(quantile_level)
+    predicted <- matrix(round(rnorm(n * N, 10, 3)), nrow = n)
+    predicted <- matrix(t(apply(predicted, 1, sort)), nrow = n)
+    predicted <- predicted[, rank(quantile_level), drop = FALSE]
+    # observations below, above and inside the predictions, and on the median
+    observed <- round(rnorm(n, 10, 4))
+    observed[1:2] <- c(-100, 100)
+    observed[3] <- predicted[3, ceiling(N / 2)]
+
+    expect_identical(
+      suppressMessages(bias_quantile(observed, predicted, quantile_level)),
+      one_by_one(observed, predicted, quantile_level)
+    )
+
+    # forecasts with missing predictions are scored separately
+    predicted[c(5, 6), 1] <- NA
+    for (na.rm in c(TRUE, FALSE)) {
+      expect_identical(
+        suppressMessages(
+          bias_quantile(observed, predicted, quantile_level, na.rm = na.rm)
+        ),
+        one_by_one(observed, predicted, quantile_level, na.rm = na.rm)
+      )
+    }
+  }
+})
+
+test_that("bias_quantile() handles missing quantile levels for many forecasts", {
+  predicted <- rbind(1:5, 2:6)
+  quantile_level <- c(0.1, 0.25, 0.5, 0.75, NA)
+  expect_identical(
+    bias_quantile(c(1.5, 5.5), predicted, quantile_level),
+    c(
+      bias_quantile(1.5, predicted[1, ], quantile_level),
+      bias_quantile(5.5, predicted[2, ], quantile_level)
+    )
+  )
+  expect_identical(
+    bias_quantile(c(1.5, 5.5), predicted, quantile_level, na.rm = FALSE),
+    c(NA_real_, NA_real_)
+  )
+})
+
+test_that("bias_quantile() errors for many forecasts if one is invalid", {
+  quantile_level <- c(0.25, 0.5, 0.75)
+  expect_error(
+    bias_quantile(c(2, 2), rbind(1:3, c(1, 3, 2)), quantile_level),
+    "Predictions must not be decreasing with increasing quantile level"
+  )
+  expect_error(
+    bias_quantile(c(2, NA), rbind(1:3, 1:3), quantile_level),
+    "Assertion on 'observed' failed"
+  )
+})
