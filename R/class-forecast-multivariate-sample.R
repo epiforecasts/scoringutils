@@ -19,7 +19,9 @@
 #' - `predicted`: Column of type `numeric` with predicted values. Predicted
 #'    values represent random samples from the predictive distribution.
 #' - `sample_id`: Column of any type with unique identifiers
-#'    (unique within a single forecast) for each sample.
+#'    (unique within a single forecast) for each sample. Samples with the same
+#'    id are matched across the forecasts that are scored jointly, so these
+#'    forecasts need to have the same sample ids.
 #' - `mv_group_id`: Column of any type with unique identifiers
 #'    (unique within a single forecast) for each multivariate group. This column
 #'    is created automatically using the `forecast_unit` and the `joint_across`
@@ -113,6 +115,36 @@ assert_forecast.forecast_multivariate_sample <- function(
     # nolint end
   }
 
+  # make sure that within every .mv_group_id, all forecast units have the same
+  # sample ids. Samples are matched by `sample_id` to form joint samples.
+  # Every forecast unit of a group has the same number of unique sample ids
+  # (checked above), so the sample ids are the same if and only if the group
+  # as a whole has that number of unique sample ids.
+  ids_per_group <- as.data.table(forecast)[, .(
+    .scoringutils_N = length(unique(sample_id))
+  ),
+  by = .mv_group_id
+  ]
+  samples_per_group <- unique(
+    sample_lengths[, c(".mv_group_id", ".scoringutils_N"), with = FALSE]
+  )
+  mismatch <- ids_per_group[!samples_per_group, on = names(ids_per_group)]
+  if (nrow(mismatch) > 0) {
+    # nolint start: object_usage_linter
+    problematic_groups <- mismatch$.mv_group_id
+    cli_abort(
+      c(
+        `!` = "All forecasts that are scored jointly must have the same sample
+        ids. This is not the case for the following
+        {qty(length(problematic_groups))} group{?s}:
+        {.val {problematic_groups}}",
+        i = "Samples are matched by {.var sample_id} to form samples from
+        the joint predictive distribution."
+      )
+    )
+    # nolint end
+  }
+
   assert_forecast_type(
     forecast,
     actual = "multivariate_sample",
@@ -151,7 +183,10 @@ score.forecast_multivariate_sample <- function(forecast, metrics = get_metrics(f
   metrics <- prep$metrics
   forecast_unit <- prep$forecast_unit
 
-  # transpose the forecasts that belong to the same forecast unit
+  # transpose the forecasts that belong to the same forecast unit. Samples are
+  # ordered by sample id, so that samples with the same id are matched across
+  # the forecast units of a group
+  setorderv(forecast, "sample_id")
   f_transposed <- forecast[, .(
     predicted = list(predicted),
     observed = unique(observed),

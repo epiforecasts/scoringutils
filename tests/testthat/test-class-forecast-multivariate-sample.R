@@ -483,3 +483,75 @@ test_that("assert_forecast() accepts correct forecast_type for multivariate samp
     )
   )
 })
+
+test_that("multivariate scores do not depend on the order of rows", {
+  set.seed(1)
+  n_samples <- 50
+  samples <- rnorm(n_samples)
+  # both locations have identical samples, so that the joint samples lie on
+  # the diagonal
+  data <- data.table::data.table(
+    model = "m",
+    location = rep(c("A", "B"), each = n_samples),
+    sample_id = rep(seq_len(n_samples), 2),
+    predicted = c(samples, samples),
+    observed = 0.3
+  )
+  expected_es <- scoringRules::es_sample(
+    y = c(0.3, 0.3), dat = rbind(samples, samples)
+  )
+  scores <- score(
+    as_forecast_multivariate_sample(data, joint_across = "location")
+  )
+  expect_equal(scores$energy_score, expected_es) # nolint: expect_identical_linter
+  expect_equal(scores$variogram_score, 0) # nolint: expect_identical_linter
+
+  # shuffle the rows of one location, and of the whole data
+  shuffled_location <- rbind(
+    data[location == "A"], data[location == "B"][sample(.N)]
+  )
+  shuffled_all <- data[sample(.N)]
+  for (shuffled in list(shuffled_location, shuffled_all)) {
+    scores_shuffled <- score(
+      as_forecast_multivariate_sample(shuffled, joint_across = "location")
+    )
+    expect_equal(scores_shuffled$energy_score, expected_es) # nolint: expect_identical_linter
+    expect_equal(scores_shuffled$variogram_score, 0) # nolint: expect_identical_linter
+  }
+
+  # the same holds for the example data
+  example <- na.omit(data.table::as.data.table(example_multivariate_sample))
+  scores_example <- score(as_forecast_multivariate_sample(
+    example, joint_across = c("location", "location_name")
+  ))
+  scores_example_shuffled <- score(as_forecast_multivariate_sample(
+    example[sample(.N)], joint_across = c("location", "location_name")
+  ))
+  by <- get_forecast_unit(scores_example)
+  expect_equal( # nolint: expect_identical_linter
+    scores_example_shuffled[order(mget(by))]$energy_score,
+    scores_example[order(mget(by))]$energy_score
+  )
+})
+
+test_that("multivariate sample forecasts need the same sample ids within a group", {
+  data <- data.table::data.table(
+    model = "m",
+    location = rep(c("A", "B"), each = 4),
+    sample_id = c(1:4, 11:14),
+    predicted = 1:8,
+    observed = 3
+  )
+  expect_error(
+    as_forecast_multivariate_sample(data, joint_across = "location"),
+    "must have the same sample ids"
+  )
+  # sample ids can differ between groups
+  data2 <- rbind(
+    data[, sample_id := rep(1:4, 2)],
+    data.table::copy(data)[, `:=`(model = "m2", sample_id = rep(11:14, 2))]
+  )
+  expect_no_error(
+    as_forecast_multivariate_sample(data2, joint_across = "location")
+  )
+})
