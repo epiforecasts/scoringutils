@@ -1,5 +1,9 @@
 # scoringutils (development version)
 
+## Bug fixes
+
+- Fixed `score()` for multivariate forecasts silently scoring incomplete forecasts. Rows with `NA` values are removed before scoring, which could remove a part of a multivariate forecast (so that it was scored with fewer dimensions) or split it into several forecasts. Multivariate forecasts that are partly missing are now removed entirely, with a warning (#1258, #PRNUM).
+
 ## Internal changes
 
 - Removed the internal helpers `check_input_binary()` and `check_input_point()` (#939, #1242).

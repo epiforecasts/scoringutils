@@ -146,8 +146,9 @@ is_forecast_multivariate_sample <- function(x) {
 #' @rdname score
 #' @export
 score.forecast_multivariate_sample <- function(forecast, metrics = get_metrics(forecast), ...) {
+  incomplete_groups <- get_incomplete_mv_groups(forecast)
   prep <- prepare_forecast_for_scoring(forecast, metrics)
-  forecast <- prep$forecast
+  forecast <- remove_incomplete_mv_groups(prep$forecast, incomplete_groups)
   metrics <- prep$metrics
   forecast_unit <- prep$forecast_unit
 
@@ -229,6 +230,59 @@ ensure_mv_grouping <- function(data, joint_across) {
     )
   }
   return(data)
+}
+
+
+#' Find and remove multivariate groups with missing values
+#'
+#' Shared helpers used by score methods for multivariate forecast classes.
+#' A multivariate forecast can only be scored if all of its parts are
+#' available. `get_incomplete_mv_groups()` returns the groups that have
+#' `NA` values in any row. `remove_incomplete_mv_groups()` removes those of
+#' these groups that still have rows left after rows with `NA` values were
+#' removed (i.e. groups that are only partly missing), and warns about it.
+#'
+#' @param forecast A multivariate forecast object (for
+#'   `get_incomplete_mv_groups()`), or a data.table with the forecast after
+#'   rows with `NA` values have been removed (for
+#'   `remove_incomplete_mv_groups()`).
+#' @param incomplete_groups Vector with the values of `.mv_group_id` that
+#'   identify the incomplete groups.
+#' @importFrom stats complete.cases
+#' @importFrom cli cli_abort cli_warn qty
+#' @return `get_incomplete_mv_groups()` returns a vector of group identifiers,
+#'   `remove_incomplete_mv_groups()` returns a data.table.
+#' @keywords internal
+get_incomplete_mv_groups <- function(forecast) {
+  unique(forecast[[".mv_group_id"]][!complete.cases(forecast)])
+}
+
+#' @rdname get_incomplete_mv_groups
+remove_incomplete_mv_groups <- function(forecast, incomplete_groups) {
+  # groups in which all rows had missing values are already gone. Only groups
+  # that are partly missing would be scored as incomplete forecasts
+  incomplete_groups <- intersect(incomplete_groups, forecast$.mv_group_id)
+  if (length(incomplete_groups) == 0) {
+    return(forecast)
+  }
+  forecast <- forecast[!(.mv_group_id %in% incomplete_groups)]
+  if (nrow(forecast) == 0) {
+    cli_abort(
+      c(
+        `!` = "After removing multivariate forecasts with missing values,
+        no forecasts are left."
+      )
+    )
+  }
+  cli_warn(
+    c(
+      `!` = "Removed {length(incomplete_groups)} multivariate
+      forecast{?s} that {?was/were} partly missing.",
+      i = "A multivariate forecast can only be scored if all forecasts that
+      are scored jointly, and all of their samples, are available."
+    )
+  )
+  return(forecast)
 }
 
 

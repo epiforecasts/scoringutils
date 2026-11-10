@@ -170,3 +170,24 @@ test_that(
     )
   }
 )
+
+test_that("score() drops multivariate point groups with missing values", {
+  data <- data.table::CJ(model = c("m1", "m2"), location = c("A", "B", "C"))
+  data[, predicted := c(1, 2, 4, 2, 3, 5)]
+  data[, observed := c(1.5, 2.5, 3, 1.5, 2.5, 3)]
+  scores_m2 <- score(
+    as_forecast_multivariate_point(data[model == "m2"], joint_across = "location")
+  )
+
+  incomplete <- data.table::copy(data)
+  incomplete[model == "m1" & location == "C", predicted := NA]
+  forecast <- suppressMessages(
+    as_forecast_multivariate_point(incomplete, joint_across = "location")
+  )
+  expect_warning(
+    scores <- score(forecast),
+    "Removed 1 multivariate forecast that was partly missing"
+  )
+  expect_identical(scores$model, "m2")
+  expect_equal(scores$variogram_score, scores_m2$variogram_score) # nolint: expect_identical_linter
+})
