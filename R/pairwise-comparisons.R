@@ -70,7 +70,9 @@
 #'   score is calculated for every model in every location.
 #' @param metric A string with the name of the metric for which
 #'   a relative skill shall be computed. By default this is either "crps",
-#'   "wis" or "brier_score" if any of these are available.
+#'   "wis" or "brier_score" if any of these are available. As relative skill
+#'   is based on ratios of scores, all values of the metric must be
+#'   non-negative.
 #' @param baseline A string with the name of a model. If a baseline is
 #'   given, then a scaled relative skill with respect to the baseline will be
 #'   returned. By default (`NULL`), relative skill will not be scaled with
@@ -179,13 +181,17 @@ get_pairwise_comparisons <- function(
     #nolint end
   }
 
-  # check that all values of the chosen metric are positive
-  if (any(sign(scores[[metric]]) < 0) && any(sign(scores[[metric]]) > 0)) {
+  # check that no value of the chosen metric is negative. Relative skill is
+  # based on ratios of scores, which are only meaningful for non-negative
+  # scores: with negative scores, the better model would get the larger ratio
+  if (any(scores[[metric]] < 0)) {
     #nolint start: object_usage_linter
     cli_abort(
       c(
         `!` = "To compute pairwise comparisons, all values of {.var {metric}}
-       must have the same sign."
+       must be non-negative.",
+        i = "Pairwise comparisons are based on ratios of scores, which are
+        not meaningful for negative scores."
       )
     )
     #nolint end

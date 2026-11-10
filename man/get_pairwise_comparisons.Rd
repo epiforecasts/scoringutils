@@ -30,7 +30,9 @@ score is calculated for every model in every location.}
 
 \item{metric}{A string with the name of the metric for which
 a relative skill shall be computed. By default this is either "crps",
-"wis" or "brier_score" if any of these are available.}
+"wis" or "brier_score" if any of these are available. As relative skill
+is based on ratios of scores, all values of the metric must be
+non-negative.}
 
 \item{baseline}{A string with the name of a model. If a baseline is
 given, then a scaled relative skill with respect to the baseline will be
