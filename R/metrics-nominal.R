@@ -135,7 +135,9 @@ logs_categorical <- function(observed, predicted, predicted_label) {
   # `as.numeric(predicted_label)[k]`, so the inverse permutation given by
   # `order()` puts the column for level k into position k
   predicted <- predicted[, order(as.numeric(predicted_label)), drop = FALSE]
-  observed_indices <- as.numeric(observed)
+  # the levels of `observed` and `predicted_label` are the same set, but not
+  # necessarily in the same order, so the observed outcome is matched by label
+  observed_indices <- match(as.character(observed), levels(predicted_label))
   pred_for_observed <- predicted[cbind(1:n, observed_indices)]
   logs <- -log(pred_for_observed)
   return(logs)

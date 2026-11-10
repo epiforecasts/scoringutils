@@ -167,3 +167,39 @@ test_that("logs_categorical() is invariant to permutations of predicted_label", 
   res_manual <- -log(c(predicted[1, 1], predicted[2, 2], predicted[3, 2]))
   expect_equal(res, res_manual) # nolint: expect_identical_linter
 })
+
+test_that("logs_categorical() matches observed and predicted_label by label", {
+  observed <- factor(c("a", "c", "b"), levels = c("a", "b", "c"))
+  predicted <- rbind(
+    c(0.7, 0.2, 0.1),
+    c(0.1, 0.3, 0.6),
+    c(0.2, 0.5, 0.3)
+  )
+  expected <- -log(c(0.7, 0.6, 0.5))
+
+  # same order of levels
+  predicted_label <- factor(c("a", "b", "c"), levels = c("a", "b", "c"))
+  expect_equal(logs_categorical(observed, predicted, predicted_label), expected) # nolint: expect_identical_linter
+
+  # same set of levels in a different order
+  predicted_label <- factor(c("a", "b", "c"), levels = c("c", "b", "a"))
+  expect_equal(logs_categorical(observed, predicted, predicted_label), expected) # nolint: expect_identical_linter
+
+  # different order of levels and of the columns of `predicted`
+  predicted_label <- factor(c("b", "c", "a"), levels = c("c", "a", "b"))
+  expect_equal( # nolint: expect_identical_linter
+    logs_categorical(observed, predicted[, c(2, 3, 1)], predicted_label),
+    expected
+  )
+})
+
+test_that("score() for nominal forecasts does not depend on the order of levels", {
+  forecast <- data.table::data.table(
+    id = rep(1:2, each = 3),
+    observed = factor(rep(c("a", "c"), each = 3), levels = c("a", "b", "c")),
+    predicted_label = factor(rep(c("a", "b", "c"), 2), levels = c("c", "b", "a")),
+    predicted = c(0.7, 0.2, 0.1, 0.1, 0.3, 0.6)
+  )
+  scores <- score(as_forecast_nominal(forecast))
+  expect_equal(scores$log_score, -log(c(0.7, 0.6))) # nolint: expect_identical_linter
+})
