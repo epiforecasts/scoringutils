@@ -451,11 +451,59 @@ bias_quantile <- function(observed, predicted, quantile_level, na.rm = TRUE) {
       )
     )
   }
-  bias <- sapply(1:n, function(i) {
+  # forecasts with missing values are handled one by one
+  has_na <- rowSums(is.na(predicted)) > 0
+  if (anyNA(quantile_level)) {
+    has_na[] <- TRUE
+  }
+  bias <- rep(NA_real_, n)
+  bias[has_na] <- vapply(which(has_na), function(i) {
     bias_quantile_single_vector(
       observed[i], predicted[i, ], quantile_level, na.rm
     )
-  })
+  }, numeric(1))
+  if (all(has_na)) {
+    return(bias)
+  }
+
+  # all other forecasts are handled together
+  assert_numeric(observed[!has_na], any.missing = FALSE, .var.name = "observed")
+  order <- order(quantile_level)
+  quantile_level <- quantile_level[order]
+  predicted <- predicted[!has_na, order, drop = FALSE]
+  observed <- observed[!has_na]
+  if (N > 1 && any(predicted[, -1] < predicted[, -N])) {
+    cli_abort(
+      c(
+        `!` = "Predictions must not be decreasing with increasing
+        quantile level."
+      )
+    )
+  }
+  if (0.5 %in% quantile_level) {
+    median_prediction <- predicted[, quantile_level == 0.5]
+  } else {
+    # linear interpolation between the two innermost quantiles
+    below <- max(which(quantile_level < 0.5))
+    above <- min(which(quantile_level > 0.5))
+    w <- (0.5 - quantile_level[above]) /
+      (quantile_level[below] - quantile_level[above])
+    median_prediction <- predicted[, above] +
+      w * (predicted[, below] - predicted[, above])
+  }
+  # predictions are non-decreasing, so the largest quantile level with a
+  # prediction <= observed and the smallest one with a prediction >= observed
+  # can be found by counting. Quantile levels 0 and 1 are added for
+  # observations outside the range of the predictions.
+  n_below <- rowSums(predicted <= observed)
+  n_above <- rowSums(predicted >= observed)
+  complete <- ifelse(
+    observed < median_prediction,
+    1 - 2 * c(0, quantile_level)[n_below + 1],
+    1 - 2 * c(quantile_level, 1)[N - n_above + 1]
+  )
+  complete[observed == median_prediction] <- 0
+  bias[!has_na] <- complete
   return(bias)
 }
 

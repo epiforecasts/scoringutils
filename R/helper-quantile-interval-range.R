@@ -118,17 +118,40 @@ quantile_to_interval_numeric <- function(observed,
   assert_input_quantile(observed, predicted, quantile_level)
 
   n <- length(observed)
-  N <- length(quantile_level)
+  if (is.null(dim(predicted))) {
+    predicted <- matrix(predicted, nrow = 1)
+  }
 
-  dt <- data.table(
-    forecast_id = rep(1:n, each = N),
-    observed = rep(observed, each = N),
-    predicted = as.vector(t(predicted)),
-    quantile_level = quantile_level
+  # every quantile level is the lower or upper bound of a central prediction
+  # interval. Find the columns of `predicted` that hold the two bounds of each
+  # interval (the median is both bounds of the 0% interval).
+  is_lower <- quantile_level <= 0.5
+  is_upper <- quantile_level >= 0.5
+  if (!any(is_lower) || !any(is_upper)) {
+    cli_abort(
+      c(
+        `!` = "No valid forecast intervals found.",
+        i = "A forecast interval comprises two
+      quantiles with quantile levels symmetric around the median
+      (e.g. 0.25 and 0.75)"
+      )
+    )
+  }
+  range <- get_range_from_quantile(quantile_level)
+  interval_range <- sort(unique(range))
+  lower_col <- match(interval_range, ifelse(is_lower, range, NA))
+  upper_col <- match(interval_range, ifelse(is_upper, range, NA))
+  n_intervals <- length(interval_range)
+
+  out <- data.table(
+    forecast_id = rep(seq_len(n), each = n_intervals),
+    observed = rep(observed, each = n_intervals),
+    interval_range = rep(interval_range, times = n),
+    lower = as.vector(t(predicted[, lower_col, drop = FALSE])),
+    upper = as.vector(t(predicted[, upper_col, drop = FALSE])),
+    key = c("forecast_id", "observed", "interval_range")
   )
-  out <- quantile_to_interval(dt, format = "wide")
-  out <- out[order(forecast_id, interval_range)]
-  return(out)
+  return(out[])
 }
 
 
