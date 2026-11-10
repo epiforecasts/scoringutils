@@ -405,7 +405,7 @@ test_that("Basic input checks for `add_relative_skill() work", {
     "After removing \"NA\" values for `crps`, no values were left."
   )
 
-  # error if not all values for the relative skill metric have the same sign
+  # error if some values for the relative skill metric are negative
   eval_diffsign <- data.table::copy(eval)
   eval_diffsign[1:10, "crps" := -eval_diffsign[1:10, "crps"]]
   expect_error(
@@ -413,7 +413,7 @@ test_that("Basic input checks for `add_relative_skill() work", {
       eval_diffsign,
       compare = "model", metric = "crps"
     ),
-    "To compute pairwise comparisons, all values of `crps` must have the same sign."
+    "To compute pairwise comparisons, all values of `crps` must be non-negative."
   )
 
   # message if `by` is equal to the forecast unit
@@ -780,4 +780,29 @@ test_that("add_relative_skill() skips the test by default", {
   )
   expect_gt(calls$n, 0L)
   expect_identical(without_test, with_test)
+})
+
+test_that("get_pairwise_comparisons() errors if all scores are negative", {
+  # with negative scores, the ratio of scores would favour the worse model:
+  # A has lower (better) scores than B, but sum(A) / sum(B) = 3
+  scores <- new_scores(
+    data.table::data.table(
+      model = rep(c("A", "B"), each = 3),
+      target = rep(1:3, 2),
+      wis = c(-3, -3, -3, -1, -1, -1)
+    ),
+    metrics = "wis"
+  )
+  expect_error(
+    get_pairwise_comparisons(scores),
+    "To compute pairwise comparisons, all values of `wis` must be non-negative."
+  )
+  expect_error(
+    add_relative_skill(scores),
+    "To compute pairwise comparisons, all values of `wis` must be non-negative."
+  )
+
+  # scores of zero are allowed
+  scores_zero <- data.table::copy(scores)[, wis := c(0, 1, 2, 1, 2, 3)]
+  expect_no_error(get_pairwise_comparisons(scores_zero))
 })

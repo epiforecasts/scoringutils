@@ -30,7 +30,9 @@ compared.}
 
 \item{metric}{A string with the name of the metric for which
 a relative skill shall be computed. By default this is either "crps",
-"wis" or "brier_score" if any of these are available.}
+"wis" or "brier_score" if any of these are available. As relative skill
+is based on ratios of scores, all values of the metric must be
+non-negative.}
 
 \item{one_sided}{Boolean, default is \code{FALSE}, whether two conduct a one-sided
 instead of a two-sided test to determine significance in a pairwise
